@@ -1,0 +1,20 @@
+# Changes here will be overwritten by Copier
+_commit: v0.3.0
+_src_path: gh:smkent/copier-python
+copyright_holder: Stephen Kent
+copyright_holder_email: smkent@smkent.net
+copyright_license: LGPL-3.0
+copyright_year: '2026'
+enable_container: false
+enable_coverage: true
+enable_docs: true
+enable_pypi: true
+github_user: smkent
+project_description: build123d utilities box
+project_name: bdbox
+project_slug: bdbox
+project_type: application
+project_visibility: public
+python_version_minimum: '3.10'
+user_email: smkent@smkent.net
+user_name: Stephen Kent
