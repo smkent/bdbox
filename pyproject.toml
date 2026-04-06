@@ -27,7 +27,9 @@ classifiers = [
     "Typing :: Typed",
 ]
 keywords = []
-dependencies = []
+dependencies = [
+    "build123d>=0.10.0",
+]
 
 [project.urls]
 Homepage = "https://smkent.github.io/bdbox"
