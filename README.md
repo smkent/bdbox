@@ -15,3 +15,9 @@ build123d utilities box
 ```sh
 pip install bdbox
 ```
+
+## Project template
+
+This project is generated and maintained with [copier-python][copier-python].
+
+[copier-python]: https://smkent.github.io/copier-python
