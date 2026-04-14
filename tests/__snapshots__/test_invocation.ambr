@@ -1,0 +1,226 @@
+# serializer version: 1
+# name: test_model[normal-help]
+  '''
+  usage: MyModel [-h] [OPTIONS]
+  
+  ╭─ options ──────────────────────────────────────╮
+  │ -h, --help   show this help message and exit   │
+  │ --preset {None,default,large,small,plain}      │
+  │              (default: None)                   │
+  │ --width 1.0 <= FLOAT <= 100.0                  │
+  │              (default: 10.0)                   │
+  │ --height 1 <= INT <= 50                        │
+  │              (default: 5)                      │
+  │ --enabled, --no-enabled                        │
+  │              enable the thing (default: False) │
+  │ --text STR   (default: nope)                   │
+  │ --thing {first,second,third}                   │
+  │              (default: first)                  │
+  │ --count INT  (default: 1)                      │
+  ╰────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model[normal-render]
+  '25.4x2,en=False,thing=third,text=nope'
+# ---
+# name: test_model[run-help]
+  '''
+  usage: MyModel [-h] [OPTIONS]
+  
+  ╭─ options ──────────────────────────────────────╮
+  │ -h, --help   show this help message and exit   │
+  │ --preset {None,default,large,small,plain}      │
+  │              (default: None)                   │
+  │ --width 1.0 <= FLOAT <= 100.0                  │
+  │              (default: 10.0)                   │
+  │ --height 1 <= INT <= 50                        │
+  │              (default: 5)                      │
+  │ --enabled, --no-enabled                        │
+  │              enable the thing (default: False) │
+  │ --text STR   (default: nope)                   │
+  │ --thing {first,second,third}                   │
+  │              (default: first)                  │
+  │ --count INT  (default: 1)                      │
+  ╰────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model[run-render]
+  '25.4x2,en=False,thing=third,text=nope'
+# ---
+# name: test_model_blank[normal-help]
+  '''
+  usage: MyModel [-h]
+  
+  ╭─ options ───────────────────────────────────╮
+  │ -h, --help  show this help message and exit │
+  ╰─────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_blank[normal-render]
+  'hm'
+# ---
+# name: test_model_blank[run-help]
+  '''
+  usage: MyModel [-h]
+  
+  ╭─ options ───────────────────────────────────╮
+  │ -h, --help  show this help message and exit │
+  ╰─────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_blank[run-render]
+  'hm'
+# ---
+# name: test_model_multiple[normal-help]
+  'Multiple Model subclasses defined: FirstModel, SecondModel. Call .run() explicitly.'
+# ---
+# name: test_model_multiple[normal-render]
+  'Multiple Model subclasses defined: FirstModel, SecondModel. Call .run() explicitly.'
+# ---
+# name: test_model_multiple[run-help]
+  '''
+  usage: FirstModel [-h] [--width 1.0 <= FLOAT <= 100.0]
+  
+  ╭─ options ───────────────────────────────────╮
+  │ -h, --help  show this help message and exit │
+  │ --width 1.0 <= FLOAT <= 100.0               │
+  │             (default: 10.0)                 │
+  ╰─────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_multiple[run-render]
+  'FirstModel 25.4'
+# ---
+# name: test_model_subclass[normal-help]
+  'Multiple Model subclasses defined: ParentModel, ChildModel. Call .run() explicitly.'
+# ---
+# name: test_model_subclass[normal-render]
+  'Multiple Model subclasses defined: ParentModel, ChildModel. Call .run() explicitly.'
+# ---
+# name: test_model_subclass[run-help]
+  '''
+  usage: ChildModel [-h] [--width 1.0 <= FLOAT <= 100.0] [--height 1 <= INT <= 100]
+  
+  ╭─ options ───────────────────────────────────╮
+  │ -h, --help  show this help message and exit │
+  │ --width 1.0 <= FLOAT <= 100.0               │
+  │             (default: 10.0)                 │
+  │ --height 1 <= INT <= 100                    │
+  │             (default: 10)                   │
+  ╰─────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_subclass[run-render]
+  'ChildModel 25.4 10'
+# ---
+# name: test_params_class[noparams-help]
+  'params() not called'
+# ---
+# name: test_params_class[noparams-render]
+  'params() not called'
+# ---
+# name: test_params_class[normal-help]
+  '''
+  usage: params_class.py [-h] [OPTIONS]
+  
+  ╭─ options ─────────────────────────────────────╮
+  │ -h, --help  show this help message and exit   │
+  │ --preset {None,default,large,small}           │
+  │             (default: None)                   │
+  │ --width 1.0 <= FLOAT <= 100.0                 │
+  │             (default: 10.0)                   │
+  │ --height 1 <= INT <= 50                       │
+  │             (default: 5)                      │
+  │ --enabled, --no-enabled                       │
+  │             enable the thing (default: False) │
+  │ --text STR  (default: nope)                   │
+  │ --thing {first,second,third}                  │
+  │             (default: first)                  │
+  ╰───────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_params_class[normal-render]
+  '25.4x2,en=False,thing=third,text=nope'
+# ---
+# name: test_params_class[show-help]
+  '''
+  usage: params_class.py [-h] [OPTIONS]
+  
+  ╭─ options ─────────────────────────────────────╮
+  │ -h, --help  show this help message and exit   │
+  │ --preset {None,default,large,small}           │
+  │             (default: None)                   │
+  │ --width 1.0 <= FLOAT <= 100.0                 │
+  │             (default: 10.0)                   │
+  │ --height 1 <= INT <= 50                       │
+  │             (default: 5)                      │
+  │ --enabled, --no-enabled                       │
+  │             enable the thing (default: False) │
+  │ --text STR  (default: nope)                   │
+  │ --thing {first,second,third}                  │
+  │             (default: first)                  │
+  ╰───────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_params_class[show-render]
+  '25.4x2,en=False,thing=third,text=nope'
+# ---
+# name: test_params_class_blank[noparams-help]
+  '''
+  usage: params_class_blank.py [-h]
+  
+  ╭─ options ───────────────────────────────────╮
+  │ -h, --help  show this help message and exit │
+  ╰─────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_params_class_blank[noparams-render]
+  'Blank model!'
+# ---
+# name: test_params_class_blank[normal-help]
+  '''
+  usage: params_class_blank.py [-h]
+  
+  ╭─ options ───────────────────────────────────╮
+  │ -h, --help  show this help message and exit │
+  ╰─────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_params_class_blank[normal-render]
+  'Blank model!'
+# ---
+# name: test_params_class_blank[show-help]
+  '''
+  usage: params_class_blank.py [-h]
+  
+  ╭─ options ───────────────────────────────────╮
+  │ -h, --help  show this help message and exit │
+  ╰─────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_params_class_blank[show-render]
+  'Blank model!'
+# ---
+# name: test_params_class_instance[help]
+  '''
+  usage: params_class_instance.py [-h] [OPTIONS]
+  
+  ╭─ options ─────────────────────────────────────╮
+  │ -h, --help  show this help message and exit   │
+  │ --preset {None,default,large,small}           │
+  │             (default: None)                   │
+  │ --width 1.0 <= FLOAT <= 100.0                 │
+  │             (default: 10.0)                   │
+  │ --height 1 <= INT <= 50                       │
+  │             (default: 5)                      │
+  │ --enabled, --no-enabled                       │
+  │             enable the thing (default: False) │
+  │ --text STR  (default: nope)                   │
+  │ --thing {first,second,third}                  │
+  │             (default: first)                  │
+  ╰───────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_params_class_instance[render]
+  '50.0x5,en=False,thing=first,text=nope'
+# ---

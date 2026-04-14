@@ -29,6 +29,15 @@ The `lint` and `test` tasks can also be run as a single combined command with:
 poe lt
 ```
 
+### Test snapshots
+
+Some tests compare test results with saved snapshots. Test snapshots can be
+updated by running:
+
+```sh
+poe snapup
+```
+
 ## Documentation server
 
 Start the development server with:
