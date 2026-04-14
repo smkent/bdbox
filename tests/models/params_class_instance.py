@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Params-style bdbox model fixture for invocation tests."""
+"""Params subclass instance test model."""
 
 from bdbox import Bool, Choice, Float, Int, Params, Preset, Str
 
