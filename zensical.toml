@@ -1,6 +1,6 @@
 [project]
 site_name = "bdbox"
-site_description = "build123d utilities box"
+site_description = "Parametric configuration and tooling for build123d models."
 site_author = "Stephen Kent"
 site_url = "https://smkent.github.io/bdbox"
 repo_url = "https://github.com/smkent/bdbox"
@@ -12,6 +12,26 @@ nav = [
     "index.md",
     "license.md",
     "contributing.md",
+  ] },
+  { "Features" = [
+    { "Parameters" = [
+      "parameters/index.md",
+      "parameters/fields.md",
+      "parameters/presets.md",
+      "parameters/cli.md",
+    ] },
+  ] },
+  { "API Reference" = [
+    { "bdbox" = [
+      "api/parameters.md",
+      "api/fields.md",
+      "api/presets.md",
+      "api/model.md",
+      "api/geometry.md",
+      "api/errors.md",
+    ] },
+  ] },
+  { "Development" = [
     { "Development" = [
       "development/requirements.md",
       "development/workflow.md",
@@ -22,7 +42,6 @@ nav = [
       "releasing.md",
     ] },
   ] },
-  { "API Reference" = "api.md" },
 ]
 
 # ----------------------------------------------------------------------------
@@ -33,6 +52,7 @@ language = "en"
 features = [
     "content.code.annotate",
     "content.code.copy",
+    "content.tabs.link",
     "content.tooltips",
     "navigation.expand",
     "navigation.footer",
@@ -47,7 +67,7 @@ features = [
 ]
 
 [project.theme.icon]
-logo = "lucide/sparkles"
+logo = "lucide/tool-case"
 
 [[project.theme.palette]]
 media = "(prefers-color-scheme)"
@@ -117,7 +137,10 @@ custom_checkbox = true
 # ----------------------------------------------------------------------------
 [project.plugins.mkdocstrings.handlers.python]
 paths = ["."]
-inventories = ["https://docs.python.org/3/objects.inv"]
+inventories = [
+    "https://docs.python.org/3/objects.inv",
+    "https://build123d.readthedocs.io/en/stable/objects.inv",
+]
 
 [project.plugins.mkdocstrings.handlers.python.options]
 docstring_section_style = "list"
@@ -131,3 +154,6 @@ show_signature_annotations = true
 show_source = true
 show_symbol_type_heading = true
 show_symbol_type_toc = true
+
+[project.plugins.mkdocstrings.handlers.python.options.docstring_options]
+ignore_init_summary = true

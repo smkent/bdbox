@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "bdbox"
 dynamic = ["version"]
-description = "build123d utilities box"
+description = "Parametric configuration and tooling for build123d models."
 readme = "README.md"
 license = "LGPL-3.0"
 license-files = ["LICENSE"]
@@ -28,7 +28,10 @@ classifiers = [
 ]
 keywords = []
 dependencies = [
+    "annotated-types>=0.5.0",
     "build123d>=0.10.0",
+    "typing_extensions>=4.1; python_version < '3.12'",
+    "tyro>=1.0.12",
 ]
 
 [project.urls]
@@ -45,6 +48,7 @@ dev = [
     "pytest-cov>=7",
     "pytest-sugar>=1",
     "ruff>=0.15",
+    "syrupy>=5.1",
     "ty>=0.0.29",
 ]
 docs = [
@@ -117,6 +121,10 @@ sequence = [
 ]
 help = "Install project dependencies and git hooks"
 
+[tool.poe.tasks.snapup]
+cmd = "pytest --snapshot-update"
+help = "Update test snapshots"
+
 [tool.poe.tasks.test]
 cmd = "pytest"
 help = "Run tests"
@@ -148,6 +156,10 @@ addopts = [
     "--strict-markers",
 ]
 testpaths = ["tests"]
+filterwarnings = [
+    "ignore::pyparsing.warnings.PyparsingDeprecationWarning:ezdxf.*",
+    "ignore:.*ArcTangent.*:DeprecationWarning:build123d.objects_curve"
+]
 
 [tool.coverage.run]
 source = ["bdbox"]
@@ -171,6 +183,7 @@ target-version = "py310"
 select = ["ALL"]
 ignore = [
     "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed
+    "C90",  # mccabe
     "COM812",  # Trailing comma missing
     "D1",  # Missing docstring presence rules
     "EM",  # flake8-errmsg
@@ -185,6 +198,9 @@ ignore = [
 known-first-party = ["bdbox"]
 
 [tool.ruff.lint.per-file-ignores]
+"**/*.pyi" = [
+    "A002",  # Stub parameter names must match the API
+]
 "tests/**/*.py" = [
     "ARG",  # flake8-unused-arguments
     "S101",  # Use of assert detected
