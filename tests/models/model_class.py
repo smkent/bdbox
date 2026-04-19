@@ -2,12 +2,22 @@
 """Model subclass test model."""
 
 import os
+from dataclasses import dataclass, field
 from typing import Any
 
 from bdbox import Bool, Choice, Float, Int, Model, Preset, Str
 
 
+@dataclass
+class SubOptions:
+    a: float
+    b: float
+    c: float
+    do_the_thing: bool = False
+
+
 class MyModel(Model):
+    sub: SubOptions = field(default_factory=lambda: SubOptions(1, 2, 3))
     width = Float(10.0, min=1.0, max=100.0)
     height = Int(5, min=1, max=50)
     enabled = Bool(default=False, description="enable the thing")

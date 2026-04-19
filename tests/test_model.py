@@ -8,22 +8,8 @@ from typing import Any
 import pytest
 
 from bdbox.model import Model
-from bdbox.parameters.field_factories import Bool, Float, Int, Str
-from bdbox.parameters.parameters import Params
+from bdbox.parameters.field_factories import Float, Int, Str
 from bdbox.parameters.preset import Preset
-
-
-def test_model_is_params_subclass() -> None:
-    assert issubclass(Model, Params)
-
-
-def test_model_instance_is_params_instance() -> None:
-    class MyModel(Model):
-        width = Float(default=10.0)
-        length = 15.0
-        flag = Bool(default=False)
-
-    assert isinstance(MyModel(), Params)
 
 
 def test_model_presets_defined() -> None:
@@ -40,7 +26,7 @@ def test_model_no_fields_or_presets() -> None:
     class EmptyModel(Model):
         pass
 
-    assert fields(EmptyModel) == ()
+    assert tuple(f for f in fields(EmptyModel) if f.name != "preset") == ()
     assert EmptyModel.presets == ()
 
 
@@ -57,7 +43,6 @@ def test_model_default_values() -> None:
 
 
 def test_model_params_override() -> None:
-
     class MyModel(Model):
         width: float = Float(default=10.0)
         count: int = Int(default=3)

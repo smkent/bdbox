@@ -1,23 +1,35 @@
 # serializer version: 1
 # name: test_model[normal-help]
   '''
-  usage: MyModel [-h] [OPTIONS]
+  usage: MyModel [-h] [OPTIONS] [{run,export}]
   
-  ╭─ options ──────────────────────────────────────╮
-  │ -h, --help   show this help message and exit   │
-  │ --preset {None,default,large,small,plain}      │
-  │              (default: None)                   │
-  │ --width 1.0 <= FLOAT <= 100.0                  │
-  │              (default: 10.0)                   │
-  │ --height 1 <= INT <= 50                        │
-  │              (default: 5)                      │
-  │ --enabled, --no-enabled                        │
-  │              enable the thing (default: False) │
-  │ --text STR   (default: nope)                   │
-  │ --thing {first,second,third}                   │
-  │              (default: first)                  │
-  │ --count INT  (default: 1)                      │
-  ╰────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit        │
+  │ --preset {None,default,large,small,plain}             │
+  │                (default: None)                        │
+  │ --width 1.0 <= FLOAT <= 100.0                         │
+  │                (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                               │
+  │                (default: 5)                           │
+  │ --enabled, --no-enabled                               │
+  │                enable the thing (default: False)      │
+  │ --text STR     (default: nope)                        │
+  │ --thing {first,second,third}                          │
+  │                (default: first)                       │
+  │ --count INT    (default: 1)                           │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ sub options ─────────────────────────────────────────╮
+  │ --sub.a FLOAT  (default: 1)                           │
+  │ --sub.b FLOAT  (default: 2)                           │
+  │ --sub.c FLOAT  (default: 3)                           │
+  │ --sub.do-the-thing, --sub.no-do-the-thing             │
+  │                (default: False)                       │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run        Run the model.                         │
+  │   • export     Export geometry to a STEP or STL file. │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model[normal-render]
@@ -25,23 +37,35 @@
 # ---
 # name: test_model[run-help]
   '''
-  usage: MyModel [-h] [OPTIONS]
+  usage: MyModel [-h] [OPTIONS] [{run,export}]
   
-  ╭─ options ──────────────────────────────────────╮
-  │ -h, --help   show this help message and exit   │
-  │ --preset {None,default,large,small,plain}      │
-  │              (default: None)                   │
-  │ --width 1.0 <= FLOAT <= 100.0                  │
-  │              (default: 10.0)                   │
-  │ --height 1 <= INT <= 50                        │
-  │              (default: 5)                      │
-  │ --enabled, --no-enabled                        │
-  │              enable the thing (default: False) │
-  │ --text STR   (default: nope)                   │
-  │ --thing {first,second,third}                   │
-  │              (default: first)                  │
-  │ --count INT  (default: 1)                      │
-  ╰────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit        │
+  │ --preset {None,default,large,small,plain}             │
+  │                (default: None)                        │
+  │ --width 1.0 <= FLOAT <= 100.0                         │
+  │                (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                               │
+  │                (default: 5)                           │
+  │ --enabled, --no-enabled                               │
+  │                enable the thing (default: False)      │
+  │ --text STR     (default: nope)                        │
+  │ --thing {first,second,third}                          │
+  │                (default: first)                       │
+  │ --count INT    (default: 1)                           │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ sub options ─────────────────────────────────────────╮
+  │ --sub.a FLOAT  (default: 1)                           │
+  │ --sub.b FLOAT  (default: 2)                           │
+  │ --sub.c FLOAT  (default: 3)                           │
+  │ --sub.do-the-thing, --sub.no-do-the-thing             │
+  │                (default: False)                       │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run        Run the model.                         │
+  │   • export     Export geometry to a STEP or STL file. │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model[run-render]
@@ -49,11 +73,16 @@
 # ---
 # name: test_model_blank[normal-help]
   '''
-  usage: MyModel [-h]
+  usage: MyModel [-h] [{run,export}]
   
-  ╭─ options ───────────────────────────────────╮
-  │ -h, --help  show this help message and exit │
-  ╰─────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  ╰────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_blank[normal-render]
@@ -61,11 +90,16 @@
 # ---
 # name: test_model_blank[run-help]
   '''
-  usage: MyModel [-h]
+  usage: MyModel [-h] [{run,export}]
   
-  ╭─ options ───────────────────────────────────╮
-  │ -h, --help  show this help message and exit │
-  ╰─────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  ╰────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_blank[run-render]
@@ -79,13 +113,18 @@
 # ---
 # name: test_model_multiple[run-help]
   '''
-  usage: FirstModel [-h] [--width 1.0 <= FLOAT <= 100.0]
+  usage: FirstModel [-h] [--width 1.0 <= FLOAT <= 100.0] [{run,export}]
   
-  ╭─ options ───────────────────────────────────╮
-  │ -h, --help  show this help message and exit │
-  │ --width 1.0 <= FLOAT <= 100.0               │
-  │             (default: 10.0)                 │
-  ╰─────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  │ --width 1.0 <= FLOAT <= 100.0                      │
+  │             (default: 10.0)                        │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  ╰────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple[run-render]
@@ -99,15 +138,20 @@
 # ---
 # name: test_model_subclass[run-help]
   '''
-  usage: ChildModel [-h] [--width 1.0 <= FLOAT <= 100.0] [--height 1 <= INT <= 100]
+  usage: ChildModel [-h] [--width 1.0 <= FLOAT <= 100.0] [--height 1 <= INT <= 100] [{run,export}]
   
-  ╭─ options ───────────────────────────────────╮
-  │ -h, --help  show this help message and exit │
-  │ --width 1.0 <= FLOAT <= 100.0               │
-  │             (default: 10.0)                 │
-  │ --height 1 <= INT <= 100                    │
-  │             (default: 10)                   │
-  ╰─────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  │ --width 1.0 <= FLOAT <= 100.0                      │
+  │             (default: 10.0)                        │
+  │ --height 1 <= INT <= 100                           │
+  │             (default: 10)                          │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  ╰────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_subclass[run-render]
@@ -121,22 +165,34 @@
 # ---
 # name: test_params_class[normal-help]
   '''
-  usage: params_class.py [-h] [OPTIONS]
+  usage: params_class.py [-h] [OPTIONS] [{run,export}]
   
-  ╭─ options ─────────────────────────────────────╮
-  │ -h, --help  show this help message and exit   │
-  │ --preset {None,default,large,small}           │
-  │             (default: None)                   │
-  │ --width 1.0 <= FLOAT <= 100.0                 │
-  │             (default: 10.0)                   │
-  │ --height 1 <= INT <= 50                       │
-  │             (default: 5)                      │
-  │ --enabled, --no-enabled                       │
-  │             enable the thing (default: False) │
-  │ --text STR  (default: nope)                   │
-  │ --thing {first,second,third}                  │
-  │             (default: first)                  │
-  ╰───────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit        │
+  │ --preset {None,default,large,small}                   │
+  │                (default: None)                        │
+  │ --width 1.0 <= FLOAT <= 100.0                         │
+  │                (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                               │
+  │                (default: 5)                           │
+  │ --enabled, --no-enabled                               │
+  │                enable the thing (default: False)      │
+  │ --text STR     (default: nope)                        │
+  │ --thing {first,second,third}                          │
+  │                (default: first)                       │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ sub options ─────────────────────────────────────────╮
+  │ --sub.a FLOAT  (default: 1)                           │
+  │ --sub.b FLOAT  (default: 2)                           │
+  │ --sub.c FLOAT  (default: 3)                           │
+  │ --sub.do-the-thing, --sub.no-do-the-thing             │
+  │                (default: False)                       │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run        Run the model.                         │
+  │   • export     Export geometry to a STEP or STL file. │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class[normal-render]
@@ -144,22 +200,34 @@
 # ---
 # name: test_params_class[show-help]
   '''
-  usage: params_class.py [-h] [OPTIONS]
+  usage: params_class.py [-h] [OPTIONS] [{run,export}]
   
-  ╭─ options ─────────────────────────────────────╮
-  │ -h, --help  show this help message and exit   │
-  │ --preset {None,default,large,small}           │
-  │             (default: None)                   │
-  │ --width 1.0 <= FLOAT <= 100.0                 │
-  │             (default: 10.0)                   │
-  │ --height 1 <= INT <= 50                       │
-  │             (default: 5)                      │
-  │ --enabled, --no-enabled                       │
-  │             enable the thing (default: False) │
-  │ --text STR  (default: nope)                   │
-  │ --thing {first,second,third}                  │
-  │             (default: first)                  │
-  ╰───────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit        │
+  │ --preset {None,default,large,small}                   │
+  │                (default: None)                        │
+  │ --width 1.0 <= FLOAT <= 100.0                         │
+  │                (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                               │
+  │                (default: 5)                           │
+  │ --enabled, --no-enabled                               │
+  │                enable the thing (default: False)      │
+  │ --text STR     (default: nope)                        │
+  │ --thing {first,second,third}                          │
+  │                (default: first)                       │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ sub options ─────────────────────────────────────────╮
+  │ --sub.a FLOAT  (default: 1)                           │
+  │ --sub.b FLOAT  (default: 2)                           │
+  │ --sub.c FLOAT  (default: 3)                           │
+  │ --sub.do-the-thing, --sub.no-do-the-thing             │
+  │                (default: False)                       │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run        Run the model.                         │
+  │   • export     Export geometry to a STEP or STL file. │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class[show-render]
@@ -167,11 +235,16 @@
 # ---
 # name: test_params_class_blank[noparams-help]
   '''
-  usage: params_class_blank.py [-h]
+  usage: params_class_blank.py [-h] [{run,export}]
   
-  ╭─ options ───────────────────────────────────╮
-  │ -h, --help  show this help message and exit │
-  ╰─────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  ╰────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class_blank[noparams-render]
@@ -179,11 +252,16 @@
 # ---
 # name: test_params_class_blank[normal-help]
   '''
-  usage: params_class_blank.py [-h]
+  usage: params_class_blank.py [-h] [{run,export}]
   
-  ╭─ options ───────────────────────────────────╮
-  │ -h, --help  show this help message and exit │
-  ╰─────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  ╰────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class_blank[normal-render]
@@ -191,11 +269,16 @@
 # ---
 # name: test_params_class_blank[show-help]
   '''
-  usage: params_class_blank.py [-h]
+  usage: params_class_blank.py [-h] [{run,export}]
   
-  ╭─ options ───────────────────────────────────╮
-  │ -h, --help  show this help message and exit │
-  ╰─────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  ╰────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class_blank[show-render]
@@ -203,22 +286,27 @@
 # ---
 # name: test_params_class_instance[help]
   '''
-  usage: params_class_instance.py [-h] [OPTIONS]
+  usage: params_class_instance.py [-h] [OPTIONS] [{run,export}]
   
-  ╭─ options ─────────────────────────────────────╮
-  │ -h, --help  show this help message and exit   │
-  │ --preset {None,default,large,small}           │
-  │             (default: None)                   │
-  │ --width 1.0 <= FLOAT <= 100.0                 │
-  │             (default: 10.0)                   │
-  │ --height 1 <= INT <= 50                       │
-  │             (default: 5)                      │
-  │ --enabled, --no-enabled                       │
-  │             enable the thing (default: False) │
-  │ --text STR  (default: nope)                   │
-  │ --thing {first,second,third}                  │
-  │             (default: first)                  │
-  ╰───────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  │ --preset {None,default,large,small}                │
+  │             (default: None)                        │
+  │ --width 1.0 <= FLOAT <= 100.0                      │
+  │             (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                            │
+  │             (default: 5)                           │
+  │ --enabled, --no-enabled                            │
+  │             enable the thing (default: False)      │
+  │ --text STR  (default: nope)                        │
+  │ --thing {first,second,third}                       │
+  │             (default: first)                       │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  ╰────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class_instance[render]

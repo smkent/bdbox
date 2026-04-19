@@ -8,10 +8,11 @@ from dataclasses import dataclass, field, fields
 from pathlib import Path
 from typing import Any, ClassVar, Literal
 
-import tyro
-
+from bdbox.actions.field import ActionField
+from bdbox.actions.run import RunAction
+from bdbox.cli import CLI
 from bdbox.errors import ParamsError
-from bdbox.geometry import GeometryMode, resolve_geometry
+from bdbox.geometry import Geometry
 
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
@@ -30,14 +31,37 @@ else:
 
 @dataclass
 class _MainInfo:
-    params_defined: bool = False
     filename: str | None = None
     model_subclasses: list[Any] = field(default_factory=list)
+    action: ActionField = field(default_factory=RunAction)
+
+
+class ParamsType(type):
+    @staticmethod
+    def __in_pkg(mro: type, pkg: str) -> bool:
+        return (n := mro.__module__) == pkg or n.startswith(f"{pkg}.")
+
+    def __base_class(cls, pkg: str) -> str | None:
+        for mro in cls.__mro__[1:]:
+            if cls.__in_pkg(mro, pkg):
+                return mro.__name__
+        return None
+
+    def __repr__(cls) -> str:
+        if cls.__in_pkg(
+            cls, (pkg := (__package__ or "").split(".", 1)[0])
+        ) or not (pkgname := cls.__base_class(pkg)):
+            return super().__repr__()
+        kvlist = [
+            f"{f.name}={getattr(cls, f.name, '(required)')!r}"
+            for f in fields(cls)
+        ]
+        return f"{cls.__qualname__}({pkgname})({', '.join(kvlist)})"
 
 
 @dataclass_transform(field_specifiers=(Float, Int, Bool, Str, Choice))
 @dataclass
-class Params:
+class Params(CLI, metaclass=ParamsType):
     """Base class for script-style single models with parameters.
 
     Declare parameters as class attributes in the same form as
@@ -97,17 +121,27 @@ class Params:
         cls._annotate_as_dataclass()
 
         if cls.__module__ == "__main__":
-            GeometryMode.ensure_params_class_mode()
-            if Params._main_info.params_defined:
+            Geometry.ensure_params_class_mode()
+            if Params._main_info.model_subclasses:
                 raise ParamsError(
                     f"Cannot define Params subclass {cls.__name__!r}:"
                     " a Params subclass is already defined in this script"
                 )
-            Params._main_info.params_defined = True
-            instance = tyro.cli(cls, prog=Path(sys.argv[0]).name)
-            for f in cls._get_dataclass_fields():
-                setattr(cls, f.name, getattr(instance, f.name))
-            atexit.register(resolve_geometry)
+            Params._main_info.model_subclasses.append(cls)
+            cli_result = cls.cli_config().instance_from_cli(
+                prog=Path(sys.argv[0]).name
+            )
+            for f in fields(cls):
+                setattr(cls, f.name, getattr(cli_result.params, f.name))
+            Params._main_info.action = cli_result.action
+            cli_result.action.before_model()
+            atexit.register(Params._atexit_handler)
+
+    @classmethod
+    def _atexit_handler(cls) -> None:
+        atexit.unregister(Params._atexit_handler)
+        if Params._main_info.model_subclasses:
+            Params._main_info.action()
 
     def __post_init__(self) -> None:
         if self.preset:
@@ -119,7 +153,7 @@ class Params:
             for name, value in preset.values.items():
                 if getattr(self, name) == dc_fields[name].default:
                     setattr(self, name, value)
-        for f in self._get_dataclass_fields():
+        for f in fields(self):
             if ff := Field.from_dataclass_field(f):
                 ff.validate(getattr(self, f.name))
 
@@ -178,6 +212,7 @@ class Params:
         else:
             annotations["preset"] = ClassVar[str | None]
             cls.preset = None  # ty: ignore[unresolved-attribute]
+
         # Apply annotations in original attribute order
         cls.__annotations__ = {
             name: annotation
@@ -188,7 +223,3 @@ class Params:
             if (annotation := annotations.get(name))
         }
         dataclass(cls)
-
-    @classmethod
-    def _get_dataclass_fields(cls) -> Sequence[DCField]:
-        return [f for f in fields(cls) if f.name != "preset"]

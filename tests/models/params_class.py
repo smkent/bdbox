@@ -2,12 +2,23 @@
 """Params subclass test model."""
 
 import os
+from dataclasses import dataclass, field
 
 from bdbox import Bool, Choice, Float, Int, Params, Preset, Str, show
+
+
+@dataclass
+class SubOptions:
+    a: float
+    b: float
+    c: float
+    do_the_thing: bool = False
+
 
 if os.environ.get("BDBOX_TEST_MODEL_MODE", "") != "show_noparams":
 
     class P(Params):
+        sub: SubOptions = field(default_factory=lambda: SubOptions(1, 2, 3))
         width = Float(10.0, min=1.0, max=100.0)
         height = Int(5, min=1, max=50)
         enabled = Bool(default=False, description="enable the thing")

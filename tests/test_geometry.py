@@ -3,32 +3,61 @@
 from __future__ import annotations
 
 import sys
-import types
-from typing import Protocol, cast
+from types import ModuleType
+from typing import Any
 
 import pytest
 
-import bdbox.geometry as geom
-from bdbox.geometry import resolve_geometry, show
+from bdbox.geometry import reset_geometry, resolve_geometry, show
 
 
 @pytest.fixture(autouse=True)
-def _clear_geometry() -> None:
+def _reset_geometry() -> None:
     """Reset collected geometry before and after each test."""
-    geom._geometry.clear()  # noqa: SLF001
+    reset_geometry()
 
 
-def test_show_multiple_args() -> None:
-    obj1, obj2, obj3 = object(), object(), object()
-    show(obj1, obj2, obj3)
+class MockBuild123d(ModuleType):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__("build123d", *args, **kwargs)
+
+    class Shape:
+        pass
+
+
+class MockMainBase(ModuleType):
+    count: int
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__("__main__", *args, **kwargs)
+
+
+@pytest.fixture(autouse=True)
+def b123d(monkeypatch: pytest.MonkeyPatch) -> MockBuild123d:
+    module = MockBuild123d()
+    monkeypatch.setitem(sys.modules, "build123d", module)
+    return module
+
+
+def test_show_multiple_args(b123d: MockBuild123d) -> None:
+    obj0, obj1, obj2, obj3, obj4 = (
+        object(),
+        b123d.Shape(),
+        b123d.Shape(),
+        b123d.Shape(),
+        object(),
+    )
+    show(obj0, obj1, obj2, obj3, obj4)
     assert resolve_geometry() == [obj1, obj2, obj3]
 
 
-def test_resolve_geometry_returns_shown() -> None:
-    obj1, obj2 = object(), object()
+def test_resolve_geometry_returns_shown(b123d: MockBuild123d) -> None:
+    obj1, obj2, obj3, obj4 = b123d.Shape(), object(), b123d.Shape(), object()
     show(obj1)
     show(obj2)
-    assert resolve_geometry() == [obj1, obj2]
+    show(obj3)
+    show(obj4)
+    assert resolve_geometry() == [obj1, obj3]
 
 
 def test_resolve_geometry_empty_no_build123d(
@@ -38,49 +67,35 @@ def test_resolve_geometry_empty_no_build123d(
     assert resolve_geometry() == []
 
 
-def test_scan_main_globals_no_shapes(monkeypatch: pytest.MonkeyPatch) -> None:
-    class MockBuild123d(Protocol):
-        Shape: type
-
-    fake_shape_cls = type("Shape", (), {})
-    fake_b123d = cast("MockBuild123d", types.ModuleType("build123d"))
-    fake_b123d.Shape = fake_shape_cls
-    monkeypatch.setitem(sys.modules, "build123d", fake_b123d)
-
-    class MockMain(Protocol):
+def test_scan_main_globals_no_shapes(
+    monkeypatch: pytest.MonkeyPatch, b123d: MockBuild123d
+) -> None:
+    class MockMain(MockMainBase):
         count: int
 
-    fake_main = cast("MockMain", types.ModuleType("__main__"))
-    fake_main.count = 42
-    monkeypatch.setitem(sys.modules, "__main__", fake_main)
+    mock_main = MockMain()
+    monkeypatch.setitem(sys.modules, "__main__", mock_main)
 
+    mock_main.count = 42
     assert resolve_geometry() == []
 
 
 def test_scan_main_globals_returns_shapes(
-    monkeypatch: pytest.MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch, b123d: MockBuild123d
 ) -> None:
-    class MockBuild123d(Protocol):
-        Shape: type
+    shape1, shape2 = b123d.Shape(), b123d.Shape()
 
-    fake_shape_cls = type("Shape", (), {})
-    fake_b123d = cast("MockBuild123d", types.ModuleType("build123d"))
-    fake_b123d.Shape = fake_shape_cls
-    monkeypatch.setitem(sys.modules, "build123d", fake_b123d)
-
-    class MockMain(Protocol):
+    class MockMain(MockMainBase):
         count: int
-        box: fake_b123d.Shape
-        sphere: fake_b123d.Shape
-        _private: fake_b123d.Shape
+        box: b123d.Shape
+        sphere: b123d.Shape
+        _private: b123d.Shape
 
-    shape1, shape2 = fake_shape_cls(), fake_shape_cls()
-    fake_main = cast("MockMain", types.ModuleType("__main__"))
-    fake_main.box = shape1
-    fake_main.sphere = shape2
-    fake_main._private = fake_shape_cls()  # noqa: SLF001
-    fake_main.count = 42
-    monkeypatch.setitem(sys.modules, "__main__", fake_main)
+    mock_main = MockMain()
+    mock_main.box = shape1
+    mock_main.sphere = shape2
+    mock_main._private = b123d.Shape()  # noqa: SLF001
+    mock_main.count = 42
+    monkeypatch.setitem(sys.modules, "__main__", mock_main)
 
-    result = resolve_geometry()
-    assert set(result) == {shape1, shape2}
+    assert set(resolve_geometry()) == {shape1, shape2}
