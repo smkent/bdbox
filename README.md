@@ -70,6 +70,19 @@ python mybox.py --preset large  # Apply a named preset of values
 python mybox.py --help          # Usage info with all parameters
 ```
 
+**Export** geometry to STEP or STL files using the built-in `export` action:
+
+```sh
+python mybox.py export output.step  # Export to STEP
+python mybox.py export output.stl   # Export to STL
+```
+
+Or use the `bdbox` runner to export plain build123d models:
+
+```sh
+bdbox mybox.py export output.step
+```
+
 **[See full details in the documentation!][docs]**
 
 ## Project template
@@ -78,4 +91,4 @@ This project is generated and maintained with [copier-python][copier-python].
 
 [build123d]: https://build123d.readthedocs.io
 [copier-python]: https://smkent.github.io/copier-python
-[docs]: https://smkent.github.io/bdbox/parameters/
+[docs]: https://smkent.github.io/bdbox/

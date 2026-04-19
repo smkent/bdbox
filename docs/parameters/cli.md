@@ -14,11 +14,17 @@ argument parsing code is needed.
 
 | Command | Effect |
 |---|---|
-| `python model.py` | Build with all field defaults |
+| `python model.py` | Build with all field defaults (equivalent to `run`) |
 | `python model.py --width 25` | Override one or more fields |
 | `python model.py --preset large` | Apply a named preset |
 | `python model.py --preset large --width 25` | Preset as baseline, then override |
-| `python model.py --help` | Show all fields, defaults, and presets |
+| `python model.py --help` | Show all fields, defaults, presets, and actions |
+| `python model.py run` | Explicitly run the model |
+| `python model.py export output.step` | Export geometry to a STEP file |
+| `python model.py export output.stl` | Export geometry to an STL file |
+
+See the [Actions](../actions/index.md) documentation for full details on the
+`run` and `export` actions, including use of the `bdbox` runner.
 
 ## Field flags
 
@@ -47,10 +53,10 @@ python model.py --no-hollow     # Set to False
 ## Help output
 
 `--help` lists every field with its type, description, and default value, plus
-available presets:
+available presets and actions:
 
 ```text
-usage: MyBox [-h] [OPTIONS]
+usage: MyBox [-h] [OPTIONS] [{run,export}]
 
 ╭─ options ──────────────────────────────────────────────╮
 │ -h, --help             show this help message and exit │
@@ -60,6 +66,11 @@ usage: MyBox [-h] [OPTIONS]
 │                        (default: 10.0)                 │
 │ --thickness 1 <= FLOAT <= 10                           │
 │                        (default: 3.0)                  │
+╰────────────────────────────────────────────────────────╯
+╭─ subcommands ──────────────────────────────────────────╮
+│ (default: run)                                         │
+│   • run      Run the model.                            │
+│   • export   Export geometry to a file.                │
 ╰────────────────────────────────────────────────────────╯
 ```
 
@@ -106,7 +117,7 @@ warning is printed and `run` must be manually called on the desired class.
 **Params:** One or more calls to [``show``][bdbox.geometry.show] accumulate
 geometry in call order. If `show` is never called (and
 [``Params``][bdbox.parameters.parameters.Params] is subclassed within the
-[invocated script][__main__]), bdbox scans the program's global variables for
+[invoked script][__main__]), bdbox scans the program's global variables for
 [``build123d.Shape``][topology.Shape] instances on completion.
 
 **Model:** Geometry must be returned from the
@@ -139,10 +150,6 @@ geometry in call order. If `show` is never called (and
 
     MyModel.run()  # optional, as only one Model subclass is defined
     ```
-
-!!! info
-    Functionality is planned for the collected geometry. Currently, geometry is
-    simply discarded.
 
 [build123d]: https://build123d.readthedocs.io
 [tyro]: https://brentyi.github.io/tyro/

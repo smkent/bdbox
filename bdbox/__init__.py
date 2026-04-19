@@ -1,4 +1,4 @@
-"""Parametric configuration and tooling for build123d models.."""
+"""Parametric configuration and tooling for build123d models."""
 
 from __future__ import annotations
 

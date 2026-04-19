@@ -7,9 +7,7 @@ import traceback
 from dataclasses import dataclass
 from typing import Any
 
-import tyro
-
-from .geometry import GeometryMode, show
+from .geometry import Geometry, show
 from .parameters.parameters import Params
 
 
@@ -89,19 +87,22 @@ class Model(Params):
         if (
             cls.__module__ == "__main__"
             and (mm := sys.modules.get(cls.__module__))
-            and not getattr(mm, "__file__", None)
+            and getattr(mm, "__file__", None)
             and Model._main_info.filename
         ):
             mm.__file__ = Model._main_info.filename
-        instance = tyro.cli(cls, prog=cls.__name__)
-        show(instance.build())
+        cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
+        action = cli_result.action
+        action.before_model()
+        show(cli_result.params.build())
+        action()
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         object.__init_subclass__(**kwargs)
         cls._annotate_as_dataclass()
 
         if cls.__module__ == "__main__":
-            GeometryMode.ensure_model_class_mode(cls.__name__)
+            Geometry.ensure_model_class_mode(cls.__name__)
             if not Model._main_info.model_subclasses:
                 atexit.register(Model._atexit_handler)
                 Model._main_info.filename = getattr(

@@ -20,6 +20,9 @@ nav = [
       "parameters/presets.md",
       "parameters/cli.md",
     ] },
+    { "Actions" = [
+      "actions/index.md",
+    ] },
   ] },
   { "API Reference" = [
     { "bdbox" = [

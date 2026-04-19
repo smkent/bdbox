@@ -34,6 +34,9 @@ dependencies = [
     "tyro>=1.0.12",
 ]
 
+[project.scripts]
+bdbox = "bdbox.__main__:main"
+
 [project.urls]
 Homepage = "https://smkent.github.io/bdbox"
 Repository = "https://github.com/smkent/bdbox"
