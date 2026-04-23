@@ -1,7 +1,7 @@
 # serializer version: 1
 # name: test_model[normal-help]
   '''
-  usage: MyModel [-h] [OPTIONS] [{run,export}]
+  usage: MyModel [-h] [OPTIONS] [{run,export,view,viewer}]
   
   ╭─ options ─────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit        │
@@ -29,6 +29,8 @@
   │ (default: run)                                        │
   │   • run        Run the model.                         │
   │   • export     Export geometry to a STEP or STL file. │
+  │   • view       View model geometry.                   │
+  │   • viewer     Viewer control                         │
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
@@ -37,7 +39,7 @@
 # ---
 # name: test_model[run-help]
   '''
-  usage: MyModel [-h] [OPTIONS] [{run,export}]
+  usage: MyModel [-h] [OPTIONS] [{run,export,view,viewer}]
   
   ╭─ options ─────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit        │
@@ -65,6 +67,8 @@
   │ (default: run)                                        │
   │   • run        Run the model.                         │
   │   • export     Export geometry to a STEP or STL file. │
+  │   • view       View model geometry.                   │
+  │   • viewer     Viewer control                         │
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
@@ -73,7 +77,7 @@
 # ---
 # name: test_model_blank[normal-help]
   '''
-  usage: MyModel [-h] [{run,export}]
+  usage: MyModel [-h] [{run,export,view,viewer}]
   
   ╭─ options ──────────────────────────────────────────╮
   │ -h, --help  show this help message and exit        │
@@ -82,6 +86,8 @@
   │ (default: run)                                     │
   │   • run     Run the model.                         │
   │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
   ╰────────────────────────────────────────────────────╯
   '''
 # ---
@@ -90,7 +96,7 @@
 # ---
 # name: test_model_blank[run-help]
   '''
-  usage: MyModel [-h] [{run,export}]
+  usage: MyModel [-h] [{run,export,view,viewer}]
   
   ╭─ options ──────────────────────────────────────────╮
   │ -h, --help  show this help message and exit        │
@@ -99,6 +105,8 @@
   │ (default: run)                                     │
   │   • run     Run the model.                         │
   │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
   ╰────────────────────────────────────────────────────╯
   '''
 # ---
@@ -113,7 +121,7 @@
 # ---
 # name: test_model_multiple[run-help]
   '''
-  usage: FirstModel [-h] [--width 1.0 <= FLOAT <= 100.0] [{run,export}]
+  usage: FirstModel [-h] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,viewer}]
   
   ╭─ options ──────────────────────────────────────────╮
   │ -h, --help  show this help message and exit        │
@@ -124,6 +132,8 @@
   │ (default: run)                                     │
   │   • run     Run the model.                         │
   │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
   ╰────────────────────────────────────────────────────╯
   '''
 # ---
@@ -138,7 +148,7 @@
 # ---
 # name: test_model_subclass[run-help]
   '''
-  usage: ChildModel [-h] [--width 1.0 <= FLOAT <= 100.0] [--height 1 <= INT <= 100] [{run,export}]
+  usage: ChildModel [-h] [--width 1.0 <= FLOAT <= 100.0] [--height 1 <= INT <= 100] [{run,export,view,viewer}]
   
   ╭─ options ──────────────────────────────────────────╮
   │ -h, --help  show this help message and exit        │
@@ -151,6 +161,8 @@
   │ (default: run)                                     │
   │   • run     Run the model.                         │
   │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
   ╰────────────────────────────────────────────────────╯
   '''
 # ---
@@ -165,7 +177,7 @@
 # ---
 # name: test_params_class[normal-help]
   '''
-  usage: params_class.py [-h] [OPTIONS] [{run,export}]
+  usage: params_class.py [-h] [OPTIONS] [{run,export,view,viewer}]
   
   ╭─ options ─────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit        │
@@ -192,6 +204,8 @@
   │ (default: run)                                        │
   │   • run        Run the model.                         │
   │   • export     Export geometry to a STEP or STL file. │
+  │   • view       View model geometry.                   │
+  │   • viewer     Viewer control                         │
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
@@ -200,7 +214,7 @@
 # ---
 # name: test_params_class[show-help]
   '''
-  usage: params_class.py [-h] [OPTIONS] [{run,export}]
+  usage: params_class.py [-h] [OPTIONS] [{run,export,view,viewer}]
   
   ╭─ options ─────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit        │
@@ -227,6 +241,8 @@
   │ (default: run)                                        │
   │   • run        Run the model.                         │
   │   • export     Export geometry to a STEP or STL file. │
+  │   • view       View model geometry.                   │
+  │   • viewer     Viewer control                         │
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
@@ -235,7 +251,7 @@
 # ---
 # name: test_params_class_blank[noparams-help]
   '''
-  usage: params_class_blank.py [-h] [{run,export}]
+  usage: params_class_blank.py [-h] [{run,export,view,viewer}]
   
   ╭─ options ──────────────────────────────────────────╮
   │ -h, --help  show this help message and exit        │
@@ -244,6 +260,8 @@
   │ (default: run)                                     │
   │   • run     Run the model.                         │
   │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
   ╰────────────────────────────────────────────────────╯
   '''
 # ---
@@ -252,7 +270,7 @@
 # ---
 # name: test_params_class_blank[normal-help]
   '''
-  usage: params_class_blank.py [-h] [{run,export}]
+  usage: params_class_blank.py [-h] [{run,export,view,viewer}]
   
   ╭─ options ──────────────────────────────────────────╮
   │ -h, --help  show this help message and exit        │
@@ -261,6 +279,8 @@
   │ (default: run)                                     │
   │   • run     Run the model.                         │
   │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
   ╰────────────────────────────────────────────────────╯
   '''
 # ---
@@ -269,7 +289,7 @@
 # ---
 # name: test_params_class_blank[show-help]
   '''
-  usage: params_class_blank.py [-h] [{run,export}]
+  usage: params_class_blank.py [-h] [{run,export,view,viewer}]
   
   ╭─ options ──────────────────────────────────────────╮
   │ -h, --help  show this help message and exit        │
@@ -278,6 +298,8 @@
   │ (default: run)                                     │
   │   • run     Run the model.                         │
   │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
   ╰────────────────────────────────────────────────────╯
   '''
 # ---
@@ -286,7 +308,7 @@
 # ---
 # name: test_params_class_instance[help]
   '''
-  usage: params_class_instance.py [-h] [OPTIONS] [{run,export}]
+  usage: params_class_instance.py [-h] [OPTIONS] [{run,export,view,viewer}]
   
   ╭─ options ──────────────────────────────────────────╮
   │ -h, --help  show this help message and exit        │
@@ -306,6 +328,8 @@
   │ (default: run)                                     │
   │   • run     Run the model.                         │
   │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
   ╰────────────────────────────────────────────────────╯
   '''
 # ---

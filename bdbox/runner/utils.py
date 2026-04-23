@@ -4,6 +4,9 @@ import sys
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
+from bdbox import Model, Params
+from bdbox.geometry import reset_geometry
+
 if sys.version_info >= (3, 11):
     from typing import Self
 else:
@@ -11,6 +14,13 @@ else:
 
 if TYPE_CHECKING:
     from types import ModuleType, TracebackType
+
+
+def reset_bdbox() -> None:
+    """Reset all bdbox module-level state for runners or tests."""
+    reset_geometry()
+    for params_class in [Params, Model]:
+        params_class._main_info.__init__()  # noqa: SLF001
 
 
 @dataclass

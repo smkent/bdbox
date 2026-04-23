@@ -1,6 +1,6 @@
 # bdbox
 
-Parametric configuration and tooling for [build123d][build123d] models.
+A live development environment for [build123d][build123d] models.
 
 [![License](https://img.shields.io/github/license/smkent/bdbox)](https://github.com/smkent/bdbox/blob/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/bdbox)](https://pypi.org/project/bdbox/)
@@ -10,19 +10,46 @@ Parametric configuration and tooling for [build123d][build123d] models.
 [![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen?logo=renovatebot)](https://renovatebot.com)
 [![GitHub stars](https://img.shields.io/github/stars/smkent/bdbox?style=social)](https://github.com/smkent/bdbox)
 
+[See the documentation site for full project details!][docs]
+
 ## Installation
 
 ```sh
 pip install bdbox
 ```
 
-## Features
+## Works with any build123d model
 
-Easily add **configurable parameters** to [build123d][build123d] models! Declare
-typed parameters with defaults, then override them individually or with named
-presets.
+Use `bdbox` with build123d models:
 
-Great for simple models:
+```python
+# mybox.py
+from build123d import Box
+
+result = Box(10, 10, 10)
+```
+
+Export to STEP or STL with `bdbox`:
+
+```sh
+bdbox mybox.py export out.step  # Export to STEP
+bdbox mybox.py export out.stl   # Export to STL
+```
+
+View your model in your browser with [OCP CAD Viewer][ocp_vscode], started
+automatically. `bdbox` automatically re-renders your model on save:
+
+```
+bdbox mybox.py view
+```
+
+**[See more about actions in the documentation!][docs-actions]**
+
+## Add parameters for interactive customization
+
+Opt in to parametric customization by importing from `bdbox`. Declare typed
+parameters with defaults, then override them individually or with named
+presets:
 
 ```python
 from bdbox import Float, Int, Params, Preset, show
@@ -60,30 +87,24 @@ class MyBox(Model):
         return Box(self.width, self.length, self.thickness)
 ```
 
-This provides a CLI with parameter value arguments, preset selection, and usage
-information:
+Parameters become CLI flags automatically:
 
 ```sh
 python mybox.py                 # Run with default values
+python mybox.py view            # View with live reload
 python mybox.py --width 50      # Override a field value
-python mybox.py --preset large  # Apply a named preset of values
+python mybox.py --preset large  # Apply a named preset
 python mybox.py --help          # Usage info with all parameters
 ```
 
-**Export** geometry to STEP or STL files using the built-in `export` action:
+Export geometry to STEP or STL files using the built-in `export` action:
 
 ```sh
 python mybox.py export output.step  # Export to STEP
 python mybox.py export output.stl   # Export to STL
 ```
 
-Or use the `bdbox` runner to export plain build123d models:
-
-```sh
-bdbox mybox.py export output.step
-```
-
-**[See full details in the documentation!][docs]**
+**[See more about parameters in the documentation!][docs-parameters]**
 
 ## Project template
 
@@ -92,3 +113,6 @@ This project is generated and maintained with [copier-python][copier-python].
 [build123d]: https://build123d.readthedocs.io
 [copier-python]: https://smkent.github.io/copier-python
 [docs]: https://smkent.github.io/bdbox/
+[docs-actions]: https://smkent.github.io/bdbox/actions/
+[docs-parameters]: https://smkent.github.io/bdbox/parameters/
+[ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer

@@ -14,14 +14,16 @@ nav = [
     "contributing.md",
   ] },
   { "Features" = [
+    { "Actions" = [
+      "actions/index.md",
+      "actions/view.md",
+      "actions/export.md",
+    ] },
     { "Parameters" = [
       "parameters/index.md",
       "parameters/fields.md",
       "parameters/presets.md",
       "parameters/cli.md",
-    ] },
-    { "Actions" = [
-      "actions/index.md",
     ] },
   ] },
   { "API Reference" = [

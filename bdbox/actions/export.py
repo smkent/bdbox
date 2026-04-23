@@ -11,14 +11,14 @@ import tyro
 from bdbox.errors import Error
 from bdbox.geometry import resolve_geometry
 
-from .action import Action
+from .action import ModelAction
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
 
 @dataclass
-class ExportAction(Action):
+class ExportAction(ModelAction):
     """Export collected geometry to a STEP or STL file."""
 
     output: Annotated[

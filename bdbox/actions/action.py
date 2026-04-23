@@ -4,13 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import TYPE_CHECKING, ClassVar
+from typing import ClassVar
 
 import tyro  # noqa: TC002
-
-if TYPE_CHECKING:
-    from collections.abc import Sequence
-    from pathlib import Path
 
 
 @dataclass
@@ -19,7 +15,7 @@ class Action:
 
     class Mode(Enum):
         EMBEDDED = auto()
-        RUNNER = auto()
+        HARNESS = auto()
 
     mode: ClassVar[Action.Mode] = Mode.EMBEDDED
     watch: ClassVar[tyro.conf.Fixed[bool]] = False
@@ -28,10 +24,10 @@ class Action:
         """Execute this action with the given geometry."""
         raise NotImplementedError
 
-    def before_harness_model(
-        self, model: str | Path, argv: Sequence[str] = ()
-    ) -> None:
-        """Executed prior to model program start within ModelRunner."""
-
     def before_model(self) -> None:
-        """Executed prior to model run."""
+        """Executed prior to running a model."""
+
+
+@dataclass
+class ModelAction(Action):
+    pass
