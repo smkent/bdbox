@@ -29,8 +29,7 @@ class ViewAction(ModelAction):
 
         show(geometry)
 
-    def before_model(self) -> None:
-        self._ensure_runner()
+    def before_harness(self) -> None:
         if not self.start_viewer:
             return
         from bdbox.viewer import ViewerManager  # noqa: PLC0415
@@ -39,6 +38,9 @@ class ViewAction(ModelAction):
             restart=self.restart_viewer,
             open_browser=self.open_browser,
         ).start()
+
+    def before_model(self) -> None:
+        self._ensure_runner()
 
     def _ensure_runner(self) -> None:
         if self.mode != self.Mode.HARNESS:

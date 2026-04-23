@@ -24,6 +24,9 @@ class Action:
         """Execute this action with the given geometry."""
         raise NotImplementedError
 
+    def before_harness(self) -> None:
+        """Executed prior to running the harness."""
+
     def before_model(self) -> None:
         """Executed prior to running a model."""
 
