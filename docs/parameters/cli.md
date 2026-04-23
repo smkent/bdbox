@@ -20,11 +20,13 @@ argument parsing code is needed.
 | `python model.py --preset large --width 25` | Preset as baseline, then override |
 | `python model.py --help` | Show all fields, defaults, presets, and actions |
 | `python model.py run` | Explicitly run the model |
+| `python model.py view` | View geometry in OCP CAD Viewer |
 | `python model.py export output.step` | Export geometry to a STEP file |
 | `python model.py export output.stl` | Export geometry to an STL file |
 
-See the [Actions](../actions/index.md) documentation for full details on the
-`run` and `export` actions, including use of the `bdbox` runner.
+See the [Actions](../actions/index.md) documentation for full details,
+including the [view](../actions/view.md) and [export](../actions/export.md)
+actions and use of the `bdbox` runner.
 
 ## Field flags
 
@@ -56,7 +58,7 @@ python model.py --no-hollow     # Set to False
 available presets and actions:
 
 ```text
-usage: MyBox [-h] [OPTIONS] [{run,export}]
+usage: MyBox [-h] [OPTIONS] [{run,view,export}]
 
 ╭─ options ──────────────────────────────────────────────╮
 │ -h, --help             show this help message and exit │
@@ -70,7 +72,8 @@ usage: MyBox [-h] [OPTIONS] [{run,export}]
 ╭─ subcommands ──────────────────────────────────────────╮
 │ (default: run)                                         │
 │   • run      Run the model.                            │
-│   • export   Export geometry to a file.                │
+│   • view     View model geometry.                      │
+│   • export   Export geometry to a STEP or STL file.    │
 ╰────────────────────────────────────────────────────────╯
 ```
 

@@ -8,7 +8,7 @@ from dataclasses import dataclass, field, fields
 from pathlib import Path
 from typing import Any, ClassVar, Literal
 
-from bdbox.actions.field import ActionField
+from bdbox.actions.action import Action
 from bdbox.actions.run import RunAction
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
@@ -33,7 +33,7 @@ else:
 class _MainInfo:
     filename: str | None = None
     model_subclasses: list[Any] = field(default_factory=list)
-    action: ActionField = field(default_factory=RunAction)
+    action: Action = field(default_factory=RunAction)
 
 
 class ParamsType(type):
@@ -134,7 +134,6 @@ class Params(CLI, metaclass=ParamsType):
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
             Params._main_info.action = cli_result.action
-            cli_result.action.before_model()
             atexit.register(Params._atexit_handler)
 
     @classmethod

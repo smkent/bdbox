@@ -92,10 +92,8 @@ class Model(Params):
         ):
             mm.__file__ = Model._main_info.filename
         cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
-        action = cli_result.action
-        action.before_model()
         show(cli_result.params.build())
-        action()
+        cli_result.action()
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         object.__init_subclass__(**kwargs)
@@ -118,20 +116,16 @@ class Model(Params):
     def _atexit_handler(cls) -> None:
         if not (model_subclasses := Model._main_info.model_subclasses):
             return
-        if len(model_subclasses) == 1:
-            model_subclasses[0]._atexit_run()  # noqa: SLF001
-        elif len(model_subclasses) > 1:
+        if len(model_subclasses) > 1:
             names = ", ".join(c.__name__ for c in model_subclasses)
             print(  # noqa: T201
                 f"Multiple Model subclasses defined: {names}."
                 " Call .run() explicitly.",
                 file=sys.stderr,
             )
-
-    @classmethod
-    def _atexit_run(cls) -> None:
+            return
         try:
-            cls.run()
+            model_subclasses[0].run()
         except BaseException as exc:  # noqa: BLE001
             if not isinstance(exc, SystemExit):
                 traceback.print_exc()

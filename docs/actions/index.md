@@ -1,83 +1,58 @@
 ---
-title: Actions
+title: Overview
 icon: lucide/play
 ---
 
 # Actions
 
-!!! Abstract "bdbox **actions** perform operations on collected model geometry!"
+!!! Abstract "bdbox provides **actions** for your [build123d][build123d] models!"
 
-    * **`export`** writes geometry to a STEP or STL file
-    * **`run`** (the default) supports running models without any postprocessing
-    * Run actions directly with model files, or using the **`bdbox`** runner
+    * Easily view or export models with `bdbox`!
+
+    * Regular build123d models must both build and determine how to use
+      model geometry.
+
+    * With `bdbox`, a model only needs to build its geometry, leaving `bdbox` to
+      perform actions on that geometry.
+
+    * Optionally specify model geometry, or let `bdbox` locate model geometry
+      from a model's global variables automatically.
 
 ## Available actions
 
-### run
-
-`run` executes the model without any postprocessing. It is the default when no
-action subcommand is given, so existing invocations like `python model.py`
-continue to work unchanged. Any geometry display or export must be performed by
-the model itself.
-
-### export
-
-`export` collects all geometry produced by the model and writes it to a file.
-The output format is determined by the file extension (not case sensitive):
-
-| Extension | Format |
+| Action | Description |
 |---|---|
-| `.step` | [STEP][step] (Standard for the Exchange of Product model data) |
-| `.stl` | [STL][stl] (stereolithography) |
+| [`export`](export.md) | Export model geometry to a STEP or STL file |
+| [`view`](view.md) | View model geometry with [OCP CAD Viewer][ocp_vscode] |
+| `run` (default) | No geometry processing. Model is responsible for using its own geometry. |
 
 ## Invocation modes
 
-Actions are available in two ways:
+Actions work the same way whether models are run with `bdbox` or directly:
 
-### Embedded
+=== "With `bdbox`"
 
-Any model that declares a [``Params``][bdbox.parameters.parameters.Params] or
-[``Model``][bdbox.model.Model] subclass automatically receives action CLI
-support. Run the model file directly with Python and supply the desired action
-as a subcommand:
+    The `bdbox` command works with any build123d model, including models without
+    any `bdbox` imports:
 
-```sh
-python model.py                     # Run (default)
-python model.py run                 # Explicit run
-python model.py export output.step  # Export to STEP
-python model.py export output.stl   # Export to STL
-```
+    ```sh
+    bdbox model.py                      # Run (default)
+    bdbox model.py view                 # View in OCP CAD Viewer
+    bdbox model.py export output.step   # Export to STEP
+    ```
 
-### bdbox runner
+=== "Direct"
 
-The `bdbox` command can run any bdbox model file. It is useful for exporting
-models without modifying them, and for scripting or automation:
+    The CLI is automatically provided on any model with a
+    [``Params``][bdbox.parameters.parameters.Params] or
+    [``Model``][bdbox.model.Model] subclass. Run the model file itself to use
+    the CLI:
 
-```sh
-bdbox model.py                      # Run (default)
-bdbox model.py run                  # Explicit run
-bdbox model.py export output.step   # Export to STEP
-bdbox model.py export output.stl    # Export to STL
-```
+    ```sh
+    python model.py                     # Run (default)
+    python model.py view                # View in OCP CAD Viewer
+    python model.py export output.step  # Export to STEP
+    ```
 
-## Combining actions with parameter flags
-
-Action subcommands and [parameter flags](../parameters/cli.md) may be used
-together. Parameter flags may appear before or after the subcommand:
-
-```sh
-python model.py --width 50 export output.step
-```
-
-```sh
-python model.py export output.step --width 50
-```
-
-The `bdbox` runner provides the same flexibility:
-
-```sh
-bdbox model.py --width 50 export output.step
-```
-
-[step]: https://en.wikipedia.org/wiki/ISO_10303-21
-[stl]: https://en.wikipedia.org/wiki/STL_(file_format)
+[build123d]: https://build123d.readthedocs.io
+[ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer
