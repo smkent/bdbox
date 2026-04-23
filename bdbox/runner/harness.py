@@ -87,7 +87,7 @@ class ModelHarness:
     def __call__(self) -> None:
         if not self.model_filename or not self.model_path:
             cli_result = self.HarnessCLI.instance_from_cli(
-                prog=self.prog, args=self.argv
+                prog=self.prog, args=self.argv, harness_hook=True
             )
             return
 
@@ -95,7 +95,10 @@ class ModelHarness:
             (self.model_params_cls or CLI)
             .cli_config()
             .instance_from_cli(
-                prog=self.prog, args=self.argv, model_hook=False
+                prog=self.prog,
+                args=self.argv,
+                harness_hook=True,
+                model_hook=False,
             )
         )
         runner = ModelRunner([self.model_path, *self.argv], cli_result.action)

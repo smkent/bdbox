@@ -91,11 +91,14 @@ class CLI:
         prog: str | None = None,
         *args: Any,
         model_hook: bool = True,
+        harness_hook: bool = False,
         **kwargs: Any,
     ) -> Self | tuple[Self, Sequence[str]]:
         cli_result = tyro.cli(
             cls, *args, prog=prog, config=cls._TYRO_CLI_CONFIG, **kwargs
         )
+        if harness_hook:
+            cli_result.action.before_harness()
         if model_hook:
             cli_result.action.before_model()
         return cli_result
