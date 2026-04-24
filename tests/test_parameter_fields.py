@@ -77,12 +77,12 @@ def test_float_all_attrs() -> None:
         ),
         pytest.param(
             lambda: Float(default=1.0, min=5.0),
-            r"default.*must be >= min",
+            r"must be >= min",
             id="below_min",
         ),
         pytest.param(
             lambda: Float(default=200.0, max=100.0),
-            r"default.*must be <= max",
+            r"must be <= max",
             id="above_max",
         ),
         pytest.param(
@@ -123,12 +123,12 @@ def test_int_all_attrs() -> None:
         ),
         pytest.param(
             lambda: Int(default=0, min=1),
-            r"default.*must be >= min",
+            r"must be >= min",
             id="below_min",
         ),
         pytest.param(
             lambda: Int(default=11, max=10),
-            r"default.*must be <= max",
+            r"must be <= max",
             id="above_max",
         ),
         pytest.param(
@@ -168,12 +168,12 @@ def test_str_all_attrs() -> None:
         ),
         pytest.param(
             lambda: Str(default="hi", min_length=5),
-            r"default.*must be >= min",
+            r"must be >= min",
             id="below_min",
         ),
         pytest.param(
             lambda: Str(default="hello world", max_length=5),
-            r"default.*must be <= max",
+            r"must be <= max",
             id="above_max",
         ),
     ],

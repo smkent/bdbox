@@ -3,35 +3,57 @@
   '''
   usage: MyModel [-h] [OPTIONS] [{run,export,view,viewer}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit        │
-  │ --preset {None,default,large,small,plain}             │
-  │                (default: None)                        │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │                (default: 10.0)                        │
-  │ --height 1 <= INT <= 50                               │
-  │                (default: 5)                           │
-  │ --enabled, --no-enabled                               │
-  │                enable the thing (default: False)      │
-  │ --text STR     (default: nope)                        │
-  │ --thing {first,second,third}                          │
-  │                (default: first)                       │
-  │ --count INT    (default: 1)                           │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ sub options ─────────────────────────────────────────╮
-  │ --sub.a FLOAT  (default: 1)                           │
-  │ --sub.b FLOAT  (default: 2)                           │
-  │ --sub.c FLOAT  (default: 3)                           │
-  │ --sub.do-the-thing, --sub.no-do-the-thing             │
-  │                (default: False)                       │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run        Run the model.                         │
-  │   • export     Export geometry to a STEP or STL file. │
-  │   • view       View model geometry.                   │
-  │   • viewer     Viewer control                         │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help      show this help message and exit        │
+  │ --preset {None,default,large,small,plain}              │
+  │                 (default: None)                        │
+  │ --aa INT        (default: 5)                           │
+  │ --width 1.0 <= FLOAT <= 100.0                          │
+  │                 (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                                │
+  │                 (default: 5)                           │
+  │ --enabled, --no-enabled                                │
+  │                 enable the thing (default: False)      │
+  │ --text STR      (default: nope)                        │
+  │ --thing {first,second,third}                           │
+  │                 (default: first)                       │
+  │ --count INT     (default: 1)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub options ──────────────────────────────────────────╮
+  │ --sub.a FLOAT   (required)                             │
+  │ --sub.b FLOAT   (default: 5.0)                         │
+  │ --sub.c 0 <= FLOAT <= 2000.0                           │
+  │                 C! (default: 25.0)                     │
+  │ --sub.do-the-thing, --sub.no-do-the-thing              │
+  │                 (default: False)                       │
+  │ --sub.do-another-thing, --sub.no-do-another-thing      │
+  │                 Another thing? (default: False)        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub.subsub options ───────────────────────────────────╮
+  │ --sub.subsub.x 0 <= INT <= 10                          │
+  │                 (default: 5)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub2 options ─────────────────────────────────────────╮
+  │ --sub2.a FLOAT  (default: 1)                           │
+  │ --sub2.b FLOAT  (default: 2)                           │
+  │ --sub2.c 0 <= FLOAT <= 2000.0                          │
+  │                 C! (default: 3)                        │
+  │ --sub2.do-the-thing, --sub2.no-do-the-thing            │
+  │                 (default: False)                       │
+  │ --sub2.do-another-thing, --sub2.no-do-another-thing    │
+  │                 Another thing? (default: False)        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub2.subsub options ──────────────────────────────────╮
+  │ --sub2.subsub.x 0 <= INT <= 10                         │
+  │                 (default: 5)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run         Run the model.                         │
+  │   • export      Export geometry to a STEP or STL file. │
+  │   • view        View model geometry.                   │
+  │   • viewer      Viewer control                         │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model[normal-render]
@@ -41,35 +63,57 @@
   '''
   usage: MyModel [-h] [OPTIONS] [{run,export,view,viewer}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit        │
-  │ --preset {None,default,large,small,plain}             │
-  │                (default: None)                        │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │                (default: 10.0)                        │
-  │ --height 1 <= INT <= 50                               │
-  │                (default: 5)                           │
-  │ --enabled, --no-enabled                               │
-  │                enable the thing (default: False)      │
-  │ --text STR     (default: nope)                        │
-  │ --thing {first,second,third}                          │
-  │                (default: first)                       │
-  │ --count INT    (default: 1)                           │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ sub options ─────────────────────────────────────────╮
-  │ --sub.a FLOAT  (default: 1)                           │
-  │ --sub.b FLOAT  (default: 2)                           │
-  │ --sub.c FLOAT  (default: 3)                           │
-  │ --sub.do-the-thing, --sub.no-do-the-thing             │
-  │                (default: False)                       │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run        Run the model.                         │
-  │   • export     Export geometry to a STEP or STL file. │
-  │   • view       View model geometry.                   │
-  │   • viewer     Viewer control                         │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help      show this help message and exit        │
+  │ --preset {None,default,large,small,plain}              │
+  │                 (default: None)                        │
+  │ --aa INT        (default: 5)                           │
+  │ --width 1.0 <= FLOAT <= 100.0                          │
+  │                 (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                                │
+  │                 (default: 5)                           │
+  │ --enabled, --no-enabled                                │
+  │                 enable the thing (default: False)      │
+  │ --text STR      (default: nope)                        │
+  │ --thing {first,second,third}                           │
+  │                 (default: first)                       │
+  │ --count INT     (default: 1)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub options ──────────────────────────────────────────╮
+  │ --sub.a FLOAT   (required)                             │
+  │ --sub.b FLOAT   (default: 5.0)                         │
+  │ --sub.c 0 <= FLOAT <= 2000.0                           │
+  │                 C! (default: 25.0)                     │
+  │ --sub.do-the-thing, --sub.no-do-the-thing              │
+  │                 Zhu Li, do the thing! (default: False) │
+  │ --sub.do-another-thing, --sub.no-do-another-thing      │
+  │                 Another thing? (default: False)        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub.subsub options ───────────────────────────────────╮
+  │ --sub.subsub.x 0 <= INT <= 10                          │
+  │                 (default: 5)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub2 options ─────────────────────────────────────────╮
+  │ --sub2.a FLOAT  (default: 1)                           │
+  │ --sub2.b FLOAT  (default: 2)                           │
+  │ --sub2.c 0 <= FLOAT <= 2000.0                          │
+  │                 C! (default: 3)                        │
+  │ --sub2.do-the-thing, --sub2.no-do-the-thing            │
+  │                 Zhu Li, do the thing! (default: False) │
+  │ --sub2.do-another-thing, --sub2.no-do-another-thing    │
+  │                 Another thing? (default: False)        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub2.subsub options ──────────────────────────────────╮
+  │ --sub2.subsub.x 0 <= INT <= 10                         │
+  │                 (default: 5)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run         Run the model.                         │
+  │   • export      Export geometry to a STEP or STL file. │
+  │   • view        View model geometry.                   │
+  │   • viewer      Viewer control                         │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model[run-render]
@@ -179,34 +223,57 @@
   '''
   usage: params_class.py [-h] [OPTIONS] [{run,export,view,viewer}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit        │
-  │ --preset {None,default,large,small}                   │
-  │                (default: None)                        │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │                (default: 10.0)                        │
-  │ --height 1 <= INT <= 50                               │
-  │                (default: 5)                           │
-  │ --enabled, --no-enabled                               │
-  │                enable the thing (default: False)      │
-  │ --text STR     (default: nope)                        │
-  │ --thing {first,second,third}                          │
-  │                (default: first)                       │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ sub options ─────────────────────────────────────────╮
-  │ --sub.a FLOAT  (default: 1)                           │
-  │ --sub.b FLOAT  (default: 2)                           │
-  │ --sub.c FLOAT  (default: 3)                           │
-  │ --sub.do-the-thing, --sub.no-do-the-thing             │
-  │                (default: False)                       │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run        Run the model.                         │
-  │   • export     Export geometry to a STEP or STL file. │
-  │   • view       View model geometry.                   │
-  │   • viewer     Viewer control                         │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help      show this help message and exit        │
+  │ --preset {None,default,large,small}                    │
+  │                 (default: None)                        │
+  │ --aa INT        (default: 5)                           │
+  │ --width 1.0 <= FLOAT <= 100.0                          │
+  │                 (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                                │
+  │                 (default: 5)                           │
+  │ --enabled, --no-enabled                                │
+  │                 enable the thing (default: False)      │
+  │ --text STR      (default: nope)                        │
+  │ --thing {first,second,third}                           │
+  │                 (default: first)                       │
+  │ --count INT     (default: 1)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub options ──────────────────────────────────────────╮
+  │ --sub.a FLOAT   (required)                             │
+  │ --sub.b FLOAT   (default: 5.0)                         │
+  │ --sub.c 0 <= FLOAT <= 2000.0                           │
+  │                 C! (default: 25.0)                     │
+  │ --sub.do-the-thing, --sub.no-do-the-thing              │
+  │                 Zhu Li, do the thing! (default: False) │
+  │ --sub.do-another-thing, --sub.no-do-another-thing      │
+  │                 Another thing? (default: False)        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub.subsub options ───────────────────────────────────╮
+  │ --sub.subsub.x 0 <= INT <= 10                          │
+  │                 (default: 5)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub2 options ─────────────────────────────────────────╮
+  │ --sub2.a FLOAT  (default: 1)                           │
+  │ --sub2.b FLOAT  (default: 2)                           │
+  │ --sub2.c 0 <= FLOAT <= 2000.0                          │
+  │                 C! (default: 3)                        │
+  │ --sub2.do-the-thing, --sub2.no-do-the-thing            │
+  │                 Zhu Li, do the thing! (default: False) │
+  │ --sub2.do-another-thing, --sub2.no-do-another-thing    │
+  │                 Another thing? (default: False)        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub2.subsub options ──────────────────────────────────╮
+  │ --sub2.subsub.x 0 <= INT <= 10                         │
+  │                 (default: 5)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run         Run the model.                         │
+  │   • export      Export geometry to a STEP or STL file. │
+  │   • view        View model geometry.                   │
+  │   • viewer      Viewer control                         │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class[normal-render]
@@ -216,34 +283,57 @@
   '''
   usage: params_class.py [-h] [OPTIONS] [{run,export,view,viewer}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit        │
-  │ --preset {None,default,large,small}                   │
-  │                (default: None)                        │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │                (default: 10.0)                        │
-  │ --height 1 <= INT <= 50                               │
-  │                (default: 5)                           │
-  │ --enabled, --no-enabled                               │
-  │                enable the thing (default: False)      │
-  │ --text STR     (default: nope)                        │
-  │ --thing {first,second,third}                          │
-  │                (default: first)                       │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ sub options ─────────────────────────────────────────╮
-  │ --sub.a FLOAT  (default: 1)                           │
-  │ --sub.b FLOAT  (default: 2)                           │
-  │ --sub.c FLOAT  (default: 3)                           │
-  │ --sub.do-the-thing, --sub.no-do-the-thing             │
-  │                (default: False)                       │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run        Run the model.                         │
-  │   • export     Export geometry to a STEP or STL file. │
-  │   • view       View model geometry.                   │
-  │   • viewer     Viewer control                         │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help      show this help message and exit        │
+  │ --preset {None,default,large,small}                    │
+  │                 (default: None)                        │
+  │ --aa INT        (default: 5)                           │
+  │ --width 1.0 <= FLOAT <= 100.0                          │
+  │                 (default: 10.0)                        │
+  │ --height 1 <= INT <= 50                                │
+  │                 (default: 5)                           │
+  │ --enabled, --no-enabled                                │
+  │                 enable the thing (default: False)      │
+  │ --text STR      (default: nope)                        │
+  │ --thing {first,second,third}                           │
+  │                 (default: first)                       │
+  │ --count INT     (default: 1)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub options ──────────────────────────────────────────╮
+  │ --sub.a FLOAT   (required)                             │
+  │ --sub.b FLOAT   (default: 5.0)                         │
+  │ --sub.c 0 <= FLOAT <= 2000.0                           │
+  │                 C! (default: 25.0)                     │
+  │ --sub.do-the-thing, --sub.no-do-the-thing              │
+  │                 Zhu Li, do the thing! (default: False) │
+  │ --sub.do-another-thing, --sub.no-do-another-thing      │
+  │                 Another thing? (default: False)        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub.subsub options ───────────────────────────────────╮
+  │ --sub.subsub.x 0 <= INT <= 10                          │
+  │                 (default: 5)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub2 options ─────────────────────────────────────────╮
+  │ --sub2.a FLOAT  (default: 1)                           │
+  │ --sub2.b FLOAT  (default: 2)                           │
+  │ --sub2.c 0 <= FLOAT <= 2000.0                          │
+  │                 C! (default: 3)                        │
+  │ --sub2.do-the-thing, --sub2.no-do-the-thing            │
+  │                 Zhu Li, do the thing! (default: False) │
+  │ --sub2.do-another-thing, --sub2.no-do-another-thing    │
+  │                 Another thing? (default: False)        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ sub2.subsub options ──────────────────────────────────╮
+  │ --sub2.subsub.x 0 <= INT <= 10                         │
+  │                 (default: 5)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run         Run the model.                         │
+  │   • export      Export geometry to a STEP or STL file. │
+  │   • view        View model geometry.                   │
+  │   • viewer      Viewer control                         │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class[show-render]

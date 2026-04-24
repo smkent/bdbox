@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from .geometry import Geometry, show
+from .parameters.annotations import Annotater
 from .parameters.parameters import Params
 
 
@@ -97,7 +98,7 @@ class Model(Params):
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         object.__init_subclass__(**kwargs)
-        cls._annotate_as_dataclass()
+        Annotater(cls)()
 
         if cls.__module__ == "__main__":
             Geometry.ensure_model_class_mode(cls.__name__)
