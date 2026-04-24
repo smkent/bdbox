@@ -114,7 +114,10 @@ def test_mixed_params_then_model_raises(runner: Runner) -> None:
     "args",
     [
         pytest.param(["--help"], id="help"),
-        pytest.param(["--preset", "small", "--width", "25.4"], id="render"),
+        pytest.param(
+            ["--sub.a", "1", "--preset", "small", "--width", "25.4"],
+            id="render",
+        ),
     ],
 )
 def test_model(
@@ -166,7 +169,10 @@ def test_model_subclass(
     "args",
     [
         pytest.param(["--help"], id="help"),
-        pytest.param(["--preset", "small", "--width", "25.4"], id="render"),
+        pytest.param(
+            ["--sub.a", "1", "--preset", "small", "--width", "25.4"],
+            id="render",
+        ),
     ],
 )
 def test_params_class(

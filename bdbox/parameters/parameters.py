@@ -3,10 +3,9 @@
 import atexit
 import sys
 from collections.abc import Sequence
-from dataclasses import Field as DCField
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
-from typing import Any, ClassVar, Literal
+from typing import Any, ClassVar
 
 from bdbox.actions.action import Action
 from bdbox.actions.run import RunAction
@@ -14,6 +13,7 @@ from bdbox.cli import CLI
 from bdbox.errors import ParamsError
 from bdbox.geometry import Geometry
 
+from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .preset import Preset
@@ -118,7 +118,7 @@ class Params(CLI, metaclass=ParamsType):
         super().__init_subclass__(**kwargs)
         if not cls._init_this_subclass():
             return
-        cls._annotate_as_dataclass()
+        Annotater(cls)()
 
         if cls.__module__ == "__main__":
             Geometry.ensure_params_class_mode()
@@ -152,73 +152,19 @@ class Params(CLI, metaclass=ParamsType):
             for name, value in preset.values.items():
                 if getattr(self, name) == dc_fields[name].default:
                     setattr(self, name, value)
-        for f in fields(self):
-            if ff := Field.from_dataclass_field(f):
-                ff.validate(getattr(self, f.name))
+
+        def validate_dc(instance: object) -> None:
+            if not is_dataclass(instance):
+                return
+            for f in fields(instance):
+                value = getattr(instance, f.name)
+                if is_dataclass(value):
+                    validate_dc(value)
+                if ff := Field.from_dataclass_field(f):
+                    ff.validate(value)
+
+        validate_dc(self)
 
     @classmethod
     def _init_this_subclass(cls) -> bool:
         return True
-
-    @classmethod
-    def _annotate_as_dataclass(cls: type) -> None:
-        annotations = getattr(cls, "__annotations__", {}).copy()
-        for name, value in cls.__dict__.items():
-            if (
-                (name.startswith("__") and name.endswith("__"))
-                or name in annotations
-                or name == "presets"
-                or callable(value)  # Skip methods
-            ):
-                continue
-
-            basic_types = {float, int, bool, str}
-            if (value_type := type(value)) in basic_types:
-                # Attach a generic annotation so @dataclass picks it up
-                annotations[name] = value_type.__name__
-                continue
-
-            if isinstance(value, DCField):
-                if bdfield := Field.from_dataclass_field(value):
-                    annotations[name] = bdfield.annotation()
-                else:
-                    annotations[name] = type(value.default)
-                continue
-
-            raise ParamsError(
-                f"Unknown {name} type {type(value)} must be a dataclass field"
-            )
-
-        preset_list = cls.__dict__.get("presets", ())
-        for preset in preset_list:
-            if not isinstance(preset, Preset):
-                raise ParamsError(
-                    f"presets item must be a Preset instance,"
-                    f" got {type(preset).__name__}"
-                )
-
-            for key in preset.values:
-                if key not in cls.__dict__ and key not in annotations:
-                    raise ParamsError(
-                        f"Preset {preset.name!r}"
-                        f" references unknown field {key!r}"
-                    )
-
-        if preset_list:
-            preset_names = tuple(p.name for p in preset_list)
-            annotations["preset"] = Literal[preset_names] | None  # ty: ignore[invalid-type-form]
-            cls.preset = field(default=None, kw_only=True)  # ty: ignore[unresolved-attribute]
-        else:
-            annotations["preset"] = ClassVar[str | None]
-            cls.preset = None  # ty: ignore[unresolved-attribute]
-
-        # Apply annotations in original attribute order
-        cls.__annotations__ = {
-            name: annotation
-            for name in [
-                *[k for k in annotations if k not in cls.__dict__],
-                *cls.__dict__,
-            ]
-            if (annotation := annotations.get(name))
-        }
-        dataclass(cls)
