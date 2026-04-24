@@ -7,7 +7,7 @@ import sys
 import time
 import webbrowser
 from collections.abc import Callable, Sequence
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 from unittest.mock import MagicMock, patch
@@ -34,12 +34,12 @@ ExecMain = Callable[..., None]
 
 
 @pytest.fixture
-def exec_main(
-    monkeypatch: pytest.MonkeyPatch,
-) -> ExecMain:
+def exec_main(monkeypatch: pytest.MonkeyPatch) -> ExecMain:
     def wrapper(*args: str) -> None:
         monkeypatch.setattr(sys, "argv", ["bdbox", *args])
-        main()
+        is_viewer = "viewer" in args[:1]
+        with pytest.raises(SystemExit) if is_viewer else nullcontext():
+            main()
 
     return wrapper
 
