@@ -47,6 +47,7 @@ Issues = "https://github.com/smkent/bdbox/issues"
 
 [dependency-groups]
 dev = [
+    "bump-my-version>=1.3.0",
     "poethepoet>=0.42",
     "prek>=0.3",
     "pysentry-rs>=0.4",
@@ -56,11 +57,19 @@ dev = [
     "ruff>=0.15",
     "syrupy>=5.1",
     "ty>=0.0.29",
+    "ty>=0.0.31",
 ]
 docs = [
     "mkdocstrings[python]>=1",
-    "zensical>=0.0.32",
+    "zensical>=0.0.33",
 ]
+
+[tool.bumpversion]
+commit = false
+tag = true
+tag_name = "v{new_version}"
+tag_message = ""
+push = true
 
 [tool.hatch.build.targets.sdist]
 include = ["/bdbox", "/tests", "*.md", "LICENSE"]
@@ -119,6 +128,10 @@ help = "Run all formatters and static checks"
 [tool.poe.tasks.lt]
 sequence = [{ref = "lint"}, {ref = "test"}]
 help = "Run all formatters, static checks and tests"
+
+[tool.poe.tasks.release]
+cmd = "bump-my-version bump -v"
+help = "Create and push a release tag (patch/minor/major)"
 
 [tool.poe.tasks.setup]
 sequence = [
