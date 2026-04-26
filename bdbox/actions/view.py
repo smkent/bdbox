@@ -27,6 +27,7 @@ class ViewAction(ModelAction):
             print("Warning: no geometry collected", file=sys.stderr)  # noqa: T201
         from ocp_vscode import show  # noqa: PLC0415
 
+        print("Sending model geometry to viewer")  # noqa: T201
         show(geometry)
 
     def before_harness(self) -> None:

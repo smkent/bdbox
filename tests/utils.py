@@ -14,7 +14,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator
+    from collections.abc import Callable, Iterator, Sequence
 
     import pytest
 
@@ -81,6 +81,17 @@ class MockBuild123d(ModuleType):
 
     class Shape:
         pass
+
+    class ShapeList(list):
+        pass
+
+    @dataclass
+    class Compound(Shape):
+        children: Sequence[MockBuild123d.Shape] = field(default_factory=tuple)
+        label: str = ""
+
+        def show_topology(self, limit_class: str | None = None) -> str:
+            return ""
 
 
 class MockOcpVscode(ModuleType):

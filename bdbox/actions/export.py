@@ -48,7 +48,5 @@ class ExportAction(ModelAction):
         if not geometry:
             raise Error("No geometry to export")
 
-        from build123d import Compound  # noqa: PLC0415
-
-        shape = Compound(geometry) if len(geometry) > 1 else geometry[0]
-        self._exporter(shape, str(self.output))
+        print(f"Exporting model geometry to {self.output}")  # noqa: T201
+        self._exporter(geometry, str(self.output))
