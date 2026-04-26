@@ -496,7 +496,6 @@ def test_status_not_running(
     assert "not running" in capsys.readouterr().out
 
 
-@pytest.mark.usefixtures("harness_mode")
 def test_model_view_starts_viewer(
     model: Path, watch_args: Sequence[str], exec_main: ExecMain
 ) -> None:
@@ -505,7 +504,6 @@ def test_model_view_starts_viewer(
     mock_start.assert_called_once()
 
 
-@pytest.mark.usefixtures("harness_mode")
 def test_model_view_skips_viewer_when_disabled(
     model: Path, watch_args: Sequence[str], exec_main: ExecMain
 ) -> None:
@@ -514,7 +512,6 @@ def test_model_view_skips_viewer_when_disabled(
     mock_start.assert_not_called()
 
 
-@pytest.mark.usefixtures("harness_mode")
 def test_model_view_passes_flags_to_viewer(
     model: Path, watch_args: Sequence[str], exec_main: ExecMain
 ) -> None:
