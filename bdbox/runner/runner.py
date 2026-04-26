@@ -4,7 +4,6 @@ import os
 import sys
 from contextlib import contextmanager
 from dataclasses import InitVar, dataclass, field
-from functools import cached_property
 from pathlib import Path
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
@@ -47,18 +46,18 @@ class ModelRunner:
 
     def __call__(self, action: Action | None = None) -> None:
         reset_bdbox()
+        main_module = self.main_module()
         with (
-            PatchModule("__main__", self.main_module, auto=False) as mock_main,
+            PatchModule("__main__", main_module, auto=False) as mock_main,
             patch.object(sys, "argv", [self.model_filename, *self.argv]),
             self.exit_mock(),
             AtExit.mock() as atexit_mock,
         ):
-            self.main_module.run_main_shim()
+            main_module.run_main_shim()
             mock_main.start()
             if not atexit_mock.hooks:
                 (action or self.action or RunAction())()
 
-    @cached_property
     def main_module(self) -> MainModule:
         return MainModule(self.model_filename)
 
