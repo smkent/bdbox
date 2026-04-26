@@ -80,6 +80,17 @@ def test_send_geometry_to_viewer(
     assert capsys.readouterr().err == ""
 
 
+@pytest.mark.parametrize("file_format", ["step", "stl"])
+def test_view_with_export_creates_file(
+    tmp_path: Path, model: Path, file_format: str
+) -> None:
+    output_file = tmp_path / f"out.{file_format}"
+    ModelHarness(
+        [str(model), "view", "--no-watch", "--export", str(output_file)]
+    )()
+    assert output_file.exists()
+
+
 def test_send_to_viewer_warns_on_empty_geometry(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
