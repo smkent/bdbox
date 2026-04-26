@@ -7,11 +7,19 @@ icon: lucide/rocket
 
 Release version numbers should follow [Semantic Versioning][semver].
 
-To create a new release, simply create and push a tag with the new release
-version number:
+To create a release, run `poe release` with one of `patch`, `minor`, or `major`
+corresponding to the version number component to update:
 
 ```sh
-git tag vX.Y.Z  # for example, v1.2.3
+poe release patch|minor|major
+```
+
+A new tag with the new release version number will be created automatically
+using [bump-my-version][bump-my-version] (for example, `v1.2.3`).
+
+Afterward, push the new release tag:
+
+```sh
 git push --tags
 ```
 
@@ -24,6 +32,7 @@ git push --tags
 
     [![PyPI][pypi-badge]][pypi-project]
 
+[bump-my-version]: https://callowayproject.github.io/bump-my-version/
 [github-release-badge]: https://img.shields.io/github/v/release/smkent/bdbox
 [github-release-latest]: https://github.com/smkent/bdbox/releases/latest
 [github-releases]: https://github.com/smkent/bdbox/releases
