@@ -58,7 +58,6 @@ def test_view_starts_watcher(model: Path) -> None:
     mock_run.assert_called_once_with()
 
 
-@pytest.mark.usefixtures("harness_mode")
 def test_view_no_watch_skips_watcher(
     mock_start: MagicMock, model: Path
 ) -> None:
