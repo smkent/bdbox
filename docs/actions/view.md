@@ -29,6 +29,12 @@ Optional arguments to `view` include:
 
 * `--no-open-browser`: Don't open a browser tab when starting the viewer
 * `--no-watch`: Render model once, don't watch for changes
+* `--export FILE`: Save rendered model to the specified file on each render
+
+!!! Note
+
+    For more information about file exports,
+    [see the `export` command documentation](export.md).
 
 See all options with `--help`:
 

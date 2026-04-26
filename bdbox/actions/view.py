@@ -5,10 +5,15 @@ from __future__ import annotations
 import subprocess
 import sys
 from dataclasses import dataclass
+from pathlib import Path  # noqa: TC003
+from typing import Annotated
+
+import tyro
 
 from bdbox.geometry import resolve_geometry
 
 from .action import ModelAction
+from .export import ExportAction
 
 
 @dataclass
@@ -20,6 +25,15 @@ class ViewAction(ModelAction):
     restart_viewer: bool = False
     open_browser: bool = True
 
+    export: Annotated[
+        Path | None,
+        tyro.conf.arg(
+            aliases=("-e",),
+            metavar="output-path",
+            help="Output STEP or STL file path.",
+        ),
+    ] = None
+
     def __call__(self) -> None:
         """Send collected geometry to the viewer."""
         geometry = resolve_geometry()
@@ -29,6 +43,9 @@ class ViewAction(ModelAction):
 
         print("Sending model geometry to viewer")  # noqa: T201
         show(geometry)
+
+        if self.export:
+            ExportAction(output=self.export)()
 
     def before_harness(self) -> None:
         if not self.start_viewer:
