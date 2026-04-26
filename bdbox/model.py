@@ -1,15 +1,22 @@
 """Model utilities."""
 
+from __future__ import annotations
+
 import atexit
 import os
 import sys
 import traceback
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any, TypeAlias
 
 from .geometry import Geometry, show
 from .parameters.annotations import Annotater
 from .parameters.parameters import Params
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping, Sequence
+
+    from build123d import Shape
 
 
 @dataclass(init=False)
@@ -54,7 +61,10 @@ class Model(Params):
         ```
     """
 
-    def build(self) -> Any:
+    if TYPE_CHECKING:
+        Build: TypeAlias = "Shape | Sequence[Shape] | Mapping[str, Shape]"
+
+    def build(self) -> Model.Build:
         """Build and return model geometry.
 
         Info:

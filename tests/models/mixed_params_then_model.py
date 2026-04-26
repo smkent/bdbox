@@ -11,5 +11,5 @@ class P(Params):
 class MyModel(Model):
     width = Float(10.0)
 
-    def build(self) -> None:
+    def build(self) -> None:  # ty: ignore[invalid-method-override]
         pass

@@ -11,15 +11,15 @@ from typing import TYPE_CHECKING, Any, ClassVar
 from bdbox.errors import ParamsError
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Mapping, Sequence
+
+    from build123d import Compound, Shape
 
 
 @dataclass
 class Geometry:
-    """Guards against mixing parameter modes in the same model."""
-
     # Geometry collected via show() calls during execution.
-    geometry: ClassVar[list[Any]] = []
+    geometry: ClassVar[list[Compound | Shape]] = []
 
     class Mode(Enum):
         PARAMS_CLASS = auto()
@@ -65,36 +65,66 @@ class Geometry:
         cls.mode = style
 
     @classmethod
-    def accumulate_geometry(cls, shapes: Sequence[Any]) -> None:
-        cls.geometry.extend(cls.filter_geometry(shapes))
+    def accumulate_geometry(
+        cls,
+        *shapes: Compound
+        | Shape
+        | Sequence[Compound | Shape]
+        | Mapping[str, Compound | Shape],
+    ) -> None:
+        cls.geometry.extend(
+            [shape for s in shapes if (shape := cls.filter_geometry(s))]
+        )
 
     @classmethod
     def clear_geometry(cls) -> None:
         cls.geometry = []
 
     @classmethod
-    def filter_geometry(cls, shapes: Sequence[Any]) -> list[Any]:
+    def filter_geometry(
+        cls, data: Any, label: str = ""
+    ) -> Compound | Shape | None:
         if "build123d" not in sys.modules:
-            return []
-        from build123d import Shape  # noqa: PLC0415
+            return None
+        from build123d import Compound, Shape  # noqa: PLC0415
 
+        geometry = None
         with suppress(TypeError):
-            return [s for s in shapes if isinstance(s, Shape)]
-        return []
+            if isinstance(data, Shape):
+                return data
+            if isinstance(data, (list, tuple)):
+                geometry = [c for s in data if (c := cls.filter_geometry(s))]
+            elif isinstance(data, dict):
+                geometry = [
+                    c
+                    for k, v in data.items()
+                    if (c := cls.filter_geometry(v, str(k)))
+                ]
+        if not geometry:
+            return None
+        if len(geometry) == 1:
+            return geometry[0]
+        return Compound(label=label, children=geometry)
 
     @classmethod
-    def resolve_geometry(cls) -> list[Any]:
-        if not Geometry.geometry:
-            if "build123d" not in sys.modules:
-                return []
+    def resolve_geometry(cls) -> Compound | Shape | None:
+        if "build123d" not in sys.modules:
+            return None
 
-            if (mod := sys.modules.get("__main__")) and (
-                shapes := cls.filter_geometry(
-                    [v for k, v in vars(mod).items() if not k.startswith("_")]
-                )
-            ):
-                Geometry.accumulate_geometry(shapes)
-        return Geometry.geometry
+        if not Geometry.geometry and (mod := sys.modules.get("__main__")):
+            found_geometry = [
+                geo
+                for var_name, value in vars(mod).items()
+                if not var_name.startswith("_")
+                and (geo := cls.filter_geometry(value, str(var_name)))
+            ]
+            Geometry.accumulate_geometry(*found_geometry)
+        label = "bdbox collected geometry"
+        geometry = cls.filter_geometry(Geometry.geometry, label=label)
+        if not geometry:
+            return None
+        print(geometry.show_topology(limit_class="Solid"))  # noqa: T201
+        return geometry
 
 
 def reset_geometry() -> None:
@@ -102,7 +132,7 @@ def reset_geometry() -> None:
     Geometry.reset()
 
 
-def resolve_geometry() -> list[Any]:
+def resolve_geometry() -> Compound | Shape | None:
     """Retrieve geometry for processing.
 
     Uses geometry collected by ``show()`` if called. Otherwise falls back to
@@ -111,7 +141,12 @@ def resolve_geometry() -> list[Any]:
     return Geometry.resolve_geometry()
 
 
-def show(*args: Any) -> None:
+def show(
+    *geometry: Compound
+    | Shape
+    | Sequence[Compound | Shape]
+    | Mapping[str, Compound | Shape],
+) -> None:
     """Provide built model geometry for display or use.
 
     Info:
@@ -128,4 +163,4 @@ def show(*args: Any) -> None:
         script's globals for [``build123d.Shape``][topology.Shape] instances,
         but calling ``show()`` manually is recommended.
     """
-    Geometry.accumulate_geometry(args)
+    Geometry.accumulate_geometry(*geometry)
