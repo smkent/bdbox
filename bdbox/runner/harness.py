@@ -4,7 +4,7 @@ import ast
 import operator
 import sys
 from contextlib import suppress
-from dataclasses import InitVar, dataclass, field, make_dataclass
+from dataclasses import dataclass, field, make_dataclass
 from functools import cached_property, reduce
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any, ClassVar, get_args
@@ -12,12 +12,14 @@ from unittest.mock import MagicMock, patch
 
 import tyro
 
-from bdbox import Params
 from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI
+from bdbox.errors import Error
+from bdbox.parameters.parameters import Params
 
 from .runner import ModelRunner
+from .utils import ModelLocator
 from .watcher import ModelWatcher
 
 if TYPE_CHECKING:
@@ -57,12 +59,11 @@ HarnessAction = HarnessCLIFactory.make()
 
 
 @dataclass
-class ModelHarness:
+class ModelHarness(ModelLocator):
+    clean_modules: ClassVar[bool] = True
     package: ClassVar[str] = (__package__ or "bdbox").split(".", 1)[0]
-    model_argv: InitVar[Sequence[Path | str] | Path | str] = ()
     model_path: Path | None = field(default=None, init=False)
     model_filename: str | Path | None = field(default=None, init=False)
-    argv: list[str] = field(default_factory=list, init=False)
 
     class MultipleModelsError(Exception):
         pass
@@ -75,17 +76,12 @@ class ModelHarness:
         self, model_argv: Sequence[Path | str] | Path | str
     ) -> None:
         Action.mode = Action.Mode.HARNESS
-        self.argv = (
-            [str(model_argv)]
-            if isinstance(model_argv, (Path, str))
-            else [str(v) for v in (model_argv or sys.argv[1:].copy())]
-        )
-        if model := self.model_path_from_argv():
-            self.model_path = Path(model)
-            self.model_filename = str(model)
+        super().__post_init__(model_argv or sys.argv[1:].copy())
 
     def __call__(self) -> None:
-        if not self.model_filename or not self.model_path:
+        if (
+            not self.model_filename or not self.model_path
+        ) and not self.model_module:
             cli_result = self.HarnessCLI.instance_from_cli(
                 prog=self.prog, args=self.argv, harness_hook=True
             )
@@ -101,24 +97,23 @@ class ModelHarness:
                 model_hook=False,
             )
         )
-        runner = ModelRunner([self.model_path, *self.argv], cli_result.action)
+        runner = ModelRunner([self.model, *self.argv], cli_result.action)
         if cli_result.action.watch:
             ModelWatcher(runner).run()
             return
         runner()
 
     @cached_property
+    def model(self) -> Path | str:
+        if result := (self.model_module or self.model_path):
+            return result
+        raise Error("No model found")
+
+    @cached_property
     def prog(self) -> str:
         if (argv0 := Path(sys.argv[0])).stem == "__main__":
             return self.package
         return argv0.name
-
-    def model_path_from_argv(self) -> str | None:
-        for arg in self.argv:
-            if not arg.startswith("-") and Path(arg).suffix == ".py":
-                self.argv.pop(self.argv.index(arg))
-                return arg
-        return None
 
     @cached_property
     def imports_detected(self) -> bool:
@@ -127,6 +122,8 @@ class ModelHarness:
         def _checkname(name: str) -> bool:
             return name == self.package or name.startswith(f"{self.package}.")
 
+        if self.model_module:
+            return True
         if not self.model_path:
             return False
         with suppress(OSError, SyntaxError):
@@ -150,7 +147,9 @@ class ModelHarness:
         Returns a list of (name, annotation, field) tuples for user-defined
         parameters, or None if no bdbox Params/Model class was found.
         """
-        if not (self.model_path and self.imports_detected):
+        if not (
+            self.model_module or (self.model_path and self.imports_detected)
+        ):
             return None
         with (
             patch.dict(
@@ -160,11 +159,14 @@ class ModelHarness:
             patch.object(
                 CLI, "instance_from_cli", MagicMock(side_effect=SystemExit)
             ),
+            self.module_cleanup(),
             suppress(SystemExit),
         ):
-            ModelRunner([self.model_path, "--help"])()
+            ModelRunner([self.model, "--help"])()
         if not (subclasses := Params._main_info.model_subclasses):  # noqa: SLF001
             return None
         if len(subclasses) > 1:
             raise self.MultipleModelsError(subclasses)
+        if getattr(subclasses[0], "__module__", None) != "__main__":
+            subclasses[0].__module__ = "__main__"
         return subclasses[0]

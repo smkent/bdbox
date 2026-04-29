@@ -213,6 +213,114 @@
 # name: test_model_subclass[run-render]
   'ChildModel 25.4 10'
 # ---
+# name: test_module_models[mod_model-model-help]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[mod_model-model-render]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[mod_model-no_submodule-help]
+  '''
+  Model main
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[mod_model-no_submodule-render]
+  '''
+  Model main
+  Model main
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[mod_params-model-help]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[mod_params-model-render]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[mod_params-no_submodule-help]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[mod_params-no_submodule-render]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  Model main P(Params)(a=2.5, b=3, c=5, d=5.0)
+  '''
+# ---
 # name: test_params_class[noparams-help]
   'params() not called'
 # ---

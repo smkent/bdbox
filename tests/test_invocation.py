@@ -29,6 +29,8 @@ PARAMS_CLASS = Models.DIR / "params_class.py"
 PARAMS_CLASS_BLANK = Models.DIR / "params_class_blank.py"
 PARAMS_CLASS_MULTIPLE_PARAMS = Models.DIR / "params_class_multiple_params.py"
 PARAMS_CLASS_INSTANCE = Models.DIR / "params_class_instance.py"
+MODEL_MODULE = "mod_model"
+PARAMS_MODULE = "mod_params"
 
 
 @dataclass
@@ -163,6 +165,23 @@ def test_model_subclass(
     runner: Runner, model_class_test_mode: str, args: Sequence[str]
 ) -> None:
     runner.match_snapshot([MODEL_CLASS_SUBCLASS, *args], model_class_test_mode)
+
+
+@pytest.mark.parametrize(
+    "args",
+    [pytest.param(["--help"], id="help"), pytest.param([], id="render")],
+)
+@pytest.mark.parametrize(
+    "sub_module",
+    [pytest.param("", id="no_submodule"), pytest.param(".model", id="model")],
+)
+@pytest.mark.parametrize("module", [MODEL_MODULE, PARAMS_MODULE])
+def test_module_models(
+    runner: Runner, module: str, sub_module: str, args: Sequence[str]
+) -> None:
+    runner.match_snapshot(
+        ["-m", "bdbox", f"tests.models.{module}{sub_module}", *args]
+    )
 
 
 @pytest.mark.parametrize(

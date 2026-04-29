@@ -96,7 +96,7 @@ class Model(Params):
         """
         atexit.unregister(Model._atexit_handler)
         if (
-            cls.__module__ == "__main__"
+            Model._main_info.is_class_in_main(cls)
             and (mm := sys.modules.get(cls.__module__))
             and getattr(mm, "__file__", None)
             and Model._main_info.filename
@@ -110,7 +110,7 @@ class Model(Params):
         object.__init_subclass__(**kwargs)
         Annotater(cls)()
 
-        if cls.__module__ == "__main__":
+        if Model._main_info.is_class_in_main(cls):
             Geometry.ensure_model_class_mode(cls.__name__)
             if not Model._main_info.model_subclasses:
                 atexit.register(Model._atexit_handler)
