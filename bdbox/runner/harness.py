@@ -4,7 +4,7 @@ import ast
 import operator
 import sys
 from contextlib import suppress
-from dataclasses import dataclass, field, make_dataclass
+from dataclasses import dataclass, make_dataclass
 from functools import cached_property, reduce
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any, ClassVar, get_args
@@ -16,14 +16,17 @@ from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI
 from bdbox.errors import Error
-from bdbox.parameters.parameters import Params
+from bdbox.parameters.state import run_state
 
+from .locator import ModelLocator
 from .runner import ModelRunner
-from .utils import ModelLocator
+from .utils import Build123dStub
 from .watcher import ModelWatcher
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+    from bdbox.parameters.parameters import Params
 
 
 class HarnessCLIFactory:
@@ -62,8 +65,6 @@ HarnessAction = HarnessCLIFactory.make()
 class ModelHarness(ModelLocator):
     clean_modules: ClassVar[bool] = True
     package: ClassVar[str] = (__package__ or "bdbox").split(".", 1)[0]
-    model_path: Path | None = field(default=None, init=False)
-    model_filename: str | Path | None = field(default=None, init=False)
 
     class MultipleModelsError(Exception):
         pass
@@ -154,7 +155,7 @@ class ModelHarness(ModelLocator):
         with (
             patch.dict(
                 sys.modules,
-                {"build123d": MagicMock(), "ocp_vscode": MagicMock()},
+                {"build123d": Build123dStub(), "ocp_vscode": MagicMock()},
             ),
             patch.object(
                 CLI, "instance_from_cli", MagicMock(side_effect=SystemExit)
@@ -163,7 +164,7 @@ class ModelHarness(ModelLocator):
             suppress(SystemExit),
         ):
             ModelRunner([self.model, "--help"])()
-        if not (subclasses := Params._main_info.model_subclasses):  # noqa: SLF001
+        if not (subclasses := run_state.model_subclasses):
             return None
         if len(subclasses) > 1:
             raise self.MultipleModelsError(subclasses)

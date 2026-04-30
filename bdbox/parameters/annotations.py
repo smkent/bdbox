@@ -1,5 +1,6 @@
 from dataclasses import Field as DCField
 from dataclasses import dataclass, field, fields, is_dataclass
+from functools import cached_property
 from typing import ClassVar, Literal
 
 from bdbox.errors import ParamsError
@@ -21,7 +22,8 @@ class Annotater:
                 (name.startswith("__") and name.endswith("__"))
                 or name in annotations
                 or name == "presets"
-                or callable(value)  # Skip methods
+                or callable(value)
+                or isinstance(value, (classmethod, property, cached_property))
             ):
                 continue
 

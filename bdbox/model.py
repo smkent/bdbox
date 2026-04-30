@@ -9,9 +9,10 @@ import traceback
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, TypeAlias
 
-from .geometry import Geometry, show
+from .geometry import show
 from .parameters.annotations import Annotater
 from .parameters.parameters import Params
+from .parameters.state import run_state
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
@@ -95,29 +96,27 @@ class Model(Params):
             Python finishes.
         """
         atexit.unregister(Model._atexit_handler)
-        if (
-            Model._main_info.is_class_in_main(cls)
-            and (mm := sys.modules.get(cls.__module__))
-            and getattr(mm, "__file__", None)
-            and Model._main_info.filename
-        ):
-            mm.__file__ = Model._main_info.filename
+        run_state.ensure_module_filename(cls)
         cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
         show(cli_result.params.build())
-        cli_result.action()
+        run_state.act_once(cli_result.action)
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         object.__init_subclass__(**kwargs)
         Annotater(cls)()
 
-        if Model._main_info.is_class_in_main(cls):
-            Geometry.ensure_model_class_mode(cls.__name__)
-            if not Model._main_info.model_subclasses:
+        if run_state.is_class_in_main(cls):
+            run_state.ensure_mode(
+                run_state.Mode.MODEL_CLASS,
+                f"Cannot define Model subclass {cls!r}"
+                " with an existing Params subclass",
+            )
+            if not run_state.model_subclasses:
                 atexit.register(Model._atexit_handler)
-                Model._main_info.filename = getattr(
+                run_state.filename = getattr(
                     sys.modules.get(cls.__module__), "__file__", None
                 )
-            Model._main_info.model_subclasses.append(cls)
+            run_state.model_subclasses.append(cls)
 
     @classmethod
     def _init_this_subclass(cls) -> bool:
@@ -125,7 +124,7 @@ class Model(Params):
 
     @classmethod
     def _atexit_handler(cls) -> None:
-        if not (model_subclasses := Model._main_info.model_subclasses):
+        if not (model_subclasses := run_state.model_subclasses):
             return
         if len(model_subclasses) > 1:
             names = ", ".join(c.__name__ for c in model_subclasses)

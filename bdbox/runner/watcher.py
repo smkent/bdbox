@@ -7,12 +7,15 @@ import time
 import traceback
 from contextlib import contextmanager
 from dataclasses import dataclass, field
+from functools import cached_property
 from pathlib import Path
 from threading import Event
 from typing import TYPE_CHECKING
 
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
+
+from bdbox.errors import Error
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -54,12 +57,17 @@ class ModelWatcher:
         observer.stop()
         observer.join()
 
+    @cached_property
+    def model_path(self) -> Path:
+        if not self.runner.model_path:
+            raise Error("Model path missing")
+        return self.runner.model_path
+
     @property
     def watched_files(self) -> frozenset[Path]:
         """Current set of files to watch: model + local dependency files."""
         return frozenset(
-            {self.runner.model_path}
-            | {Path(f) for f in self.local_modules.values()}
+            {self.model_path} | {Path(f) for f in self.local_modules.values()}
         )
 
     def run(self) -> None:
