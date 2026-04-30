@@ -29,8 +29,6 @@ PARAMS_CLASS = Models.DIR / "params_class.py"
 PARAMS_CLASS_BLANK = Models.DIR / "params_class_blank.py"
 PARAMS_CLASS_MULTIPLE_PARAMS = Models.DIR / "params_class_multiple_params.py"
 PARAMS_CLASS_INSTANCE = Models.DIR / "params_class_instance.py"
-MODEL_MODULE = "mod_model"
-PARAMS_MODULE = "mod_params"
 
 
 @dataclass
@@ -60,7 +58,7 @@ class Runner:
         assert self(cmd, *args, **kwargs) == self.snapshot
 
     def raises(
-        self, cmd: Sequence[Any], match: str | None
+        self, cmd: Sequence[Any], match: str
     ) -> subprocess.CalledProcessError:
         with pytest.raises(
             subprocess.CalledProcessError,
@@ -68,8 +66,7 @@ class Runner:
         ) as ee:
             self(cmd)
         assert ee.value.returncode != 0
-        if match is not None:
-            assert match in (ee.value.output or "")
+        assert match in (ee.value.output or "")
         return ee.value
 
 
@@ -168,19 +165,44 @@ def test_model_subclass(
 
 
 @pytest.mark.parametrize(
+    "runner_args",
+    [pytest.param(["bdbox"], id="harness"), pytest.param([], id="embedded")],
+)
+@pytest.mark.parametrize(
     "args",
     [pytest.param(["--help"], id="help"), pytest.param([], id="render")],
 )
 @pytest.mark.parametrize(
-    "sub_module",
-    [pytest.param("", id="no_submodule"), pytest.param(".model", id="model")],
+    "module",
+    [
+        Models.MOD_MODEL,
+        f"{Models.MOD_MODEL}.model",
+        Models.MOD_PARAMS,
+        f"{Models.MOD_PARAMS}.model",
+        Models.MONO_MODEL,
+        Models.MONO_PARAMS,
+        Models.MONO_PLAIN,
+    ],
 )
-@pytest.mark.parametrize("module", [MODEL_MODULE, PARAMS_MODULE])
 def test_module_models(
-    runner: Runner, module: str, sub_module: str, args: Sequence[str]
+    runner: Runner,
+    module: str,
+    runner_args: Sequence[str],
+    args: Sequence[str],
 ) -> None:
-    runner.match_snapshot(
-        ["-m", "bdbox", f"tests.models.{module}{sub_module}", *args]
+    runner.match_snapshot(["-m", *runner_args, module, *args])
+
+
+def test_nonexistent_module(runner: Runner) -> None:
+    runner.raises(
+        [
+            "-m",
+            "bdbox",
+            "who.is.this.whats.your.operating.number",
+            "export",
+            "out.step",
+        ],
+        "Unrecognized options",
     )
 
 

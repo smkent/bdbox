@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any, ClassVar, Protocol
 
 import pytest
 
+from bdbox.actions.export import ExportAction
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 
@@ -15,6 +16,9 @@ from .utils import Models
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+
+pytestmark = pytest.mark.usefixtures("mock_sys_modules")
 
 
 MAIN_STUB = Models.DIR / "main_stub.py"
@@ -46,7 +50,10 @@ class ExportModelRunner:
         argv: Sequence[Any],
         run_class: type[Runner] = ModelRunner,
     ) -> None:
-        run_class([filename, *[str(a) for a in argv]])()
+        kwargs = {}
+        if run_class is ModelRunner:
+            kwargs["action"] = ExportAction(output=self.output_file)
+        run_class([filename, *[str(a) for a in argv]], **kwargs)()
         assert self.output_file.exists()
         assert self.output_file.read_text(
             encoding="utf-8", errors="ignore"
@@ -76,6 +83,19 @@ def model_runner(
         pytest.param(Models.PARAMS_EXPORT, id="Params"),
     ]
 )
+def model_with_params(request: pytest.FixtureRequest) -> Path:
+    return request.param
+
+
+@pytest.fixture(
+    params=[
+        pytest.param(Models.MODEL_EXPORT, id="Model"),
+        pytest.param(Models.PARAMS_EXPORT, id="Params"),
+        pytest.param(Models.MONO_MODEL, id="mono_model"),
+        pytest.param(Models.MONO_PARAMS, id="mono_params"),
+        pytest.param(Models.MONO_PLAIN, id="mono_plain"),
+    ]
+)
 def model(request: pytest.FixtureRequest) -> Path:
     return request.param
 
@@ -89,30 +109,38 @@ def test_model_export(
 
 
 def test_export_with_parameters_after(
-    run_class: type[Runner], model: Path, model_runner: ExportModelRunner
+    run_class: type[Runner],
+    model_with_params: Path,
+    model_runner: ExportModelRunner,
 ) -> None:
     model_runner(
-        model,
+        model_with_params,
         ["export", model_runner.output_file, "--size", "20"],
         run_class=run_class,
     )
 
 
 def test_export_with_parameters_before(
-    run_class: type[Runner], model: Path, model_runner: ExportModelRunner
+    run_class: type[Runner],
+    model_with_params: Path,
+    model_runner: ExportModelRunner,
 ) -> None:
     model_runner(
-        model,
+        model_with_params,
         ["--size", "20", "export", model_runner.output_file],
         run_class=run_class,
     )
 
 
 def test_export_no_output_arg(
-    run_class: type[Runner], model: Path, model_runner: ExportModelRunner
+    run_class: type[Runner],
+    model_with_params: Path,
+    model_runner: ExportModelRunner,
 ) -> None:
     with pytest.raises(SystemExit):
-        model_runner(model, ["--size", "20", "export"], run_class=run_class)
+        model_runner(
+            model_with_params, ["--size", "20", "export"], run_class=run_class
+        )
 
 
 @pytest.mark.parametrize(
@@ -130,10 +158,17 @@ def test_main_export(
 
 
 def test_main_export_with_parameters(
-    model: Path, model_runner: ExportModelRunner
+    model_with_params: Path, model_runner: ExportModelRunner
 ) -> None:
     model_runner(
-        MAIN_STUB, ["export", model, model_runner.output_file, "--size", "20"]
+        MAIN_STUB,
+        [
+            "export",
+            model_with_params,
+            model_runner.output_file,
+            "--size",
+            "20",
+        ],
     )
 
 

@@ -18,8 +18,6 @@ if TYPE_CHECKING:
 
     import pytest
 
-MODELS_DIR = Path(__file__).parent / "models"
-
 
 class Models:
     DIR = Path(__file__).parent / "models"
@@ -27,6 +25,12 @@ class Models:
     MODEL_EXPORT = DIR / "model_export.py"
     PARAMS_EXPORT = DIR / "params_export.py"
     PLAIN_EXPORT = DIR / "plain_export.py"
+    MOD_MODEL = "tests.models.mod_model"
+    MOD_PARAMS = "tests.models.mod_params"
+    MOD_PLAIN = "tests.models.mod_plain"
+    MONO_MODEL = "tests.models.mono_model.models.model"
+    MONO_PARAMS = "tests.models.mono_params.models.model"
+    MONO_PLAIN = "tests.models.mono_plain.models.model"
 
 
 @dataclass

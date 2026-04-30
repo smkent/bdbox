@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-pytestmark = pytest.mark.usefixtures("mock_ocp_vscode")
+pytestmark = pytest.mark.usefixtures("ensure_sys_modules", "mock_ocp_vscode")
 
 
 @pytest.fixture(autouse=True)

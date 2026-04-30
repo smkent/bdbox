@@ -36,7 +36,7 @@ class ModelLocator:
     model_argv: InitVar[Sequence[Path | str] | Path | str] = ()
     model_path: Path = field(init=False)
     model_module: str | None = field(default=None, init=False)
-    model_filename: str = field(init=False)
+    model_filename: str | None = field(default=None, init=False)
     argv: list[str] = field(default_factory=list, init=False)
 
     def __post_init__(
