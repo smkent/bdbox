@@ -81,6 +81,11 @@ Select a preset with `--preset`:
     python -m mypackage.mymodule --preset large
     ```
 
+!!! Tip
+
+    Use [`export --all-presets`](../actions/export.md#exporting-all-presets)
+    to export a model rendered with every preset to a separate file all at once.
+
 ### Combining presets with overrides
 
 Specific field values take precedence over preset values. Use a preset as a

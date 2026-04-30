@@ -10,7 +10,7 @@ from .action import Action
 
 @dataclass
 class ViewerAction(Action):
-    def before_harness(self) -> None:
+    def before_harness(self) -> Action.BeforeHarnessResult:
         self()
 
     def before_model(self) -> None:
