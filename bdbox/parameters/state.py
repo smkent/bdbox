@@ -3,11 +3,10 @@ from __future__ import annotations
 import sys
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from functools import cached_property
 from typing import TYPE_CHECKING, Any
 
 from bdbox.actions.run import RunAction
-from bdbox.errors import Error, MultipleModelsError, ParamsError
+from bdbox.errors import MultipleModelsError, ParamsError
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -29,16 +28,6 @@ class RunState:
         MODEL_CLASS = auto()
 
     mode: Mode | None = None
-
-    @cached_property
-    def model_arg(self) -> str:
-        if self.module_name:
-            if self.class_name:
-                return f"{self.module_name}:{self.class_name}"
-            return self.module_name
-        if self.filename:
-            return self.filename
-        raise Error("Model not found")
 
     def get_model(self) -> type[Any] | None:
         if not self.model_subclasses:
