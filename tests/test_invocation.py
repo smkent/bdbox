@@ -20,17 +20,6 @@ if TYPE_CHECKING:
 
     from .utils import DisallowCallable
 
-MIXED_MODEL_THEN_PARAMS = Models.DIR / "mixed_model_then_params.py"
-MIXED_PARAMS_THEN_MODEL = Models.DIR / "mixed_params_then_model.py"
-MODEL_CLASS = Models.DIR / "model_class.py"
-MODEL_CLASS_BLANK = Models.DIR / "model_class_blank.py"
-MODEL_CLASS_MULTIPLE = Models.DIR / "model_class_multiple.py"
-MODEL_CLASS_SUBCLASS = Models.DIR / "model_class_subclass.py"
-PARAMS_CLASS = Models.DIR / "params_class.py"
-PARAMS_CLASS_BLANK = Models.DIR / "params_class_blank.py"
-PARAMS_CLASS_MULTIPLE_PARAMS = Models.DIR / "params_class_multiple_params.py"
-PARAMS_CLASS_INSTANCE = Models.DIR / "params_class_instance.py"
-
 
 @dataclass
 class Runner:
@@ -101,13 +90,15 @@ def params_class_test_mode(request: pytest.FixtureRequest) -> str:
 
 def test_mixed_model_then_params_raises(runner: Runner) -> None:
     runner.raises(
-        [MIXED_MODEL_THEN_PARAMS],
+        [Models.MIXED_MODEL_THEN_PARAMS],
         "Cannot use Params subclass with an existing Model subclass",
     )
 
 
 def test_mixed_params_then_model_raises(runner: Runner) -> None:
-    runner.raises([MIXED_PARAMS_THEN_MODEL], "Cannot define Model subclass")
+    runner.raises(
+        [Models.MIXED_PARAMS_THEN_MODEL], "Cannot define Model subclass"
+    )
 
 
 @pytest.mark.parametrize(
@@ -123,7 +114,7 @@ def test_mixed_params_then_model_raises(runner: Runner) -> None:
 def test_model(
     runner: Runner, model_class_test_mode: str, args: Sequence[str]
 ) -> None:
-    runner.match_snapshot([MODEL_CLASS, *args], model_class_test_mode)
+    runner.match_snapshot([Models.MODEL_CLASS, *args], model_class_test_mode)
 
 
 @pytest.mark.parametrize(
@@ -136,7 +127,9 @@ def test_model(
 def test_model_blank(
     runner: Runner, model_class_test_mode: str, args: Sequence[str]
 ) -> None:
-    runner.match_snapshot([MODEL_CLASS_BLANK, *args], model_class_test_mode)
+    runner.match_snapshot(
+        [Models.MODEL_CLASS_BLANK, *args], model_class_test_mode
+    )
 
 
 @pytest.mark.parametrize(
@@ -146,9 +139,10 @@ def test_model_blank(
 @pytest.mark.parametrize(
     "model",
     [
-        pytest.param([MODEL_CLASS_MULTIPLE], id="file"),
+        pytest.param([Models.MODEL_CLASS_MULTIPLE], id="file"),
         pytest.param(
-            ["-m", f"tests.models.{MODEL_CLASS_MULTIPLE.stem}"], id="class"
+            ["-m", f"tests.models.{Models.MODEL_CLASS_MULTIPLE.stem}"],
+            id="class",
         ),
     ],
 )
@@ -169,11 +163,11 @@ def test_model_multiple(
     "model",
     [
         pytest.param(
-            f"tests.models.{MODEL_CLASS_MULTIPLE.stem}:FirstModel",
+            f"tests.models.{Models.MODEL_CLASS_MULTIPLE.stem}:FirstModel",
             id="class_multi_first",
         ),
         pytest.param(
-            f"tests.models.{MODEL_CLASS_MULTIPLE.stem}:SecondModel",
+            f"tests.models.{Models.MODEL_CLASS_MULTIPLE.stem}:SecondModel",
             id="class_multi_second",
         ),
     ],
@@ -192,7 +186,7 @@ def test_model_multiple_harness_nonexistent_class(runner: Runner) -> None:
         [
             "-m",
             "bdbox",
-            f"tests.models.{MODEL_CLASS_MULTIPLE.stem}:NonexistentModel",
+            f"tests.models.{Models.MODEL_CLASS_MULTIPLE.stem}:NonexistentModel",
         ],
         "Model NonexistentModel not found",
     )
@@ -208,7 +202,9 @@ def test_model_multiple_harness_nonexistent_class(runner: Runner) -> None:
 def test_model_subclass(
     runner: Runner, model_class_test_mode: str, args: Sequence[str]
 ) -> None:
-    runner.match_snapshot([MODEL_CLASS_SUBCLASS, *args], model_class_test_mode)
+    runner.match_snapshot(
+        [Models.MODEL_CLASS_SUBCLASS, *args], model_class_test_mode
+    )
 
 
 @pytest.mark.parametrize(
@@ -285,7 +281,7 @@ def test_nonexistent_module(runner: Runner) -> None:
 def test_params_class(
     runner: Runner, params_class_test_mode: str, args: Sequence[str]
 ) -> None:
-    runner.match_snapshot([PARAMS_CLASS, *args], params_class_test_mode)
+    runner.match_snapshot([Models.PARAMS_CLASS, *args], params_class_test_mode)
 
 
 @pytest.mark.parametrize(
@@ -298,12 +294,14 @@ def test_params_class(
 def test_params_class_blank(
     runner: Runner, params_class_test_mode: str, args: Sequence[str]
 ) -> None:
-    runner.match_snapshot([PARAMS_CLASS_BLANK, *args], params_class_test_mode)
+    runner.match_snapshot(
+        [Models.PARAMS_CLASS_BLANK, *args], params_class_test_mode
+    )
 
 
 def test_params_class_multiple_params_raises(runner: Runner) -> None:
     runner.raises(
-        [PARAMS_CLASS_MULTIPLE_PARAMS],
+        [Models.PARAMS_CLASS_MULTIPLE_PARAMS],
         "a Params subclass is already defined in this script",
     )
 
@@ -319,4 +317,4 @@ def test_params_class_multiple_params_raises(runner: Runner) -> None:
     ],
 )
 def test_params_class_instance(runner: Runner, args: Sequence[str]) -> None:
-    runner.match_snapshot([PARAMS_CLASS_INSTANCE, *args])
+    runner.match_snapshot([Models.PARAMS_CLASS_INSTANCE, *args])
