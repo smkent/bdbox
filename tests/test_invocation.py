@@ -14,6 +14,7 @@ from .utils import Models
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+    from pathlib import Path
 
     from syrupy.assertion import SnapshotAssertion
 
@@ -140,15 +141,61 @@ def test_model_blank(
 
 @pytest.mark.parametrize(
     "args",
+    [pytest.param(["--help"], id="help"), pytest.param([], id="render")],
+)
+@pytest.mark.parametrize(
+    "model",
     [
-        pytest.param(["--help"], id="help"),
-        pytest.param(["--width", "25.4"], id="render"),
+        pytest.param([MODEL_CLASS_MULTIPLE], id="file"),
+        pytest.param(
+            ["-m", f"tests.models.{MODEL_CLASS_MULTIPLE.stem}"], id="class"
+        ),
     ],
 )
 def test_model_multiple(
-    runner: Runner, model_class_test_mode: str, args: Sequence[str]
+    runner: Runner,
+    model_class_test_mode: str,
+    args: Sequence[str],
+    model: Sequence[str | Path],
 ) -> None:
-    runner.match_snapshot([MODEL_CLASS_MULTIPLE, *args], model_class_test_mode)
+    runner.match_snapshot([*model, *args], model_class_test_mode)
+
+
+@pytest.mark.parametrize(
+    "args",
+    [pytest.param(["--help"], id="help"), pytest.param([], id="render")],
+)
+@pytest.mark.parametrize(
+    "model",
+    [
+        pytest.param(
+            f"tests.models.{MODEL_CLASS_MULTIPLE.stem}:FirstModel",
+            id="class_multi_first",
+        ),
+        pytest.param(
+            f"tests.models.{MODEL_CLASS_MULTIPLE.stem}:SecondModel",
+            id="class_multi_second",
+        ),
+    ],
+)
+def test_model_multiple_harness(
+    runner: Runner,
+    model_class_test_mode: str,
+    args: Sequence[str],
+    model: str | Path,
+) -> None:
+    runner.match_snapshot(["-m", "bdbox", model, *args], model_class_test_mode)
+
+
+def test_model_multiple_harness_nonexistent_class(runner: Runner) -> None:
+    runner.raises(
+        [
+            "-m",
+            "bdbox",
+            f"tests.models.{MODEL_CLASS_MULTIPLE.stem}:NonexistentModel",
+        ],
+        "Model NonexistentModel not found",
+    )
 
 
 @pytest.mark.parametrize(
@@ -191,6 +238,25 @@ def test_module_models(
     args: Sequence[str],
 ) -> None:
     runner.match_snapshot(["-m", *runner_args, module, *args])
+
+
+@pytest.mark.parametrize(
+    "args",
+    [pytest.param(["--help"], id="help"), pytest.param([], id="render")],
+)
+@pytest.mark.parametrize(
+    "module",
+    [
+        pytest.param(f"{Models.MOD_MODEL}.model:SomeModel", id="mod_model"),
+        pytest.param(f"{Models.MOD_PARAMS}.model:P", id="mod_params"),
+        pytest.param(f"{Models.MONO_MODEL}:MyModel", id="mono_model"),
+        pytest.param(f"{Models.MONO_PARAMS}:P", id="mono_params"),
+    ],
+)
+def test_module_class_model(
+    runner: Runner, module: str, args: Sequence[str]
+) -> None:
+    runner.match_snapshot(["-m", "bdbox", module, *args])
 
 
 def test_nonexistent_module(runner: Runner) -> None:

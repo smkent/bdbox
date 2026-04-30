@@ -23,7 +23,7 @@ pip install bdbox
 Use `bdbox` with build123d models:
 
 ```python
-# mybox.py
+# mymodel.py
 from build123d import Box
 
 result = Box(10, 10, 10)
@@ -32,32 +32,38 @@ result = Box(10, 10, 10)
 Export to STEP or STL with `bdbox`:
 
 ```sh
-bdbox mybox.py export out.step  # Export to STEP
+bdbox mymodel.py export out.step  # Export to STEP
 ```
 
 ```sh
-bdbox mybox.py export out.stl   # Export to STL
+bdbox mymodel.py export out.stl   # Export to STL
 ```
 
 Python module paths work too:
 
 ```sh
-bdbox mypackage.models.mybox export out.step
+bdbox mypackage.mymodule.mymodel export out.step
 ```
 
 ```sh
-python -m mypackage.models.mybox export out.step
+python -m mypackage.mymodule.mymodel export out.step
+```
+
+A specific model class can be chosen from a module using `bdbox`:
+
+```sh
+bdbox mypackage.mymodule.mymodel:MyModel export out.step
 ```
 
 View your model in your browser with [OCP CAD Viewer][ocp_vscode], started
 automatically. `bdbox` automatically re-renders your model on save:
 
 ```sh
-bdbox mybox.py view
+bdbox mymodel.py view
 ```
 
 ```sh
-bdbox mypackage.models.mybox view
+bdbox mypackage.mymodule.mymodel view
 ```
 
 **[See more about actions in the documentation!][docs-actions]**
@@ -90,7 +96,7 @@ Or inherit from the provided base class for reusable, importable models:
 from bdbox import Float, Int, Model, Preset
 from build123d import Box
 
-class MyBox(Model):
+class MyModel(Model):
     width = Float(10.0, min=5, max=100)
     length = Float(20.0, min=5, max=100)
     thickness = Int(2, min=1, max=10)
@@ -106,18 +112,18 @@ class MyBox(Model):
 Parameters become CLI flags automatically:
 
 ```sh
-python mybox.py                 # Run with default values
-python mybox.py view            # View with live reload
-python mybox.py --width 50      # Override a field value
-python mybox.py --preset large  # Apply a named preset
-python mybox.py --help          # Usage info with all parameters
+python mymodel.py                 # Run with default values
+python mymodel.py view            # View with live reload
+python mymodel.py --width 50      # Override a field value
+python mymodel.py --preset large  # Apply a named preset
+python mymodel.py --help          # Usage info with all parameters
 ```
 
 Export geometry to STEP or STL files using the built-in `export` action:
 
 ```sh
-python mybox.py export output.step  # Export to STEP
-python mybox.py export output.stl   # Export to STL
+python mymodel.py export output.step  # Export to STEP
+python mymodel.py export output.stl   # Export to STL
 ```
 
 **[See more about parameters in the documentation!][docs-parameters]**

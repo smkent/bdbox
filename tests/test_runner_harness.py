@@ -48,6 +48,10 @@ def model_runner(
         pytest.param(Models.MONO_PARAMS, id="mono_params"),
         pytest.param(Models.MONO_MODEL, id="mono_model"),
         pytest.param(Models.MONO_PLAIN, id="mono_plain"),
+        pytest.param(f"{Models.MONO_PARAMS}:P", id="mono_params_class"),
+        pytest.param(f"{Models.MONO_MODEL}:MyModel", id="mono_model_class"),
+        pytest.param(f"{Models.MOD_PARAMS}:P", id="params_class"),
+        pytest.param(f"{Models.MOD_MODEL}:SomeModel", id="model_class"),
     ]
 )
 def module(request: pytest.FixtureRequest) -> str:

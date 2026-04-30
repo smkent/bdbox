@@ -42,18 +42,28 @@ The `bdbox` command works with any build123d model, including models without
 any `bdbox` imports:
 
 ```sh
-bdbox model.py                      # Run (default)
-bdbox model.py view                 # View in OCP CAD Viewer
-bdbox model.py export output.step   # Export to STEP
+bdbox model.py                     # Run (default)
+bdbox model.py view                # View in OCP CAD Viewer
+bdbox model.py export output.step  # Export to STEP
 ```
 
 or with a module:
 
 ```sh
-bdbox mypackage.mymodule                      # Run (default)
-bdbox mypackage.mymodule view                 # View in OCP CAD Viewer
-bdbox mypackage.mymodule export output.step   # Export to STEP
+bdbox mypackage.mymodule                     # Run (default)
+bdbox mypackage.mymodule view                # View in OCP CAD Viewer
+bdbox mypackage.mymodule export output.step  # Export to STEP
 ```
+
+A specific [``Model``][bdbox.model.Model] subclass within a module may be
+selected:
+
+```sh
+bdbox mypackage.mymodule:MyModel                     # Run (default)
+bdbox mypackage.mymodule:MyModel view                # View in OCP CAD Viewer
+bdbox mypackage.mymodule:MyModel export output.step  # Export to STEP
+```
+
 
 ### Direct
 
@@ -71,9 +81,9 @@ python model.py export output.step  # Export to STEP
 or with a module:
 
 ```sh
-python -m mypackage.mymodule                      # Run (default)
-python -m mypackage.mymodule view                 # View in OCP CAD Viewer
-python -m mypackage.mymodule export output.step   # Export to STEP
+python -m mypackage.mymodule                     # Run (default)
+python -m mypackage.mymodule view                # View in OCP CAD Viewer
+python -m mypackage.mymodule export output.step  # Export to STEP
 ```
 
 [build123d]: https://build123d.readthedocs.io

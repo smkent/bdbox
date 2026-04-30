@@ -43,6 +43,7 @@ class ModelRunner(ModelLocator):
     def _run_model(self) -> dict[str, Any]:
         if self.model_module:
             run_state.module_name = self.model_module
+            run_state.class_name = self.model_class_name
             results = runpy.run_module(self.model_module, run_name="__main__")
         elif self.model_filename:
             results = runpy.run_path(self.model_filename, run_name="__main__")
