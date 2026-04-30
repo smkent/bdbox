@@ -9,6 +9,7 @@ import traceback
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, TypeAlias
 
+from .errors import MultipleModelsError
 from .geometry import show
 from .parameters.annotations import Annotater
 from .parameters.parameters import Params
@@ -124,18 +125,18 @@ class Model(Params):
 
     @classmethod
     def _atexit_handler(cls) -> None:
-        if not (model_subclasses := run_state.model_subclasses):
-            return
-        if len(model_subclasses) > 1:
-            names = ", ".join(c.__name__ for c in model_subclasses)
+        try:
+            if not (model_class := run_state.get_model()):
+                return
+        except MultipleModelsError as e:
             print(  # noqa: T201
-                f"Multiple Model subclasses defined: {names}."
+                f"Multiple Model subclasses defined: {', '.join(e.names)}."
                 " Call .run() explicitly.",
                 file=sys.stderr,
             )
             return
         try:
-            model_subclasses[0].run()
+            model_class.run()
         except BaseException as exc:  # noqa: BLE001
             if not isinstance(exc, SystemExit):
                 traceback.print_exc()

@@ -12,7 +12,231 @@
   
   '''
 # ---
-# name: test_harness_usage[model]
+# name: test_harness_usage_file[model_class]
+  '''
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer}]
+  
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help      show this help message and exit         
+    --preset {None,default,large,small,plain}               
+                    (default: None)                         
+    --aa INT        (default: 5)                            
+    --width 1.0 <= FLOAT <= 100.0                           
+                    (default: 10.0)                         
+    --height 1 <= INT <= 50                                 
+                    (default: 5)                            
+    --enabled, --no-enabled                                 
+                    enable the thing (default: False)       
+    --text STR      (default: nope)                         
+    --thing {first,second,third}                            
+                    (default: first)                        
+    --count INT     (default: 1)                            
+                                                            
+   sub options                                              
+   -------------------------------------------------------- 
+    --sub.a FLOAT   (required)                              
+    --sub.b FLOAT   (default: 5.0)                          
+    --sub.c 0 <= FLOAT <= 2000.0                            
+                    C! (default: 25.0)                      
+    --sub.do-the-thing, --sub.no-do-the-thing               
+                    (default: False)                        
+    --sub.do-another-thing, --sub.no-do-another-thing       
+                    Another thing? (default: False)         
+                                                            
+   sub.subsub options                                       
+   -------------------------------------------------------- 
+    --sub.subsub.x 0 <= INT <= 10                           
+                    (default: 5)                            
+                                                            
+   sub2 options                                             
+   -------------------------------------------------------- 
+    --sub2.a FLOAT  (default: 1)                            
+    --sub2.b FLOAT  (default: 2)                            
+    --sub2.c 0 <= FLOAT <= 2000.0                           
+                    C! (default: 3)                         
+    --sub2.do-the-thing, --sub2.no-do-the-thing             
+                    (default: False)                        
+    --sub2.do-another-thing, --sub2.no-do-another-thing     
+                    Another thing? (default: False)         
+                                                            
+   sub2.subsub options                                      
+   -------------------------------------------------------- 
+    --sub2.subsub.x 0 <= INT <= 10                          
+                    (default: 5)                            
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run         Run the model.                          
+      • export      Export geometry to a STEP or STL file.  
+      • view        View model geometry.                    
+      • viewer      Viewer control                          
+                                                            
+  
+  '''
+# ---
+# name: test_harness_usage_file[model_class].1
+  ''
+# ---
+# name: test_harness_usage_file[model_export]
+  '''
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer}]
+  
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help     show this help message and exit         
+    --preset {None,mid}                                    
+                   (default: None)                         
+    --size 1.0 <= FLOAT <= 100.0                           
+                   (default: 10.0)                         
+                                                           
+   sub options                                             
+   ------------------------------------------------------- 
+    --sub.x FLOAT  (default: 1)                            
+    --sub.y FLOAT  (default: 2)                            
+    --sub.z FLOAT  (default: 3)                            
+    --sub.do-the-thing, --sub.no-do-the-thing              
+                   (default: False)                        
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run        Run the model.                          
+      • export     Export geometry to a STEP or STL file.  
+      • view       View model geometry.                    
+      • viewer     Viewer control                          
+                                                           
+  
+  '''
+# ---
+# name: test_harness_usage_file[model_export].1
+  ''
+# ---
+# name: test_harness_usage_file[params_class]
+  '''
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer}]
+  
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help      show this help message and exit         
+    --preset {None,default,large,small}                     
+                    (default: None)                         
+    --aa INT        (default: 5)                            
+    --width 1.0 <= FLOAT <= 100.0                           
+                    (default: 10.0)                         
+    --height 1 <= INT <= 50                                 
+                    (default: 5)                            
+    --enabled, --no-enabled                                 
+                    enable the thing (default: False)       
+    --text STR      (default: nope)                         
+    --thing {first,second,third}                            
+                    (default: first)                        
+    --count INT     (default: 1)                            
+                                                            
+   sub options                                              
+   -------------------------------------------------------- 
+    --sub.a FLOAT   (required)                              
+    --sub.b FLOAT   (default: 5.0)                          
+    --sub.c 0 <= FLOAT <= 2000.0                            
+                    C! (default: 25.0)                      
+    --sub.do-the-thing, --sub.no-do-the-thing               
+                    (default: False)                        
+    --sub.do-another-thing, --sub.no-do-another-thing       
+                    Another thing? (default: False)         
+                                                            
+   sub.subsub options                                       
+   -------------------------------------------------------- 
+    --sub.subsub.x 0 <= INT <= 10                           
+                    (default: 5)                            
+                                                            
+   sub2 options                                             
+   -------------------------------------------------------- 
+    --sub2.a FLOAT  (default: 1)                            
+    --sub2.b FLOAT  (default: 2)                            
+    --sub2.c 0 <= FLOAT <= 2000.0                           
+                    C! (default: 3)                         
+    --sub2.do-the-thing, --sub2.no-do-the-thing             
+                    (default: False)                        
+    --sub2.do-another-thing, --sub2.no-do-another-thing     
+                    Another thing? (default: False)         
+                                                            
+   sub2.subsub options                                      
+   -------------------------------------------------------- 
+    --sub2.subsub.x 0 <= INT <= 10                          
+                    (default: 5)                            
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run         Run the model.                          
+      • export      Export geometry to a STEP or STL file.  
+      • view        View model geometry.                    
+      • viewer      Viewer control                          
+                                                            
+  
+  '''
+# ---
+# name: test_harness_usage_file[params_class].1
+  ''
+# ---
+# name: test_harness_usage_file[params_export]
+  '''
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer}]
+  
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help     show this help message and exit         
+    --preset {None,mid}                                    
+                   (default: None)                         
+    --size 1.0 <= FLOAT <= 100.0                           
+                   (default: 10.0)                         
+                                                           
+   sub options                                             
+   ------------------------------------------------------- 
+    --sub.x FLOAT  (default: 1)                            
+    --sub.y FLOAT  (default: 2)                            
+    --sub.z FLOAT  (default: 3)                            
+    --sub.do-the-thing, --sub.no-do-the-thing              
+                   (default: False)                        
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run        Run the model.                          
+      • export     Export geometry to a STEP or STL file.  
+      • view       View model geometry.                    
+      • viewer     Viewer control                          
+                                                           
+  
+  '''
+# ---
+# name: test_harness_usage_file[params_export].1
+  ''
+# ---
+# name: test_harness_usage_file[plain_export]
+  '''
+  usage: pytest [-h] [{run,export,view,viewer}]
+  
+   options                                              
+   ---------------------------------------------------- 
+    -h, --help  show this help message and exit         
+                                                        
+   subcommands                                          
+   ---------------------------------------------------- 
+    (default: run)                                      
+      • run     Run the model.                          
+      • export  Export geometry to a STEP or STL file.  
+      • view    View model geometry.                    
+      • viewer  Viewer control                          
+                                                        
+  
+  '''
+# ---
+# name: test_harness_usage_file[plain_export].1
+  ''
+# ---
+# name: test_harness_usage_module[model]
   '''
   Model main
   usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
@@ -36,7 +260,37 @@
   
   '''
 # ---
-# name: test_harness_usage[mono_model]
+# name: test_harness_usage_module[model].1
+  ''
+# ---
+# name: test_harness_usage_module[model_class]
+  '''
+  Model main
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_harness_usage_module[model_class].1
+  ''
+# ---
+# name: test_harness_usage_module[mono_model]
   '''
   usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
   
@@ -59,7 +313,10 @@
   
   '''
 # ---
-# name: test_harness_usage[mono_params]
+# name: test_harness_usage_module[mono_model].1
+  ''
+# ---
+# name: test_harness_usage_module[mono_model_class]
   '''
   usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
   
@@ -82,7 +339,62 @@
   
   '''
 # ---
-# name: test_harness_usage[mono_plain]
+# name: test_harness_usage_module[mono_model_class].1
+  ''
+# ---
+# name: test_harness_usage_module[mono_params]
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_harness_usage_module[mono_params].1
+  ''
+# ---
+# name: test_harness_usage_module[mono_params_class]
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_harness_usage_module[mono_params_class].1
+  ''
+# ---
+# name: test_harness_usage_module[mono_plain]
   '''
   Box count: 2
   usage: pytest [-h] [{run,export,view,viewer}]
@@ -102,7 +414,10 @@
   
   '''
 # ---
-# name: test_harness_usage[params]
+# name: test_harness_usage_module[mono_plain].1
+  ''
+# ---
+# name: test_harness_usage_module[params]
   '''
   usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
   
@@ -125,7 +440,36 @@
   
   '''
 # ---
-# name: test_harness_usage[plain]
+# name: test_harness_usage_module[params].1
+  ''
+# ---
+# name: test_harness_usage_module[params_class]
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_harness_usage_module[params_class].1
+  ''
+# ---
+# name: test_harness_usage_module[plain]
   '''
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
   usage: pytest [-h] [{run,export,view,viewer}]
@@ -144,6 +488,9 @@
                                                         
   
   '''
+# ---
+# name: test_harness_usage_module[plain].1
+  ''
 # ---
 # name: test_successive_harness_success[model]
   '''
@@ -170,6 +517,9 @@
   '''
 # ---
 # name: test_successive_harness_success[model].1
+  ''
+# ---
+# name: test_successive_harness_success[model].2
   '''
   Model main
   usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
@@ -192,6 +542,63 @@
                                                                       
   
   '''
+# ---
+# name: test_successive_harness_success[model].3
+  ''
+# ---
+# name: test_successive_harness_success[model_class]
+  '''
+  Model main
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_successive_harness_success[model_class].1
+  ''
+# ---
+# name: test_successive_harness_success[model_class].2
+  '''
+  Model main
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_successive_harness_success[model_class].3
+  ''
 # ---
 # name: test_successive_harness_success[mono_model]
   '''
@@ -217,6 +624,9 @@
   '''
 # ---
 # name: test_successive_harness_success[mono_model].1
+  ''
+# ---
+# name: test_successive_harness_success[mono_model].2
   '''
   usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
   
@@ -238,6 +648,61 @@
                                                                       
   
   '''
+# ---
+# name: test_successive_harness_success[mono_model].3
+  ''
+# ---
+# name: test_successive_harness_success[mono_model_class]
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_successive_harness_success[mono_model_class].1
+  ''
+# ---
+# name: test_successive_harness_success[mono_model_class].2
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_successive_harness_success[mono_model_class].3
+  ''
 # ---
 # name: test_successive_harness_success[mono_params]
   '''
@@ -263,6 +728,9 @@
   '''
 # ---
 # name: test_successive_harness_success[mono_params].1
+  ''
+# ---
+# name: test_successive_harness_success[mono_params].2
   '''
   usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
   
@@ -285,6 +753,61 @@
   
   '''
 # ---
+# name: test_successive_harness_success[mono_params].3
+  ''
+# ---
+# name: test_successive_harness_success[mono_params_class]
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_successive_harness_success[mono_params_class].1
+  ''
+# ---
+# name: test_successive_harness_success[mono_params_class].2
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_successive_harness_success[mono_params_class].3
+  ''
+# ---
 # name: test_successive_harness_success[mono_plain]
   '''
   Box count: 2
@@ -306,6 +829,9 @@
   '''
 # ---
 # name: test_successive_harness_success[mono_plain].1
+  ''
+# ---
+# name: test_successive_harness_success[mono_plain].2
   '''
   Box count: 2
   usage: pytest [-h] [{run,export,view,viewer}]
@@ -324,6 +850,9 @@
                                                         
   
   '''
+# ---
+# name: test_successive_harness_success[mono_plain].3
+  ''
 # ---
 # name: test_successive_harness_success[params]
   '''
@@ -349,6 +878,9 @@
   '''
 # ---
 # name: test_successive_harness_success[params].1
+  ''
+# ---
+# name: test_successive_harness_success[params].2
   '''
   usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
   
@@ -371,6 +903,61 @@
   
   '''
 # ---
+# name: test_successive_harness_success[params].3
+  ''
+# ---
+# name: test_successive_harness_success[params_class]
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_successive_harness_success[params_class].1
+  ''
+# ---
+# name: test_successive_harness_success[params_class].2
+  '''
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+                                                                      
+  
+  '''
+# ---
+# name: test_successive_harness_success[params_class].3
+  ''
+# ---
 # name: test_successive_harness_success[plain]
   '''
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
@@ -392,6 +979,9 @@
   '''
 # ---
 # name: test_successive_harness_success[plain].1
+  ''
+# ---
+# name: test_successive_harness_success[plain].2
   '''
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
   usage: pytest [-h] [{run,export,view,viewer}]
@@ -410,4 +1000,7 @@
                                                         
   
   '''
+# ---
+# name: test_successive_harness_success[plain].3
+  ''
 # ---

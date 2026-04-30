@@ -106,6 +106,8 @@ class ModelHarness(ModelLocator):
 
     @cached_property
     def model(self) -> Path | str:
+        if self.model_module and self.model_class_name:
+            return f"{self.model_module}:{self.model_class_name}"
         if result := (self.model_module or self.model_path):
             return result
         raise Error("No model found")
@@ -164,10 +166,8 @@ class ModelHarness(ModelLocator):
             suppress(SystemExit),
         ):
             ModelRunner([self.model, "--help"])()
-        if not (subclasses := run_state.model_subclasses):
+        if not (model_class := run_state.get_model()):
             return None
-        if len(subclasses) > 1:
-            raise self.MultipleModelsError(subclasses)
-        if getattr(subclasses[0], "__module__", None) != "__main__":
-            subclasses[0].__module__ = "__main__"
-        return subclasses[0]
+        if getattr(model_class, "__module__", None) != "__main__":
+            model_class.__module__ = "__main__"
+        return model_class

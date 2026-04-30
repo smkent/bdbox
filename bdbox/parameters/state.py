@@ -6,7 +6,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING, Any
 
 from bdbox.actions.run import RunAction
-from bdbox.errors import ParamsError
+from bdbox.errors import MultipleModelsError, ParamsError
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 class RunState:
     filename: str | None = None
     module_name: str = "__main__"
+    class_name: str | None = None
     model_subclasses: list[Any] = field(default_factory=list)
     action: Action = field(default_factory=RunAction)
     acted: bool = False
@@ -27,6 +28,21 @@ class RunState:
         MODEL_CLASS = auto()
 
     mode: Mode | None = None
+
+    def get_model(self) -> type[Any] | None:
+        if not self.model_subclasses:
+            return None
+        if len(self.model_subclasses) == 1:
+            subc = self.model_subclasses[0]
+            if self.class_name and subc.__name__ != self.class_name:
+                raise ParamsError(f"Model {self.class_name} not found")
+            return subc
+        if self.class_name:
+            for subc in self.model_subclasses:
+                if subc.__name__ == self.class_name:
+                    return subc
+            raise ParamsError(f"Model {self.class_name} not found")
+        raise MultipleModelsError(self.model_subclasses)
 
     def ensure_mode(self, style: RunState.Mode, msg: str) -> None:
         if self.mode is not None and self.mode is not style:

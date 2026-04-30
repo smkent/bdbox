@@ -94,6 +94,8 @@ def model_with_params(request: pytest.FixtureRequest) -> Path:
         pytest.param(Models.MONO_MODEL, id="mono_model"),
         pytest.param(Models.MONO_PARAMS, id="mono_params"),
         pytest.param(Models.MONO_PLAIN, id="mono_plain"),
+        pytest.param(f"{Models.MONO_PARAMS}:P", id="mono_params_class"),
+        pytest.param(f"{Models.MONO_MODEL}:MyModel", id="mono_model_class"),
     ]
 )
 def model(request: pytest.FixtureRequest) -> Path:

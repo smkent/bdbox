@@ -22,6 +22,17 @@ if TYPE_CHECKING:
 class Models:
     DIR = Path(__file__).parent / "models"
 
+    MIXED_MODEL_THEN_PARAMS = DIR / "mixed_model_then_params.py"
+    MIXED_PARAMS_THEN_MODEL = DIR / "mixed_params_then_model.py"
+    MODEL_CLASS = DIR / "model_class.py"
+    MODEL_CLASS_BLANK = DIR / "model_class_blank.py"
+    MODEL_CLASS_MULTIPLE = DIR / "model_class_multiple.py"
+    MODEL_CLASS_SUBCLASS = DIR / "model_class_subclass.py"
+    PARAMS_CLASS = DIR / "params_class.py"
+    PARAMS_CLASS_BLANK = DIR / "params_class_blank.py"
+    PARAMS_CLASS_MULTIPLE_PARAMS = DIR / "params_class_multiple_params.py"
+    PARAMS_CLASS_INSTANCE = DIR / "params_class_instance.py"
+
     MODEL_EXPORT = DIR / "model_export.py"
     PARAMS_EXPORT = DIR / "params_export.py"
     PLAIN_EXPORT = DIR / "plain_export.py"
