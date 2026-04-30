@@ -33,23 +33,39 @@ Export to STEP or STL with `bdbox`:
 
 ```sh
 bdbox mybox.py export out.step  # Export to STEP
+```
+
+```sh
 bdbox mybox.py export out.stl   # Export to STL
+```
+
+Python module paths work too:
+
+```sh
+bdbox mypackage.models.mybox export out.step
+```
+
+```sh
+python -m mypackage.models.mybox export out.step
 ```
 
 View your model in your browser with [OCP CAD Viewer][ocp_vscode], started
 automatically. `bdbox` automatically re-renders your model on save:
 
-```
+```sh
 bdbox mybox.py view
+```
+
+```sh
+bdbox mypackage.models.mybox view
 ```
 
 **[See more about actions in the documentation!][docs-actions]**
 
 ## Add parameters for interactive customization
 
-Opt in to parametric customization by importing from `bdbox`. Declare typed
-parameters with defaults, then override them individually or with named
-presets:
+Easily create parametric models using `bdbox`! Declare typed parameters with
+defaults, then override them individually or with named presets:
 
 ```python
 from bdbox import Float, Int, Params, Preset, show

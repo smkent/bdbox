@@ -28,31 +28,53 @@ icon: lucide/play
 
 ## Invocation modes
 
-Actions work the same way whether models are run with `bdbox` or directly:
+Actions work the same way whether models are run with `bdbox` or directly, with
+file names or module paths.
 
-=== "With `bdbox`"
+!!! info
 
-    The `bdbox` command works with any build123d model, including models without
-    any `bdbox` imports:
+    Module paths must be importable from the current working directory or
+    Python path.
 
-    ```sh
-    bdbox model.py                      # Run (default)
-    bdbox model.py view                 # View in OCP CAD Viewer
-    bdbox model.py export output.step   # Export to STEP
-    ```
+### Using `bdbox`
 
-=== "Direct"
+The `bdbox` command works with any build123d model, including models without
+any `bdbox` imports:
 
-    The CLI is automatically provided on any model with a
-    [``Params``][bdbox.parameters.parameters.Params] or
-    [``Model``][bdbox.model.Model] subclass. Run the model file itself to use
-    the CLI:
+```sh
+bdbox model.py                      # Run (default)
+bdbox model.py view                 # View in OCP CAD Viewer
+bdbox model.py export output.step   # Export to STEP
+```
 
-    ```sh
-    python model.py                     # Run (default)
-    python model.py view                # View in OCP CAD Viewer
-    python model.py export output.step  # Export to STEP
-    ```
+or with a module:
+
+```sh
+bdbox mypackage.mymodule                      # Run (default)
+bdbox mypackage.mymodule view                 # View in OCP CAD Viewer
+bdbox mypackage.mymodule export output.step   # Export to STEP
+```
+
+### Direct
+
+The CLI is automatically provided on any model with a
+[``Params``][bdbox.parameters.parameters.Params] or
+[``Model``][bdbox.model.Model] subclass. Run the model file itself to use
+the CLI:
+
+```sh
+python model.py                     # Run (default)
+python model.py view                # View in OCP CAD Viewer
+python model.py export output.step  # Export to STEP
+```
+
+or with a module:
+
+```sh
+python -m mypackage.mymodule                      # Run (default)
+python -m mypackage.mymodule view                 # View in OCP CAD Viewer
+python -m mypackage.mymodule export output.step   # Export to STEP
+```
 
 [build123d]: https://build123d.readthedocs.io
 [ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer

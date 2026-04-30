@@ -12,17 +12,61 @@ argument parsing code is needed.
 
 ## Invocation modes
 
-| Command | Effect |
-|---|---|
-| `python model.py` | Build with all field defaults (equivalent to `run`) |
-| `python model.py --width 25` | Override one or more fields |
-| `python model.py --preset large` | Apply a named preset |
-| `python model.py --preset large --width 25` | Preset as baseline, then override |
-| `python model.py --help` | Show all fields, defaults, presets, and actions |
-| `python model.py run` | Explicitly run the model |
-| `python model.py view` | View geometry in OCP CAD Viewer |
-| `python model.py export output.step` | Export geometry to a STEP file |
-| `python model.py export output.stl` | Export geometry to an STL file |
+=== "`bdbox` with **file**"
+
+    | Command | Effect |
+    |---|---|
+    | `bdbox model.py` | Build with all field defaults (equivalent to `run`) |
+    | `bdbox model.py --width 25` | Override one or more fields |
+    | `bdbox model.py --preset large` | Apply a named preset |
+    | `bdbox model.py --preset large --width 25` | Preset as baseline, then override |
+    | `bdbox model.py --help` | Show all fields, defaults, presets, and actions |
+    | `bdbox model.py run` | Explicitly run the model |
+    | `bdbox model.py view` | View geometry in OCP CAD Viewer |
+    | `bdbox model.py export output.step` | Export geometry to a STEP file |
+    | `bdbox model.py export output.stl` | Export geometry to an STL file |
+
+=== "`bdbox` with **module**"
+
+    | Command | Effect |
+    |---|---|
+    | `bdbox mypackage.mymodule` | Build with all field defaults (equivalent to `run`) |
+    | `bdbox mypackage.mymodule --width 25` | Override one or more fields |
+    | `bdbox mypackage.mymodule --preset large` | Apply a named preset |
+    | `bdbox mypackage.mymodule --preset large --width 25` | Preset as baseline, then override |
+    | `bdbox mypackage.mymodule --help` | Show all fields, defaults, presets, and actions |
+    | `bdbox mypackage.mymodule run` | Explicitly run the model |
+    | `bdbox mypackage.mymodule view` | View geometry in OCP CAD Viewer |
+    | `bdbox mypackage.mymodule export output.step` | Export geometry to a STEP file |
+    | `bdbox mypackage.mymodule export output.stl` | Export geometry to an STL file |
+
+=== "Direct with **file**"
+
+    | Command | Effect |
+    |---|---|
+    | `python model.py` | Build with all field defaults (equivalent to `run`) |
+    | `python model.py --width 25` | Override one or more fields |
+    | `python model.py --preset large` | Apply a named preset |
+    | `python model.py --preset large --width 25` | Preset as baseline, then override |
+    | `python model.py --help` | Show all fields, defaults, presets, and actions |
+    | `python model.py run` | Explicitly run the model |
+    | `python model.py view` | View geometry in OCP CAD Viewer |
+    | `python model.py export output.step` | Export geometry to a STEP file |
+    | `python model.py export output.stl` | Export geometry to an STL file |
+
+=== "Direct with **module**"
+
+    | Command | Effect |
+    |---|---|
+    | `python -m mypackage.mymodule` | Build with all field defaults (equivalent to `run`) |
+    | `python -m mypackage.mymodule --width 25` | Override one or more fields |
+    | `python -m mypackage.mymodule --preset large` | Apply a named preset |
+    | `python -m mypackage.mymodule --preset large --width 25` | Preset as baseline, then override |
+    | `python -m mypackage.mymodule --help` | Show all fields, defaults, presets, and actions |
+    | `python -m mypackage.mymodule run` | Explicitly run the model |
+    | `python -m mypackage.mymodule view` | View geometry in OCP CAD Viewer |
+    | `python -m mypackage.mymodule export output.step` | Export geometry to a STEP file |
+    | `python -m mypackage.mymodule export output.stl` | Export geometry to an STL file |
 
 See the [Actions](../actions/index.md) documentation for full details,
 including the [view](../actions/view.md) and [export](../actions/export.md)
@@ -47,10 +91,33 @@ Boolean fields are represented as a pair of `--flag` / `--no-flag` options:
 --hollow, --no-hollow  (default: False)
 ```
 
-```sh
-python model.py --hollow        # Set to True
-python model.py --no-hollow     # Set to False
-```
+=== "`bdbox` with **file**"
+
+    ```sh
+    bdbox model.py --hollow     # Set to True
+    bdbox model.py --no-hollow  # Set to False
+    ```
+
+=== "`bdbox` with **module**"
+
+    ```sh
+    bdbox mypackage.mymodule --hollow     # Set to True
+    bdbox mypackage.mymodule --no-hollow  # Set to False
+    ```
+
+=== "Direct with **file**"
+
+    ```sh
+    python model.py --hollow     # Set to True
+    python model.py --no-hollow  # Set to False
+    ```
+
+=== "Direct with **module**"
+
+    ```sh
+    python -m mypackage.mymodule --hollow     # Set to True
+    python -m mypackage.mymodule --no-hollow  # Set to False
+    ```
 
 ## Help output
 
@@ -72,8 +139,9 @@ usage: MyBox [-h] [OPTIONS] [{run,view,export}]
 ╭─ subcommands ──────────────────────────────────────────╮
 │ (default: run)                                         │
 │   • run      Run the model.                            │
-│   • view     View model geometry.                      │
 │   • export   Export geometry to a STEP or STL file.    │
+│   • view     View model geometry.                      │
+│   • viewer   Viewer control                            │
 ╰────────────────────────────────────────────────────────╯
 ```
 

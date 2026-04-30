@@ -8,7 +8,9 @@ from types import ModuleType
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
-from bdbox import Model, Params
+from bdbox.errors import Error
+from bdbox.model import Model
+from bdbox.parameters.parameters import Params
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -56,11 +58,23 @@ class AtExit(ModuleType):
 
 
 class MainModule(ModuleType):
-    def __init__(self, filename: str | Path) -> None:
+    def __init__(
+        self,
+        filename: str | Path | None = None,
+        module_name: str | None = None,
+    ) -> None:
         super().__init__("__main__")
-        self.__filename__ = str(filename)
+        self.__filename__ = str(filename) if filename else None
+        self.__module_name__ = module_name
 
     def run_main_shim(self) -> None:
-        self.__dict__.update(
-            runpy.run_path(self.__filename__, run_name="__main__")
-        )
+        if self.__module_name__:
+            Params._main_info.module_name = self.__module_name__  # noqa: SLF001
+            results = runpy.run_module(
+                self.__module_name__, run_name="__main__"
+            )
+        elif self.__filename__:
+            results = runpy.run_path(self.__filename__, run_name="__main__")
+        else:
+            raise Error("One of filename or module_name are required")
+        self.__dict__.update(results)

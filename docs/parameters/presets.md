@@ -57,18 +57,58 @@ its default value.
 
 Select a preset with `--preset`:
 
-```sh
-python model.py --preset large
-```
+=== "`bdbox` with **file**"
+
+    ```sh
+    bdbox model.py --preset large
+    ```
+
+=== "`bdbox` with **module**"
+
+    ```sh
+    bdbox mypackage.mymodule --preset large
+    ```
+
+=== "Direct with **file**"
+
+    ```sh
+    python model.py --preset large
+    ```
+
+=== "Direct with **module**"
+
+    ```sh
+    python -m mypackage.mymodule --preset large
+    ```
 
 ### Combining presets with overrides
 
 Specific field values take precedence over preset values. Use a preset as a
 baseline and adjust individual fields as needed. For example, in the CLI:
 
-```sh
-python model.py --preset large --thickness 5.0
-```
+=== "`bdbox` with **file**"
+
+    ```sh
+    bdbox model.py --preset large --thickness 5.0
+    ```
+
+=== "`bdbox` with **module**"
+
+    ```sh
+    bdbox mypackage.mymodule --preset large --thickness 5.0
+    ```
+
+=== "Direct with **file**"
+
+    ```sh
+    python model.py --preset large --thickness 5.0
+    ```
+
+=== "Direct with **module**"
+
+    ```sh
+    python -m mypackage.mymodule --preset large --thickness 5.0
+    ```
 
 Field value precedence, from highest to lowest:
 

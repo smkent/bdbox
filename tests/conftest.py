@@ -35,6 +35,25 @@ def reset_all() -> None:
     Action.mode = Action.Mode.EMBEDDED
 
 
+@pytest.fixture
+def mock_sys_modules() -> Iterator[None]:
+    with patch.dict(sys.modules, sys.modules.copy()):
+        yield
+
+
+@pytest.fixture
+def ensure_sys_modules() -> Iterator[None]:
+    mods = sys.modules.copy()
+    with patch.dict(sys.modules, sys.modules.copy()):
+        yield
+        unexpected_modules = {
+            mod
+            for mod in (set(sys.modules.keys()) - set(mods.keys()))
+            if mod == "tests.models" or mod.startswith("tests.models.")
+        }
+        assert not unexpected_modules
+
+
 @pytest.fixture(autouse=True)
 def disallow_subprocess(
     request: pytest.FixtureRequest,

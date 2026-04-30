@@ -7,7 +7,6 @@ import time
 import traceback
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from functools import cached_property
 from pathlib import Path
 from threading import Event
 from typing import TYPE_CHECKING
@@ -47,28 +46,21 @@ class ModelWatcher:
                 _self.on_modified(event)
 
         observer = Observer()
-        observer.schedule(_Handler(), str(self.model_dir), recursive=True)
+        observer.schedule(
+            _Handler(), str(self.runner.model_base_dir), recursive=True
+        )
         observer.start()
         yield
         observer.stop()
         observer.join()
 
-    @cached_property
-    def model_path(self) -> Path:
-        return self.runner.model_path.resolve()
-
-    @property
-    def model_dir(self) -> Path:
-        """Parent directory of the model file."""
-        return self.model_path.parent
-
     @property
     def watched_files(self) -> frozenset[Path]:
         """Current set of files to watch: model + local dependency files."""
-        files: set[Path] = {self.model_path}
-        for f in self.local_modules.values():
-            files.add(Path(f))
-        return frozenset(files)
+        return frozenset(
+            {self.runner.model_path}
+            | {Path(f) for f in self.local_modules.values()}
+        )
 
     def run(self) -> None:
         with self.observer:
@@ -78,7 +70,7 @@ class ModelWatcher:
                     with self.handle_modules:
                         try:
                             self.runner()
-                        except Exception:  # noqa: BLE001
+                        except (Exception, SystemExit):  # noqa: BLE001
                             traceback.print_exc()
             except KeyboardInterrupt:
                 print("Quitting", file=sys.stderr)  # noqa: T201
@@ -108,7 +100,7 @@ class ModelWatcher:
             if "site-packages" in p.parts:
                 continue
             try:
-                p.relative_to(self.model_dir)
+                p.relative_to(self.runner.model_base_dir)
             except ValueError:
                 continue
             self.local_modules[name] = str(p)

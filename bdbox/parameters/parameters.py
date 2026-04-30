@@ -32,8 +32,15 @@ else:
 @dataclass
 class _MainInfo:
     filename: str | None = None
+    module_name: str = "__main__"
     model_subclasses: list[Any] = field(default_factory=list)
     action: Action = field(default_factory=RunAction)
+
+    def is_class_in_main(self, cls: type) -> bool:
+        return cls.__module__ in (
+            "__main__",
+            self.module_name,
+        ) or cls.__module__.startswith(f"{self.module_name}.")
 
 
 class ParamsType(type):
@@ -120,7 +127,7 @@ class Params(CLI, metaclass=ParamsType):
             return
         Annotater(cls)()
 
-        if cls.__module__ == "__main__":
+        if Params._main_info.is_class_in_main(cls):
             Geometry.ensure_params_class_mode()
             if Params._main_info.model_subclasses:
                 raise ParamsError(

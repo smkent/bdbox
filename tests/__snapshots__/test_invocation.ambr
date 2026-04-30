@@ -213,6 +213,341 @@
 # name: test_model_subclass[run-render]
   'ChildModel 25.4 10'
 # ---
+# name: test_module_models[tests.models.mod_model-help-embedded]
+  '''
+  Model main
+  usage: SomeModel [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mod_model-help-harness]
+  '''
+  Model main
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mod_model-render-embedded]
+  '''
+  Model main
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mod_model-render-harness]
+  '''
+  Model main
+  Model main
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mod_model.model-help-embedded]
+  '''
+  usage: SomeModel [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mod_model.model-help-harness]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mod_model.model-render-embedded]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mod_model.model-render-harness]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mod_params-help-embedded]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  Model main P(Params)(a=2.5, b=3, c=5, d=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mod_params-help-harness]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mod_params-render-embedded]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  Model main P(Params)(a=2.5, b=3, c=5, d=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mod_params-render-harness]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  Model main P(Params)(a=2.5, b=3, c=5, d=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mod_params.model-help-embedded]
+  '''
+  usage: model.py [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mod_params.model-help-harness]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mod_params.model-render-embedded]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mod_params.model-render-harness]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  '''
+# ---
+# name: test_module_models[tests.models.mono_model.models.model-help-embedded]
+  '''
+  usage: MyModel [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mono_model.models.model-help-harness]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mono_model.models.model-render-embedded]
+  '''
+  b1 <SnapshotMock name='b123d.Box()'>
+  b2 <SnapshotMock name='b123d.Box()'>
+  '''
+# ---
+# name: test_module_models[tests.models.mono_model.models.model-render-harness]
+  '''
+  b1 <SnapshotMock name='b123d.Box()'>
+  b2 <SnapshotMock name='b123d.Box()'>
+  '''
+# ---
+# name: test_module_models[tests.models.mono_params.models.model-help-embedded]
+  '''
+  usage: model.py [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mono_params.models.model-help-harness]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  
+  ╭─ options ────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit        │
+  │ --a FLOAT                 (default: 2.5)                         │
+  │ --b INT                   (default: 3)                           │
+  │ --c 1 <= INT <= 10        (default: 5)                           │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────────────────╮
+  │ (default: run)                                                   │
+  │   • run                   Run the model.                         │
+  │   • export                Export geometry to a STEP or STL file. │
+  │   • view                  View model geometry.                   │
+  │   • viewer                Viewer control                         │
+  ╰──────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mono_params.models.model-render-embedded]
+  '''
+  b1 <SnapshotMock name='b123d.Box()'>
+  b2 <SnapshotMock name='b123d.Box()'>
+  '''
+# ---
+# name: test_module_models[tests.models.mono_params.models.model-render-harness]
+  '''
+  b1 <SnapshotMock name='b123d.Box()'>
+  b2 <SnapshotMock name='b123d.Box()'>
+  '''
+# ---
+# name: test_module_models[tests.models.mono_plain.models.model-help-embedded]
+  'Box count: 2'
+# ---
+# name: test_module_models[tests.models.mono_plain.models.model-help-harness]
+  '''
+  Box count: 2
+  usage: bdbox [-h] [{run,export,view,viewer}]
+  
+  ╭─ options ──────────────────────────────────────────╮
+  │ -h, --help  show this help message and exit        │
+  ╰────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────╮
+  │ (default: run)                                     │
+  │   • run     Run the model.                         │
+  │   • export  Export geometry to a STEP or STL file. │
+  │   • view    View model geometry.                   │
+  │   • viewer  Viewer control                         │
+  ╰────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mono_plain.models.model-render-embedded]
+  'Box count: 2'
+# ---
+# name: test_module_models[tests.models.mono_plain.models.model-render-harness]
+  '''
+  Box count: 2
+  Box count: 2
+  '''
+# ---
 # name: test_params_class[noparams-help]
   'params() not called'
 # ---

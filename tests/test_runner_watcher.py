@@ -27,10 +27,21 @@ if TYPE_CHECKING:
 class Modules:
     monkeypatch: pytest.MonkeyPatch
     tmp_path: Path
+    ref_type: str
+    model_ref: str | Path = field(init=False)
     mods_kept: dict[str, ModuleType] = field(default_factory=dict, init=False)
     mods_removed: dict[str, ModuleType] = field(
         default_factory=dict, init=False
     )
+
+    def __post_init__(self) -> None:
+        (self.local_dir / "model.py").write_text("")
+        if self.ref_type == "file":
+            self.model_ref = self.local_dir / "model.py"
+        elif self.ref_type == "module":
+            self.model_ref = "module_dir.local_dir.model"
+        else:
+            raise ValueError(self.ref_type)
 
     @contextmanager
     def __call__(self, watcher: ModelWatcher) -> Iterator[None]:
@@ -42,8 +53,9 @@ class Modules:
         }
         assert set(self.mods_kept.keys()).issubset(sys_filter)
         assert {
-            Path(self.mods_removed[p].__file__ or "").resolve()
+            Path(f).resolve()
             for p in self.mods_removed
+            if (f := (self.mods_removed[p].__file__))
         }.issubset(watcher.watched_files)
         assert not set(self.mods_removed.keys()) & sys_filter
 
@@ -53,7 +65,9 @@ class Modules:
             "_another_local_mod", self.local_dir / "another.py", kept=False
         )
         self._add(
-            "_nonlocal_mod", self.nonlocal_dir / "nonlocal_lib.py", kept=True
+            "_nonlocal_mod",
+            self.nonlocal_dir / "nonlocal_lib.py",
+            kept=(self.ref_type == "file"),
         )
         self._add(
             "_site_mod",
@@ -68,21 +82,32 @@ class Modules:
         (self.mods_kept if kept else self.mods_removed)[name] = mod
 
     @cached_property
+    def module_dir(self) -> Path:
+        return self._mkmodule(self.tmp_path / "module_dir")
+
+    @cached_property
     def local_dir(self) -> Path:
-        newdir = self.tmp_path / "local_dir"
-        newdir.mkdir()
-        return newdir
+        return self._mkmodule(self.module_dir / "local_dir")
 
     @cached_property
     def nonlocal_dir(self) -> Path:
-        newdir = self.tmp_path / "nonlocal_dir"
+        return self._mkmodule(self.module_dir / "nonlocal_dir")
+
+    def _mkmodule(self, newdir: Path) -> Path:
         newdir.mkdir()
+        (newdir / "__init__.py").touch(exist_ok=True)
         return newdir
 
 
-@pytest.fixture
-def modules(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Modules:
-    return Modules(monkeypatch, tmp_path)
+@pytest.fixture(params=("file", "module"))
+def modules(
+    request: pytest.FixtureRequest,
+    ensure_sys_modules: None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> Modules:
+    monkeypatch.syspath_prepend(tmp_path)
+    return Modules(monkeypatch, tmp_path, ref_type=request.param)
 
 
 ExpectExit = Callable[[Callable[[], None]], Callable[[], None]]
@@ -110,7 +135,7 @@ def mock_runner_call() -> Iterator[MagicMock]:
 def runner(
     tmp_path: Path, modules: Modules, mock_runner_call: MagicMock
 ) -> ModelRunner:
-    return ModelRunner(modules.local_dir / "model.py")
+    return ModelRunner(modules.model_ref)
 
 
 @pytest.fixture
