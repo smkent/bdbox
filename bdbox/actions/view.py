@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path  # noqa: TC003
@@ -47,7 +46,7 @@ class ViewAction(ModelAction):
         if self.export:
             ExportAction(output=self.export)()
 
-    def before_harness(self) -> None:
+    def before_harness(self) -> ModelAction.BeforeHarnessResult:
         if not self.start_viewer:
             return
         from bdbox.viewer import ViewerManager  # noqa: PLC0415
@@ -59,15 +58,3 @@ class ViewAction(ModelAction):
 
     def before_model(self) -> None:
         self._ensure_runner()
-
-    def _ensure_runner(self) -> None:
-        if self.mode != self.Mode.HARNESS:
-            try:
-                returncode = subprocess.run(  # noqa: S603, PLW1510
-                    [sys.executable, "-m", "bdbox", *sys.argv]
-                ).returncode
-            except KeyboardInterrupt:
-                sys.exit(130)
-            except Exception:  # noqa: BLE001
-                sys.exit(2)
-            sys.exit(returncode)

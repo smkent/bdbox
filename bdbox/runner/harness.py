@@ -7,7 +7,7 @@ from contextlib import suppress
 from dataclasses import dataclass, make_dataclass
 from functools import cached_property, reduce
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any, ClassVar, get_args
+from typing import TYPE_CHECKING, Annotated, Any, ClassVar, cast, get_args
 from unittest.mock import MagicMock, patch
 
 import tyro
@@ -92,17 +92,50 @@ class ModelHarness(ModelLocator):
             (self.model_params_cls or CLI)
             .cli_config()
             .instance_from_cli(
-                prog=self.prog,
-                args=self.argv,
-                harness_hook=True,
-                model_hook=False,
+                prog=self.prog, args=self.argv, model_hook=False
             )
         )
+        if (
+            (result := cli_result.action.before_harness())
+            and result.all_presets
+            and result.preset_argv
+            and result.preset_action
+        ):
+            for preset in (None, *getattr(cli_result.params, "presets", ())):
+                preset_argv = result.preset_argv(getattr(preset, "name", None))
+                if not preset_argv:
+                    continue
+                argv = [str(self.model), *preset_argv, *self.params_argv]
+                ModelRunner(argv, result.preset_action(preset))()
+            return
+
         runner = ModelRunner([self.model, *self.argv], cli_result.action)
         if cli_result.action.watch:
             ModelWatcher(runner).run()
             return
         runner()
+
+    @cached_property
+    def params_argv(self) -> Sequence[str]:
+        _, params_argv = (
+            cast(
+                "CLI",
+                make_dataclass(
+                    CLI.__name__,
+                    [("preset", "str | None", None)],
+                    bases=(CLI,),
+                ),
+            )
+            .cli_config()
+            .instance_from_cli(
+                prog=self.prog,
+                args=self.argv,
+                model_hook=False,
+                return_unknown_args=True,
+                add_help=False,
+            )
+        )
+        return params_argv
 
     @cached_property
     def model(self) -> Path | str:

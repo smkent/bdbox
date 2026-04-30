@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import subprocess
+import sys
 from dataclasses import InitVar, dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, Protocol
+from unittest.mock import patch
 
 import pytest
 
@@ -177,3 +180,94 @@ def test_main_export_with_parameters(
 def test_main_export_no_model(model_runner: ExportModelRunner) -> None:
     with pytest.raises(SystemExit):
         model_runner(MAIN_STUB, ["export"])
+
+
+def test_export_all_embedded_execs_harness(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    argv = [
+        str(Models.PARAMS_EXPORT),
+        "export",
+        "-a",
+        str(tmp_path),
+        "--format",
+        "step",
+    ]
+    monkeypatch.setattr(sys, "argv", argv)
+    with (
+        patch.object(subprocess, "run") as mock_run,
+        pytest.raises(SystemExit),
+    ):
+        ModelRunner(
+            [
+                Models.PARAMS_EXPORT,
+                "export",
+                "-a",
+                str(tmp_path),
+                "--format",
+                "step",
+            ]
+        )()
+    mock_run.assert_called_once_with([sys.executable, "-m", "bdbox", *argv])
+
+
+def test_export_single_embedded_does_not_exec_harness(
+    tmp_path: Path, model_runner: ExportModelRunner
+) -> None:
+    with patch.object(subprocess, "run") as mock_run:
+        model_runner(
+            Models.PARAMS_EXPORT, ["export", model_runner.output_file]
+        )
+    mock_run.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    ("model_file", "expected_stems"),
+    [
+        pytest.param(
+            Models.PARAMS_EXPORT, ["default", "mid"], id="Params-with-preset"
+        ),
+        pytest.param(
+            Models.MODEL_EXPORT, ["default", "mid"], id="Model-with-preset"
+        ),
+        pytest.param(Models.PLAIN_EXPORT, ["default"], id="plain-no-presets"),
+    ],
+)
+@pytest.mark.parametrize("file_format", ["step", "stl"])
+def test_export_all_creates_preset_files(
+    tmp_path: Path,
+    model_file: Path,
+    expected_stems: list[str],
+    file_format: str,
+) -> None:
+    out_dir = tmp_path / "renders"
+    ModelHarness(
+        [
+            str(model_file),
+            "export",
+            "-a",
+            str(out_dir),
+            "--format",
+            file_format,
+        ]
+    )()
+    assert out_dir.is_dir()
+    assert sorted(p.stem for p in out_dir.iterdir()) == sorted(expected_stems)
+    for stem in expected_stems:
+        assert (out_dir / f"{stem}.{file_format}").exists()
+
+
+def test_export_all_creates_output_dir(tmp_path: Path) -> None:
+    out_dir = tmp_path / "a" / "b" / "renders"
+    assert not out_dir.exists()
+    ModelHarness(
+        [
+            str(Models.PLAIN_EXPORT),
+            "export",
+            "-a",
+            str(out_dir),
+            "--format",
+            "step",
+        ]
+    )()
+    assert out_dir.is_dir()
