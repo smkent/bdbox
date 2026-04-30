@@ -16,18 +16,32 @@ sensitive):
 
 ## Usage
 
-=== "With `bdbox`"
+=== "`bdbox` with **file**"
 
     ```sh
-    bdbox model.py export output.step   # Export to STEP
-    bdbox model.py export output.stl    # Export to STL
+    bdbox model.py export output.step  # Export to STEP
+    bdbox model.py export output.stl   # Export to STL
     ```
 
-=== "Direct"
+=== "`bdbox` with **module**"
+
+    ```sh
+    bdbox mypackage.mymodule export output.step  # Export to STEP
+    bdbox mypackage.mymodule export output.stl   # Export to STL
+    ```
+
+=== "Direct with **file**"
 
     ```sh
     python model.py export output.step  # Export to STEP
     python model.py export output.stl   # Export to STL
+    ```
+
+=== "Direct with **module**"
+
+    ```sh
+    python -m mypackage.mymodule export output.step  # Export to STEP
+    python -m mypackage.mymodule export output.stl   # Export to STL
     ```
 
 ## Combining with parameter flags
@@ -35,18 +49,32 @@ sensitive):
 [Parameter flags](../parameters/cli.md) may appear before or after the
 subcommand:
 
-=== "With `bdbox`"
+=== "`bdbox` with **file**"
 
     ```sh
     bdbox model.py --width 50 export output.step
     bdbox model.py export output.step --width 50
     ```
 
-=== "Direct"
+=== "`bdbox` with **module**"
+
+    ```sh
+    bdbox mypackage.mymodule --width 50 export output.step
+    bdbox mypackage.mymodule export output.step --width 50
+    ```
+
+=== "Direct with **file**"
 
     ```sh
     python model.py --width 50 export output.step
     python model.py export output.step --width 50
+    ```
+
+=== "Direct with **module**"
+
+    ```sh
+    python -m mypackage.mymodule --width 50 export output.step
+    python -m mypackage.mymodule export output.step --width 50
     ```
 
 [step]: https://en.wikipedia.org/wiki/ISO_10303-21
