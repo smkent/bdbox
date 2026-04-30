@@ -1,31 +1,26 @@
 from __future__ import annotations
 
-import os
+import runpy
 import sys
-from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
 from bdbox.actions.run import RunAction
 from bdbox.errors import Error
+from bdbox.parameters.state import run_state
 
+from .locator import ModelLocator
 from .shims import AtExit, MainModule
-from .utils import ModelLocator, PatchModule, reset_bdbox
+from .utils import PatchModule, exit_mock, reset_bdbox
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
-
     from bdbox.actions.action import Action
 
 
 @dataclass
 class ModelRunner(ModelLocator):
     action: Action | None = None
-
-    @dataclass
-    class ExitError(Exception):
-        code: int | str
 
     def __call__(self, action: Action | None = None) -> None:
         if not self.model_filename:
@@ -37,22 +32,20 @@ class ModelRunner(ModelLocator):
         with (
             PatchModule("__main__", main_module, auto=False) as mock_main,
             patch.object(sys, "argv", [self.model_filename, *self.argv]),
-            self.exit_mock(),
+            exit_mock(),
             AtExit.mock() as atexit_mock,
         ):
-            main_module.run_main_shim()
+            main_module.__dict__.update(self._run_model())
             mock_main.start()
             if not atexit_mock.hooks:
-                (action or self.action or RunAction())()
+                run_state.act_once(action or self.action or RunAction())
 
-    @classmethod
-    @contextmanager
-    def exit_mock(cls) -> Iterator[None]:
-        def stub(code: str | int) -> None:
-            raise cls.ExitError(code)
-
-        with patch.object(sys, "exit", stub), patch.object(os, "_exit", stub):
-            try:
-                yield
-            except cls.ExitError as e:
-                raise SystemExit(e.code) from e
+    def _run_model(self) -> dict[str, Any]:
+        if self.model_module:
+            run_state.module_name = self.model_module
+            results = runpy.run_module(self.model_module, run_name="__main__")
+        elif self.model_filename:
+            results = runpy.run_path(self.model_filename, run_name="__main__")
+        else:
+            raise Error("One of filename or module_name are required")
+        return results

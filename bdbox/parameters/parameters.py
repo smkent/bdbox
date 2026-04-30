@@ -7,16 +7,14 @@ from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import Any, ClassVar
 
-from bdbox.actions.action import Action
-from bdbox.actions.run import RunAction
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
-from bdbox.geometry import Geometry
 
 from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .preset import Preset
+from .state import run_state
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -27,20 +25,6 @@ if sys.version_info >= (3, 12):
     from typing import dataclass_transform
 else:
     from typing_extensions import dataclass_transform
-
-
-@dataclass
-class _MainInfo:
-    filename: str | None = None
-    module_name: str = "__main__"
-    model_subclasses: list[Any] = field(default_factory=list)
-    action: Action = field(default_factory=RunAction)
-
-    def is_class_in_main(self, cls: type) -> bool:
-        return cls.__module__ in (
-            "__main__",
-            self.module_name,
-        ) or cls.__module__.startswith(f"{self.module_name}.")
 
 
 class ParamsType(type):
@@ -107,12 +91,11 @@ class Params(CLI, metaclass=ParamsType):
         ```
     """
 
-    _main_info: ClassVar[_MainInfo] = _MainInfo()
     preset: str | None = field(default=None, kw_only=True)
     presets: ClassVar[Sequence[Preset]] = ()
 
     @classmethod
-    def with_preset(cls, preset: str, **overrides: Any) -> Self:
+    def with_preset(cls, preset: str | None, **overrides: Any) -> Self:
         """Create a new instance with values from a preset applied.
 
         Args:
@@ -127,27 +110,30 @@ class Params(CLI, metaclass=ParamsType):
             return
         Annotater(cls)()
 
-        if Params._main_info.is_class_in_main(cls):
-            Geometry.ensure_params_class_mode()
-            if Params._main_info.model_subclasses:
+        if run_state.is_class_in_main(cls):
+            run_state.ensure_mode(
+                run_state.Mode.PARAMS_CLASS,
+                "Cannot use Params subclass with an existing Model subclass",
+            )
+            if run_state.model_subclasses:
                 raise ParamsError(
                     f"Cannot define Params subclass {cls.__name__!r}:"
                     " a Params subclass is already defined in this script"
                 )
-            Params._main_info.model_subclasses.append(cls)
+            run_state.model_subclasses.append(cls)
             cli_result = cls.cli_config().instance_from_cli(
                 prog=Path(sys.argv[0]).name
             )
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
-            Params._main_info.action = cli_result.action
+            run_state.action = cli_result.action
             atexit.register(Params._atexit_handler)
 
     @classmethod
     def _atexit_handler(cls) -> None:
         atexit.unregister(Params._atexit_handler)
-        if Params._main_info.model_subclasses:
-            Params._main_info.action()
+        if run_state.model_subclasses:
+            run_state.act_once(run_state.action)
 
     def __post_init__(self) -> None:
         if self.preset:

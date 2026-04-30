@@ -4,11 +4,8 @@ from __future__ import annotations
 
 import sys
 from contextlib import suppress
-from dataclasses import dataclass
-from enum import Enum, auto
-from typing import TYPE_CHECKING, Any, ClassVar
-
-from bdbox.errors import ParamsError
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
@@ -19,70 +16,28 @@ if TYPE_CHECKING:
 @dataclass
 class Geometry:
     # Geometry collected via show() calls during execution.
-    geometry: ClassVar[list[Compound | Shape]] = []
+    geometry: list[Compound | Shape] = field(default_factory=list)
 
-    class Mode(Enum):
-        PARAMS_CLASS = auto()
-        MODEL_CLASS = auto()
+    def reset(self) -> None:
+        """Clear any active geometry for runners or tests."""
+        self.clear_geometry()
 
-    mode: ClassVar[Mode | None] = None
-
-    @classmethod
-    def reset(cls) -> None:
-        """Clear any active mode information for runners or tests."""
-        cls.clear_geometry()
-        cls.mode = None
-
-    @classmethod
-    def ensure_params_class_mode(cls) -> None:
-        """Ensure ``Params`` subclass is the only active mode.
-
-        Raises:
-            ParamsError: If a ``Model`` subclass is already defined.
-        """
-        cls.ensure_mode(
-            cls.Mode.PARAMS_CLASS,
-            "Cannot use Params subclass with an existing Model subclass",
-        )
-
-    @classmethod
-    def ensure_model_class_mode(cls, name: str) -> None:
-        """Ensure ``Model`` subclass is the only active mode.
-
-        Raises:
-            ParamsError: If a ``Params`` subclass is already defined.
-        """
-        cls.ensure_mode(
-            cls.Mode.MODEL_CLASS,
-            f"Cannot define Model subclass {name!r}"
-            " with an existing Params subclass",
-        )
-
-    @classmethod
-    def ensure_mode(cls, style: Geometry.Mode, msg: str) -> None:
-        if cls.mode is not None and cls.mode is not style:
-            raise ParamsError(msg)
-        cls.mode = style
-
-    @classmethod
     def accumulate_geometry(
-        cls,
+        self,
         *shapes: Compound
         | Shape
         | Sequence[Compound | Shape]
         | Mapping[str, Compound | Shape],
     ) -> None:
-        cls.geometry.extend(
-            [shape for s in shapes if (shape := cls.filter_geometry(s))]
+        self.geometry.extend(
+            [shape for s in shapes if (shape := self.filter_geometry(s))]
         )
 
-    @classmethod
-    def clear_geometry(cls) -> None:
-        cls.geometry = []
+    def clear_geometry(self) -> None:
+        self.geometry = []
 
-    @classmethod
     def filter_geometry(
-        cls, data: Any, label: str = ""
+        self, data: Any, label: str = ""
     ) -> Compound | Shape | None:
         if "build123d" not in sys.modules:
             return None
@@ -93,12 +48,12 @@ class Geometry:
             if isinstance(data, Shape):
                 return data
             if isinstance(data, (list, tuple)):
-                geometry = [c for s in data if (c := cls.filter_geometry(s))]
+                geometry = [c for s in data if (c := self.filter_geometry(s))]
             elif isinstance(data, dict):
                 geometry = [
                     c
                     for k, v in data.items()
-                    if (c := cls.filter_geometry(v, str(k)))
+                    if (c := self.filter_geometry(v, str(k)))
                 ]
         if not geometry:
             return None
@@ -106,30 +61,32 @@ class Geometry:
             return geometry[0]
         return Compound(label=label, children=geometry)
 
-    @classmethod
-    def resolve_geometry(cls) -> Compound | Shape | None:
+    def resolve_geometry(self) -> Compound | Shape | None:
         if "build123d" not in sys.modules:
             return None
 
-        if not Geometry.geometry and (mod := sys.modules.get("__main__")):
+        if not self.geometry and (mod := sys.modules.get("__main__")):
             found_geometry = [
                 geo
                 for var_name, value in vars(mod).items()
                 if not var_name.startswith("_")
-                and (geo := cls.filter_geometry(value, str(var_name)))
+                and (geo := self.filter_geometry(value, str(var_name)))
             ]
-            Geometry.accumulate_geometry(*found_geometry)
+            self.accumulate_geometry(*found_geometry)
         label = "bdbox collected geometry"
-        geometry = cls.filter_geometry(Geometry.geometry, label=label)
+        geometry = self.filter_geometry(self.geometry, label=label)
         if not geometry:
             return None
         print(geometry.show_topology(limit_class="Solid"))  # noqa: T201
         return geometry
 
 
+_geometry = Geometry()
+
+
 def reset_geometry() -> None:
     """Clear collected geometry for runners or tests."""
-    Geometry.reset()
+    _geometry.reset()
 
 
 def resolve_geometry() -> Compound | Shape | None:
@@ -138,7 +95,7 @@ def resolve_geometry() -> Compound | Shape | None:
     Uses geometry collected by ``show()`` if called. Otherwise falls back to
     scanning ``__main__`` globals for build123d ``Shape`` instances.
     """
-    return Geometry.resolve_geometry()
+    return _geometry.resolve_geometry()
 
 
 def show(
@@ -163,4 +120,4 @@ def show(
         script's globals for [``build123d.Shape``][topology.Shape] instances,
         but calling ``show()`` manually is recommended.
     """
-    Geometry.accumulate_geometry(*geometry)
+    _geometry.accumulate_geometry(*geometry)
