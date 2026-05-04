@@ -9,6 +9,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+import bdbox.server.server as server_module
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
@@ -27,6 +28,14 @@ pytestmark = pytest.mark.usefixtures("ensure_sys_modules", "mock_ocp_vscode")
 @pytest.fixture(autouse=True)
 def mock_start() -> Iterator[MagicMock]:
     with patch.object(ViewerManager, "start") as mocked:
+        yield mocked
+
+
+@pytest.fixture(autouse=True)
+def mock_server_start() -> Iterator[MagicMock]:
+    with patch.object(
+        server_module.ServerManager, "start", autospec=True
+    ) as mocked:
         yield mocked
 
 

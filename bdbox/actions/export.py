@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path  # noqa: TC003
 from typing import TYPE_CHECKING, Annotated, Literal
@@ -14,7 +15,7 @@ from bdbox.geometry import resolve_geometry
 from .action import ModelAction
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Iterator
 
 
 @dataclass
@@ -81,32 +82,39 @@ class ExportAction(ModelAction):
         print(f"Exporting model geometry to {self.output}")  # noqa: T201
         self._exporter(geometry, str(self.output))
 
-    def before_harness(self) -> ModelAction.BeforeHarnessResult:
+    def before_harness(
+        self, args: ModelAction.ModelHarnessProtocol
+    ) -> ModelAction.BeforeHarnessResult:
         if self.all_presets:
-            self.output.mkdir(parents=True, exist_ok=True)
-            return ModelAction.HarnessResult(
-                all_presets=True,
-                preset_argv=lambda preset: (
-                    [
-                        "export",
-                        str(
-                            self.output
-                            / f"{preset or 'default'}.{self.format}"
+            runs = []
+            for preset in (
+                *((None,) if self.default else ()),
+                *getattr(args.model_params_cls, "presets", ()),
+            ):
+                name = preset.name if preset else "default"
+                dest = self.output / f"{name}.{self.format}"
+                runs.append(
+                    (
+                        [
+                            str(args.model),
+                            "export",
+                            str(dest),
+                            *(("--preset", preset.name) if preset else ()),
+                            *args.params_argv,
+                        ],
+                        ExportAction(
+                            all_presets=False,
+                            output=dest,
+                            format=self.format,
                         ),
-                        *(("--preset", preset) if preset else ()),
-                    ]
-                    if (preset or self.default)
-                    else []
-                ),
-                preset_action=lambda preset: ExportAction(
-                    all_presets=False,
-                    output=self.output
-                    / (f"{preset or 'default'}.{self.format}"),
-                    format=self.format,
-                ),
-            )
+                    )
+                )
+            self.output.mkdir(parents=True, exist_ok=True)
+            return ModelAction.HarnessResult(runs=runs)
         return None
 
-    def before_model(self) -> None:
+    @contextmanager
+    def on_model_render(self) -> Iterator[None]:
         if self.all_presets:
             self._ensure_runner()
+        yield

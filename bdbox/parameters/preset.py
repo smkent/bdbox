@@ -21,3 +21,10 @@ class Preset:
         self.name = name
         self.description = description
         self.values: dict[str, Any] = values
+
+    def to_schema(self) -> dict:
+        return {
+            "name": self.name,
+            "description": self.description,
+            "values": self.values,
+        }

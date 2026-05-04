@@ -30,7 +30,7 @@ class ModelWatcher:
     """Tracks local module dependencies and signals on file changes."""
 
     runner: ModelRunner
-    change_event: Event = field(default_factory=Event, init=False)
+    change_event: Event = field(default_factory=Event, repr=False)
     local_modules: dict[str, str] = field(default_factory=dict, init=False)
     started: bool = field(default=False, init=False)
 
@@ -55,7 +55,7 @@ class ModelWatcher:
         observer.start()
         yield
         observer.stop()
-        observer.join()
+        observer.join(timeout=3.0)
 
     @cached_property
     def model_path(self) -> Path:
@@ -83,7 +83,8 @@ class ModelWatcher:
             except KeyboardInterrupt:
                 print("Quitting", file=sys.stderr)  # noqa: T201
             finally:
-                sys.exit(0)
+                if self.runner.action:
+                    self.runner.action.watch_end()
 
     @property
     @contextmanager

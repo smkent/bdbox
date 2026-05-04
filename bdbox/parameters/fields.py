@@ -4,7 +4,7 @@ import sys
 from collections.abc import Callable, Sequence
 from dataclasses import Field as DCField
 from dataclasses import dataclass, field
-from functools import wraps
+from functools import cached_property, wraps
 from typing import (
     Annotated,
     Any,
@@ -17,6 +17,8 @@ from typing import (
 
 import tyro
 from annotated_types import Ge, Le, MaxLen, MinLen
+from cattrs import Converter
+from cattrs.gen import override
 
 from bdbox.errors import ParamsError, ParamValidationError
 
@@ -28,6 +30,8 @@ else:
 Number = TypeVar("Number", float, int)
 P = ParamSpec("P")
 T = TypeVar("T")
+
+converter = Converter()
 
 
 class Field:
@@ -72,6 +76,15 @@ class Field:
 
     def validate(self, value: Any) -> None:
         """Validate a value against this field's constraints."""
+
+    def to_schema(
+        self,
+        hint_to_schema: Callable[..., dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        d = converter.unstructure(self)
+        if self.value_type and hint_to_schema:
+            d |= hint_to_schema(self.value_type)
+        return d
 
     def _cli_conf(
         self,
@@ -195,8 +208,8 @@ class StrField(Field):
 
     value_type: ClassVar[type] = str
     default: str
-    min_length: int | None = None
-    max_length: int | None = None
+    min_length: Annotated[int | None, override(rename="minLength")] = None
+    max_length: Annotated[int | None, override(rename="maxLength")] = None
     description: str | None = None
 
     def __post_init__(self) -> None:
@@ -230,9 +243,12 @@ class StrField(Field):
 class ChoiceField(Field, Generic[T]):
     """Choice parameter with a fixed set of choices."""
 
-    value_type: ClassVar[type] = Sequence[T]
+    @cached_property
+    def value_type(self) -> type | None:
+        return None
+
     default: T
-    choices: Sequence[T]
+    choices: Annotated[Sequence[T], override(rename="enum")]
     description: str | None = None
 
     def __post_init__(self) -> None:

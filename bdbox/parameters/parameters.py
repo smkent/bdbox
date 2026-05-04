@@ -5,7 +5,7 @@ import sys
 from collections.abc import Sequence
 from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Literal, overload
 
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
@@ -14,6 +14,7 @@ from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .preset import Preset
+from .serializer import Serializer
 from .state import run_state
 
 if sys.version_info >= (3, 11):
@@ -104,6 +105,47 @@ class Params(CLI, metaclass=ParamsType):
         """
         return cls(preset=preset, **overrides)
 
+    @overload
+    @classmethod
+    def instance_from_cli(
+        cls,
+        prog: str | None = None,
+        *args: Any,
+        return_unknown_args: Literal[False] = ...,
+        **kwargs: Any,
+    ) -> Self: ...
+
+    @overload
+    @classmethod
+    def instance_from_cli(
+        cls,
+        prog: str | None = None,
+        *args: Any,
+        return_unknown_args: Literal[True],
+        **kwargs: Any,
+    ) -> tuple[Self, Sequence[str]]: ...
+
+    @classmethod
+    def instance_from_cli(
+        cls,
+        prog: str | None = None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> Self | tuple[Self, Sequence[str]]:
+        cli_result = super().instance_from_cli(prog, *args, **kwargs)
+        params = (
+            cli_result[1]
+            if (isinstance(cli_result, tuple) and len(cli_result) == 2)
+            else cli_result.params
+        )
+        run_state.apply_overrides(params)
+        return cli_result
+
+    @classmethod
+    def schema(cls) -> dict:
+        """Return a JSON Schema describing fields and presets."""
+        return Serializer().generate(cls)
+
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
         if not cls._init_this_subclass():
@@ -126,12 +168,19 @@ class Params(CLI, metaclass=ParamsType):
             )
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
+            run_state.resolved_values = {
+                f.name: getattr(cls, f.name)
+                for f in fields(cls)
+                if Field.from_dataclass_field(f)
+            }
             run_state.action = cli_result.action
+            run_state.enter_on_model_render()
             atexit.register(Params._atexit_handler)
 
     @classmethod
     def _atexit_handler(cls) -> None:
         atexit.unregister(Params._atexit_handler)
+        run_state.close_stack()
         if run_state.model_subclasses:
             run_state.act_once(run_state.action)
 

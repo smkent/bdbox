@@ -1,20 +1,30 @@
 from __future__ import annotations
 
 import sys
+from contextlib import contextmanager
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from bdbox.viewer import ViewerManager
 
 from .action import Action
 
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
 
 @dataclass
 class ViewerAction(Action):
-    def before_harness(self) -> Action.BeforeHarnessResult:
+    def before_harness(
+        self,
+        args: Action.ModelHarnessProtocol,  # noqa: ARG002
+    ) -> Action.BeforeHarnessResult:
         self()
 
-    def before_model(self) -> None:
+    @contextmanager
+    def on_model_render(self) -> Iterator[None]:
         self()
+        yield
 
     def __call__(self) -> None:
         sys.exit(0)

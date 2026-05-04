@@ -16,6 +16,7 @@ from urllib.error import URLError
 import psutil
 import pytest
 
+import bdbox.server.server as server_module
 import bdbox.viewer as viewer_module
 from bdbox.__main__ import main
 from bdbox.runner.watcher import ModelWatcher
@@ -99,6 +100,14 @@ def mock_send_command(mock_ocp_vscode: MockOcpVscode) -> Iterator[MagicMock]:
 @pytest.fixture(autouse=True)
 def mock_browser_open() -> Iterator[MagicMock]:
     with patch.object(webbrowser, "open_new_tab") as mocked:
+        yield mocked
+
+
+@pytest.fixture(autouse=True)
+def mock_server_start() -> Iterator[MagicMock]:
+    with patch.object(
+        server_module.ServerManager, "start", autospec=True
+    ) as mocked:
         yield mocked
 
 
@@ -497,19 +506,27 @@ def test_status_not_running(
 
 
 def test_model_view_starts_viewer(
-    model: Path, watch_args: Sequence[str], exec_main: ExecMain
+    model: Path,
+    watch_args: Sequence[str],
+    exec_main: ExecMain,
+    mock_server_start: MagicMock,
 ) -> None:
     with patch.object(ViewerManager, "start") as mock_start:
         exec_main(str(model), "view", *watch_args)
     mock_start.assert_called_once()
+    mock_server_start.assert_called_once()
 
 
 def test_model_view_skips_viewer_when_disabled(
-    model: Path, watch_args: Sequence[str], exec_main: ExecMain
+    model: Path,
+    watch_args: Sequence[str],
+    exec_main: ExecMain,
+    mock_server_start: MagicMock,
 ) -> None:
     with patch.object(ViewerManager, "start") as mock_start:
         exec_main(str(model), "view", "--no-start-viewer", *watch_args)
     mock_start.assert_not_called()
+    mock_server_start.assert_not_called()
 
 
 def test_model_view_passes_flags_to_viewer(
@@ -517,7 +534,9 @@ def test_model_view_passes_flags_to_viewer(
 ) -> None:
     def check_args(self: ViewerManager) -> None:
         assert self.restart is True
-        assert self.open_browser is False
+        assert (
+            self.open_browser is False
+        )  # always False; ServerManager opens browser
 
     with patch.object(
         ViewerManager, "start", autospec=True, side_effect=check_args
@@ -530,6 +549,24 @@ def test_model_view_passes_flags_to_viewer(
             *watch_args,
         )
     mock_start.assert_called_once()
+
+
+def test_model_view_passes_flags_to_server(
+    model: Path,
+    watch_args: Sequence[str],
+    exec_main: ExecMain,
+    mock_server_start: MagicMock,
+) -> None:
+    with patch.object(ViewerManager, "start"):
+        exec_main(
+            str(model),
+            "view",
+            "--no-open-browser",
+            *watch_args,
+        )
+    mock_server_start.assert_called_once()
+    server_instance = mock_server_start.call_args[0][0]
+    assert server_instance.open_browser is False
 
 
 def test_viewer_start_open_browser(

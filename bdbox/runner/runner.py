@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import runpy
 import sys
+from contextlib import nullcontext
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
@@ -30,6 +31,7 @@ class ModelRunner(ModelLocator):
             filename=self.model_filename, module_name=self.model_module
         )
         with (
+            action.on_model_render() if action else nullcontext(),
             PatchModule("__main__", main_module, auto=False) as mock_main,
             patch.object(sys, "argv", [self.model_filename, *self.argv]),
             exit_mock(),

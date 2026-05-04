@@ -88,18 +88,11 @@ class CLI:
 
     @classmethod
     def instance_from_cli(
-        cls,
-        prog: str | None = None,
-        *args: Any,
-        model_hook: bool = True,
-        **kwargs: Any,
+        cls, prog: str | None = None, *args: Any, **kwargs: Any
     ) -> Self | tuple[Self, Sequence[str]]:
-        cli_result = tyro.cli(
+        return tyro.cli(
             cls, *args, prog=prog, config=cls._TYRO_CLI_CONFIG, **kwargs
         )
-        if model_hook:
-            cli_result.action.before_model()
-        return cli_result
 
 
 @dataclass

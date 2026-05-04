@@ -4,9 +4,10 @@ import ast
 import operator
 import sys
 from contextlib import suppress
-from dataclasses import dataclass, make_dataclass
+from dataclasses import dataclass, field, make_dataclass
 from functools import cached_property, reduce
 from pathlib import Path
+from threading import Event
 from typing import TYPE_CHECKING, Annotated, Any, ClassVar, cast, get_args
 from unittest.mock import MagicMock, patch
 
@@ -65,9 +66,9 @@ HarnessAction = HarnessCLIFactory.make()
 class ModelHarness(ModelLocator):
     clean_modules: ClassVar[bool] = True
     package: ClassVar[str] = (__package__ or "bdbox").split(".", 1)[0]
-
-    class MultipleModelsError(Exception):
-        pass
+    rerender_event: Event = field(
+        default_factory=Event, init=False, repr=False
+    )
 
     @dataclass
     class HarnessCLI(CLI):
@@ -80,38 +81,21 @@ class ModelHarness(ModelLocator):
         super().__post_init__(model_argv or sys.argv[1:].copy())
 
     def __call__(self) -> None:
-        if (
-            not self.model_filename or not self.model_path
-        ) and not self.model_module:
-            cli_result = self.HarnessCLI.instance_from_cli(
-                prog=self.prog, args=self.argv, harness_hook=True
-            )
-            return
-
         cli_result = (
-            (self.model_params_cls or CLI)
-            .cli_config()
-            .instance_from_cli(
-                prog=self.prog, args=self.argv, model_hook=False
-            )
-        )
-        if (
-            (result := cli_result.action.before_harness())
-            and result.all_presets
-            and result.preset_argv
-            and result.preset_action
-        ):
-            for preset in (None, *getattr(cli_result.params, "presets", ())):
-                preset_argv = result.preset_argv(getattr(preset, "name", None))
-                if not preset_argv:
-                    continue
-                argv = [str(self.model), *preset_argv, *self.params_argv]
-                ModelRunner(argv, result.preset_action(preset))()
+            ((self.model_params_cls or CLI).cli_config())
+            if self.maybe_model
+            else self.HarnessCLI
+        ).instance_from_cli(prog=self.prog, args=self.argv)
+        hook_result = cli_result.action.before_harness(self)
+        if not self.maybe_model:
             return
-
+        if hook_result and hook_result.runs:
+            for argv, action in hook_result.runs:
+                ModelRunner(argv, action)()
+            return
         runner = ModelRunner([self.model, *self.argv], cli_result.action)
         if cli_result.action.watch:
-            ModelWatcher(runner).run()
+            ModelWatcher(runner=runner, change_event=self.rerender_event).run()
             return
         runner()
 
@@ -130,12 +114,16 @@ class ModelHarness(ModelLocator):
             .instance_from_cli(
                 prog=self.prog,
                 args=self.argv,
-                model_hook=False,
                 return_unknown_args=True,
                 add_help=False,
             )
         )
         return params_argv
+
+    @cached_property
+    def maybe_model(self) -> Path | str | None:
+        with suppress(Error):
+            return self.model
 
     @cached_property
     def model(self) -> Path | str:
@@ -183,9 +171,7 @@ class ModelHarness(ModelLocator):
         Returns a list of (name, annotation, field) tuples for user-defined
         parameters, or None if no bdbox Params/Model class was found.
         """
-        if not (
-            self.model_module or (self.model_path and self.imports_detected)
-        ):
+        if not self.model:
             return None
         with (
             patch.dict(
