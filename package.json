@@ -1,0 +1,22 @@
+{
+  "name": "bdbox-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild frontend/src/app.js --bundle --minify --outfile=bdbox/server/static/app.js",
+    "dev": "esbuild frontend/src/app.js --bundle --watch --outfile=bdbox/server/static/app.js",
+    "lint:fix": "eslint --fix frontend/",
+    "format": "prettier --write frontend/ package.json eslint.config.js"
+  },
+  "dependencies": {
+    "alpinejs": "^3.14.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "esbuild": "^0.25.0",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
+    "prettier": "^3.8.3"
+  }
+}

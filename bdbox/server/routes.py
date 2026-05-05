@@ -44,6 +44,7 @@ _PAGE_TEMPLATE = """\
 <head>
   <meta charset="utf-8">
   <title>bdbox</title>
+  <script src="/static/app.js" defer></script>
   <style>
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     body {{

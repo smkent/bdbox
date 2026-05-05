@@ -51,6 +51,7 @@ Issues = "https://github.com/smkent/bdbox/issues"
 [dependency-groups]
 dev = [
     "bump-my-version>=1.3.0",
+    "hatchling>=1.29.0",
     "poethepoet>=0.42",
     "prek>=0.3",
     "pysentry-rs>=0.4",
@@ -74,8 +75,15 @@ tag_name = "v{new_version}"
 tag_message = ""
 push = true
 
+[tool.hatch.build.hooks.custom]
+path = "utils/hatch_build.py"
+
 [tool.hatch.build.targets.sdist]
-include = ["/bdbox", "/tests", "*.md", "LICENSE"]
+include = ["/bdbox", "/tests", "*.md", "LICENSE", "/frontend", "package.json", "package-lock.json", "/utils"]
+artifacts = ["bdbox/server/static/app.js"]
+
+[tool.hatch.build.targets.wheel]
+artifacts = ["bdbox/server/static/app.js"]
 
 [tool.hatch.version]
 source = "uv-dynamic-versioning"
@@ -136,10 +144,20 @@ help = "Run all formatters, static checks and tests"
 cmd = "bump-my-version bump -v"
 help = "Create and push a release tag (patch/minor/major)"
 
+[tool.poe.tasks.static]
+cmd = "npm run build"
+help = "Build static frontend assets"
+
+[tool.poe.tasks.dev]
+cmd = "npm run dev"
+help = "Watch and rebuild static frontend assets"
+
 [tool.poe.tasks.setup]
 sequence = [
     {cmd = "uv sync"},
     {cmd = "prek install"},
+    {cmd = "npm install"},
+    {ref = "static"},
 ]
 help = "Install project dependencies and git hooks"
 

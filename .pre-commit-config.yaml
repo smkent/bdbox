@@ -41,3 +41,15 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+      - id: eslint
+        name: eslint
+        entry: npm run lint:fix
+        language: system
+        types: [javascript]
+        pass_filenames: false
+      - id: prettier
+        name: prettier
+        entry: npm run format
+        language: system
+        types_or: [javascript, json]
+        pass_filenames: false

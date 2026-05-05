@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import asyncio
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from .routes import manager, routes_router
 
@@ -15,6 +17,7 @@ if TYPE_CHECKING:
 
     from .context import Context
 
+_STATIC_DIR = Path(__file__).parent / "static"
 _STOP = object()
 
 
@@ -41,4 +44,7 @@ class App(FastAPI):
     def __init__(self, context: Context, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, lifespan=_lifespan, **kwargs)
         self.state.context = context
+        self.mount(
+            "/static", StaticFiles(directory=_STATIC_DIR), name="static"
+        )
         self.include_router(routes_router)
