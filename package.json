@@ -4,13 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild frontend/src/app.js --bundle --minify --outfile=bdbox/server/static/app.js",
-    "dev": "esbuild frontend/src/app.js --bundle --watch --outfile=bdbox/server/static/app.js",
+    "build": "esbuild frontend/src/app.js --bundle --minify --outdir=bdbox/server/static/ --loader:.png=dataurl",
+    "dev": "esbuild frontend/src/app.js --bundle --watch --outdir=bdbox/server/static/ --loader:.png=dataurl",
     "lint:fix": "eslint --fix frontend/",
     "format": "prettier --write frontend/ package.json eslint.config.js"
   },
   "dependencies": {
-    "alpinejs": "^3.14.0"
+    "alpinejs": "^3.14.0",
+    "golden-layout": "^2.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -44,23 +44,16 @@ _PAGE_TEMPLATE = """\
 <head>
   <meta charset="utf-8">
   <title>bdbox</title>
-  <script src="/static/app.js" defer></script>
+  <link rel="stylesheet" href="/static/app.css">
   <style>
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-    body {{
-      display: flex;
-      height: 100vh;
-      background: #111;
-      font-family: sans-serif;
-    }}
-    #viewer {{ flex: 3; }}
-    #viewer iframe {{ width: 100%; height: 100%; border: none; }}
+    body {{ overflow: hidden; background: #111; }}
   </style>
+  <script>window.__BDBOX__ = {{"viewerPort": {viewer_port}}};</script>
+  <script src="/static/app.js" defer></script>
 </head>
 <body>
-  <div id="viewer">
-    <iframe src="http://localhost:{viewer_port}/viewer"></iframe>
-  </div>
+  <div id="layout" style="width: 100%; height: 100vh;"></div>
 </body>
 </html>
 """

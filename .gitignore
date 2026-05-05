@@ -21,4 +21,5 @@ __pycache__/
 coverage.xml
 
 # Build artifacts
+/bdbox/server/static/app.css
 /bdbox/server/static/app.js
