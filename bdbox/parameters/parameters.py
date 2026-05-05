@@ -7,6 +7,7 @@ from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import Any, ClassVar
 
+from bdbox.actions.action import Action
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
 
@@ -130,6 +131,10 @@ class Params(CLI, metaclass=ParamsType):
             cli_result = cls.cli_config().instance_from_cli(
                 prog=Path(sys.argv[0]).name
             )
+            if run_state.action.mode != Action.Mode.HARNESS:
+                run_state.action = cli_result.action
+            run_state.enter_on_model_render()
+            run_state.apply_overrides(cli_result.params)
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
             run_state.resolved_values = {
@@ -137,8 +142,6 @@ class Params(CLI, metaclass=ParamsType):
                 for f in fields(cls)
                 if Field.from_dataclass_field(f)
             }
-            run_state.action = cli_result.action
-            run_state.enter_on_model_render()
             atexit.register(Params._atexit_handler)
 
     @classmethod
@@ -146,7 +149,7 @@ class Params(CLI, metaclass=ParamsType):
         atexit.unregister(Params._atexit_handler)
         run_state.close_stack()
         if run_state.model_subclasses:
-            run_state.act_once(run_state.action)
+            run_state.act_once()
 
     def __post_init__(self) -> None:
         if self.preset:

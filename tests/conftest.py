@@ -65,12 +65,6 @@ def disallow_subprocess(
 
 
 @pytest.fixture
-def harness_mode() -> Iterator[None]:
-    with patch.object(Action, "mode", Action.Mode.HARNESS):
-        yield
-
-
-@pytest.fixture
 def mock_b123d(monkeypatch: pytest.MonkeyPatch) -> MockBuild123d:
     module = MockBuild123d()
     monkeypatch.setitem(sys.modules, "build123d", module)

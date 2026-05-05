@@ -12,8 +12,6 @@ from bdbox.errors import MultipleModelsError, ParamsError
 from .serializer import Serializer
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
     from bdbox.actions.action import Action
 
     from .parameters import Params
@@ -51,7 +49,8 @@ class RunState:
             setattr(target, name, self.serializer.structure(raw_value, hint))
 
     def enter_on_model_render(self) -> None:
-        self.stack.enter_context(self.action.on_model_render())
+        if self.action:
+            self.stack.enter_context(self.action.on_model_render())
 
     def close_stack(self) -> None:
         self.stack.close()
@@ -76,11 +75,11 @@ class RunState:
             raise ParamsError(msg)
         self.mode = style
 
-    def act_once(self, func: Callable[[], None]) -> None:
+    def act_once(self) -> None:
         if self.acted:
             return
         self.acted = True
-        func()
+        self.action()
 
     def is_class_in_main(self, cls: type) -> bool:
         return cls.__module__ in (

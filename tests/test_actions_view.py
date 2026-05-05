@@ -10,6 +10,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 import bdbox.server.server as server_module
+from bdbox.actions.action import Action
+from bdbox.actions.view import ViewAction
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
@@ -76,13 +78,15 @@ def test_view_no_watch_skips_watcher(
     mock_start.assert_called_once()
 
 
-@pytest.mark.usefixtures("harness_mode")
 def test_send_geometry_to_viewer(
     capsys: pytest.CaptureFixture[str],
     mock_ocp_vscode: MockOcpVscode,
 ) -> None:
-    with patch.object(mock_ocp_vscode, "show") as mock_show:
-        ModelRunner([Models.PARAMS_EXPORT, "view"])()
+    with (
+        patch.object(Action, "mode", Action.Mode.HARNESS),
+        patch.object(mock_ocp_vscode, "show") as mock_show,
+    ):
+        ModelRunner([Models.PARAMS_EXPORT, "view"], ViewAction())()
     mock_show.assert_called_once()
     assert len(mock_show.call_args[0][0]) == 1
     assert capsys.readouterr().err == ""

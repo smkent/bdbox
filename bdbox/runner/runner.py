@@ -27,6 +27,7 @@ class ModelRunner(ModelLocator):
         if not self.model_filename:
             raise Error("Model not found in arguments")
         reset_bdbox()
+        run_state.action = action or self.action or RunAction()
         main_module = MainModule(
             filename=self.model_filename, module_name=self.model_module
         )
@@ -40,7 +41,7 @@ class ModelRunner(ModelLocator):
             main_module.__dict__.update(self._run_model())
             mock_main.start()
             if not atexit_mock.hooks:
-                run_state.act_once(action or self.action or RunAction())
+                run_state.act_once()
 
     def _run_model(self) -> dict[str, Any]:
         if self.model_module:
