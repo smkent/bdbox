@@ -1,20 +1,20 @@
 # serializer version: 1
 # name: test_harness_existing_non_model_file
   '''
-   Unrecognized options                               
-   -------------------------------------------------- 
-    Unrecognized options: some.unrelated.file         
-    --------------------------------------------------
-    Available subcommands: run, export, view, viewer  
-    --------------------------------------------------
-    For full helptext, run pytest --help              
-                                                      
+   Unrecognized options                                        
+   ----------------------------------------------------------- 
+    Unrecognized options: some.unrelated.file                  
+    -----------------------------------------------------------
+    Available subcommands: run, export, view, viewer, version  
+    -----------------------------------------------------------
+    For full helptext, run pytest --help                       
+                                                               
   
   '''
 # ---
 # name: test_harness_usage_file[model_class]
   '''
-  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
    options                                                  
    -------------------------------------------------------- 
@@ -72,6 +72,7 @@
       • export      Export geometry to a STEP or STL file.  
       • view        View model geometry.                    
       • viewer      Viewer control                          
+      • version     Show bdbox version and exit             
                                                             
   
   '''
@@ -81,7 +82,7 @@
 # ---
 # name: test_harness_usage_file[model_export]
   '''
-  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
    options                                                 
    ------------------------------------------------------- 
@@ -106,6 +107,7 @@
       • export     Export geometry to a STEP or STL file.  
       • view       View model geometry.                    
       • viewer     Viewer control                          
+      • version    Show bdbox version and exit             
                                                            
   
   '''
@@ -115,7 +117,7 @@
 # ---
 # name: test_harness_usage_file[params_class]
   '''
-  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
    options                                                  
    -------------------------------------------------------- 
@@ -173,6 +175,7 @@
       • export      Export geometry to a STEP or STL file.  
       • view        View model geometry.                    
       • viewer      Viewer control                          
+      • version     Show bdbox version and exit             
                                                             
   
   '''
@@ -182,7 +185,7 @@
 # ---
 # name: test_harness_usage_file[params_export]
   '''
-  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
    options                                                 
    ------------------------------------------------------- 
@@ -207,6 +210,7 @@
       • export     Export geometry to a STEP or STL file.  
       • view       View model geometry.                    
       • viewer     Viewer control                          
+      • version    Show bdbox version and exit             
                                                            
   
   '''
@@ -216,20 +220,21 @@
 # ---
 # name: test_harness_usage_file[plain_export]
   '''
-  usage: pytest [-h] [{run,export,view,viewer}]
+  usage: pytest [-h] [{run,export,view,viewer,version}]
   
-   options                                              
-   ---------------------------------------------------- 
-    -h, --help  show this help message and exit         
-                                                        
-   subcommands                                          
-   ---------------------------------------------------- 
-    (default: run)                                      
-      • run     Run the model.                          
-      • export  Export geometry to a STEP or STL file.  
-      • view    View model geometry.                    
-      • viewer  Viewer control                          
-                                                        
+   options                                               
+   ----------------------------------------------------- 
+    -h, --help   show this help message and exit         
+                                                         
+   subcommands                                           
+   ----------------------------------------------------- 
+    (default: run)                                       
+      • run      Run the model.                          
+      • export   Export geometry to a STEP or STL file.  
+      • view     View model geometry.                    
+      • viewer   Viewer control                          
+      • version  Show bdbox version and exit             
+                                                         
   
   '''
 # ---
@@ -239,7 +244,7 @@
 # name: test_harness_usage_module[model]
   '''
   Model main
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -256,6 +261,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -266,7 +272,7 @@
 # name: test_harness_usage_module[model_class]
   '''
   Model main
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -283,6 +289,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -292,7 +299,7 @@
 # ---
 # name: test_harness_usage_module[mono_model]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -309,6 +316,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -318,7 +326,7 @@
 # ---
 # name: test_harness_usage_module[mono_model_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -335,6 +343,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -344,7 +353,7 @@
 # ---
 # name: test_harness_usage_module[mono_params]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -361,6 +370,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -370,7 +380,7 @@
 # ---
 # name: test_harness_usage_module[mono_params_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -387,6 +397,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -397,20 +408,21 @@
 # name: test_harness_usage_module[mono_plain]
   '''
   Box count: 2
-  usage: pytest [-h] [{run,export,view,viewer}]
+  usage: pytest [-h] [{run,export,view,viewer,version}]
   
-   options                                              
-   ---------------------------------------------------- 
-    -h, --help  show this help message and exit         
-                                                        
-   subcommands                                          
-   ---------------------------------------------------- 
-    (default: run)                                      
-      • run     Run the model.                          
-      • export  Export geometry to a STEP or STL file.  
-      • view    View model geometry.                    
-      • viewer  Viewer control                          
-                                                        
+   options                                               
+   ----------------------------------------------------- 
+    -h, --help   show this help message and exit         
+                                                         
+   subcommands                                           
+   ----------------------------------------------------- 
+    (default: run)                                       
+      • run      Run the model.                          
+      • export   Export geometry to a STEP or STL file.  
+      • view     View model geometry.                    
+      • viewer   Viewer control                          
+      • version  Show bdbox version and exit             
+                                                         
   
   '''
 # ---
@@ -419,7 +431,7 @@
 # ---
 # name: test_harness_usage_module[params]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -436,6 +448,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -445,7 +458,7 @@
 # ---
 # name: test_harness_usage_module[params_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -462,6 +475,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -472,20 +486,21 @@
 # name: test_harness_usage_module[plain]
   '''
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
-  usage: pytest [-h] [{run,export,view,viewer}]
+  usage: pytest [-h] [{run,export,view,viewer,version}]
   
-   options                                              
-   ---------------------------------------------------- 
-    -h, --help  show this help message and exit         
-                                                        
-   subcommands                                          
-   ---------------------------------------------------- 
-    (default: run)                                      
-      • run     Run the model.                          
-      • export  Export geometry to a STEP or STL file.  
-      • view    View model geometry.                    
-      • viewer  Viewer control                          
-                                                        
+   options                                               
+   ----------------------------------------------------- 
+    -h, --help   show this help message and exit         
+                                                         
+   subcommands                                           
+   ----------------------------------------------------- 
+    (default: run)                                       
+      • run      Run the model.                          
+      • export   Export geometry to a STEP or STL file.  
+      • view     View model geometry.                    
+      • viewer   Viewer control                          
+      • version  Show bdbox version and exit             
+                                                         
   
   '''
 # ---
@@ -495,7 +510,7 @@
 # name: test_successive_harness_success[model]
   '''
   Model main
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -512,6 +527,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -522,7 +538,7 @@
 # name: test_successive_harness_success[model].2
   '''
   Model main
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -539,6 +555,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -549,7 +566,7 @@
 # name: test_successive_harness_success[model_class]
   '''
   Model main
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -566,6 +583,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -576,7 +594,7 @@
 # name: test_successive_harness_success[model_class].2
   '''
   Model main
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -593,6 +611,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -602,7 +621,7 @@
 # ---
 # name: test_successive_harness_success[mono_model]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -619,6 +638,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -628,7 +648,7 @@
 # ---
 # name: test_successive_harness_success[mono_model].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -645,6 +665,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -654,7 +675,7 @@
 # ---
 # name: test_successive_harness_success[mono_model_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -671,6 +692,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -680,7 +702,7 @@
 # ---
 # name: test_successive_harness_success[mono_model_class].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -697,6 +719,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -706,7 +729,7 @@
 # ---
 # name: test_successive_harness_success[mono_params]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -723,6 +746,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -732,7 +756,7 @@
 # ---
 # name: test_successive_harness_success[mono_params].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -749,6 +773,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -758,7 +783,7 @@
 # ---
 # name: test_successive_harness_success[mono_params_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -775,6 +800,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -784,7 +810,7 @@
 # ---
 # name: test_successive_harness_success[mono_params_class].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -801,6 +827,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -811,20 +838,21 @@
 # name: test_successive_harness_success[mono_plain]
   '''
   Box count: 2
-  usage: pytest [-h] [{run,export,view,viewer}]
+  usage: pytest [-h] [{run,export,view,viewer,version}]
   
-   options                                              
-   ---------------------------------------------------- 
-    -h, --help  show this help message and exit         
-                                                        
-   subcommands                                          
-   ---------------------------------------------------- 
-    (default: run)                                      
-      • run     Run the model.                          
-      • export  Export geometry to a STEP or STL file.  
-      • view    View model geometry.                    
-      • viewer  Viewer control                          
-                                                        
+   options                                               
+   ----------------------------------------------------- 
+    -h, --help   show this help message and exit         
+                                                         
+   subcommands                                           
+   ----------------------------------------------------- 
+    (default: run)                                       
+      • run      Run the model.                          
+      • export   Export geometry to a STEP or STL file.  
+      • view     View model geometry.                    
+      • viewer   Viewer control                          
+      • version  Show bdbox version and exit             
+                                                         
   
   '''
 # ---
@@ -834,20 +862,21 @@
 # name: test_successive_harness_success[mono_plain].2
   '''
   Box count: 2
-  usage: pytest [-h] [{run,export,view,viewer}]
+  usage: pytest [-h] [{run,export,view,viewer,version}]
   
-   options                                              
-   ---------------------------------------------------- 
-    -h, --help  show this help message and exit         
-                                                        
-   subcommands                                          
-   ---------------------------------------------------- 
-    (default: run)                                      
-      • run     Run the model.                          
-      • export  Export geometry to a STEP or STL file.  
-      • view    View model geometry.                    
-      • viewer  Viewer control                          
-                                                        
+   options                                               
+   ----------------------------------------------------- 
+    -h, --help   show this help message and exit         
+                                                         
+   subcommands                                           
+   ----------------------------------------------------- 
+    (default: run)                                       
+      • run      Run the model.                          
+      • export   Export geometry to a STEP or STL file.  
+      • view     View model geometry.                    
+      • viewer   Viewer control                          
+      • version  Show bdbox version and exit             
+                                                         
   
   '''
 # ---
@@ -856,7 +885,7 @@
 # ---
 # name: test_successive_harness_success[params]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -873,6 +902,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -882,7 +912,7 @@
 # ---
 # name: test_successive_harness_success[params].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -899,6 +929,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -908,7 +939,7 @@
 # ---
 # name: test_successive_harness_success[params_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -925,6 +956,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -934,7 +966,7 @@
 # ---
 # name: test_successive_harness_success[params_class].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer}]
+  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
   
    options                                                            
    ------------------------------------------------------------------ 
@@ -951,6 +983,7 @@
       • export                Export geometry to a STEP or STL file.  
       • view                  View model geometry.                    
       • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
                                                                       
   
   '''
@@ -961,20 +994,21 @@
 # name: test_successive_harness_success[plain]
   '''
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
-  usage: pytest [-h] [{run,export,view,viewer}]
+  usage: pytest [-h] [{run,export,view,viewer,version}]
   
-   options                                              
-   ---------------------------------------------------- 
-    -h, --help  show this help message and exit         
-                                                        
-   subcommands                                          
-   ---------------------------------------------------- 
-    (default: run)                                      
-      • run     Run the model.                          
-      • export  Export geometry to a STEP or STL file.  
-      • view    View model geometry.                    
-      • viewer  Viewer control                          
-                                                        
+   options                                               
+   ----------------------------------------------------- 
+    -h, --help   show this help message and exit         
+                                                         
+   subcommands                                           
+   ----------------------------------------------------- 
+    (default: run)                                       
+      • run      Run the model.                          
+      • export   Export geometry to a STEP or STL file.  
+      • view     View model geometry.                    
+      • viewer   Viewer control                          
+      • version  Show bdbox version and exit             
+                                                         
   
   '''
 # ---
@@ -984,20 +1018,21 @@
 # name: test_successive_harness_success[plain].2
   '''
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
-  usage: pytest [-h] [{run,export,view,viewer}]
+  usage: pytest [-h] [{run,export,view,viewer,version}]
   
-   options                                              
-   ---------------------------------------------------- 
-    -h, --help  show this help message and exit         
-                                                        
-   subcommands                                          
-   ---------------------------------------------------- 
-    (default: run)                                      
-      • run     Run the model.                          
-      • export  Export geometry to a STEP or STL file.  
-      • view    View model geometry.                    
-      • viewer  Viewer control                          
-                                                        
+   options                                               
+   ----------------------------------------------------- 
+    -h, --help   show this help message and exit         
+                                                         
+   subcommands                                           
+   ----------------------------------------------------- 
+    (default: run)                                       
+      • run      Run the model.                          
+      • export   Export geometry to a STEP or STL file.  
+      • view     View model geometry.                    
+      • viewer   Viewer control                          
+      • version  Show bdbox version and exit             
+                                                         
   
   '''
 # ---

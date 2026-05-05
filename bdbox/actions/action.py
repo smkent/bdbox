@@ -73,3 +73,20 @@ class ModelAction(Action):
             except Exception:  # noqa: BLE001
                 sys.exit(2)
             sys.exit(returncode)
+
+
+@dataclass
+class CommandAction(Action):
+    def before_harness(
+        self,
+        args: Action.ModelHarnessProtocol,  # noqa: ARG002
+    ) -> Action.BeforeHarnessResult:
+        self()
+
+    @contextmanager
+    def on_model_render(self) -> Iterator[None]:
+        self()
+        yield
+
+    def __call__(self) -> None:
+        sys.exit(0)
