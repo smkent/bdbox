@@ -5,37 +5,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_reset_params[Params-param_overrides]
@@ -44,37 +40,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_select_preset_replaces_overrides[Model-param_overrides]
@@ -83,37 +75,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_select_preset_replaces_overrides[Params-param_overrides]
@@ -122,37 +110,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_select_preset_unknown_ignored[Model-param_overrides0]
@@ -161,37 +145,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_select_preset_unknown_ignored[Params-param_overrides0]
@@ -200,37 +180,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_unknown_message_type_ignored[Model-param_overrides0]
@@ -239,37 +215,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_unknown_message_type_ignored[Params-param_overrides0]
@@ -278,37 +250,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_update_param_accumulates[Model-param_overrides0]
@@ -317,37 +285,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_update_param_accumulates[Params-param_overrides0]
@@ -356,37 +320,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0]
@@ -395,37 +355,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0].1
@@ -442,37 +398,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0].1
@@ -489,37 +441,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].1
@@ -528,37 +476,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].2
@@ -574,37 +518,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].1
@@ -613,37 +553,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].2
@@ -659,37 +595,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_reset_params[Params-param_overrides]
@@ -698,37 +630,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_select_preset[Model-param_overrides0]
@@ -737,37 +665,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_select_preset[Params-param_overrides0]
@@ -776,37 +700,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_update_param[Model-param_overrides0]
@@ -815,37 +735,33 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---
 # name: test_ws_update_param[Params-param_overrides0]
@@ -854,36 +770,32 @@
       'count': 3,
       'width': 10.0,
     }),
-    'properties': dict({
-      'count': dict({
-        'default': 3,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'count',
-        'step': None,
-        'type': 'number',
-      }),
-      'width': dict({
-        'default': 10.0,
-        'description': None,
-        'max': None,
-        'min': None,
-        'name': 'width',
-        'step': None,
-        'type': 'number',
-      }),
-    }),
-    'type': 'object',
-    'x-presets': list([
-      dict({
-        'description': None,
-        'name': 'small',
-        'values': dict({
-          'count': 1,
-          'width': 5.0,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
         }),
       }),
-    ]),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
   })
 # ---

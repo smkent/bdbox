@@ -8,9 +8,12 @@ from typing import Any
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 
+from bdbox.parameters.serializer import Serializer
+
 from .context import Context
 
 routes_router = APIRouter()
+serializer = Serializer()
 
 
 @dataclass
@@ -77,7 +80,12 @@ def _handle_client_message(data: dict[str, Any], context: Context) -> None:
             for preset in context.model_class.presets:
                 if preset.name == data["preset"]:
                     context.param_overrides.clear()
-                    context.param_overrides.update(preset.values)
+                    context.param_overrides.update(
+                        {
+                            name: serializer.unstructure(value)
+                            for name, value in preset.values.items()
+                        }
+                    )
                     context.rerender_event.set()
                     break
     elif msg_type == "reset_params":
@@ -94,7 +102,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
             await websocket.send_json(
                 {
                     "type": "schema",
-                    **context.model_class.schema(),
+                    "schema": context.model_class.schema(),
                     "current_values": context.current_values,
                 }
             )

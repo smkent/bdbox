@@ -5,7 +5,7 @@ import sys
 from collections.abc import Sequence
 from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
-from typing import Any, ClassVar, Literal, overload
+from typing import Any, ClassVar
 
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
@@ -104,42 +104,6 @@ class Params(CLI, metaclass=ParamsType):
             **overrides: Additional field values to apply after the preset.
         """
         return cls(preset=preset, **overrides)
-
-    @overload
-    @classmethod
-    def instance_from_cli(
-        cls,
-        prog: str | None = None,
-        *args: Any,
-        return_unknown_args: Literal[False] = ...,
-        **kwargs: Any,
-    ) -> Self: ...
-
-    @overload
-    @classmethod
-    def instance_from_cli(
-        cls,
-        prog: str | None = None,
-        *args: Any,
-        return_unknown_args: Literal[True],
-        **kwargs: Any,
-    ) -> tuple[Self, Sequence[str]]: ...
-
-    @classmethod
-    def instance_from_cli(
-        cls,
-        prog: str | None = None,
-        *args: Any,
-        **kwargs: Any,
-    ) -> Self | tuple[Self, Sequence[str]]:
-        cli_result = super().instance_from_cli(prog, *args, **kwargs)
-        params = (
-            cli_result[1]
-            if (isinstance(cli_result, tuple) and len(cli_result) == 2)
-            else cli_result.params
-        )
-        run_state.apply_overrides(params)
-        return cli_result
 
     @classmethod
     def schema(cls) -> dict:

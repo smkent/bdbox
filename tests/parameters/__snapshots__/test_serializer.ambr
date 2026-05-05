@@ -6,17 +6,15 @@
       "properties": {
           "count": {
               "default": 0,
-              "type": "number",
-              "name": "count"
+              "type": "number"
           },
           "more_count": {
               "default": 6,
-              "min": 2,
-              "max": 10,
-              "step": 2,
-              "description": null,
+              "minimum": 2,
+              "maximum": 10,
+              "multipleOf": 2,
               "type": "number",
-              "name": "more_count"
+              "x-format": "range"
           },
           "nested": {
               "default": {
@@ -49,16 +47,17 @@
                       "properties": {
                           "x": {
                               "default": 0.0,
-                              "type": "number",
-                              "name": "x"
+                              "type": "number"
                           },
                           "y": {
                               "default": 0.0,
-                              "type": "number",
-                              "name": "y"
+                              "type": "number"
                           }
                       },
-                      "name": "point"
+                      "required": [
+                          "x",
+                          "y"
+                      ]
                   },
                   "nested": {
                       "default": {
@@ -84,16 +83,17 @@
                               "properties": {
                                   "x": {
                                       "default": 0.0,
-                                      "type": "number",
-                                      "name": "x"
+                                      "type": "number"
                                   },
                                   "y": {
                                       "default": 0.0,
-                                      "type": "number",
-                                      "name": "y"
+                                      "type": "number"
                                   }
                               },
-                              "name": "point"
+                              "required": [
+                                  "x",
+                                  "y"
+                              ]
                           },
                           "color": {
                               "default": "purple",
@@ -102,43 +102,49 @@
                                   "blue",
                                   "purple"
                               ],
-                              "name": "color"
+                              "type": "string"
                           },
                           "maybe_color": {
                               "default": "red",
-                              "optional": true,
                               "oneOf": [
                                   {
                                       "enum": [
                                           "red",
                                           "blue",
                                           "purple"
-                                      ]
+                                      ],
+                                      "type": "string"
+                                  },
+                                  {
+                                      "type": "null"
                                   }
-                              ],
-                              "name": "maybe_color"
+                              ]
                           },
                           "kinda_color": {
                               "default": "blue",
-                              "optional": true,
                               "oneOf": [
                                   {
                                       "enum": [
                                           "red",
                                           "blue",
                                           "purple"
-                                      ]
+                                      ],
+                                      "type": "string"
                                   },
                                   {
                                       "type": "number"
+                                  },
+                                  {
+                                      "type": "null"
                                   }
-                              ],
-                              "name": "kinda_color"
+                              ]
                           },
                           "size": {
                               "default": "small",
-                              "optional": true,
                               "oneOf": [
+                                  {
+                                      "type": "null"
+                                  },
                                   {
                                       "enum": [
                                           "small",
@@ -147,13 +153,14 @@
                                           1
                                       ]
                                   }
-                              ],
-                              "name": "size"
+                              ]
                           },
                           "thing": {
                               "default": 4.4,
-                              "optional": true,
                               "oneOf": [
+                                  {
+                                      "type": "null"
+                                  },
                                   {
                                       "type": "string"
                                   },
@@ -166,8 +173,7 @@
                                           2
                                       ]
                                   }
-                              ],
-                              "name": "thing"
+                              ]
                           },
                           "other_thing": {
                               "default": 5,
@@ -178,11 +184,18 @@
                                   {
                                       "type": "string"
                                   }
-                              ],
-                              "name": "other_thing"
+                              ]
                           }
                       },
-                      "name": "nested"
+                      "required": [
+                          "color",
+                          "kinda_color",
+                          "maybe_color",
+                          "other_thing",
+                          "point",
+                          "size",
+                          "thing"
+                      ]
                   },
                   "several": {
                       "default": [],
@@ -199,16 +212,17 @@
                                   "properties": {
                                       "x": {
                                           "default": 0.0,
-                                          "type": "number",
-                                          "name": "x"
+                                          "type": "number"
                                       },
                                       "y": {
                                           "default": 0.0,
-                                          "type": "number",
-                                          "name": "y"
+                                          "type": "number"
                                       }
                                   },
-                                  "name": "point"
+                                  "required": [
+                                      "x",
+                                      "y"
+                                  ]
                               },
                               "color": {
                                   "default": "purple",
@@ -217,43 +231,49 @@
                                       "blue",
                                       "purple"
                                   ],
-                                  "name": "color"
+                                  "type": "string"
                               },
                               "maybe_color": {
                                   "default": "red",
-                                  "optional": true,
                                   "oneOf": [
                                       {
                                           "enum": [
                                               "red",
                                               "blue",
                                               "purple"
-                                          ]
+                                          ],
+                                          "type": "string"
+                                      },
+                                      {
+                                          "type": "null"
                                       }
-                                  ],
-                                  "name": "maybe_color"
+                                  ]
                               },
                               "kinda_color": {
                                   "default": "blue",
-                                  "optional": true,
                                   "oneOf": [
                                       {
                                           "enum": [
                                               "red",
                                               "blue",
                                               "purple"
-                                          ]
+                                          ],
+                                          "type": "string"
                                       },
                                       {
                                           "type": "number"
+                                      },
+                                      {
+                                          "type": "null"
                                       }
-                                  ],
-                                  "name": "kinda_color"
+                                  ]
                               },
                               "size": {
                                   "default": "small",
-                                  "optional": true,
                                   "oneOf": [
+                                      {
+                                          "type": "null"
+                                      },
                                       {
                                           "enum": [
                                               "small",
@@ -262,13 +282,14 @@
                                               1
                                           ]
                                       }
-                                  ],
-                                  "name": "size"
+                                  ]
                               },
                               "thing": {
                                   "default": 4.4,
-                                  "optional": true,
                                   "oneOf": [
+                                      {
+                                          "type": "null"
+                                      },
                                       {
                                           "type": "string"
                                       },
@@ -281,8 +302,7 @@
                                               2
                                           ]
                                       }
-                                  ],
-                                  "name": "thing"
+                                  ]
                               },
                               "other_thing": {
                                   "default": 5,
@@ -293,15 +313,26 @@
                                       {
                                           "type": "string"
                                       }
-                                  ],
-                                  "name": "other_thing"
+                                  ]
                               }
-                          }
-                      },
-                      "name": "several"
+                          },
+                          "required": [
+                              "color",
+                              "kinda_color",
+                              "maybe_color",
+                              "other_thing",
+                              "point",
+                              "size",
+                              "thing"
+                          ]
+                      }
                   }
               },
-              "name": "nested"
+              "required": [
+                  "nested",
+                  "point",
+                  "several"
+              ]
           },
           "point": {
               "default": {
@@ -312,16 +343,17 @@
               "properties": {
                   "x": {
                       "default": 0.0,
-                      "type": "number",
-                      "name": "x"
+                      "type": "number"
                   },
                   "y": {
                       "default": 0.0,
-                      "type": "number",
-                      "name": "y"
+                      "type": "number"
                   }
               },
-              "name": "point"
+              "required": [
+                  "x",
+                  "y"
+              ]
           },
           "top_several": {
               "default": [],
@@ -338,16 +370,17 @@
                           "properties": {
                               "x": {
                                   "default": 0.0,
-                                  "type": "number",
-                                  "name": "x"
+                                  "type": "number"
                               },
                               "y": {
                                   "default": 0.0,
-                                  "type": "number",
-                                  "name": "y"
+                                  "type": "number"
                               }
                           },
-                          "name": "point"
+                          "required": [
+                              "x",
+                              "y"
+                          ]
                       },
                       "color": {
                           "default": "purple",
@@ -356,43 +389,49 @@
                               "blue",
                               "purple"
                           ],
-                          "name": "color"
+                          "type": "string"
                       },
                       "maybe_color": {
                           "default": "red",
-                          "optional": true,
                           "oneOf": [
                               {
                                   "enum": [
                                       "red",
                                       "blue",
                                       "purple"
-                                  ]
+                                  ],
+                                  "type": "string"
+                              },
+                              {
+                                  "type": "null"
                               }
-                          ],
-                          "name": "maybe_color"
+                          ]
                       },
                       "kinda_color": {
                           "default": "blue",
-                          "optional": true,
                           "oneOf": [
                               {
                                   "enum": [
                                       "red",
                                       "blue",
                                       "purple"
-                                  ]
+                                  ],
+                                  "type": "string"
                               },
                               {
                                   "type": "number"
+                              },
+                              {
+                                  "type": "null"
                               }
-                          ],
-                          "name": "kinda_color"
+                          ]
                       },
                       "size": {
                           "default": "small",
-                          "optional": true,
                           "oneOf": [
+                              {
+                                  "type": "null"
+                              },
                               {
                                   "enum": [
                                       "small",
@@ -401,13 +440,14 @@
                                       1
                                   ]
                               }
-                          ],
-                          "name": "size"
+                          ]
                       },
                       "thing": {
                           "default": 4.4,
-                          "optional": true,
                           "oneOf": [
+                              {
+                                  "type": "null"
+                              },
                               {
                                   "type": "string"
                               },
@@ -420,8 +460,7 @@
                                       2
                                   ]
                               }
-                          ],
-                          "name": "thing"
+                          ]
                       },
                       "other_thing": {
                           "default": 5,
@@ -432,14 +471,28 @@
                               {
                                   "type": "string"
                               }
-                          ],
-                          "name": "other_thing"
+                          ]
                       }
-                  }
-              },
-              "name": "top_several"
+                  },
+                  "required": [
+                      "color",
+                      "kinda_color",
+                      "maybe_color",
+                      "other_thing",
+                      "point",
+                      "size",
+                      "thing"
+                  ]
+              }
           }
       },
+      "required": [
+          "count",
+          "more_count",
+          "nested",
+          "point",
+          "top_several"
+      ],
       "x-presets": []
   }
   '''
@@ -451,17 +504,15 @@
       "properties": {
           "count": {
               "default": 0,
-              "type": "number",
-              "name": "count"
+              "type": "number"
           },
           "more_count": {
               "default": 6,
-              "min": 2,
-              "max": 10,
-              "step": 2,
-              "description": null,
+              "minimum": 2,
+              "maximum": 10,
+              "multipleOf": 2,
               "type": "number",
-              "name": "more_count"
+              "x-format": "range"
           },
           "nested": {
               "default": {
@@ -494,16 +545,17 @@
                       "properties": {
                           "x": {
                               "default": 0.0,
-                              "type": "number",
-                              "name": "x"
+                              "type": "number"
                           },
                           "y": {
                               "default": 0.0,
-                              "type": "number",
-                              "name": "y"
+                              "type": "number"
                           }
                       },
-                      "name": "point"
+                      "required": [
+                          "x",
+                          "y"
+                      ]
                   },
                   "nested": {
                       "default": {
@@ -529,16 +581,17 @@
                               "properties": {
                                   "x": {
                                       "default": 0.0,
-                                      "type": "number",
-                                      "name": "x"
+                                      "type": "number"
                                   },
                                   "y": {
                                       "default": 0.0,
-                                      "type": "number",
-                                      "name": "y"
+                                      "type": "number"
                                   }
                               },
-                              "name": "point"
+                              "required": [
+                                  "x",
+                                  "y"
+                              ]
                           },
                           "color": {
                               "default": "purple",
@@ -547,43 +600,49 @@
                                   "blue",
                                   "purple"
                               ],
-                              "name": "color"
+                              "type": "string"
                           },
                           "maybe_color": {
                               "default": "red",
-                              "optional": true,
                               "oneOf": [
                                   {
                                       "enum": [
                                           "red",
                                           "blue",
                                           "purple"
-                                      ]
+                                      ],
+                                      "type": "string"
+                                  },
+                                  {
+                                      "type": "null"
                                   }
-                              ],
-                              "name": "maybe_color"
+                              ]
                           },
                           "kinda_color": {
                               "default": "blue",
-                              "optional": true,
                               "oneOf": [
                                   {
                                       "enum": [
                                           "red",
                                           "blue",
                                           "purple"
-                                      ]
+                                      ],
+                                      "type": "string"
                                   },
                                   {
                                       "type": "number"
+                                  },
+                                  {
+                                      "type": "null"
                                   }
-                              ],
-                              "name": "kinda_color"
+                              ]
                           },
                           "size": {
                               "default": "small",
-                              "optional": true,
                               "oneOf": [
+                                  {
+                                      "type": "null"
+                                  },
                                   {
                                       "enum": [
                                           "small",
@@ -592,13 +651,14 @@
                                           1
                                       ]
                                   }
-                              ],
-                              "name": "size"
+                              ]
                           },
                           "thing": {
                               "default": 4.4,
-                              "optional": true,
                               "oneOf": [
+                                  {
+                                      "type": "null"
+                                  },
                                   {
                                       "type": "string"
                                   },
@@ -611,8 +671,7 @@
                                           2
                                       ]
                                   }
-                              ],
-                              "name": "thing"
+                              ]
                           },
                           "other_thing": {
                               "default": 5,
@@ -623,11 +682,18 @@
                                   {
                                       "type": "string"
                                   }
-                              ],
-                              "name": "other_thing"
+                              ]
                           }
                       },
-                      "name": "nested"
+                      "required": [
+                          "color",
+                          "kinda_color",
+                          "maybe_color",
+                          "other_thing",
+                          "point",
+                          "size",
+                          "thing"
+                      ]
                   },
                   "several": {
                       "default": [],
@@ -644,16 +710,17 @@
                                   "properties": {
                                       "x": {
                                           "default": 0.0,
-                                          "type": "number",
-                                          "name": "x"
+                                          "type": "number"
                                       },
                                       "y": {
                                           "default": 0.0,
-                                          "type": "number",
-                                          "name": "y"
+                                          "type": "number"
                                       }
                                   },
-                                  "name": "point"
+                                  "required": [
+                                      "x",
+                                      "y"
+                                  ]
                               },
                               "color": {
                                   "default": "purple",
@@ -662,43 +729,49 @@
                                       "blue",
                                       "purple"
                                   ],
-                                  "name": "color"
+                                  "type": "string"
                               },
                               "maybe_color": {
                                   "default": "red",
-                                  "optional": true,
                                   "oneOf": [
                                       {
                                           "enum": [
                                               "red",
                                               "blue",
                                               "purple"
-                                          ]
+                                          ],
+                                          "type": "string"
+                                      },
+                                      {
+                                          "type": "null"
                                       }
-                                  ],
-                                  "name": "maybe_color"
+                                  ]
                               },
                               "kinda_color": {
                                   "default": "blue",
-                                  "optional": true,
                                   "oneOf": [
                                       {
                                           "enum": [
                                               "red",
                                               "blue",
                                               "purple"
-                                          ]
+                                          ],
+                                          "type": "string"
                                       },
                                       {
                                           "type": "number"
+                                      },
+                                      {
+                                          "type": "null"
                                       }
-                                  ],
-                                  "name": "kinda_color"
+                                  ]
                               },
                               "size": {
                                   "default": "small",
-                                  "optional": true,
                                   "oneOf": [
+                                      {
+                                          "type": "null"
+                                      },
                                       {
                                           "enum": [
                                               "small",
@@ -707,13 +780,14 @@
                                               1
                                           ]
                                       }
-                                  ],
-                                  "name": "size"
+                                  ]
                               },
                               "thing": {
                                   "default": 4.4,
-                                  "optional": true,
                                   "oneOf": [
+                                      {
+                                          "type": "null"
+                                      },
                                       {
                                           "type": "string"
                                       },
@@ -726,8 +800,7 @@
                                               2
                                           ]
                                       }
-                                  ],
-                                  "name": "thing"
+                                  ]
                               },
                               "other_thing": {
                                   "default": 5,
@@ -738,15 +811,26 @@
                                       {
                                           "type": "string"
                                       }
-                                  ],
-                                  "name": "other_thing"
+                                  ]
                               }
-                          }
-                      },
-                      "name": "several"
+                          },
+                          "required": [
+                              "color",
+                              "kinda_color",
+                              "maybe_color",
+                              "other_thing",
+                              "point",
+                              "size",
+                              "thing"
+                          ]
+                      }
                   }
               },
-              "name": "nested"
+              "required": [
+                  "nested",
+                  "point",
+                  "several"
+              ]
           },
           "point": {
               "default": {
@@ -757,16 +841,17 @@
               "properties": {
                   "x": {
                       "default": 0.0,
-                      "type": "number",
-                      "name": "x"
+                      "type": "number"
                   },
                   "y": {
                       "default": 0.0,
-                      "type": "number",
-                      "name": "y"
+                      "type": "number"
                   }
               },
-              "name": "point"
+              "required": [
+                  "x",
+                  "y"
+              ]
           },
           "top_several": {
               "default": [],
@@ -783,16 +868,17 @@
                           "properties": {
                               "x": {
                                   "default": 0.0,
-                                  "type": "number",
-                                  "name": "x"
+                                  "type": "number"
                               },
                               "y": {
                                   "default": 0.0,
-                                  "type": "number",
-                                  "name": "y"
+                                  "type": "number"
                               }
                           },
-                          "name": "point"
+                          "required": [
+                              "x",
+                              "y"
+                          ]
                       },
                       "color": {
                           "default": "purple",
@@ -801,43 +887,49 @@
                               "blue",
                               "purple"
                           ],
-                          "name": "color"
+                          "type": "string"
                       },
                       "maybe_color": {
                           "default": "red",
-                          "optional": true,
                           "oneOf": [
                               {
                                   "enum": [
                                       "red",
                                       "blue",
                                       "purple"
-                                  ]
+                                  ],
+                                  "type": "string"
+                              },
+                              {
+                                  "type": "null"
                               }
-                          ],
-                          "name": "maybe_color"
+                          ]
                       },
                       "kinda_color": {
                           "default": "blue",
-                          "optional": true,
                           "oneOf": [
                               {
                                   "enum": [
                                       "red",
                                       "blue",
                                       "purple"
-                                  ]
+                                  ],
+                                  "type": "string"
                               },
                               {
                                   "type": "number"
+                              },
+                              {
+                                  "type": "null"
                               }
-                          ],
-                          "name": "kinda_color"
+                          ]
                       },
                       "size": {
                           "default": "small",
-                          "optional": true,
                           "oneOf": [
+                              {
+                                  "type": "null"
+                              },
                               {
                                   "enum": [
                                       "small",
@@ -846,13 +938,14 @@
                                       1
                                   ]
                               }
-                          ],
-                          "name": "size"
+                          ]
                       },
                       "thing": {
                           "default": 4.4,
-                          "optional": true,
                           "oneOf": [
+                              {
+                                  "type": "null"
+                              },
                               {
                                   "type": "string"
                               },
@@ -865,8 +958,7 @@
                                       2
                                   ]
                               }
-                          ],
-                          "name": "thing"
+                          ]
                       },
                       "other_thing": {
                           "default": 5,
@@ -877,14 +969,28 @@
                               {
                                   "type": "string"
                               }
-                          ],
-                          "name": "other_thing"
+                          ]
                       }
-                  }
-              },
-              "name": "top_several"
+                  },
+                  "required": [
+                      "color",
+                      "kinda_color",
+                      "maybe_color",
+                      "other_thing",
+                      "point",
+                      "size",
+                      "thing"
+                  ]
+              }
           }
       },
+      "required": [
+          "count",
+          "more_count",
+          "nested",
+          "point",
+          "top_several"
+      ],
       "x-presets": []
   }
   '''

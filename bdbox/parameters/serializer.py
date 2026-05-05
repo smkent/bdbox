@@ -149,15 +149,14 @@ class Serializer:
         return {
             "type": "object",
             "properties": field_schemas,
+            "required": sorted(field_schemas.keys()),
             "x-presets": [p.to_schema() for p in getattr(cls, "presets", ())],
         }
 
     def _field_schema(self, f: DCField, hint: Any) -> dict:
         """Generate schema for a field."""
         if ff := Field.from_dataclass_field(f):
-            d = ff.to_schema(self._hint_to_schema)
-            d["name"] = f.name
-            return d
+            return ff.to_schema(self._hint_to_schema)
 
         default: Any = MISSING
         if f.default is not MISSING:
@@ -165,9 +164,7 @@ class Serializer:
         elif f.default_factory is not MISSING:  # type: ignore[misc]
             default = f.default_factory()
 
-        schema = self._hint_to_schema(hint, default)
-        schema["name"] = f.name
-        return schema
+        return self._hint_to_schema(hint, default)
 
     def _hint_to_schema(
         self, hint: Any, default: Any = MISSING
@@ -184,10 +181,6 @@ class Serializer:
             schema["default"] = self.unstructure(default)
 
         if origin in _UNION_ORIGINS:
-            with suppress(ValueError):
-                args = list(args)
-                args.pop(args.index(type(None)))
-                schema["optional"] = True
             return schema | {"oneOf": [self._hint_to_schema(a) for a in args]}
 
         if origin is Literal:
@@ -195,7 +188,11 @@ class Serializer:
 
         with suppress(TypeError):
             if isinstance(hint, type) and issubclass(hint, Enum):
-                return schema | {"enum": [e.value for e in hint]}
+                return (
+                    schema
+                    | {"enum": [e.value for e in hint]}
+                    | self._hint_to_schema(type(next(iter(hint)).value))
+                )
 
         if is_dataclass(hint):
             return schema | self._dataclass_to_schema(hint)
@@ -221,8 +218,10 @@ class Serializer:
             int: "number",
             bool: "boolean",
             str: "string",
-            None: "null",
+            type(None): "null",
         }
+        if hint is bool:
+            schema |= {"x-format": "checkbox"}
         if hint in _primitives:
             return schema | {"type": _primitives[hint]}
         raise TypeError(hint)
@@ -237,4 +236,8 @@ class Serializer:
                 continue
             field_schemas[f.name] = self._field_schema(f, hint)
 
-        return {"type": "object", "properties": field_schemas}
+        return {
+            "type": "object",
+            "properties": field_schemas,
+            "required": sorted(field_schemas.keys()),
+        }

@@ -81,25 +81,22 @@ def test_schema_fields(model_base: type[Params]) -> None:
     assert T.schema() == {
         "properties": {
             "count": {
-                "name": "count",
-                "step": None,
-                "description": None,
                 "default": 3,
-                "max": 10,
-                "min": 1,
+                "maximum": 10,
+                "minimum": 1,
                 "type": "number",
+                "x-format": "range",
             },
             "width": {
-                "name": "width",
-                "step": None,
-                "description": None,
                 "default": 10.0,
-                "max": 100.0,
-                "min": 5.0,
+                "maximum": 100.0,
+                "minimum": 5.0,
                 "type": "number",
+                "x-format": "range",
             },
         },
         "type": "object",
+        "required": ["count", "width"],
         "x-presets": [],
     }
 
@@ -116,30 +113,21 @@ def test_schema_with_presets(model_base: type[Params]) -> None:
     assert schema == {
         "properties": {
             "width": {
-                "name": "width",
-                "step": None,
-                "description": None,
                 "default": 10.0,
-                "max": 100.0,
-                "min": 5.0,
+                "maximum": 100.0,
+                "minimum": 5.0,
                 "type": "number",
+                "x-format": "range",
             },
         },
         "type": "object",
+        "required": ["width"],
         "x-presets": [
-            {
-                "description": None,
-                "name": "small",
-                "values": {
-                    "width": 5.0,
-                },
-            },
+            {"name": "small", "values": {"width": 5.0}},
             {
                 "description": "Full size",
                 "name": "large",
-                "values": {
-                    "width": 80.0,
-                },
+                "values": {"width": 80.0},
             },
         ],
     }
@@ -149,7 +137,12 @@ def test_schema_empty(model_base: type[Params]) -> None:
     class T(model_base):  # ty: ignore[unsupported-base]
         pass
 
-    assert T.schema() == {"type": "object", "properties": {}, "x-presets": []}
+    assert T.schema() == {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "x-presets": [],
+    }
 
 
 def test_schema_complex(

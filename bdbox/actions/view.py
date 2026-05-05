@@ -91,7 +91,7 @@ class ViewAction(ModelAction):
         ctx.current_values = dict(run_state.resolved_values)
         if new_schema != old_schema:
             ctx.model_class = new_class
-            ctx.msg_queue.put({"type": "schema", **new_schema})
+            ctx.msg_queue.put({"type": "schema", "schema": new_schema})
 
     @contextmanager
     def on_model_render(self) -> Iterator[None]:

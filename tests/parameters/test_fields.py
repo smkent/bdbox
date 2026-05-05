@@ -296,10 +296,11 @@ def test_preset_no_values() -> None:
             {
                 "type": "number",
                 "default": 10.0,
-                "min": 5.0,
-                "max": 100.0,
-                "step": 0.5,
+                "minimum": 5.0,
+                "maximum": 100.0,
+                "multipleOf": 0.5,
                 "description": "Width",
+                "x-format": "range",
             },
             id="float",
         ),
@@ -308,10 +309,6 @@ def test_preset_no_values() -> None:
             {
                 "type": "number",
                 "default": 10.0,
-                "min": None,
-                "max": None,
-                "step": None,
-                "description": None,
             },
             id="float_minimal",
         ),
@@ -320,28 +317,20 @@ def test_preset_no_values() -> None:
             {
                 "type": "number",
                 "default": 3,
-                "min": 1,
-                "max": 10,
-                "step": 2,
+                "minimum": 1,
+                "maximum": 10,
+                "multipleOf": 2,
                 "description": "Count",
+                "x-format": "range",
             },
             id="int",
         ),
         pytest.param(
-            Int(3),
-            {
-                "type": "number",
-                "default": 3,
-                "min": None,
-                "max": None,
-                "step": None,
-                "description": None,
-            },
-            id="int_minimal",
+            Int(3), {"type": "number", "default": 3}, id="int_minimal"
         ),
         pytest.param(
             Bool(default=True),
-            {"type": "boolean", "default": True, "description": None},
+            {"type": "boolean", "default": True, "x-format": "checkbox"},
             id="bool",
         ),
         pytest.param(
@@ -350,18 +339,13 @@ def test_preset_no_values() -> None:
                 "type": "boolean",
                 "default": False,
                 "description": "Enable feature",
+                "x-format": "checkbox",
             },
             id="bool_with_description",
         ),
         pytest.param(
             Str("hello"),
-            {
-                "type": "string",
-                "default": "hello",
-                "minLength": None,
-                "maxLength": None,
-                "description": None,
-            },
+            {"type": "string", "default": "hello"},
             id="str_minimal",
         ),
         pytest.param(
@@ -377,15 +361,15 @@ def test_preset_no_values() -> None:
         ),
         pytest.param(
             Choice(4, [2, 4, 8]),
-            {"default": 4, "description": None, "enum": [2, 4, 8]},
+            {"default": 4, "enum": [2, 4, 8], "type": "number"},
             id="choice_ints",
         ),
         pytest.param(
             Choice("solid", ["solid", "hollow"]),
             {
                 "default": "solid",
-                "description": None,
                 "enum": ["solid", "hollow"],
+                "type": "string",
             },
             id="choice_strings",
         ),
@@ -397,9 +381,7 @@ def test_field_to_schema(
     class T(model_base):  # ty: ignore[unsupported-base]
         things = field_value
 
-    schema = T().schema()["properties"]["things"]
-    assert schema.pop("name") == "things"
-    assert schema == expected_schema
+    assert T().schema()["properties"]["things"] == expected_schema
 
 
 def test_preset_to_schema(model_base: type[Params]) -> None:
@@ -413,33 +395,17 @@ def test_preset_to_schema(model_base: type[Params]) -> None:
 
     assert T.schema() == {
         "properties": {
-            "count": {
-                "default": 3,
-                "name": "count",
-                "type": "number",
-            },
-            "width": {
-                "default": 10,
-                "name": "width",
-                "type": "number",
-            },
+            "count": {"default": 3, "type": "number"},
+            "width": {"default": 10, "type": "number"},
         },
         "type": "object",
+        "required": ["count", "width"],
         "x-presets": [
-            {
-                "description": None,
-                "name": "small",
-                "values": {
-                    "count": 1,
-                    "width": 5.0,
-                },
-            },
+            {"name": "small", "values": {"count": 1, "width": 5.0}},
             {
                 "description": "Full size",
                 "name": "large",
-                "values": {
-                    "width": 80.0,
-                },
+                "values": {"width": 80.0},
             },
         ],
     }

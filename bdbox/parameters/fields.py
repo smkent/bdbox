@@ -41,7 +41,7 @@ class Field:
 
     value_type: ClassVar[type]
     default: Any
-    description: str | None = None
+    description: Annotated[str | None, override(omit_if_default=True)] = None
 
     @staticmethod
     def as_dataclass_field(func: Callable[P, "Field"]) -> Callable[P, T]:
@@ -139,10 +139,16 @@ class NumberField(Field):
     """Number parameter field base class."""
 
     default: int
-    min: int | None = None
-    max: int | None = None
-    step: int | None = None
-    description: str | None = None
+    min: Annotated[
+        int | None, override(rename="minimum", omit_if_default=True)
+    ] = None
+    max: Annotated[
+        int | None, override(rename="maximum", omit_if_default=True)
+    ] = None
+    step: Annotated[
+        int | None, override(rename="multipleOf", omit_if_default=True)
+    ] = None
+    description: Annotated[str | None, override(omit_if_default=True)] = None
 
     def __post_init__(self) -> None:
         try:
@@ -168,6 +174,15 @@ class NumberField(Field):
     def validate(self, value: Any) -> None:
         self._validate_number(float, value, self.min, self.max, None)
 
+    def to_schema(
+        self,
+        hint_to_schema: Callable[..., dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        schema = super().to_schema(hint_to_schema=hint_to_schema)
+        if None not in (self.min, self.max):
+            schema |= {"x-format": "range"}
+        return schema
+
 
 @dataclass
 class FloatField(NumberField):
@@ -175,10 +190,16 @@ class FloatField(NumberField):
 
     value_type: ClassVar[type] = float
     default: float
-    min: float | None = None
-    max: float | None = None
-    step: float | None = None
-    description: str | None = None
+    min: Annotated[
+        float | None, override(rename="minimum", omit_if_default=True)
+    ] = None
+    max: Annotated[
+        float | None, override(rename="maximum", omit_if_default=True)
+    ] = None
+    step: Annotated[
+        float | None, override(rename="multipleOf", omit_if_default=True)
+    ] = None
+    description: Annotated[str | None, override(omit_if_default=True)] = None
 
 
 @dataclass
@@ -187,10 +208,16 @@ class IntField(NumberField):
 
     value_type: ClassVar[type] = int
     default: int
-    min: int | None = None
-    max: int | None = None
-    step: int | None = None
-    description: str | None = None
+    min: Annotated[
+        int | None, override(rename="minimum", omit_if_default=True)
+    ] = None
+    max: Annotated[
+        int | None, override(rename="maximum", omit_if_default=True)
+    ] = None
+    step: Annotated[
+        int | None, override(rename="multipleOf", omit_if_default=True)
+    ] = None
+    description: Annotated[str | None, override(omit_if_default=True)] = None
 
 
 @dataclass
@@ -199,7 +226,15 @@ class BoolField(Field):
 
     value_type: ClassVar[type] = bool
     default: bool
-    description: str | None = None
+    description: Annotated[str | None, override(omit_if_default=True)] = None
+
+    def to_schema(
+        self,
+        hint_to_schema: Callable[..., dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        return super().to_schema(hint_to_schema=hint_to_schema) | {
+            "x-format": "checkbox"
+        }
 
 
 @dataclass
@@ -208,9 +243,13 @@ class StrField(Field):
 
     value_type: ClassVar[type] = str
     default: str
-    min_length: Annotated[int | None, override(rename="minLength")] = None
-    max_length: Annotated[int | None, override(rename="maxLength")] = None
-    description: str | None = None
+    min_length: Annotated[
+        int | None, override(rename="minLength", omit_if_default=True)
+    ] = None
+    max_length: Annotated[
+        int | None, override(rename="maxLength", omit_if_default=True)
+    ] = None
+    description: Annotated[str | None, override(omit_if_default=True)] = None
 
     def __post_init__(self) -> None:
         try:
@@ -249,7 +288,7 @@ class ChoiceField(Field, Generic[T]):
 
     default: T
     choices: Annotated[Sequence[T], override(rename="enum")]
-    description: str | None = None
+    description: Annotated[str | None, override(omit_if_default=True)] = None
 
     def __post_init__(self) -> None:
         if self.choices:
@@ -278,3 +317,12 @@ class ChoiceField(Field, Generic[T]):
             raise ParamValidationError(
                 f"Value {value!r} is not in choices {self.choices!r}"
             )
+
+    def to_schema(
+        self,
+        hint_to_schema: Callable[..., dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        schema = super().to_schema(hint_to_schema=hint_to_schema)
+        if hint_to_schema:
+            schema |= hint_to_schema(type(self.choices[0]))
+        return schema
