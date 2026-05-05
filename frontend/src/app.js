@@ -1,9 +1,10 @@
 import { GoldenLayout } from "golden-layout";
 import Alpine from "alpinejs";
+import Jedison from "jedison";
 import "golden-layout/dist/css/goldenlayout-base.css";
 import "golden-layout/dist/css/themes/goldenlayout-dark-theme.css";
 import "./app.css";
-import { connectWs } from "./ws.js";
+import { connectWs, sendWs } from "./ws.js";
 
 const LAYOUT_VERSION = 1;
 const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
@@ -46,6 +47,75 @@ const DEFAULT_LAYOUT = {
   },
 };
 
+// Params panel state
+let paramsFormEl = null;
+let jedison = null;
+let currentValues = {};
+let paramOverrides = {};
+let latestSchema = null;
+
+function initJedison(detail) {
+  if (jedison) {
+    jedison.destroy();
+    jedison = null;
+  }
+
+  const schemaData = detail.schema || {};
+  currentValues = detail.current_values || {};
+  paramOverrides = {};
+  paramsFormEl.innerHTML = "";
+
+  // Controls bar: preset buttons + reset
+  const controls = document.createElement("div");
+  controls.className = "params-controls";
+  const presets = schemaData["x-presets"] || [];
+  presets.forEach(({ name, description }) => {
+    const btn = document.createElement("button");
+    btn.className = "params-preset-btn";
+    btn.textContent = name;
+    if (description) btn.title = description;
+    btn.addEventListener("click", () =>
+      sendWs({ type: "select_preset", preset: name }),
+    );
+    controls.appendChild(btn);
+  });
+  const resetBtn = document.createElement("button");
+  resetBtn.className = "params-reset-btn";
+  resetBtn.textContent = "Reset";
+  resetBtn.addEventListener("click", () => sendWs({ type: "reset_params" }));
+  controls.appendChild(resetBtn);
+  paramsFormEl.appendChild(controls);
+
+  // Jedison form
+  const jedContainer = document.createElement("div");
+  paramsFormEl.appendChild(jedContainer);
+
+  const schema = {
+    type: "object",
+    "x-titleHidden": true,
+    properties: schemaData.properties,
+    required: schemaData.required,
+  };
+
+  jedison = new Jedison.Create({
+    container: jedContainer,
+    theme: new Jedison.Theme(),
+    schema,
+    data: { ...currentValues, ...paramOverrides },
+    objectAdd: false,
+  });
+
+  jedison.on("instance-change", (instance, initiator) => {
+    if (initiator !== "user") return;
+    const parts = instance.path.split("/");
+    if (parts.length !== 2) return;
+    const topKey = parts[1];
+    const value = instance.getValue();
+    paramOverrides = { ...paramOverrides, [topKey]: value };
+    sendWs({ type: "update_param", field: topKey, value });
+  });
+}
+
 function registerComponents(layout) {
   layout.registerComponentFactoryFunction("viewer", (container) => {
     const { viewerPort } = window.__BDBOX__;
@@ -73,6 +143,11 @@ function registerComponents(layout) {
     `;
     container.element.appendChild(div);
     Alpine.initTree(div);
+
+    paramsFormEl = div.querySelector(".params-form");
+    if (latestSchema) {
+      initJedison(latestSchema);
+    }
   });
 
   layout.registerComponentFactoryFunction("console", (container) => {
@@ -140,19 +215,43 @@ function initIframeDragFix() {
 }
 
 function initWs() {
+  window.addEventListener("bdbox:schema", ({ detail }) => {
+    latestSchema = detail;
+    if (paramsFormEl) {
+      initJedison(detail);
+    }
+  });
+
+  window.addEventListener("bdbox:param_overrides", ({ detail }) => {
+    paramOverrides = detail.param_overrides;
+    if (jedison) {
+      jedison.setValue({ ...currentValues, ...paramOverrides });
+    }
+  });
+
   window.addEventListener("bdbox:run_start", () => {
     const store = Alpine.store("runStatus");
     store.state = "running";
     store.elapsedMs = "";
   });
+
   window.addEventListener("bdbox:run_ok", ({ detail }) => {
     const store = Alpine.store("runStatus");
     store.state = "ok";
     store.elapsedMs = detail.elapsed_ms;
+    if (detail.current_values) {
+      currentValues = detail.current_values;
+      // Sync form when no pending overrides (e.g. after reset)
+      if (jedison && Object.keys(paramOverrides).length === 0) {
+        jedison.setValue(currentValues);
+      }
+    }
   });
+
   window.addEventListener("bdbox:run_error", () => {
     Alpine.store("runStatus").state = "error";
   });
+
   connectWs();
 }
 

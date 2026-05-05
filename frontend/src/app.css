@@ -35,6 +35,147 @@
   padding: 8px;
 }
 
+/* Controls bar: preset buttons + reset */
+.params-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a2a2a;
+  margin-bottom: 6px;
+}
+
+.params-preset-btn,
+.params-reset-btn {
+  padding: 2px 8px;
+  background: #2a2a2a;
+  color: #bbb;
+  border: 1px solid #444;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.params-preset-btn:hover,
+.params-reset-btn:hover {
+  background: #383838;
+  color: #ddd;
+}
+
+.params-reset-btn {
+  margin-left: auto;
+}
+
+/* ── Jedison dark theme ─────────────────────────────────── */
+
+/* Strip the root-level object fieldset border */
+.params-form .jedi-ready > .jedi-editor-container > .jedi-editor-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Field containers */
+.params-form .jedi-editor-container {
+  margin-bottom: 8px;
+}
+
+/* Labels */
+.params-form .jedi-title {
+  display: block;
+  color: #999;
+  font-size: 11px;
+  margin-bottom: 3px;
+  text-transform: none;
+}
+
+/* Nested object fieldsets */
+.params-form .jedi-editor-fieldset {
+  border: 1px solid #333;
+  border-radius: 3px;
+  padding: 4px 8px 6px;
+  margin: 0;
+}
+
+.params-form .jedi-editor-legend {
+  padding: 0 2px;
+  font-size: inherit;
+}
+
+/* Inputs */
+.params-form input[type="text"],
+.params-form input[type="number"],
+.params-form select,
+.params-form textarea {
+  background: #1e1e1e;
+  color: #ddd;
+  border: 1px solid #3a3a3a;
+  border-radius: 2px;
+  padding: 3px 5px;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.params-form input[type="text"]:focus,
+.params-form input[type="number"]:focus,
+.params-form select:focus,
+.params-form textarea:focus {
+  border-color: #5af;
+  outline: none;
+}
+
+/* Range slider */
+.params-form input[type="range"] {
+  accent-color: #5af;
+  vertical-align: middle;
+  width: calc(100% - 52px);
+}
+
+.params-form output.range-output {
+  display: inline-block;
+  min-width: 42px;
+  margin-left: 6px !important;
+  color: #ddd;
+  font-weight: normal !important;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+/* Checkbox */
+.params-form input[type="checkbox"] {
+  accent-color: #5af;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* Validation error messages */
+.params-form .jedi-error-message {
+  color: #f86;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* Buttons (array add/delete/move, etc.) */
+.params-form button {
+  background: #2a2a2a;
+  color: #bbb;
+  border: 1px solid #444;
+  border-radius: 2px;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.params-form button:hover {
+  background: #383838;
+  color: #ddd;
+}
+
+/* ── Console panel ──────────────────────────────────────── */
+
 .console-panel {
   height: 100%;
   overflow: hidden;
