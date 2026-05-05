@@ -57,3 +57,15 @@ class ModelAction(Action):
             except Exception:  # noqa: BLE001
                 sys.exit(2)
             sys.exit(returncode)
+
+
+@dataclass
+class CommandAction(Action):
+    def before_harness(self) -> Action.BeforeHarnessResult:
+        self()
+
+    def before_model(self) -> None:
+        self()
+
+    def __call__(self) -> None:
+        sys.exit(0)

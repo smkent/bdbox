@@ -1,27 +1,14 @@
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass
 
 from bdbox.viewer import ViewerManager
 
-from .action import Action
+from .action import CommandAction
 
 
 @dataclass
-class ViewerAction(Action):
-    def before_harness(self) -> Action.BeforeHarnessResult:
-        self()
-
-    def before_model(self) -> None:
-        self()
-
-    def __call__(self) -> None:
-        sys.exit(0)
-
-
-@dataclass
-class Start(ViewerAction):
+class Start(CommandAction):
     """Start the OCP CAD Viewer."""
 
     restart: bool = False
@@ -35,7 +22,7 @@ class Start(ViewerAction):
 
 
 @dataclass
-class Stop(ViewerAction):
+class Stop(CommandAction):
     """Stop the OCP CAD Viewer."""
 
     def __call__(self) -> None:
@@ -44,7 +31,7 @@ class Stop(ViewerAction):
 
 
 @dataclass
-class Status(ViewerAction):
+class Status(CommandAction):
     """Show OCP CAD Viewer status."""
 
     def __call__(self) -> None:
