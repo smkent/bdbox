@@ -47,6 +47,36 @@ const DEFAULT_LAYOUT = {
   },
 };
 
+// The viewer iframe lives outside GoldenLayout's DOM so maximize/restore
+// doesn't reload it. Repositioned to track container.element on each frame.
+let viewerIframe = null;
+let viewerContainerEl = null;
+
+function positionViewerIframe() {
+  if (!viewerIframe || !viewerContainerEl) return;
+
+  // Hide if a non-viewer panel is maximised (would otherwise float above it)
+  const maximisedEl = document.querySelector(".lm_maximised");
+  if (maximisedEl && !maximisedEl.contains(viewerContainerEl)) {
+    viewerIframe.style.display = "none";
+    return;
+  }
+
+  const rect = viewerContainerEl.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) {
+    viewerIframe.style.display = "none";
+    return;
+  }
+
+  Object.assign(viewerIframe.style, {
+    display: "block",
+    left: `${rect.left}px`,
+    top: `${rect.top}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+  });
+}
+
 // Params panel state
 let paramsFormEl = null;
 let jedison = null;
@@ -119,14 +149,21 @@ function initJedison(detail) {
 function registerComponents(layout) {
   layout.registerComponentFactoryFunction("viewer", (container) => {
     const { viewerPort } = window.__BDBOX__;
-    const iframe = document.createElement("iframe");
-    iframe.src = `http://localhost:${viewerPort}/viewer`;
-    Object.assign(iframe.style, {
-      width: "100%",
-      height: "100%",
-      border: "none",
-    });
-    container.element.appendChild(iframe);
+    viewerContainerEl = container.element;
+
+    if (!viewerIframe) {
+      viewerIframe = document.createElement("iframe");
+      viewerIframe.src = `http://localhost:${viewerPort}/viewer`;
+      Object.assign(viewerIframe.style, {
+        position: "fixed",
+        border: "none",
+        display: "none",
+        zIndex: "45",
+      });
+      document.body.appendChild(viewerIframe);
+    }
+
+    requestAnimationFrame(positionViewerIframe);
   });
 
   layout.registerComponentFactoryFunction("params", (container) => {
@@ -193,11 +230,13 @@ function initLayout() {
 
   layout.on("stateChanged", () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(layout.saveLayout()));
+    requestAnimationFrame(positionViewerIframe);
   });
 
   new ResizeObserver((entries) => {
     const { width, height } = entries[0].contentRect;
     layout.updateSize(width, height);
+    requestAnimationFrame(positionViewerIframe);
   }).observe(container);
 }
 
