@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import runpy
 import sys
+from contextlib import nullcontext
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
@@ -26,10 +27,12 @@ class ModelRunner(ModelLocator):
         if not self.model_filename:
             raise Error("Model not found in arguments")
         reset_bdbox()
+        run_state.action = action or self.action or RunAction()
         main_module = MainModule(
             filename=self.model_filename, module_name=self.model_module
         )
         with (
+            action.on_model_render() if action else nullcontext(),
             PatchModule("__main__", main_module, auto=False) as mock_main,
             patch.object(sys, "argv", [self.model_filename, *self.argv]),
             exit_mock(),
@@ -38,13 +41,15 @@ class ModelRunner(ModelLocator):
             main_module.__dict__.update(self._run_model())
             mock_main.start()
             if not atexit_mock.hooks:
-                run_state.act_once(action or self.action or RunAction())
+                run_state.act_once()
 
     def _run_model(self) -> dict[str, Any]:
         if self.model_module:
             run_state.module_name = self.model_module
             run_state.class_name = self.model_class_name
-            results = runpy.run_module(self.model_module, run_name="__main__")
+            results = runpy.run_module(
+                self.model_module, run_name="__main__", alter_sys=True
+            )
         elif self.model_filename:
             results = runpy.run_path(self.model_filename, run_name="__main__")
         else:

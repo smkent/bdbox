@@ -2,6 +2,10 @@
 
 from typing import Any
 
+from cattrs import Converter
+
+converter = Converter()
+
 
 class Preset:
     """A saved combination of parameter values, applied by name.
@@ -21,3 +25,13 @@ class Preset:
         self.name = name
         self.description = description
         self.values: dict[str, Any] = values
+
+    def to_schema(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "values": converter.unstructure(self.values),
+        } | (
+            {"description": self.description}
+            if self.description is not None
+            else {}
+        )

@@ -7,6 +7,7 @@ from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import Any, ClassVar
 
+from bdbox.actions.action import Action
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
 
@@ -14,6 +15,7 @@ from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .preset import Preset
+from .serializer import Serializer
 from .state import run_state
 
 if sys.version_info >= (3, 11):
@@ -104,6 +106,11 @@ class Params(CLI, metaclass=ParamsType):
         """
         return cls(preset=preset, **overrides)
 
+    @classmethod
+    def schema(cls) -> dict:
+        """Return a JSON Schema describing fields and presets."""
+        return Serializer().generate(cls)
+
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
         if not cls._init_this_subclass():
@@ -121,19 +128,31 @@ class Params(CLI, metaclass=ParamsType):
                     " a Params subclass is already defined in this script"
                 )
             run_state.model_subclasses.append(cls)
-            cli_result = cls.cli_config().instance_from_cli(
-                prog=Path(sys.argv[0]).name
-            )
+            try:
+                cli_result = cls.cli_config().instance_from_cli(
+                    prog=Path(sys.argv[0]).name
+                )
+            finally:
+                run_state.module_dict = sys.modules["__main__"].__dict__
+            if run_state.action.mode != Action.Mode.HARNESS:
+                run_state.action = cli_result.action
+            run_state.enter_on_model_render()
+            run_state.apply_overrides(cli_result.params)
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
-            run_state.action = cli_result.action
+            run_state.resolved_values = {
+                f.name: getattr(cls, f.name)
+                for f in fields(cls)
+                if Field.from_dataclass_field(f)
+            }
             atexit.register(Params._atexit_handler)
 
     @classmethod
     def _atexit_handler(cls) -> None:
         atexit.unregister(Params._atexit_handler)
+        run_state.close_stack()
         if run_state.model_subclasses:
-            run_state.act_once(run_state.action)
+            run_state.act_once()
 
     def __post_init__(self) -> None:
         if self.preset:

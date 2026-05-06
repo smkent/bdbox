@@ -36,6 +36,10 @@ class ViewerManager:
     )
 
     @property
+    def port(self) -> int:
+        return self._port
+
+    @property
     def _port(self) -> int:
         try:
             from ocp_vscode.comms import CMD_PORT  # noqa: PLC0415

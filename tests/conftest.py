@@ -9,6 +9,8 @@ from unittest.mock import patch
 import pytest
 
 from bdbox.actions.action import Action
+from bdbox.model import Model
+from bdbox.parameters.parameters import Params
 from bdbox.runner.utils import reset_bdbox
 
 from .utils import DisallowCallable, MockBuild123d, MockOcpVscode
@@ -63,12 +65,6 @@ def disallow_subprocess(
 
 
 @pytest.fixture
-def harness_mode() -> Iterator[None]:
-    with patch.object(Action, "mode", Action.Mode.HARNESS):
-        yield
-
-
-@pytest.fixture
 def mock_b123d(monkeypatch: pytest.MonkeyPatch) -> MockBuild123d:
     module = MockBuild123d()
     monkeypatch.setitem(sys.modules, "build123d", module)
@@ -81,3 +77,10 @@ def mock_ocp_vscode(monkeypatch: pytest.MonkeyPatch) -> MockOcpVscode:
     monkeypatch.setitem(sys.modules, "ocp_vscode", module)
     monkeypatch.setitem(sys.modules, "ocp_vscode.comms", module.comms)
     return module
+
+
+@pytest.fixture(
+    params=(pytest.param(Params, id="Params"), pytest.param(Model, id="Model"))
+)
+def model_base(request: pytest.FixtureRequest) -> type[Params]:
+    return request.param

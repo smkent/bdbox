@@ -5,7 +5,6 @@ from __future__ import annotations
 import sys
 import threading
 import time
-from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from functools import cached_property
@@ -20,6 +19,8 @@ from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from bdbox.actions.action import Action
 
 
@@ -110,21 +111,6 @@ def modules(
     return Modules(monkeypatch, tmp_path, ref_type=request.param)
 
 
-ExpectExit = Callable[[Callable[[], None]], Callable[[], None]]
-
-
-@pytest.fixture
-def expect_exit() -> ExpectExit:
-    def wrapper(fn: Callable[[], None]) -> Callable[[], None]:
-        def func() -> None:
-            with pytest.raises(SystemExit):
-                fn()
-
-        return func
-
-    return wrapper
-
-
 @pytest.fixture(autouse=True)
 def mock_runner_call() -> Iterator[MagicMock]:
     with patch.object(ModelRunner, "__call__") as mocked:
@@ -177,7 +163,6 @@ def debounce(
 
 @pytest.mark.usefixtures("debounce")
 def test_runloop_with_rerun(
-    expect_exit: ExpectExit,
     mock_runner_call: MagicMock,
     watcher: ModelWatcher,
     modules: Modules,
@@ -206,7 +191,7 @@ def test_runloop_with_rerun(
     mock_runner_call.side_effect = _call
     watcher.change_event = _SignalingEvent()
 
-    t = threading.Thread(target=expect_exit(watcher.run), daemon=True)
+    t = threading.Thread(target=watcher.run, daemon=True)
     t.start()
 
     assert first_run_done.wait(timeout=1.0), "first run should have completed"

@@ -16,6 +16,7 @@ from urllib.error import URLError
 import psutil
 import pytest
 
+import bdbox.server.server as server_module
 import bdbox.viewer as viewer_module
 from bdbox.__main__ import main
 from bdbox.runner.watcher import ModelWatcher
@@ -99,6 +100,14 @@ def mock_send_command(mock_ocp_vscode: MockOcpVscode) -> Iterator[MagicMock]:
 @pytest.fixture(autouse=True)
 def mock_browser_open() -> Iterator[MagicMock]:
     with patch.object(webbrowser, "open_new_tab") as mocked:
+        yield mocked
+
+
+@pytest.fixture(autouse=True)
+def mock_server_start() -> Iterator[MagicMock]:
+    with patch.object(
+        server_module.ServerManager, "start", autospec=True
+    ) as mocked:
         yield mocked
 
 
@@ -279,7 +288,7 @@ def test_start_running_process_returns_none_when_all_attempts_fail(
 
     mock_urlopen.side_effect = [URLError("refused"), TempError]
     with ps_mock(launches=True), pytest.raises((TempError, SystemExit)):
-        exec_main(str(model), "view", "--no-watch")
+        exec_main(str(model), "view", "--no-watch", "--open-browser")
     assert mock_urlopen.call_count == 2
     mock_urlopen.assert_called_with(ps_mock.viewer_url)
 
@@ -304,13 +313,7 @@ def test_start_running_without_pid(
         ps_mock(),
         patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
     ):
-        exec_main(
-            str(model),
-            "view",
-            "--restart-viewer",
-            "--no-open-browser",
-            *watch_args,
-        )
+        exec_main(str(model), "view", "--restart-viewer", *watch_args)
 
     mock_set_port.assert_called_once_with(ps_mock.ocp_port)
     assert "running" in capsys.readouterr().out
@@ -341,7 +344,7 @@ def test_status_running_without_pid(
 def test_start_launches(ps_mock: PSMock, exec_main: ExecMain) -> None:
     ps_mock.add_connection(pid=1138, port=8)
     with ps_mock(launches=True):
-        exec_main("viewer", "start", "--no-open-browser")
+        exec_main("viewer", "start")
 
 
 def test_start_already_running_skips_subprocess(
@@ -350,7 +353,7 @@ def test_start_already_running_skips_subprocess(
     ps_mock.add_connection(pid=1138)
     ps_mock.add_connection(port=ps_mock.ocp_port - 1, pid=4002)
     with ps_mock(launches=False):
-        exec_main("viewer", "start", "--no-open-browser")
+        exec_main("viewer", "start")
 
 
 def test_start_restart_terminates_old_process_and_relaunches(
@@ -358,7 +361,7 @@ def test_start_restart_terminates_old_process_and_relaunches(
 ) -> None:
     conn = ps_mock.add_connection(pid=1138)
     with ps_mock(launches=True, terminates=True):
-        exec_main("viewer", "start", "--restart", "--no-open-browser")
+        exec_main("viewer", "start", "--restart")
     ps_mock.assert_terminated(conn.pid)
 
 
@@ -368,7 +371,7 @@ def test_start_opens_browser(ps_mock: PSMock, exec_main: ExecMain) -> None:
 
     ps_mock.mock_browser_open.side_effect = TempError
     with ps_mock(launches=True, opens_browser=True), pytest.raises(TempError):
-        exec_main("viewer", "start")
+        exec_main("viewer", "start", "--open-browser")
 
 
 def test_start_skips_browser_when_disabled(
@@ -379,7 +382,7 @@ def test_start_skips_browser_when_disabled(
 
     ps_mock.mock_browser_open.side_effect = TempError
     with ps_mock(launches=True):
-        exec_main("viewer", "start", "--no-open-browser")
+        exec_main("viewer", "start")
 
 
 def test_start_initializes_port_when_freshly_launched(
@@ -389,7 +392,7 @@ def test_start_initializes_port_when_freshly_launched(
         ps_mock(launches=True),
         patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
     ):
-        exec_main("viewer", "start", "--no-open-browser")
+        exec_main("viewer", "start")
     mock_set_port.assert_called_once_with(ps_mock.ocp_port)
 
 
@@ -401,7 +404,7 @@ def test_start_initializes_port_when_already_running(
         ps_mock(launches=False),
         patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
     ):
-        exec_main("viewer", "start", "--no-open-browser")
+        exec_main("viewer", "start")
     mock_set_port.assert_called_once_with(ps_mock.ocp_port)
 
 
@@ -409,7 +412,7 @@ def test_start_skips_wait_when_not_opening_browser(
     ps_mock: PSMock, exec_main: ExecMain
 ) -> None:
     with ps_mock(launches=True), patch.object(time, "sleep") as mock_sleep:
-        exec_main("viewer", "start", "--no-open-browser")
+        exec_main("viewer", "start")
     mock_sleep.assert_not_called()
 
 
@@ -418,7 +421,7 @@ def test_start_open_browser(ps_mock: PSMock, exec_main: ExecMain) -> None:
         ps_mock(launches=True, opens_browser=True),
         patch.object(time, "sleep") as mock_sleep,
     ):
-        exec_main("viewer", "start")
+        exec_main("viewer", "start", "--open-browser")
     mock_sleep.assert_not_called()
 
 
@@ -429,7 +432,7 @@ def test_start_open_browser_wait(ps_mock: PSMock, exec_main: ExecMain) -> None:
         ps_mock(launches=True, opens_browser=True),
         patch.object(time, "sleep") as mock_sleep,
     ):
-        exec_main("viewer", "start")
+        exec_main("viewer", "start", "--open-browser")
     assert mock_sleep.call_count == 2
 
 
@@ -441,7 +444,7 @@ def test_start_open_browser_wait_timeout(
         ps_mock(launches=True, opens_browser=True),
         patch.object(time, "sleep") as mock_sleep,
     ):
-        exec_main("viewer", "start")
+        exec_main("viewer", "start", "--open-browser")
     assert mock_sleep.call_count == 120
     assert "Warning" in capsys.readouterr().out
 
@@ -497,19 +500,15 @@ def test_status_not_running(
 
 
 def test_model_view_starts_viewer(
-    model: Path, watch_args: Sequence[str], exec_main: ExecMain
+    model: Path,
+    watch_args: Sequence[str],
+    exec_main: ExecMain,
+    mock_server_start: MagicMock,
 ) -> None:
     with patch.object(ViewerManager, "start") as mock_start:
         exec_main(str(model), "view", *watch_args)
     mock_start.assert_called_once()
-
-
-def test_model_view_skips_viewer_when_disabled(
-    model: Path, watch_args: Sequence[str], exec_main: ExecMain
-) -> None:
-    with patch.object(ViewerManager, "start") as mock_start:
-        exec_main(str(model), "view", "--no-start-viewer", *watch_args)
-    mock_start.assert_not_called()
+    mock_server_start.assert_called_once()
 
 
 def test_model_view_passes_flags_to_viewer(
@@ -517,19 +516,28 @@ def test_model_view_passes_flags_to_viewer(
 ) -> None:
     def check_args(self: ViewerManager) -> None:
         assert self.restart is True
-        assert self.open_browser is False
+        assert (
+            self.open_browser is False
+        )  # always False; ServerManager opens browser
 
     with patch.object(
         ViewerManager, "start", autospec=True, side_effect=check_args
     ) as mock_start:
-        exec_main(
-            str(model),
-            "view",
-            "--restart-viewer",
-            "--no-open-browser",
-            *watch_args,
-        )
+        exec_main(str(model), "view", "--restart-viewer", *watch_args)
     mock_start.assert_called_once()
+
+
+def test_model_view_passes_flags_to_server(
+    model: Path,
+    watch_args: Sequence[str],
+    exec_main: ExecMain,
+    mock_server_start: MagicMock,
+) -> None:
+    with patch.object(ViewerManager, "start"):
+        exec_main(str(model), "view", *watch_args)
+    mock_server_start.assert_called_once()
+    server_instance = mock_server_start.call_args[0][0]
+    assert server_instance.open_browser is False
 
 
 def test_viewer_start_open_browser(
@@ -539,13 +547,13 @@ def test_viewer_start_open_browser(
         ps_mock(launches=True, opens_browser=True),
         patch.object(time, "sleep") as mock_sleep,
     ):
-        exec_main("viewer", "start")
+        exec_main("viewer", "start", "--open-browser")
     mock_sleep.assert_not_called()
 
 
 def test_viewer_start_no_browser(ps_mock: PSMock, exec_main: ExecMain) -> None:
     with ps_mock(launches=True), patch.object(time, "sleep") as mock_sleep:
-        exec_main("viewer", "start", "--no-open-browser")
+        exec_main("viewer", "start")
     mock_sleep.assert_not_called()
 
 

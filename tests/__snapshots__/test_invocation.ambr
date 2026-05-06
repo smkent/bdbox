@@ -389,23 +389,27 @@
 # ---
 # name: test_module_class_model[mono_model-help]
   '''
-  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-  ╭─ options ────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit        │
-  │ --a FLOAT                 (default: 2.5)                         │
-  │ --b INT                   (default: 3)                           │
-  │ --c 1 <= INT <= 10        (default: 5)                           │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
-  ╰──────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────────────╮
-  │ (default: run)                                                   │
-  │   • run                   Run the model.                         │
-  │   • export                Export geometry to a STEP or STL file. │
-  │   • view                  View model geometry.                   │
-  │   • viewer                Viewer control                         │
-  │   • version               Show bdbox version and exit            │
-  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit          │
+  │ --a FLOAT    (default: 2.5)                           │
+  │ --b INT      (default: 3)                             │
+  │ --c 1 <= INT <= 10                                    │
+  │              (default: 5)                             │
+  │ --d 1.0 <= FLOAT <= 10.0                              │
+  │              (default: 5.0)                           │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM} │
+  │              (default: TRANSPARENT_ALUMINUM)          │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run      Run the model.                           │
+  │   • export   Export geometry to a STEP or STL file.   │
+  │   • view     View model geometry.                     │
+  │   • viewer   Viewer control                           │
+  │   • version  Show bdbox version and exit              │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_class_model[mono_model-render]
@@ -416,23 +420,27 @@
 # ---
 # name: test_module_class_model[mono_params-help]
   '''
-  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-  ╭─ options ────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit        │
-  │ --a FLOAT                 (default: 2.5)                         │
-  │ --b INT                   (default: 3)                           │
-  │ --c 1 <= INT <= 10        (default: 5)                           │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
-  ╰──────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────────────╮
-  │ (default: run)                                                   │
-  │   • run                   Run the model.                         │
-  │   • export                Export geometry to a STEP or STL file. │
-  │   • view                  View model geometry.                   │
-  │   • viewer                Viewer control                         │
-  │   • version               Show bdbox version and exit            │
-  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit          │
+  │ --a FLOAT    (default: 2.5)                           │
+  │ --b INT      (default: 3)                             │
+  │ --c 1 <= INT <= 10                                    │
+  │              (default: 5)                             │
+  │ --d 1.0 <= FLOAT <= 10.0                              │
+  │              (default: 5.0)                           │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM} │
+  │              (default: TRANSPARENT_ALUMINUM)          │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run      Run the model.                           │
+  │   • export   Export geometry to a STEP or STL file.   │
+  │   • view     View model geometry.                     │
+  │   • viewer   Viewer control                           │
+  │   • version  Show bdbox version and exit              │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_class_model[mono_params-render]
@@ -652,44 +660,52 @@
 # ---
 # name: test_module_models[tests.models.mono_model.models.model-help-embedded]
   '''
-  usage: MyModel [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: MyModel [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-  ╭─ options ────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit        │
-  │ --a FLOAT                 (default: 2.5)                         │
-  │ --b INT                   (default: 3)                           │
-  │ --c 1 <= INT <= 10        (default: 5)                           │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
-  ╰──────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────────────╮
-  │ (default: run)                                                   │
-  │   • run                   Run the model.                         │
-  │   • export                Export geometry to a STEP or STL file. │
-  │   • view                  View model geometry.                   │
-  │   • viewer                Viewer control                         │
-  │   • version               Show bdbox version and exit            │
-  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit          │
+  │ --a FLOAT    (default: 2.5)                           │
+  │ --b INT      (default: 3)                             │
+  │ --c 1 <= INT <= 10                                    │
+  │              (default: 5)                             │
+  │ --d 1.0 <= FLOAT <= 10.0                              │
+  │              (default: 5.0)                           │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM} │
+  │              (default: TRANSPARENT_ALUMINUM)          │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run      Run the model.                           │
+  │   • export   Export geometry to a STEP or STL file.   │
+  │   • view     View model geometry.                     │
+  │   • viewer   Viewer control                           │
+  │   • version  Show bdbox version and exit              │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_model.models.model-help-harness]
   '''
-  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-  ╭─ options ────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit        │
-  │ --a FLOAT                 (default: 2.5)                         │
-  │ --b INT                   (default: 3)                           │
-  │ --c 1 <= INT <= 10        (default: 5)                           │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
-  ╰──────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────────────╮
-  │ (default: run)                                                   │
-  │   • run                   Run the model.                         │
-  │   • export                Export geometry to a STEP or STL file. │
-  │   • view                  View model geometry.                   │
-  │   • viewer                Viewer control                         │
-  │   • version               Show bdbox version and exit            │
-  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit          │
+  │ --a FLOAT    (default: 2.5)                           │
+  │ --b INT      (default: 3)                             │
+  │ --c 1 <= INT <= 10                                    │
+  │              (default: 5)                             │
+  │ --d 1.0 <= FLOAT <= 10.0                              │
+  │              (default: 5.0)                           │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM} │
+  │              (default: TRANSPARENT_ALUMINUM)          │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run      Run the model.                           │
+  │   • export   Export geometry to a STEP or STL file.   │
+  │   • view     View model geometry.                     │
+  │   • viewer   Viewer control                           │
+  │   • version  Show bdbox version and exit              │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_model.models.model-render-embedded]
@@ -706,44 +722,52 @@
 # ---
 # name: test_module_models[tests.models.mono_params.models.model-help-embedded]
   '''
-  usage: model.py [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: model.py [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-  ╭─ options ────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit        │
-  │ --a FLOAT                 (default: 2.5)                         │
-  │ --b INT                   (default: 3)                           │
-  │ --c 1 <= INT <= 10        (default: 5)                           │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
-  ╰──────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────────────╮
-  │ (default: run)                                                   │
-  │   • run                   Run the model.                         │
-  │   • export                Export geometry to a STEP or STL file. │
-  │   • view                  View model geometry.                   │
-  │   • viewer                Viewer control                         │
-  │   • version               Show bdbox version and exit            │
-  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit          │
+  │ --a FLOAT    (default: 2.5)                           │
+  │ --b INT      (default: 3)                             │
+  │ --c 1 <= INT <= 10                                    │
+  │              (default: 5)                             │
+  │ --d 1.0 <= FLOAT <= 10.0                              │
+  │              (default: 5.0)                           │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM} │
+  │              (default: TRANSPARENT_ALUMINUM)          │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run      Run the model.                           │
+  │   • export   Export geometry to a STEP or STL file.   │
+  │   • view     View model geometry.                     │
+  │   • viewer   Viewer control                           │
+  │   • version  Show bdbox version and exit              │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_params.models.model-help-harness]
   '''
-  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-  ╭─ options ────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit        │
-  │ --a FLOAT                 (default: 2.5)                         │
-  │ --b INT                   (default: 3)                           │
-  │ --c 1 <= INT <= 10        (default: 5)                           │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                         │
-  ╰──────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────────────╮
-  │ (default: run)                                                   │
-  │   • run                   Run the model.                         │
-  │   • export                Export geometry to a STEP or STL file. │
-  │   • view                  View model geometry.                   │
-  │   • viewer                Viewer control                         │
-  │   • version               Show bdbox version and exit            │
-  ╰──────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit          │
+  │ --a FLOAT    (default: 2.5)                           │
+  │ --b INT      (default: 3)                             │
+  │ --c 1 <= INT <= 10                                    │
+  │              (default: 5)                             │
+  │ --d 1.0 <= FLOAT <= 10.0                              │
+  │              (default: 5.0)                           │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM} │
+  │              (default: TRANSPARENT_ALUMINUM)          │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run      Run the model.                           │
+  │   • export   Export geometry to a STEP or STL file.   │
+  │   • view     View model geometry.                     │
+  │   • viewer   Viewer control                           │
+  │   • version  Show bdbox version and exit              │
+  ╰───────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_params.models.model-render-embedded]

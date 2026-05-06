@@ -6,12 +6,14 @@ import atexit
 import os
 import sys
 import traceback
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, Any, TypeAlias
 
+from .actions.action import Action
 from .errors import MultipleModelsError
 from .geometry import show
 from .parameters.annotations import Annotater
+from .parameters.fields import Field
 from .parameters.parameters import Params
 from .parameters.state import run_state
 
@@ -98,9 +100,21 @@ class Model(Params):
         """
         atexit.unregister(Model._atexit_handler)
         run_state.ensure_module_filename(cls)
-        cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
-        show(cli_result.params.build())
-        run_state.act_once(cli_result.action)
+        try:
+            cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
+        finally:
+            run_state.module_dict = sys.modules["__main__"].__dict__
+        if run_state.action.mode != Action.Mode.HARNESS:
+            run_state.action = cli_result.action
+        with run_state.action.on_model_render():
+            run_state.apply_overrides(cli_result.params)
+            run_state.resolved_values = {
+                f.name: getattr(cli_result.params, f.name)
+                for f in fields(cli_result.params)
+                if Field.from_dataclass_field(f)
+            }
+            show(cli_result.params.build())
+            run_state.act_once()
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         object.__init_subclass__(**kwargs)

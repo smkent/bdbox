@@ -23,6 +23,8 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from dataclasses import Field as DCField
 
+    from bdbox.parameters.parameters import Params
+
 
 @pytest.mark.parametrize(
     ("factory", "field", "default"),
@@ -284,3 +286,126 @@ def test_preset_with_description() -> None:
 def test_preset_no_values() -> None:
     p = Preset("empty")
     assert p.values == {}
+
+
+@pytest.mark.parametrize(
+    ("field_value", "expected_schema"),
+    [
+        pytest.param(
+            Float(10.0, min=5.0, max=100.0, step=0.5, description="Width"),
+            {
+                "type": "number",
+                "default": 10.0,
+                "minimum": 5.0,
+                "maximum": 100.0,
+                "multipleOf": 0.5,
+                "description": "Width",
+                "x-format": "range",
+            },
+            id="float",
+        ),
+        pytest.param(
+            Float(10.0),
+            {
+                "type": "number",
+                "default": 10.0,
+            },
+            id="float_minimal",
+        ),
+        pytest.param(
+            Int(3, min=1, max=10, step=2, description="Count"),
+            {
+                "type": "number",
+                "default": 3,
+                "minimum": 1,
+                "maximum": 10,
+                "multipleOf": 2,
+                "description": "Count",
+                "x-format": "range",
+            },
+            id="int",
+        ),
+        pytest.param(
+            Int(3), {"type": "number", "default": 3}, id="int_minimal"
+        ),
+        pytest.param(
+            Bool(default=True),
+            {"type": "boolean", "default": True, "x-format": "checkbox"},
+            id="bool",
+        ),
+        pytest.param(
+            Bool(default=False, description="Enable feature"),
+            {
+                "type": "boolean",
+                "default": False,
+                "description": "Enable feature",
+                "x-format": "checkbox",
+            },
+            id="bool_with_description",
+        ),
+        pytest.param(
+            Str("hello"),
+            {"type": "string", "default": "hello"},
+            id="str_minimal",
+        ),
+        pytest.param(
+            Str("hello", min_length=3, max_length=10, description="Label"),
+            {
+                "type": "string",
+                "default": "hello",
+                "minLength": 3,
+                "maxLength": 10,
+                "description": "Label",
+            },
+            id="str_minimal",
+        ),
+        pytest.param(
+            Choice(4, [2, 4, 8]),
+            {"default": 4, "enum": [2, 4, 8], "type": "number"},
+            id="choice_ints",
+        ),
+        pytest.param(
+            Choice("solid", ["solid", "hollow"]),
+            {
+                "default": "solid",
+                "enum": ["solid", "hollow"],
+                "type": "string",
+            },
+            id="choice_strings",
+        ),
+    ],
+)
+def test_field_to_schema(
+    model_base: type[Params], field_value: Any, expected_schema: dict[str, Any]
+) -> None:
+    class T(model_base):  # ty: ignore[unsupported-base]
+        things = field_value
+
+    assert T().schema()["properties"]["things"] == expected_schema
+
+
+def test_preset_to_schema(model_base: type[Params]) -> None:
+    class T(model_base):  # ty: ignore[unsupported-base]
+        width: float = 10
+        count: int = 3
+        presets = (
+            Preset("small", width=5.0, count=1),
+            Preset("large", width=80.0, description="Full size"),
+        )
+
+    assert T.schema() == {
+        "properties": {
+            "count": {"default": 3, "type": "number"},
+            "width": {"default": 10, "type": "number"},
+        },
+        "type": "object",
+        "required": ["count", "width"],
+        "x-presets": [
+            {"name": "small", "values": {"count": 1, "width": 5.0}},
+            {
+                "description": "Full size",
+                "name": "large",
+                "values": {"width": 80.0},
+            },
+        ],
+    }

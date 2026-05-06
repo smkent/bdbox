@@ -1,0 +1,1151 @@
+# serializer version: 1
+# name: test_schema_complex[Model]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "count": {
+              "default": 0,
+              "type": "number"
+          },
+          "more_count": {
+              "default": 6,
+              "minimum": 2,
+              "maximum": 10,
+              "multipleOf": 2,
+              "type": "number",
+              "x-format": "range"
+          },
+          "nested": {
+              "default": {
+                  "point": {
+                      "x": 30.0,
+                      "y": 40.0
+                  },
+                  "nested": {
+                      "point": {
+                          "x": 0.0,
+                          "y": 0.0
+                      },
+                      "color": "purple",
+                      "maybe_color": "red",
+                      "kinda_color": "blue",
+                      "size": "small",
+                      "thing": 4.4,
+                      "other_thing": 5
+                  },
+                  "several": []
+              },
+              "type": "object",
+              "properties": {
+                  "point": {
+                      "default": {
+                          "x": 0.0,
+                          "y": 0.0
+                      },
+                      "type": "object",
+                      "properties": {
+                          "x": {
+                              "default": 0.0,
+                              "type": "number"
+                          },
+                          "y": {
+                              "default": 0.0,
+                              "type": "number"
+                          }
+                      },
+                      "required": [
+                          "x",
+                          "y"
+                      ]
+                  },
+                  "nested": {
+                      "default": {
+                          "point": {
+                              "x": 0.0,
+                              "y": 0.0
+                          },
+                          "color": "purple",
+                          "maybe_color": "red",
+                          "kinda_color": "blue",
+                          "size": "small",
+                          "thing": 4.4,
+                          "other_thing": 5
+                      },
+                      "type": "object",
+                      "properties": {
+                          "point": {
+                              "default": {
+                                  "x": 0.0,
+                                  "y": 0.0
+                              },
+                              "type": "object",
+                              "properties": {
+                                  "x": {
+                                      "default": 0.0,
+                                      "type": "number"
+                                  },
+                                  "y": {
+                                      "default": 0.0,
+                                      "type": "number"
+                                  }
+                              },
+                              "required": [
+                                  "x",
+                                  "y"
+                              ]
+                          },
+                          "color": {
+                              "default": "purple",
+                              "enum": [
+                                  "red",
+                                  "blue",
+                                  "purple"
+                              ],
+                              "x-enumTitles": [
+                                  "RED",
+                                  "BLUE",
+                                  "PURPLE"
+                              ],
+                              "type": "string"
+                          },
+                          "maybe_color": {
+                              "default": "red",
+                              "oneOf": [
+                                  {
+                                      "enum": [
+                                          "red",
+                                          "blue",
+                                          "purple"
+                                      ],
+                                      "x-enumTitles": [
+                                          "RED",
+                                          "BLUE",
+                                          "PURPLE"
+                                      ],
+                                      "type": "string"
+                                  },
+                                  {
+                                      "type": "null"
+                                  }
+                              ]
+                          },
+                          "kinda_color": {
+                              "default": "blue",
+                              "oneOf": [
+                                  {
+                                      "enum": [
+                                          "red",
+                                          "blue",
+                                          "purple"
+                                      ],
+                                      "x-enumTitles": [
+                                          "RED",
+                                          "BLUE",
+                                          "PURPLE"
+                                      ],
+                                      "type": "string"
+                                  },
+                                  {
+                                      "type": "number"
+                                  },
+                                  {
+                                      "type": "null"
+                                  }
+                              ]
+                          },
+                          "size": {
+                              "default": "small",
+                              "oneOf": [
+                                  {
+                                      "type": "null"
+                                  },
+                                  {
+                                      "enum": [
+                                          "small",
+                                          "medium",
+                                          "large",
+                                          1
+                                      ]
+                                  }
+                              ]
+                          },
+                          "thing": {
+                              "default": 4.4,
+                              "oneOf": [
+                                  {
+                                      "type": "null"
+                                  },
+                                  {
+                                      "type": "string"
+                                  },
+                                  {
+                                      "type": "number"
+                                  },
+                                  {
+                                      "enum": [
+                                          1,
+                                          2
+                                      ]
+                                  }
+                              ]
+                          },
+                          "other_thing": {
+                              "default": 5,
+                              "oneOf": [
+                                  {
+                                      "type": "number"
+                                  },
+                                  {
+                                      "type": "string"
+                                  }
+                              ]
+                          }
+                      },
+                      "required": [
+                          "color",
+                          "kinda_color",
+                          "maybe_color",
+                          "other_thing",
+                          "point",
+                          "size",
+                          "thing"
+                      ]
+                  },
+                  "several": {
+                      "default": [],
+                      "type": "array",
+                      "items": {
+                          "type": "object",
+                          "properties": {
+                              "point": {
+                                  "default": {
+                                      "x": 0.0,
+                                      "y": 0.0
+                                  },
+                                  "type": "object",
+                                  "properties": {
+                                      "x": {
+                                          "default": 0.0,
+                                          "type": "number"
+                                      },
+                                      "y": {
+                                          "default": 0.0,
+                                          "type": "number"
+                                      }
+                                  },
+                                  "required": [
+                                      "x",
+                                      "y"
+                                  ]
+                              },
+                              "color": {
+                                  "default": "purple",
+                                  "enum": [
+                                      "red",
+                                      "blue",
+                                      "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
+                                  ],
+                                  "type": "string"
+                              },
+                              "maybe_color": {
+                                  "default": "red",
+                                  "oneOf": [
+                                      {
+                                          "enum": [
+                                              "red",
+                                              "blue",
+                                              "purple"
+                                          ],
+                                          "x-enumTitles": [
+                                              "RED",
+                                              "BLUE",
+                                              "PURPLE"
+                                          ],
+                                          "type": "string"
+                                      },
+                                      {
+                                          "type": "null"
+                                      }
+                                  ]
+                              },
+                              "kinda_color": {
+                                  "default": "blue",
+                                  "oneOf": [
+                                      {
+                                          "enum": [
+                                              "red",
+                                              "blue",
+                                              "purple"
+                                          ],
+                                          "x-enumTitles": [
+                                              "RED",
+                                              "BLUE",
+                                              "PURPLE"
+                                          ],
+                                          "type": "string"
+                                      },
+                                      {
+                                          "type": "number"
+                                      },
+                                      {
+                                          "type": "null"
+                                      }
+                                  ]
+                              },
+                              "size": {
+                                  "default": "small",
+                                  "oneOf": [
+                                      {
+                                          "type": "null"
+                                      },
+                                      {
+                                          "enum": [
+                                              "small",
+                                              "medium",
+                                              "large",
+                                              1
+                                          ]
+                                      }
+                                  ]
+                              },
+                              "thing": {
+                                  "default": 4.4,
+                                  "oneOf": [
+                                      {
+                                          "type": "null"
+                                      },
+                                      {
+                                          "type": "string"
+                                      },
+                                      {
+                                          "type": "number"
+                                      },
+                                      {
+                                          "enum": [
+                                              1,
+                                              2
+                                          ]
+                                      }
+                                  ]
+                              },
+                              "other_thing": {
+                                  "default": 5,
+                                  "oneOf": [
+                                      {
+                                          "type": "number"
+                                      },
+                                      {
+                                          "type": "string"
+                                      }
+                                  ]
+                              }
+                          },
+                          "required": [
+                              "color",
+                              "kinda_color",
+                              "maybe_color",
+                              "other_thing",
+                              "point",
+                              "size",
+                              "thing"
+                          ]
+                      }
+                  }
+              },
+              "required": [
+                  "nested",
+                  "point",
+                  "several"
+              ]
+          },
+          "point": {
+              "default": {
+                  "x": 10.0,
+                  "y": 20.0
+              },
+              "type": "object",
+              "properties": {
+                  "x": {
+                      "default": 0.0,
+                      "type": "number"
+                  },
+                  "y": {
+                      "default": 0.0,
+                      "type": "number"
+                  }
+              },
+              "required": [
+                  "x",
+                  "y"
+              ]
+          },
+          "top_several": {
+              "default": [],
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "point": {
+                          "default": {
+                              "x": 0.0,
+                              "y": 0.0
+                          },
+                          "type": "object",
+                          "properties": {
+                              "x": {
+                                  "default": 0.0,
+                                  "type": "number"
+                              },
+                              "y": {
+                                  "default": 0.0,
+                                  "type": "number"
+                              }
+                          },
+                          "required": [
+                              "x",
+                              "y"
+                          ]
+                      },
+                      "color": {
+                          "default": "purple",
+                          "enum": [
+                              "red",
+                              "blue",
+                              "purple"
+                          ],
+                          "x-enumTitles": [
+                              "RED",
+                              "BLUE",
+                              "PURPLE"
+                          ],
+                          "type": "string"
+                      },
+                      "maybe_color": {
+                          "default": "red",
+                          "oneOf": [
+                              {
+                                  "enum": [
+                                      "red",
+                                      "blue",
+                                      "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
+                                  ],
+                                  "type": "string"
+                              },
+                              {
+                                  "type": "null"
+                              }
+                          ]
+                      },
+                      "kinda_color": {
+                          "default": "blue",
+                          "oneOf": [
+                              {
+                                  "enum": [
+                                      "red",
+                                      "blue",
+                                      "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
+                                  ],
+                                  "type": "string"
+                              },
+                              {
+                                  "type": "number"
+                              },
+                              {
+                                  "type": "null"
+                              }
+                          ]
+                      },
+                      "size": {
+                          "default": "small",
+                          "oneOf": [
+                              {
+                                  "type": "null"
+                              },
+                              {
+                                  "enum": [
+                                      "small",
+                                      "medium",
+                                      "large",
+                                      1
+                                  ]
+                              }
+                          ]
+                      },
+                      "thing": {
+                          "default": 4.4,
+                          "oneOf": [
+                              {
+                                  "type": "null"
+                              },
+                              {
+                                  "type": "string"
+                              },
+                              {
+                                  "type": "number"
+                              },
+                              {
+                                  "enum": [
+                                      1,
+                                      2
+                                  ]
+                              }
+                          ]
+                      },
+                      "other_thing": {
+                          "default": 5,
+                          "oneOf": [
+                              {
+                                  "type": "number"
+                              },
+                              {
+                                  "type": "string"
+                              }
+                          ]
+                      }
+                  },
+                  "required": [
+                      "color",
+                      "kinda_color",
+                      "maybe_color",
+                      "other_thing",
+                      "point",
+                      "size",
+                      "thing"
+                  ]
+              }
+          }
+      },
+      "required": [
+          "count",
+          "more_count",
+          "nested",
+          "point",
+          "top_several"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_schema_complex[Params]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "count": {
+              "default": 0,
+              "type": "number"
+          },
+          "more_count": {
+              "default": 6,
+              "minimum": 2,
+              "maximum": 10,
+              "multipleOf": 2,
+              "type": "number",
+              "x-format": "range"
+          },
+          "nested": {
+              "default": {
+                  "point": {
+                      "x": 30.0,
+                      "y": 40.0
+                  },
+                  "nested": {
+                      "point": {
+                          "x": 0.0,
+                          "y": 0.0
+                      },
+                      "color": "purple",
+                      "maybe_color": "red",
+                      "kinda_color": "blue",
+                      "size": "small",
+                      "thing": 4.4,
+                      "other_thing": 5
+                  },
+                  "several": []
+              },
+              "type": "object",
+              "properties": {
+                  "point": {
+                      "default": {
+                          "x": 0.0,
+                          "y": 0.0
+                      },
+                      "type": "object",
+                      "properties": {
+                          "x": {
+                              "default": 0.0,
+                              "type": "number"
+                          },
+                          "y": {
+                              "default": 0.0,
+                              "type": "number"
+                          }
+                      },
+                      "required": [
+                          "x",
+                          "y"
+                      ]
+                  },
+                  "nested": {
+                      "default": {
+                          "point": {
+                              "x": 0.0,
+                              "y": 0.0
+                          },
+                          "color": "purple",
+                          "maybe_color": "red",
+                          "kinda_color": "blue",
+                          "size": "small",
+                          "thing": 4.4,
+                          "other_thing": 5
+                      },
+                      "type": "object",
+                      "properties": {
+                          "point": {
+                              "default": {
+                                  "x": 0.0,
+                                  "y": 0.0
+                              },
+                              "type": "object",
+                              "properties": {
+                                  "x": {
+                                      "default": 0.0,
+                                      "type": "number"
+                                  },
+                                  "y": {
+                                      "default": 0.0,
+                                      "type": "number"
+                                  }
+                              },
+                              "required": [
+                                  "x",
+                                  "y"
+                              ]
+                          },
+                          "color": {
+                              "default": "purple",
+                              "enum": [
+                                  "red",
+                                  "blue",
+                                  "purple"
+                              ],
+                              "x-enumTitles": [
+                                  "RED",
+                                  "BLUE",
+                                  "PURPLE"
+                              ],
+                              "type": "string"
+                          },
+                          "maybe_color": {
+                              "default": "red",
+                              "oneOf": [
+                                  {
+                                      "enum": [
+                                          "red",
+                                          "blue",
+                                          "purple"
+                                      ],
+                                      "x-enumTitles": [
+                                          "RED",
+                                          "BLUE",
+                                          "PURPLE"
+                                      ],
+                                      "type": "string"
+                                  },
+                                  {
+                                      "type": "null"
+                                  }
+                              ]
+                          },
+                          "kinda_color": {
+                              "default": "blue",
+                              "oneOf": [
+                                  {
+                                      "enum": [
+                                          "red",
+                                          "blue",
+                                          "purple"
+                                      ],
+                                      "x-enumTitles": [
+                                          "RED",
+                                          "BLUE",
+                                          "PURPLE"
+                                      ],
+                                      "type": "string"
+                                  },
+                                  {
+                                      "type": "number"
+                                  },
+                                  {
+                                      "type": "null"
+                                  }
+                              ]
+                          },
+                          "size": {
+                              "default": "small",
+                              "oneOf": [
+                                  {
+                                      "type": "null"
+                                  },
+                                  {
+                                      "enum": [
+                                          "small",
+                                          "medium",
+                                          "large",
+                                          1
+                                      ]
+                                  }
+                              ]
+                          },
+                          "thing": {
+                              "default": 4.4,
+                              "oneOf": [
+                                  {
+                                      "type": "null"
+                                  },
+                                  {
+                                      "type": "string"
+                                  },
+                                  {
+                                      "type": "number"
+                                  },
+                                  {
+                                      "enum": [
+                                          1,
+                                          2
+                                      ]
+                                  }
+                              ]
+                          },
+                          "other_thing": {
+                              "default": 5,
+                              "oneOf": [
+                                  {
+                                      "type": "number"
+                                  },
+                                  {
+                                      "type": "string"
+                                  }
+                              ]
+                          }
+                      },
+                      "required": [
+                          "color",
+                          "kinda_color",
+                          "maybe_color",
+                          "other_thing",
+                          "point",
+                          "size",
+                          "thing"
+                      ]
+                  },
+                  "several": {
+                      "default": [],
+                      "type": "array",
+                      "items": {
+                          "type": "object",
+                          "properties": {
+                              "point": {
+                                  "default": {
+                                      "x": 0.0,
+                                      "y": 0.0
+                                  },
+                                  "type": "object",
+                                  "properties": {
+                                      "x": {
+                                          "default": 0.0,
+                                          "type": "number"
+                                      },
+                                      "y": {
+                                          "default": 0.0,
+                                          "type": "number"
+                                      }
+                                  },
+                                  "required": [
+                                      "x",
+                                      "y"
+                                  ]
+                              },
+                              "color": {
+                                  "default": "purple",
+                                  "enum": [
+                                      "red",
+                                      "blue",
+                                      "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
+                                  ],
+                                  "type": "string"
+                              },
+                              "maybe_color": {
+                                  "default": "red",
+                                  "oneOf": [
+                                      {
+                                          "enum": [
+                                              "red",
+                                              "blue",
+                                              "purple"
+                                          ],
+                                          "x-enumTitles": [
+                                              "RED",
+                                              "BLUE",
+                                              "PURPLE"
+                                          ],
+                                          "type": "string"
+                                      },
+                                      {
+                                          "type": "null"
+                                      }
+                                  ]
+                              },
+                              "kinda_color": {
+                                  "default": "blue",
+                                  "oneOf": [
+                                      {
+                                          "enum": [
+                                              "red",
+                                              "blue",
+                                              "purple"
+                                          ],
+                                          "x-enumTitles": [
+                                              "RED",
+                                              "BLUE",
+                                              "PURPLE"
+                                          ],
+                                          "type": "string"
+                                      },
+                                      {
+                                          "type": "number"
+                                      },
+                                      {
+                                          "type": "null"
+                                      }
+                                  ]
+                              },
+                              "size": {
+                                  "default": "small",
+                                  "oneOf": [
+                                      {
+                                          "type": "null"
+                                      },
+                                      {
+                                          "enum": [
+                                              "small",
+                                              "medium",
+                                              "large",
+                                              1
+                                          ]
+                                      }
+                                  ]
+                              },
+                              "thing": {
+                                  "default": 4.4,
+                                  "oneOf": [
+                                      {
+                                          "type": "null"
+                                      },
+                                      {
+                                          "type": "string"
+                                      },
+                                      {
+                                          "type": "number"
+                                      },
+                                      {
+                                          "enum": [
+                                              1,
+                                              2
+                                          ]
+                                      }
+                                  ]
+                              },
+                              "other_thing": {
+                                  "default": 5,
+                                  "oneOf": [
+                                      {
+                                          "type": "number"
+                                      },
+                                      {
+                                          "type": "string"
+                                      }
+                                  ]
+                              }
+                          },
+                          "required": [
+                              "color",
+                              "kinda_color",
+                              "maybe_color",
+                              "other_thing",
+                              "point",
+                              "size",
+                              "thing"
+                          ]
+                      }
+                  }
+              },
+              "required": [
+                  "nested",
+                  "point",
+                  "several"
+              ]
+          },
+          "point": {
+              "default": {
+                  "x": 10.0,
+                  "y": 20.0
+              },
+              "type": "object",
+              "properties": {
+                  "x": {
+                      "default": 0.0,
+                      "type": "number"
+                  },
+                  "y": {
+                      "default": 0.0,
+                      "type": "number"
+                  }
+              },
+              "required": [
+                  "x",
+                  "y"
+              ]
+          },
+          "top_several": {
+              "default": [],
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "point": {
+                          "default": {
+                              "x": 0.0,
+                              "y": 0.0
+                          },
+                          "type": "object",
+                          "properties": {
+                              "x": {
+                                  "default": 0.0,
+                                  "type": "number"
+                              },
+                              "y": {
+                                  "default": 0.0,
+                                  "type": "number"
+                              }
+                          },
+                          "required": [
+                              "x",
+                              "y"
+                          ]
+                      },
+                      "color": {
+                          "default": "purple",
+                          "enum": [
+                              "red",
+                              "blue",
+                              "purple"
+                          ],
+                          "x-enumTitles": [
+                              "RED",
+                              "BLUE",
+                              "PURPLE"
+                          ],
+                          "type": "string"
+                      },
+                      "maybe_color": {
+                          "default": "red",
+                          "oneOf": [
+                              {
+                                  "enum": [
+                                      "red",
+                                      "blue",
+                                      "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
+                                  ],
+                                  "type": "string"
+                              },
+                              {
+                                  "type": "null"
+                              }
+                          ]
+                      },
+                      "kinda_color": {
+                          "default": "blue",
+                          "oneOf": [
+                              {
+                                  "enum": [
+                                      "red",
+                                      "blue",
+                                      "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
+                                  ],
+                                  "type": "string"
+                              },
+                              {
+                                  "type": "number"
+                              },
+                              {
+                                  "type": "null"
+                              }
+                          ]
+                      },
+                      "size": {
+                          "default": "small",
+                          "oneOf": [
+                              {
+                                  "type": "null"
+                              },
+                              {
+                                  "enum": [
+                                      "small",
+                                      "medium",
+                                      "large",
+                                      1
+                                  ]
+                              }
+                          ]
+                      },
+                      "thing": {
+                          "default": 4.4,
+                          "oneOf": [
+                              {
+                                  "type": "null"
+                              },
+                              {
+                                  "type": "string"
+                              },
+                              {
+                                  "type": "number"
+                              },
+                              {
+                                  "enum": [
+                                      1,
+                                      2
+                                  ]
+                              }
+                          ]
+                      },
+                      "other_thing": {
+                          "default": 5,
+                          "oneOf": [
+                              {
+                                  "type": "number"
+                              },
+                              {
+                                  "type": "string"
+                              }
+                          ]
+                      }
+                  },
+                  "required": [
+                      "color",
+                      "kinda_color",
+                      "maybe_color",
+                      "other_thing",
+                      "point",
+                      "size",
+                      "thing"
+                  ]
+              }
+          }
+      },
+      "required": [
+          "count",
+          "more_count",
+          "nested",
+          "point",
+          "top_several"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_unstructure_complex[Model]
+  '''
+  {
+      "count": 0,
+      "more_count": 6,
+      "nested": {
+          "point": {
+              "x": 30.0,
+              "y": 40.0
+          },
+          "nested": {
+              "point": {
+                  "x": 0.0,
+                  "y": 0.0
+              },
+              "color": "purple",
+              "maybe_color": "red",
+              "kinda_color": "blue",
+              "size": "small",
+              "thing": 4.4,
+              "other_thing": 5
+          },
+          "several": []
+      },
+      "point": {
+          "x": 10.0,
+          "y": 20.0
+      },
+      "top_several": []
+  }
+  '''
+# ---
+# name: test_unstructure_complex[Params]
+  '''
+  {
+      "count": 0,
+      "more_count": 6,
+      "nested": {
+          "point": {
+              "x": 30.0,
+              "y": 40.0
+          },
+          "nested": {
+              "point": {
+                  "x": 0.0,
+                  "y": 0.0
+              },
+              "color": "purple",
+              "maybe_color": "red",
+              "kinda_color": "blue",
+              "size": "small",
+              "thing": 4.4,
+              "other_thing": 5
+          },
+          "several": []
+      },
+      "point": {
+          "x": 10.0,
+          "y": 20.0
+      },
+      "top_several": []
+  }
+  '''
+# ---

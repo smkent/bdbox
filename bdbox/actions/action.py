@@ -4,14 +4,19 @@ from __future__ import annotations
 
 import subprocess
 import sys
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, ClassVar, Protocol
 
 import tyro  # noqa: TC002
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
+    from collections.abc import Iterator, Sequence
+    from pathlib import Path
+    from threading import Event
+
+    from bdbox.parameters.parameters import Params
 
 
 @dataclass
@@ -25,11 +30,15 @@ class Action:
     mode: ClassVar[Action.Mode] = Mode.EMBEDDED
     watch: tyro.conf.Fixed[bool] = field(default=False, kw_only=True)
 
+    class ModelHarnessProtocol(Protocol):
+        model: Path | str
+        params_argv: Sequence[str]
+        model_params_cls: type[Params] | None
+        rerender_event: Event
+
     @dataclass
     class HarnessResult:
-        all_presets: bool = False
-        preset_argv: Callable[[str | None], Sequence[str]] | None = None
-        preset_action: Callable[[str | None], Action] | None = None
+        runs: Sequence[tuple[Sequence[str | Path], Action]]
 
     BeforeHarnessResult = HarnessResult | None
 
@@ -37,11 +46,18 @@ class Action:
         """Execute this action with the given geometry."""
         raise NotImplementedError
 
-    def before_harness(self) -> Action.BeforeHarnessResult:
+    def before_harness(
+        self, args: Action.ModelHarnessProtocol
+    ) -> Action.BeforeHarnessResult:
         """Executed prior to running the harness."""
 
-    def before_model(self) -> None:
-        """Executed prior to running a model."""
+    @contextmanager
+    def on_model_render(self) -> Iterator[None]:
+        """Executed around model run."""
+        yield
+
+    def watch_end(self) -> None:
+        """Executed after the harness finishes."""
 
 
 @dataclass
@@ -61,11 +77,16 @@ class ModelAction(Action):
 
 @dataclass
 class CommandAction(Action):
-    def before_harness(self) -> Action.BeforeHarnessResult:
+    def before_harness(
+        self,
+        args: Action.ModelHarnessProtocol,  # noqa: ARG002
+    ) -> Action.BeforeHarnessResult:
         self()
 
-    def before_model(self) -> None:
+    @contextmanager
+    def on_model_render(self) -> Iterator[None]:
         self()
+        yield
 
     def __call__(self) -> None:
         sys.exit(0)

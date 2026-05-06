@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Annotated
+
+import tyro
 
 from bdbox.viewer import ViewerManager
 
@@ -11,8 +14,24 @@ from .action import CommandAction
 class Start(CommandAction):
     """Start the OCP CAD Viewer."""
 
-    restart: bool = False
-    open_browser: bool = True
+    restart: Annotated[
+        bool,
+        tyro.conf.arg(
+            aliases=("-r",),
+            help="Restart OCP CAD Viewer if already running",
+            help_behavior_hint="(default: no)",
+        ),
+        tyro.conf.FlagCreatePairsOff,
+    ] = False
+    open_browser: Annotated[
+        bool,
+        tyro.conf.arg(
+            aliases=("-b",),
+            help="Open browser automatically",
+            help_behavior_hint="(default: no)",
+        ),
+        tyro.conf.FlagCreatePairsOff,
+    ] = False
 
     def __call__(self) -> None:
         ViewerManager(
