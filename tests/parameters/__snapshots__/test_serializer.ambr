@@ -102,6 +102,11 @@
                                   "blue",
                                   "purple"
                               ],
+                              "x-enumTitles": [
+                                  "RED",
+                                  "BLUE",
+                                  "PURPLE"
+                              ],
                               "type": "string"
                           },
                           "maybe_color": {
@@ -112,6 +117,11 @@
                                           "red",
                                           "blue",
                                           "purple"
+                                      ],
+                                      "x-enumTitles": [
+                                          "RED",
+                                          "BLUE",
+                                          "PURPLE"
                                       ],
                                       "type": "string"
                                   },
@@ -128,6 +138,11 @@
                                           "red",
                                           "blue",
                                           "purple"
+                                      ],
+                                      "x-enumTitles": [
+                                          "RED",
+                                          "BLUE",
+                                          "PURPLE"
                                       ],
                                       "type": "string"
                                   },
@@ -231,6 +246,11 @@
                                       "blue",
                                       "purple"
                                   ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
+                                  ],
                                   "type": "string"
                               },
                               "maybe_color": {
@@ -241,6 +261,11 @@
                                               "red",
                                               "blue",
                                               "purple"
+                                          ],
+                                          "x-enumTitles": [
+                                              "RED",
+                                              "BLUE",
+                                              "PURPLE"
                                           ],
                                           "type": "string"
                                       },
@@ -257,6 +282,11 @@
                                               "red",
                                               "blue",
                                               "purple"
+                                          ],
+                                          "x-enumTitles": [
+                                              "RED",
+                                              "BLUE",
+                                              "PURPLE"
                                           ],
                                           "type": "string"
                                       },
@@ -389,6 +419,11 @@
                               "blue",
                               "purple"
                           ],
+                          "x-enumTitles": [
+                              "RED",
+                              "BLUE",
+                              "PURPLE"
+                          ],
                           "type": "string"
                       },
                       "maybe_color": {
@@ -399,6 +434,11 @@
                                       "red",
                                       "blue",
                                       "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
                                   ],
                                   "type": "string"
                               },
@@ -415,6 +455,11 @@
                                       "red",
                                       "blue",
                                       "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
                                   ],
                                   "type": "string"
                               },
@@ -600,6 +645,11 @@
                                   "blue",
                                   "purple"
                               ],
+                              "x-enumTitles": [
+                                  "RED",
+                                  "BLUE",
+                                  "PURPLE"
+                              ],
                               "type": "string"
                           },
                           "maybe_color": {
@@ -610,6 +660,11 @@
                                           "red",
                                           "blue",
                                           "purple"
+                                      ],
+                                      "x-enumTitles": [
+                                          "RED",
+                                          "BLUE",
+                                          "PURPLE"
                                       ],
                                       "type": "string"
                                   },
@@ -626,6 +681,11 @@
                                           "red",
                                           "blue",
                                           "purple"
+                                      ],
+                                      "x-enumTitles": [
+                                          "RED",
+                                          "BLUE",
+                                          "PURPLE"
                                       ],
                                       "type": "string"
                                   },
@@ -729,6 +789,11 @@
                                       "blue",
                                       "purple"
                                   ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
+                                  ],
                                   "type": "string"
                               },
                               "maybe_color": {
@@ -739,6 +804,11 @@
                                               "red",
                                               "blue",
                                               "purple"
+                                          ],
+                                          "x-enumTitles": [
+                                              "RED",
+                                              "BLUE",
+                                              "PURPLE"
                                           ],
                                           "type": "string"
                                       },
@@ -755,6 +825,11 @@
                                               "red",
                                               "blue",
                                               "purple"
+                                          ],
+                                          "x-enumTitles": [
+                                              "RED",
+                                              "BLUE",
+                                              "PURPLE"
                                           ],
                                           "type": "string"
                                       },
@@ -887,6 +962,11 @@
                               "blue",
                               "purple"
                           ],
+                          "x-enumTitles": [
+                              "RED",
+                              "BLUE",
+                              "PURPLE"
+                          ],
                           "type": "string"
                       },
                       "maybe_color": {
@@ -897,6 +977,11 @@
                                       "red",
                                       "blue",
                                       "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
                                   ],
                                   "type": "string"
                               },
@@ -913,6 +998,11 @@
                                       "red",
                                       "blue",
                                       "purple"
+                                  ],
+                                  "x-enumTitles": [
+                                      "RED",
+                                      "BLUE",
+                                      "PURPLE"
                                   ],
                                   "type": "string"
                               },

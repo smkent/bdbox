@@ -190,7 +190,10 @@ class Serializer:
             if isinstance(hint, type) and issubclass(hint, Enum):
                 return (
                     schema
-                    | {"enum": [e.value for e in hint]}
+                    | {
+                        "enum": [e.value for e in hint],
+                        "x-enumTitles": [e.name for e in hint],
+                    }
                     | self._hint_to_schema(type(next(iter(hint)).value))
                 )
 
