@@ -128,9 +128,12 @@ class Params(CLI, metaclass=ParamsType):
                     " a Params subclass is already defined in this script"
                 )
             run_state.model_subclasses.append(cls)
-            cli_result = cls.cli_config().instance_from_cli(
-                prog=Path(sys.argv[0]).name
-            )
+            try:
+                cli_result = cls.cli_config().instance_from_cli(
+                    prog=Path(sys.argv[0]).name
+                )
+            finally:
+                run_state.module_dict = sys.modules["__main__"].__dict__
             if run_state.action.mode != Action.Mode.HARNESS:
                 run_state.action = cli_result.action
             run_state.enter_on_model_render()

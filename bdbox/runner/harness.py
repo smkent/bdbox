@@ -21,7 +21,8 @@ from bdbox.parameters.state import run_state
 
 from .locator import ModelLocator
 from .runner import ModelRunner
-from .utils import Build123dStub
+from .shims import MainModule
+from .utils import Build123dStub, PatchModule
 from .watcher import ModelWatcher
 
 if TYPE_CHECKING:
@@ -81,11 +82,17 @@ class ModelHarness(ModelLocator):
         super().__post_init__(model_argv or sys.argv[1:].copy())
 
     def __call__(self) -> None:
-        cli_result = (
+        cli_cls = (
             ((self.model_params_cls or CLI).cli_config())
             if self.maybe_model
             else self.HarnessCLI
-        ).instance_from_cli(prog=self.prog, args=self.argv)
+        )
+        main_module = MainModule()
+        main_module.__dict__.update(run_state.module_dict)
+        with PatchModule("__main__", main_module, auto=True):
+            cli_result = cli_cls.instance_from_cli(
+                prog=self.prog, args=self.argv
+            )
         hook_result = cli_result.action.before_harness(self)
         if not self.maybe_model:
             return

@@ -40,7 +40,7 @@
     --sub.c 0 <= FLOAT <= 2000.0                            
                     C! (default: 25.0)                      
     --sub.do-the-thing, --sub.no-do-the-thing               
-                    (default: False)                        
+                    Zhu Li, do the thing! (default: False)  
     --sub.do-another-thing, --sub.no-do-another-thing       
                     Another thing? (default: False)         
                                                             
@@ -56,7 +56,7 @@
     --sub2.c 0 <= FLOAT <= 2000.0                           
                     C! (default: 3)                         
     --sub2.do-the-thing, --sub2.no-do-the-thing             
-                    (default: False)                        
+                    Zhu Li, do the thing! (default: False)  
     --sub2.do-another-thing, --sub2.no-do-another-thing     
                     Another thing? (default: False)         
                                                             
@@ -143,7 +143,7 @@
     --sub.c 0 <= FLOAT <= 2000.0                            
                     C! (default: 25.0)                      
     --sub.do-the-thing, --sub.no-do-the-thing               
-                    (default: False)                        
+                    Zhu Li, do the thing! (default: False)  
     --sub.do-another-thing, --sub.no-do-another-thing       
                     Another thing? (default: False)         
                                                             
@@ -159,7 +159,7 @@
     --sub2.c 0 <= FLOAT <= 2000.0                           
                     C! (default: 3)                         
     --sub2.do-the-thing, --sub2.no-do-the-thing             
-                    (default: False)                        
+                    Zhu Li, do the thing! (default: False)  
     --sub2.do-another-thing, --sub2.no-do-another-thing     
                     Another thing? (default: False)         
                                                             
@@ -299,25 +299,29 @@
 # ---
 # name: test_harness_usage_module[mono_model]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -326,25 +330,29 @@
 # ---
 # name: test_harness_usage_module[mono_model_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -353,25 +361,29 @@
 # ---
 # name: test_harness_usage_module[mono_params]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -380,25 +392,29 @@
 # ---
 # name: test_harness_usage_module[mono_params_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -621,25 +637,29 @@
 # ---
 # name: test_successive_harness_success[mono_model]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -648,25 +668,29 @@
 # ---
 # name: test_successive_harness_success[mono_model].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -675,25 +699,29 @@
 # ---
 # name: test_successive_harness_success[mono_model_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -702,25 +730,29 @@
 # ---
 # name: test_successive_harness_success[mono_model_class].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -729,25 +761,29 @@
 # ---
 # name: test_successive_harness_success[mono_params]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -756,25 +792,29 @@
 # ---
 # name: test_successive_harness_success[mono_params].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -783,25 +823,29 @@
 # ---
 # name: test_successive_harness_success[mono_params_class]
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---
@@ -810,25 +854,29 @@
 # ---
 # name: test_successive_harness_success[mono_params_class].2
   '''
-  usage: pytest [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: pytest [-h] [OPTIONS] [{run,export,view,viewer,version}]
   
-   options                                                            
-   ------------------------------------------------------------------ 
-    -h, --help                show this help message and exit         
-    --a FLOAT                 (default: 2.5)                          
-    --b INT                   (default: 3)                            
-    --c 1 <= INT <= 10        (default: 5)                            
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
-                                                                      
-   subcommands                                                        
-   ------------------------------------------------------------------ 
-    (default: run)                                                    
-      • run                   Run the model.                          
-      • export                Export geometry to a STEP or STL file.  
-      • view                  View model geometry.                    
-      • viewer                Viewer control                          
-      • version               Show bdbox version and exit             
-                                                                      
+   options                                                 
+   ------------------------------------------------------- 
+    -h, --help   show this help message and exit           
+    --a FLOAT    (default: 2.5)                            
+    --b INT      (default: 3)                              
+    --c 1 <= INT <= 10                                     
+                 (default: 5)                              
+    --d 1.0 <= FLOAT <= 10.0                               
+                 (default: 5.0)                            
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  
+                 (default: TRANSPARENT_ALUMINUM)           
+                                                           
+   subcommands                                             
+   ------------------------------------------------------- 
+    (default: run)                                         
+      • run      Run the model.                            
+      • export   Export geometry to a STEP or STL file.    
+      • view     View model geometry.                      
+      • viewer   Viewer control                            
+      • version  Show bdbox version and exit               
+                                                           
   
   '''
 # ---

@@ -22,6 +22,9 @@ class RunState:
     filename: str | None = None
     module_name: str = "__main__"
     class_name: str | None = None
+    module_dict: dict[str, Any] = field(
+        default_factory=dict, init=False, repr=False
+    )
     model_subclasses: list[Any] = field(default_factory=list)
     action: Action = field(default_factory=RunAction)
     acted: bool = False

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from enum import Enum, auto
 from typing import Any
 
 from tests.models.utils import build123d
@@ -10,11 +13,18 @@ from bdbox import Float, Int, Model, show  # noqa: E402
 from tests.models.mono_model.misc.constants import Defaults  # noqa: E402
 
 
+class Material(Enum):
+    TRANSPARENT_ALUMINUM = auto()
+    NEUTRONIUM = auto()
+    DURANIUM = auto()
+
+
 class MyModel(Model):
     a: float = Defaults.A
     b: int = Defaults.B
     c = Int(Defaults.C, min=1, max=10)
     d = Float(Defaults.D, min=1.0, max=10.0)
+    material: Material = Material.TRANSPARENT_ALUMINUM
 
     def build(self) -> Any:
         b1 = Box(self.a, self.b, self.c)

@@ -100,7 +100,10 @@ class Model(Params):
         """
         atexit.unregister(Model._atexit_handler)
         run_state.ensure_module_filename(cls)
-        cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
+        try:
+            cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
+        finally:
+            run_state.module_dict = sys.modules["__main__"].__dict__
         if run_state.action.mode != Action.Mode.HARNESS:
             run_state.action = cli_result.action
         with run_state.action.on_model_render():
