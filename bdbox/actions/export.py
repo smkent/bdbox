@@ -42,7 +42,9 @@ class ExportAction(ModelAction):
                 "Export each preset to a separate file"
                 " in the output directory."
             ),
+            help_behavior_hint="(default: no)",
         ),
+        tyro.conf.FlagCreatePairsOff,
     ] = field(default=False, kw_only=True)
 
     format: Annotated[
@@ -55,6 +57,7 @@ class ExportAction(ModelAction):
         tyro.conf.arg(
             aliases=["-n"],
             help=("Include no-preset render with -a/--all-presets."),
+            help_behavior_hint="(default: yes)",
         ),
         tyro.conf.FlagCreatePairsOff,
     ] = field(default=True, kw_only=True)

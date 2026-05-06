@@ -31,11 +31,32 @@ if TYPE_CHECKING:
 class ViewAction(ModelAction):
     """View model geometry in OCP CAD Viewer."""
 
-    watch: bool = True
-    start_viewer: bool = True
-    restart_viewer: bool = False
-    open_browser: bool = True
-
+    watch: Annotated[
+        bool,
+        tyro.conf.arg(
+            help="Watch and rerender model on changes",
+            help_behavior_hint="(default: yes)",
+        ),
+        tyro.conf.FlagCreatePairsOff,
+    ] = True
+    restart_viewer: Annotated[
+        bool,
+        tyro.conf.arg(
+            aliases=("-r",),
+            help="Restart OCP CAD Viewer if already running",
+            help_behavior_hint="(default: no)",
+        ),
+        tyro.conf.FlagCreatePairsOff,
+    ] = False
+    open_browser: Annotated[
+        bool,
+        tyro.conf.arg(
+            aliases=("-b",),
+            help="Open browser automatically",
+            help_behavior_hint="(default: no)",
+        ),
+        tyro.conf.FlagCreatePairsOff,
+    ] = False
     export: Annotated[
         Path | None,
         tyro.conf.arg(
@@ -63,9 +84,6 @@ class ViewAction(ModelAction):
     def before_harness(
         self, args: ModelAction.ModelHarnessProtocol
     ) -> ModelAction.BeforeHarnessResult:
-        if not self.start_viewer:
-            return
-
         viewer = ViewerManager(restart=self.restart_viewer, open_browser=False)
         viewer.start()
         self.server_manager = ServerManager(
