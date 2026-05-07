@@ -1,6 +1,6 @@
 [project]
 site_name = "bdbox"
-site_description = "Parametric configuration and tooling for build123d models."
+site_description = "Interactive parametric build123d model development: live parameter panel, named presets, automatic CLI, and one-command export."
 site_author = "Stephen Kent"
 site_url = "https://smkent.github.io/bdbox"
 repo_url = "https://github.com/smkent/bdbox"
@@ -10,6 +10,7 @@ copyright = "&copy; 2026 Stephen Kent"
 nav = [
   { "About" = [
     "index.md",
+    "background.md",
     "license.md",
     "contributing.md",
   ] },
@@ -24,6 +25,7 @@ nav = [
       "parameters/fields.md",
       "parameters/presets.md",
       "parameters/cli.md",
+      "parameters/panel.md",
     ] },
   ] },
   { "API Reference" = [
@@ -136,6 +138,8 @@ alternate_style = true
 
 [project.markdown_extensions.pymdownx.tasklist]
 custom_checkbox = true
+
+[project.markdown_extensions.zensical.extensions.glightbox]
 
 # ----------------------------------------------------------------------------
 # Plugins

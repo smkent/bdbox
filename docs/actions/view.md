@@ -5,9 +5,14 @@ icon: lucide/eye
 
 # View
 
-The `view` action renders and displays your model in your browser using
-[OCP CAD Viewer][ocp_vscode], started automatically. Models being viewed
-automatically re-render when model files are saved.
+The `view` action provides a web UI for displaying rendered models in your
+browser using [OCP CAD Viewer][ocp_vscode]. The UI server is started
+automatically. Models being viewed automatically re-render when model files are
+saved.
+
+With the `view` command running, the UI is available at:
+
+[**http://localhost:4040**](http://localhost:4040){ .md-button .md-button--primary target="_blank" }
 
 ## Usage
 
@@ -85,6 +90,16 @@ See all options with `--help`:
     ```sh
     python -m mypackage.mymodule view --help
     ```
+
+## Parameters panel
+
+The web UI displays a parameters panel
+
+When your model defines [parameters](../parameters/index.md), controls for those
+parameters appear in the web UI's parameters panel. Adjust parameter values or
+select presets in the panel. The model re-renders automatically.
+
+See the [Parameter Panel](../parameters/panel.md) documentation for details.
 
 ## Viewer process management
 

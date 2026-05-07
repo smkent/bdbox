@@ -10,7 +10,7 @@ enable_coverage: true
 enable_docs: true
 enable_pypi: true
 github_user: smkent
-project_description: Parametric configuration and tooling for build123d models.
+project_description: build123d development with live preview and interactive parameters.
 project_name: bdbox
 project_slug: bdbox
 project_type: application

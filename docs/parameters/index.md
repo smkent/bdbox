@@ -15,6 +15,8 @@ icon: lucide/package-open
       information for running models with different parameter values
     * When all parameters have default values,
       **running `python model.py` just works!**
+    * Interactive [parameter panel](panel.md) with controls and automatic
+      re-render with the [`view` action](../actions/view.md)
 
 Choose from one of two declaration styles by subclassing either
 **[``Params``][bdbox.parameters.parameters.Params]** or

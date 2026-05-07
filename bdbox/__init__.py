@@ -1,4 +1,4 @@
-"""Parametric configuration and tooling for build123d models."""
+"""build123d development with live preview and interactive parameters."""
 
 from __future__ import annotations
 
