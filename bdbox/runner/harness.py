@@ -16,7 +16,7 @@ import tyro
 from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI
-from bdbox.errors import Error
+from bdbox.errors import InternalError, RunError
 from bdbox.parameters.state import run_state
 
 from .locator import ModelLocator
@@ -98,12 +98,13 @@ class ModelHarness(ModelLocator):
             return
         if hook_result and hook_result.runs:
             for argv, action in hook_result.runs:
-                ModelRunner(argv, action)()
+                ModelRunner(argv, action, preserve_exceptions=True)()
             return
         runner = ModelRunner([self.model, *self.argv], cli_result.action)
         if cli_result.action.watch:
             ModelWatcher(runner=runner, change_event=self.rerender_event).run()
             return
+        runner.preserve_exceptions = True
         runner()
 
     @cached_property
@@ -129,7 +130,7 @@ class ModelHarness(ModelLocator):
 
     @cached_property
     def maybe_model(self) -> Path | str | None:
-        with suppress(Error):
+        with suppress(InternalError):
             return self.model
 
     @cached_property
@@ -138,7 +139,7 @@ class ModelHarness(ModelLocator):
             return f"{self.model_module}:{self.model_class_name}"
         if result := (self.model_module or self.model_path):
             return result
-        raise Error("No model found")
+        raise InternalError("No model found")
 
     @cached_property
     def prog(self) -> str:
@@ -189,7 +190,7 @@ class ModelHarness(ModelLocator):
                 CLI, "instance_from_cli", MagicMock(side_effect=SystemExit)
             ),
             self.module_cleanup(),
-            suppress(SystemExit),
+            suppress(RunError),
         ):
             ModelRunner([self.model, "--help"])()
         if not (model_class := run_state.get_model()):

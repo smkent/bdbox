@@ -5,7 +5,6 @@ from __future__ import annotations
 import atexit
 import os
 import sys
-import traceback
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, Any, TypeAlias
 
@@ -151,10 +150,9 @@ class Model(Params):
             return
         try:
             model_class.run()
-        except BaseException as exc:  # noqa: BLE001
-            if not isinstance(exc, SystemExit):
-                traceback.print_exc()
+        except KeyboardInterrupt:
+            raise
+        except SystemExit as exc:
             sys.stdout.flush()
             sys.stderr.flush()
-            code = exc.code if isinstance(exc, SystemExit) else 1
-            os._exit(code if isinstance(code, int) else 1)
+            os._exit(exc.code if isinstance(exc.code, int) else 1)

@@ -12,6 +12,7 @@ import pytest
 import bdbox.server.server as server_module
 from bdbox.actions.action import Action
 from bdbox.actions.view import ViewAction
+from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
@@ -55,7 +56,7 @@ def test_embedded_mode_execs_harness(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "argv", [str(Models.MODEL_EXPORT), "view"])
     with (
         patch.object(subprocess, "run") as mock_run,
-        pytest.raises(SystemExit),
+        pytest.raises(RunError),
     ):
         ModelRunner([Models.MODEL_EXPORT, "view"])()
     mock_run.assert_called_once_with(

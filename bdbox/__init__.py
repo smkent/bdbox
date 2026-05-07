@@ -5,7 +5,14 @@ from __future__ import annotations
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as import_version
 
-from bdbox.errors import Error, ParamsError, ParamValidationError
+from bdbox.errors import (
+    Error,
+    InternalError,
+    MultipleModelsError,
+    ParamsError,
+    ParamValidationError,
+    RunError,
+)
 from bdbox.geometry import show
 from bdbox.model import Model
 from bdbox.parameters.field_factories import Bool, Choice, Float, Int, Str
@@ -24,11 +31,14 @@ __all__ = [
     "Error",
     "Float",
     "Int",
+    "InternalError",
     "Model",
+    "MultipleModelsError",
     "ParamValidationError",
     "Params",
     "ParamsError",
     "Preset",
+    "RunError",
     "Str",
     "show",
     "version",

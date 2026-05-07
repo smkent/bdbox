@@ -12,6 +12,7 @@ from unittest.mock import patch
 import pytest
 
 from bdbox.actions.export import ExportAction
+from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 
@@ -63,14 +64,25 @@ class ExportModelRunner:
         ).startswith(self._FILE_HEADERS[self.file_format])
 
 
+@dataclass
+class RunClass:
+    cls: type[Runner]
+    exc_type: type[Exception] | None = None
+
+
 @pytest.fixture(
     params=(
-        pytest.param(ModelHarness, id="harness"),
-        pytest.param(ModelRunner, id="runner"),
+        pytest.param(RunClass(ModelHarness), id="harness"),
+        pytest.param(RunClass(ModelRunner, RunError), id="runner"),
     )
 )
-def run_class(request: pytest.FixtureRequest) -> type[Runner]:
+def run_class_info(request: pytest.FixtureRequest) -> RunClass:
     return request.param
+
+
+@pytest.fixture
+def run_class(run_class_info: RunClass) -> type[Runner]:
+    return run_class_info.cls
 
 
 @pytest.fixture(params=(pytest.param("step"), pytest.param("stl")))
@@ -138,13 +150,15 @@ def test_export_with_parameters_before(
 
 
 def test_export_no_output_arg(
-    run_class: type[Runner],
+    run_class_info: RunClass,
     model_with_params: Path,
     model_runner: ExportModelRunner,
 ) -> None:
-    with pytest.raises(SystemExit):
+    with pytest.raises(run_class_info.exc_type or SystemExit):
         model_runner(
-            model_with_params, ["--size", "20", "export"], run_class=run_class
+            model_with_params,
+            ["--size", "20", "export"],
+            run_class=run_class_info.cls,
         )
 
 
@@ -178,7 +192,7 @@ def test_main_export_with_parameters(
 
 
 def test_main_export_no_model(model_runner: ExportModelRunner) -> None:
-    with pytest.raises(SystemExit):
+    with pytest.raises(RunError):
         model_runner(MAIN_STUB, ["export"])
 
 
@@ -196,7 +210,7 @@ def test_export_all_embedded_execs_harness(
     monkeypatch.setattr(sys, "argv", argv)
     with (
         patch.object(subprocess, "run") as mock_run,
-        pytest.raises(SystemExit),
+        pytest.raises(RunError),
     ):
         ModelRunner(
             [

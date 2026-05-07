@@ -56,7 +56,7 @@ class RunState:
             self.stack.enter_context(self.action.on_model_render())
 
     def close_stack(self) -> None:
-        self.stack.close()
+        self.stack.__exit__(*sys.exc_info())
 
     def get_model(self) -> type[Any] | None:
         if not self.model_subclasses:

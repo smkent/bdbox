@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Any
 import pytest
 from starlette.testclient import TestClient
 
-from bdbox.errors import Error
+from bdbox.errors import InternalError
 from bdbox.model import Model
 from bdbox.parameters.field_factories import Float, Int
 from bdbox.parameters.parameters import Params
@@ -54,7 +54,7 @@ class WSParamTest:
     @contextmanager
     def wsconn(self) -> Iterator[WebSocketTestSession]:
         if not self.client:
-            raise Error("Client not available")
+            raise InternalError("Client not available")
         with self.client.websocket_connect("/ws") as ws:
             yield ws
 
@@ -63,15 +63,18 @@ class WSParamTest:
         msg: dict[str, Any],
         expect_overrides: dict[str, Any] | None = None,
         *,
+        expect_response: bool = True,
         expect_event: bool = True,
     ) -> Any:
         if not self.ws:
-            raise Error("Websocket connection not available")
+            raise InternalError("Websocket connection not available")
         self.ws.send_json(msg)
-        ack = self.ws.receive_json()
-        if expect_overrides is not None:
-            assert ack["param_overrides"] == expect_overrides
-            assert self.context.param_overrides == expect_overrides
+        ack = None
+        if expect_response:
+            ack = self.ws.receive_json()
+            if expect_overrides is not None:
+                assert ack["param_overrides"] == expect_overrides
+                assert self.context.param_overrides == expect_overrides
         if expect_event:
             assert self.context.rerender_event.is_set()
         else:
@@ -80,7 +83,7 @@ class WSParamTest:
 
     def recv(self) -> dict[str, Any]:
         if not self.ws:
-            raise Error("Websocket connection not available")
+            raise InternalError("Websocket connection not available")
         msg = self.ws.receive_json()
         assert msg == self.snapshot
         return msg
@@ -191,6 +194,22 @@ def test_unknown_message_type_ignored(wspt: WSParamTest) -> None:
         {"type": "detention_block", "value": "aa23"},
         expect_overrides={},
         expect_event=False,
+    )
+
+
+def test_malformed_json_ignored(wspt: WSParamTest) -> None:
+    assert wspt.ws
+    wspt.ws.send_text("not valid json {{{")
+    wspt.send(
+        {"type": "update_param", "field": "width", "value": 50.0},
+        expect_overrides={"width": 50.0},
+        expect_event=True,
+    )
+
+
+def test_missing_message_fields_ignored(wspt: WSParamTest) -> None:
+    wspt.send(
+        {"type": "update_param"}, expect_event=False, expect_response=False
     )
 
 

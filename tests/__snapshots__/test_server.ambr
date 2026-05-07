@@ -1,4 +1,144 @@
 # serializer version: 1
+# name: test_malformed_json_ignored[Model-param_overrides0]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
+  })
+# ---
+# name: test_malformed_json_ignored[Params-param_overrides0]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
+  })
+# ---
+# name: test_missing_message_fields_ignored[Model-param_overrides0]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
+  })
+# ---
+# name: test_missing_message_fields_ignored[Params-param_overrides0]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'type': 'schema',
+  })
+# ---
 # name: test_reset_params[Model-param_overrides]
   dict({
     'current_values': dict({

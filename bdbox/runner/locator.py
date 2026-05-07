@@ -9,7 +9,7 @@ from importlib.util import find_spec
 from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar
 
-from bdbox.errors import Error
+from bdbox.errors import InternalError
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
@@ -45,7 +45,7 @@ class ModelLocator:
             if file := getattr(sys.modules.get(base_module), "__file__", None):
                 return Path(file).parent
         if not self.model_path:
-            raise Error("Model path missing")
+            raise InternalError("Model path missing")
         return self.model_path.parent
 
     @contextmanager

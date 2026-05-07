@@ -13,6 +13,10 @@ class Error(Exception):
     """Base class for all bdbox exceptions."""
 
 
+class InternalError(Error):
+    """Raised on unexpected internal state errors."""
+
+
 @dataclass
 class MultipleModelsError(Error):
     """Raise when multiple models are available but none were selected."""
@@ -33,3 +37,10 @@ class ParamsError(Error):
 
 class ParamValidationError(Error, ValueError):
     """Raised when a parameter value fails validation."""
+
+
+@dataclass
+class RunError(Error):
+    """Raised when a model run fails."""
+
+    exception: Exception | SystemExit
