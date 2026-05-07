@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any
 
 from fastapi import FastAPI, Request
 
-from bdbox.errors import Error
+from bdbox.errors import InternalError
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -36,4 +36,4 @@ class Context:
             obj = obj.app
         if isinstance(obj, FastAPI):
             return obj.state.context
-        raise Error(f"{cls.__name__} not found")
+        raise InternalError(f"{cls.__name__} not found")

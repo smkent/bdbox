@@ -77,7 +77,10 @@ class Geometry:
         geometry = self.filter_geometry(self.geometry, label=label)
         if not geometry:
             return None
-        print(geometry.show_topology(limit_class="Solid"))  # noqa: T201
+        try:
+            print(geometry.show_topology(limit_class="Solid"))  # noqa: T201
+        except Exception as e:  # noqa: BLE001
+            print("Error showing topology:", e)  # noqa: T201
         return geometry
 
 

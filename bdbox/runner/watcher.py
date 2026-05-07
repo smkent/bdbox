@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import sys
 import time
-import traceback
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
@@ -15,7 +14,7 @@ from typing import TYPE_CHECKING
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
-from bdbox.errors import Error
+from bdbox.errors import InternalError, RunError
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -60,7 +59,7 @@ class ModelWatcher:
     @cached_property
     def model_path(self) -> Path:
         if not self.runner.model_path:
-            raise Error("Model path missing")
+            raise InternalError("Model path missing")
         return self.runner.model_path
 
     @property
@@ -75,11 +74,8 @@ class ModelWatcher:
             try:
                 while True:
                     self.wait_for_change()
-                    with self.handle_modules:
-                        try:
-                            self.runner()
-                        except (Exception, SystemExit):  # noqa: BLE001
-                            traceback.print_exc()
+                    with self.handle_modules, suppress(RunError):
+                        self.runner()
             except KeyboardInterrupt:
                 print("Quitting", file=sys.stderr)  # noqa: T201
             finally:

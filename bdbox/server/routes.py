@@ -101,8 +101,14 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                 }
             )
         while True:
-            data = await websocket.receive_json()
-            _handle_client_message(data, context)
+            try:
+                data = await websocket.receive_json()
+            except ValueError:
+                continue
+            try:
+                _handle_client_message(data, context)
+            except (KeyError, TypeError):
+                continue
             await websocket.send_json(
                 {
                     "type": "param_overrides",

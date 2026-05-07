@@ -123,21 +123,21 @@ class ViewAction(ModelAction):
         ctx.msg_queue.put(
             {"type": "run_start", "params": dict(ctx.param_overrides)}
         )
-        tee = tee_stderr(ctx.msg_queue) if ctx else nullcontext()
-        try:
-            with tee:
+        with tee_stderr(ctx.msg_queue) if ctx else nullcontext():
+            try:
                 yield
-            elapsed = int((time.monotonic() - start_time) * 1000)
-            self._update_schema(ctx)
-            ctx.msg_queue.put(
-                {
-                    "type": "run_ok",
-                    "elapsed_ms": elapsed,
-                    "current_values": dict(run_state.resolved_values),
-                }
-            )
-        except (Exception, SystemExit):
-            if ctx:
-                tb = traceback.format_exc()
-                ctx.msg_queue.put({"type": "run_error", "traceback": tb})
-            raise
+                elapsed = int((time.monotonic() - start_time) * 1000)
+                self._update_schema(ctx)
+                ctx.msg_queue.put(
+                    {
+                        "type": "run_ok",
+                        "elapsed_ms": elapsed,
+                        "current_values": dict(run_state.resolved_values),
+                    }
+                )
+            except (Exception, SystemExit):
+                traceback.print_exc(file=sys.stderr)
+                if ctx:
+                    tb = traceback.format_exc()
+                    ctx.msg_queue.put({"type": "run_error", "traceback": tb})
+                raise

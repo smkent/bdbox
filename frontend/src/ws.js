@@ -12,7 +12,12 @@ export function connectWs() {
   _ws = new WebSocket(`ws://${window.location.host}/ws`);
 
   _ws.addEventListener("message", ({ data }) => {
-    const msg = JSON.parse(data);
+    let msg;
+    try {
+      msg = JSON.parse(data);
+    } catch {
+      return;
+    }
     window.dispatchEvent(new CustomEvent(`bdbox:${msg.type}`, { detail: msg }));
   });
 
