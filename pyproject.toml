@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "bdbox"
 dynamic = ["version"]
-description = "Parametric configuration and tooling for build123d models."
+description = "build123d development with live preview and interactive parameters."
 readme = "README.md"
 license = "LGPL-3.0"
 license-files = ["LICENSE"]
