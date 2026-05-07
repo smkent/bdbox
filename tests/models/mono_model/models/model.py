@@ -9,7 +9,7 @@ assert build123d
 
 from build123d import Box  # noqa: E402
 
-from bdbox import Float, Int, Model, show  # noqa: E402
+from bdbox import Float, Int, Model  # noqa: E402
 from tests.models.mono_model.misc.constants import Defaults  # noqa: E402
 
 
@@ -31,4 +31,4 @@ class MyModel(Model):
         b2 = Box(self.b, self.c, self.d)
         print("b1", b1)  # noqa: T201
         print("b2", b2)  # noqa: T201
-        show(b1, b2)
+        return b1, b2
