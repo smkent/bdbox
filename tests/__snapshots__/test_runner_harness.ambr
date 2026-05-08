@@ -7,7 +7,7 @@
     -----------------------------------------------------------
     Available subcommands: run, export, view, viewer, version  
     -----------------------------------------------------------
-    For full helptext, run pytest --help                       
+    For full helptext, run bdbox --help                        
                                                                
   
   '''

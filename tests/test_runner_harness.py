@@ -108,6 +108,7 @@ def test_harness_existing_non_model_file(
 ) -> None:
     monkeypatch.chdir(tmp_path)
     (test_file := Path("some.unrelated.file")).write_text("Hello there")
+    monkeypatch.setattr(sys, "argv", ["bdbox", str(test_file)])
     with pytest.raises(SystemExit):
         ModelHarness([str(test_file)])()
     assert capsys.readouterr().err == snapshot

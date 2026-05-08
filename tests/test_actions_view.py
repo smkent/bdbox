@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import subprocess
 import sys
-from typing import TYPE_CHECKING
+from collections.abc import Callable
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -21,7 +23,7 @@ from bdbox.viewer import ViewerManager
 from .utils import MockOcpVscode, Models
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Iterator, Sequence
     from pathlib import Path
 
 
@@ -52,6 +54,21 @@ def model(request: pytest.FixtureRequest) -> Path:
     return request.param
 
 
+HarnessWrapper = Callable[..., ModelHarness]
+
+
+@pytest.fixture
+def harness(monkeypatch: pytest.MonkeyPatch) -> HarnessWrapper:
+
+    def wrapper(
+        model_argv: Sequence[str], *args: Any, **kwargs: Any
+    ) -> ModelHarness:
+        monkeypatch.setattr(sys, "argv", [model_argv[0], *model_argv])
+        return ModelHarness(model_argv, *args, **kwargs)
+
+    return wrapper
+
+
 def test_embedded_mode_execs_harness(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "argv", [str(Models.MODEL_EXPORT), "view"])
     with (
@@ -64,17 +81,17 @@ def test_embedded_mode_execs_harness(monkeypatch: pytest.MonkeyPatch) -> None:
     )
 
 
-def test_view_starts_watcher(model: Path) -> None:
+def test_view_starts_watcher(model: Path, harness: HarnessWrapper) -> None:
     with patch.object(ModelWatcher, "run") as mock_run:
-        ModelHarness([str(model), "view"])()
+        harness([str(model), "view"])()
     mock_run.assert_called_once_with()
 
 
 def test_view_no_watch_skips_watcher(
-    mock_start: MagicMock, model: Path
+    mock_start: MagicMock, model: Path, harness: HarnessWrapper
 ) -> None:
     with patch.object(ModelWatcher, "run") as mock_run:
-        ModelHarness([str(model), "view", "--no-watch"])()
+        harness([str(model), "view", "--no-watch"])()
     mock_run.assert_not_called()
     mock_start.assert_called_once()
 
@@ -95,12 +112,10 @@ def test_send_geometry_to_viewer(
 
 @pytest.mark.parametrize("file_format", ["step", "stl"])
 def test_view_with_export_creates_file(
-    tmp_path: Path, model: Path, file_format: str
+    tmp_path: Path, model: Path, harness: HarnessWrapper, file_format: str
 ) -> None:
     output_file = tmp_path / f"out.{file_format}"
-    ModelHarness(
-        [str(model), "view", "--no-watch", "--export", str(output_file)]
-    )()
+    harness([str(model), "view", "--no-watch", "--export", str(output_file)])()
     assert output_file.exists()
 
 
@@ -108,6 +123,7 @@ def test_send_to_viewer_warns_on_empty_geometry(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
     mock_ocp_vscode: MockOcpVscode,
+    harness: HarnessWrapper,
 ) -> None:
     model = tmp_path / "model.py"
     model.write_text('print("nope")')
@@ -117,5 +133,5 @@ def test_send_to_viewer_warns_on_empty_geometry(
         autospec=True,
         side_effect=lambda self: self.runner(),
     ):
-        ModelHarness([str(model), "view"])()
+        harness([str(model), "view"])()
     assert "Warning: no geometry collected" in capsys.readouterr().err
