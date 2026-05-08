@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -24,8 +25,10 @@ pytestmark = pytest.mark.usefixtures("ensure_sys_modules")
 class HarnessRunnerRunner:
     capsys: pytest.CaptureFixture[str]
     snapshot: SnapshotAssertion
+    monkeypatch: pytest.MonkeyPatch
 
     def __call__(self, *args: str | Path) -> None:
+        self.monkeypatch.setattr(sys, "argv", ["bdbox", *args])
         with pytest.raises(SystemExit):
             ModelHarness([*args])()
         assert self.capsys.readouterr().out == self.snapshot
@@ -36,8 +39,11 @@ class HarnessRunnerRunner:
 def model_runner(
     capsys: pytest.CaptureFixture[str],
     snapshot: SnapshotAssertion,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> HarnessRunnerRunner:
-    return HarnessRunnerRunner(capsys=capsys, snapshot=snapshot)
+    return HarnessRunnerRunner(
+        capsys=capsys, snapshot=snapshot, monkeypatch=monkeypatch
+    )
 
 
 @pytest.fixture(
@@ -71,6 +77,10 @@ def model(request: pytest.FixtureRequest) -> str:
     return request.param
 
 
+def test_harness_usage_no_arguments(model_runner: HarnessRunnerRunner) -> None:
+    model_runner()
+
+
 def test_harness_usage_module(
     model_runner: HarnessRunnerRunner, module: str
 ) -> None:
@@ -98,6 +108,7 @@ def test_harness_existing_non_model_file(
 ) -> None:
     monkeypatch.chdir(tmp_path)
     (test_file := Path("some.unrelated.file")).write_text("Hello there")
+    monkeypatch.setattr(sys, "argv", ["bdbox", str(test_file)])
     with pytest.raises(SystemExit):
         ModelHarness([str(test_file)])()
     assert capsys.readouterr().err == snapshot

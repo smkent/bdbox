@@ -39,6 +39,7 @@ class ExportModelRunner:
     file_format: str
     output_file: Path = field(init=False)
     tmp_path: InitVar[str | Path]
+    monkeypatch: pytest.MonkeyPatch
 
     _FILE_HEADERS: ClassVar[dict] = {
         "step": "ISO-10303-21;",
@@ -57,7 +58,9 @@ class ExportModelRunner:
         kwargs = {}
         if run_class is ModelRunner:
             kwargs["action"] = ExportAction(output=self.output_file)
-        run_class([filename, *[str(a) for a in argv]], **kwargs)()
+        args = [filename, *[str(a) for a in argv]]
+        self.monkeypatch.setattr(sys, "argv", args)
+        run_class(args, **kwargs)()
         assert self.output_file.exists()
         assert self.output_file.read_text(
             encoding="utf-8", errors="ignore"
@@ -87,9 +90,13 @@ def run_class(run_class_info: RunClass) -> type[Runner]:
 
 @pytest.fixture(params=(pytest.param("step"), pytest.param("stl")))
 def model_runner(
-    request: pytest.FixtureRequest, tmp_path: Path
+    request: pytest.FixtureRequest,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> ExportModelRunner:
-    return ExportModelRunner(file_format=request.param, tmp_path=tmp_path)
+    return ExportModelRunner(
+        file_format=request.param, tmp_path=tmp_path, monkeypatch=monkeypatch
+    )
 
 
 @pytest.fixture(
@@ -250,38 +257,42 @@ def test_export_single_embedded_does_not_exec_harness(
 @pytest.mark.parametrize("file_format", ["step", "stl"])
 def test_export_all_creates_preset_files(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
     model_file: Path,
     expected_stems: list[str],
     file_format: str,
 ) -> None:
     out_dir = tmp_path / "renders"
-    ModelHarness(
-        [
-            str(model_file),
-            "export",
-            "-a",
-            str(out_dir),
-            "--format",
-            file_format,
-        ]
-    )()
+    args = [
+        str(model_file),
+        "export",
+        "-a",
+        str(out_dir),
+        "--format",
+        file_format,
+    ]
+    monkeypatch.setattr(sys, "argv", args)
+    ModelHarness(args)()
     assert out_dir.is_dir()
     assert sorted(p.stem for p in out_dir.iterdir()) == sorted(expected_stems)
     for stem in expected_stems:
         assert (out_dir / f"{stem}.{file_format}").exists()
 
 
-def test_export_all_creates_output_dir(tmp_path: Path) -> None:
+def test_export_all_creates_output_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     out_dir = tmp_path / "a" / "b" / "renders"
     assert not out_dir.exists()
-    ModelHarness(
-        [
-            str(Models.PLAIN_EXPORT),
-            "export",
-            "-a",
-            str(out_dir),
-            "--format",
-            "step",
-        ]
-    )()
+    args = [
+        str(Models.PLAIN_EXPORT),
+        "export",
+        "-a",
+        str(out_dir),
+        "--format",
+        "step",
+    ]
+    monkeypatch.setattr(sys, "argv", args)
+    ModelHarness(args)()
+    monkeypatch.setattr(sys, "argv", args)
     assert out_dir.is_dir()

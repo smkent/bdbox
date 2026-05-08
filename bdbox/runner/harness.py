@@ -80,6 +80,8 @@ class ModelHarness(ModelLocator):
     ) -> None:
         Action.mode = Action.Mode.HARNESS
         super().__post_init__(model_argv or sys.argv[1:].copy())
+        if len(sys.argv) == 1:
+            self.argv.append("--help")
 
     def __call__(self) -> None:
         cli_cls = (
