@@ -1,16 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Any
 
 from bdbox import Float, Int, Model
 
-
-@dataclass
-class Box:
-    x: float
-    y: float
-    z: float
+from .model import Box
 
 
 class SomeModel(Model):

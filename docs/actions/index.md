@@ -64,6 +64,11 @@ bdbox mypackage.mymodule:MyModel view                # View in OCP CAD Viewer
 bdbox mypackage.mymodule:MyModel export output.step  # Export to STEP
 ```
 
+!!! tip "Virtual environment discovery"
+
+    When `bdbox` is invoked with a model file in a
+    [virtual environment][python-venv] also containing `bdbox`, the model's
+    virtual environment is used automatically.
 
 ### Direct
 
@@ -88,3 +93,4 @@ python -m mypackage.mymodule export output.step  # Export to STEP
 
 [build123d]: https://build123d.readthedocs.io
 [ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer
+[python-venv]: https://docs.python.org/3/tutorial/venv.html

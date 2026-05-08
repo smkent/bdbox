@@ -149,3 +149,17 @@ def test_harness_no_class_found(
 def test_harness_multiple_models(model_runner: HarnessRunnerRunner) -> None:
     with pytest.raises(MultipleModelsError, match="FirstModel, SecondModel"):
         model_runner(Models.MODEL_CLASS_MULTIPLE)
+
+
+@pytest.mark.parametrize(
+    "model",
+    [
+        "tests/models/mod_model/relative.py",
+        "tests/models/mod_params/relative.py",
+        "tests/models/mod_plain/relative.py",
+    ],
+)
+def test_harness_retry_model_as_module(
+    model_runner: HarnessRunnerRunner, model: str
+) -> None:
+    model_runner(model, "--help")

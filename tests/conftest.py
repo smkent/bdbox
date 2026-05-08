@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import random
 import subprocess
 import sys
@@ -61,6 +62,14 @@ def disallow_subprocess(
     request: pytest.FixtureRequest,
 ) -> Iterator[DisallowCallable]:
     with DisallowCallable(request, subprocess.Popen, "__init__")() as mock:
+        yield mock
+
+
+@pytest.fixture(autouse=True)
+def disallow_os_exec(
+    request: pytest.FixtureRequest,
+) -> Iterator[DisallowCallable]:
+    with DisallowCallable(request, os, "execv")() as mock:
         yield mock
 
 
