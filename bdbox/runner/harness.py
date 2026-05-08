@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import operator
+import os
 import sys
 from contextlib import suppress
 from dataclasses import dataclass, field, make_dataclass
@@ -65,6 +66,7 @@ HarnessAction = HarnessCLIFactory.make()
 
 @dataclass
 class ModelHarness(ModelLocator):
+    env_search: ClassVar[bool] = True
     clean_modules: ClassVar[bool] = True
     package: ClassVar[str] = (__package__ or "bdbox").split(".", 1)[0]
     rerender_event: Event = field(
@@ -174,15 +176,7 @@ class ModelHarness(ModelLocator):
                     return True
         return False
 
-    @cached_property
-    def model_params_cls(self) -> type[Params] | None:
-        """Discover model parameters by running the model in discovery mode.
-
-        Returns a list of (name, annotation, field) tuples for user-defined
-        parameters, or None if no bdbox Params/Model class was found.
-        """
-        if not self.model:
-            return None
+    def get_model(self) -> type[Params] | None:
         with (
             patch.dict(
                 sys.modules,
@@ -195,7 +189,28 @@ class ModelHarness(ModelLocator):
             suppress(RunError),
         ):
             ModelRunner([self.model, "--help"])()
-        if not (model_class := run_state.get_model()):
+        return run_state.get_model()
+
+    @cached_property
+    def model_params_cls(self) -> type[Params] | None:
+        """Discover model parameters by running the model in discovery mode.
+
+        Returns a list of (name, annotation, field) tuples for user-defined
+        parameters, or None if no bdbox Params/Model class was found.
+        """
+        if not self.model:
+            return None
+        if not (model_class := self.get_model()):
+            if not self.model_module and self.model_path:
+                with suppress(ValueError):
+                    relative = self.model_path.relative_to(Path().cwd())
+                    mod_name = (
+                        str(relative).removesuffix(".py").replace(os.sep, ".")
+                    )
+                    self.model_module = mod_name
+                    del self.model
+                    if model_class := self.get_model():
+                        return model_class
             return None
         if getattr(model_class, "__module__", None) != "__main__":
             model_class.__module__ = "__main__"

@@ -11,12 +11,15 @@ from typing import TYPE_CHECKING, ClassVar
 
 from bdbox.errors import InternalError
 
+from .env import EnvLocator
+
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
 
 
 @dataclass
 class ModelLocator:
+    env_search: ClassVar[bool] = False
     clean_modules: ClassVar[bool] = False
     model_argv: InitVar[Sequence[Path | str] | Path | str] = ()
     model_path: Path | None = field(default=None, init=False)
@@ -69,6 +72,8 @@ class ModelLocator:
             if ":" not in name:
                 name += ":"
             mod_name, mod_attr = name.split(":", maxsplit=1)
+            if self.env_search:
+                EnvLocator(target_module=mod_name).ensure_env()
             if (spec := find_spec(mod_name)) and spec.origin:
                 self.model_module = mod_name
                 self.model_class_name = mod_attr or None
@@ -79,6 +84,8 @@ class ModelLocator:
         for arg in self.argv:
             if not arg.startswith("-") and Path(arg).suffix == ".py":
                 self.argv.pop(self.argv.index(arg))
+                if self.env_search:
+                    EnvLocator(arg).ensure_env()
                 return arg
         for arg in self.argv:
             if not re.match(r"^[A-Za-z0-9_.:]+$", arg) or Path(arg).is_file():

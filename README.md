@@ -41,9 +41,40 @@ else!
 
 ## Installation
 
+Install user-wide with [`uv`][uv-tool] or [`pipx`][pipx] for use across all
+projects:
+
+```sh
+uv tool install bdbox
+```
+
+```sh
+pipx install bdbox
+```
+
+Install in any environment where `pip` is available:
+
 ```sh
 pip install bdbox
 ```
+
+### Installation in projects
+
+Install in a project, such as with [`uv`][uv] or [`poetry`][poetry]:
+
+```sh
+uv add bdbox
+```
+
+```sh
+poetry add bdbox
+```
+
+`bdbox` detects and automatically uses virtual environments also containing
+`bdbox`.
+
+This enables running via `bdbox model.py` instead of `uv run bdbox model.py`,
+for example.
 
 ## Works with any build123d model
 
@@ -79,7 +110,7 @@ bdbox mypackage.mymodule export out.step
 
 **[See more about actions in the documentation!][docs-actions]**
 
-## Interactive parameter panel
+## Interactive parameters panel
 
 Add parameters to your model and run with `view` to open an interactive
 parameter panel in your browser. Adjust sliders, enter values, and select
@@ -169,4 +200,8 @@ This project is generated and maintained with [copier-python][copier-python].
 [openscad-customizer]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Customizer
 [openscad-language]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual#The_OpenSCAD_Language_Reference
 [openscad]: https://openscad.org/
+[pipx]: https://pipx.pypa.io
+[poetry]: https://python-poetry.org/
 [step]: https://en.wikipedia.org/wiki/ISO_10303-21
+[uv-tool]: https://docs.astral.sh/uv/guides/tools/
+[uv]: https://docs.astral.sh/uv/
