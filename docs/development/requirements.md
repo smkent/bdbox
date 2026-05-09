@@ -9,6 +9,8 @@ icon: lucide/bookmark-check
 - [x] [**git** for verson control][git]
 - [x] [Astral's **uv** Python project manager][uv]: `pip install uv` or
   [other supported method][uv-installation]
+- [x] [**Node.js**][nodejs]: via [**mise**][mise] (`mise use --global node@lts`)
+  or [other supported method][nodejs-installation]
 - [x] [**Copier**][copier]: `uv tool install copier`
 - [x] [Poe the Poet][poethepoet] (recommended): `uv tool install poethepoet`
 
@@ -17,6 +19,9 @@ icon: lucide/bookmark-check
 
 [copier]: https://copier.readthedocs.io
 [git]: https://git-scm.com
+[mise]: https://mise.jdx.dev
+[nodejs-installation]: https://nodejs.org/en/download
+[nodejs]: https://nodejs.org
 [poethepoet]: https://poethepoet.natn.io/
 [python-versions]: https://devguide.python.org/versions/
 [python]: https://python.org
