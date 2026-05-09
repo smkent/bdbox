@@ -21,6 +21,12 @@ jobs:
           enable-cache: true
           python-version: '3.12'
 
+      - name: 🟩 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
       - name: 📦 Build package
         run: uv build
 

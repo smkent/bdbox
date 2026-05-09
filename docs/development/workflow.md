@@ -12,15 +12,23 @@ git clone https://github.com/smkent/bdbox
 cd bdbox
 ```
 
-Run `poe setup` in new repository clones to enable git hooks:
+Run `poe setup` in new repository clones to:
+
+* Enable git hooks
+* Install UI dependencies via `npm`
+  (To update, run `poe setup` again or `npm install`)
+* Build static UI assets
+  (To build again, run `poe static` or `poe dev`)
 
 ```sh
-poe setup  # Enables git hooks
+poe setup
 ```
 
 ## Development tools
 
+* `poe dev`: Watch and automatically rebuild static UI assets on changes
 * `poe lint`: Run formatters and static checks
+* `poe static`: Build static UI assets
 * `poe test`: Run tests
 
 The `lint` and `test` tasks can also be run as a single combined command with:
