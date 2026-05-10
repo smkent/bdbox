@@ -163,3 +163,19 @@ def test_harness_retry_model_as_module(
     model_runner: HarnessRunnerRunner, model: str
 ) -> None:
     model_runner(model, "--help")
+
+
+@pytest.mark.parametrize(
+    "model",
+    [
+        "tests/models/mod_model/relative.py",
+        "tests/models/mod_params/relative.py",
+        "tests/models/mod_plain/relative.py",
+    ],
+)
+def test_harness_retry_model_as_module_chdir(
+    tmp_path: Path, model_runner: HarnessRunnerRunner, model: str
+) -> None:
+    model_path = Path(model).resolve()
+    model_runner.monkeypatch.chdir(model_path.parent)
+    model_runner(model_path, "--help")

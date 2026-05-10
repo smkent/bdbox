@@ -93,6 +93,87 @@
 # name: test_harness_retry_model_as_module[tests/models/mod_plain/relative.py].1
   ''
 # ---
+# name: test_harness_retry_model_as_module_chdir[tests/models/mod_model/relative.py]
+  '''
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
+                                                                      
+  
+  '''
+# ---
+# name: test_harness_retry_model_as_module_chdir[tests/models/mod_model/relative.py].1
+  ''
+# ---
+# name: test_harness_retry_model_as_module_chdir[tests/models/mod_params/relative.py]
+  '''
+  b1 Box(x=2.5, y=3, z=5)
+  b2 Box(x=3, y=5, z=5.0)
+  usage: bdbox [-h] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  
+   options                                                            
+   ------------------------------------------------------------------ 
+    -h, --help                show this help message and exit         
+    --a FLOAT                 (default: 2.5)                          
+    --b INT                   (default: 3)                            
+    --c 1 <= INT <= 10        (default: 5)                            
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          
+                                                                      
+   subcommands                                                        
+   ------------------------------------------------------------------ 
+    (default: run)                                                    
+      • run                   Run the model.                          
+      • export                Export geometry to a STEP or STL file.  
+      • view                  View model geometry.                    
+      • viewer                Viewer control                          
+      • version               Show bdbox version and exit             
+                                                                      
+  
+  '''
+# ---
+# name: test_harness_retry_model_as_module_chdir[tests/models/mod_params/relative.py].1
+  ''
+# ---
+# name: test_harness_retry_model_as_module_chdir[tests/models/mod_plain/relative.py]
+  '''
+  Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
+  Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
+  usage: bdbox [-h] [{run,export,view,viewer,version}]
+  
+   options                                               
+   ----------------------------------------------------- 
+    -h, --help   show this help message and exit         
+                                                         
+   subcommands                                           
+   ----------------------------------------------------- 
+    (default: run)                                       
+      • run      Run the model.                          
+      • export   Export geometry to a STEP or STL file.  
+      • view     View model geometry.                    
+      • viewer   Viewer control                          
+      • version  Show bdbox version and exit             
+                                                         
+  
+  '''
+# ---
+# name: test_harness_retry_model_as_module_chdir[tests/models/mod_plain/relative.py].1
+  ''
+# ---
 # name: test_harness_usage_file[model_class]
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]

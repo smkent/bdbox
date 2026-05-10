@@ -20,6 +20,7 @@ from bdbox.cli import CLI
 from bdbox.errors import InternalError, RunError
 from bdbox.parameters.state import run_state
 
+from .env import EnvLocator
 from .locator import ModelLocator
 from .runner import ModelRunner
 from .shims import MainModule
@@ -186,7 +187,7 @@ class ModelHarness(ModelLocator):
                 CLI, "instance_from_cli", MagicMock(side_effect=SystemExit)
             ),
             self.module_cleanup(),
-            suppress(RunError),
+            suppress(RunError, InternalError),
         ):
             ModelRunner([self.model, "--help"])()
         return run_state.get_model()
@@ -203,7 +204,9 @@ class ModelHarness(ModelLocator):
         if not (model_class := self.get_model()):
             if not self.model_module and self.model_path:
                 with suppress(ValueError):
-                    relative = self.model_path.relative_to(Path().cwd())
+                    env = EnvLocator(self.model_path).project_root()
+                    relative = self.model_path.relative_to(env)
+                    os.chdir(env)
                     mod_name = (
                         str(relative).removesuffix(".py").replace(os.sep, ".")
                     )
