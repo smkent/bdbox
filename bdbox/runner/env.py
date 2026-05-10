@@ -46,6 +46,11 @@ class EnvLocator:
             sys.path.pop(0)
         return None
 
+    def project_root(self) -> Path:
+        if venv_dir := self.find_venv():
+            return venv_dir.resolve().parent
+        return Path.cwd()
+
     def find_venv(self) -> Path | None:
         if not self.target_dir:
             return None
