@@ -78,7 +78,7 @@ for example.
 
 ## Works with any build123d model
 
-Use `bdbox` with any existing build123d script — no imports required:
+Use `bdbox` with any existing build123d script:
 
 ```python
 # mymodel.py
@@ -95,8 +95,8 @@ bdbox mymodel.py export output/   # Export STEP files to output/
 bdbox mymodel.py export -f stl    # Export STL files to current directory
 ```
 
-View your model in the browser with [OCP CAD Viewer][ocp_vscode], started
-automatically:
+View your model using the web UI, which includes [OCP CAD Viewer][ocp_vscode]
+and an [interactive parameters panel][docs-panel]:
 
 ```sh
 bdbox mymodel.py view
@@ -110,16 +110,6 @@ bdbox mypackage.mymodule export
 ```
 
 **[See more about actions in the documentation!][docs-actions]**
-
-## Interactive parameters panel
-
-Add parameters to your model and run with `view` to open an interactive
-parameter panel in your browser. Adjust sliders, enter values, and select
-presets — the model re-renders automatically on every change.
-
-<!-- Screenshot: parameter panel UI -->
-
-**[See more about the parameter panel in the documentation!][docs-panel]**
 
 ## Add parameters
 

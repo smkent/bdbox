@@ -101,8 +101,8 @@ updated value applied.
 ## Presets
 
 If your model defines [presets][presets], preset buttons appear above the
-parameter form. Click a preset button to apply it — the parameter form updates
-to the preset's values and the model re-renders automatically.
+parameter form. Clicking a preset button applies the preset's values and
+re-renders the model automatically.
 
 Click **Reset** to restore all parameters to their default values.
 
