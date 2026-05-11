@@ -8,7 +8,7 @@ import traceback
 from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass
 from pathlib import Path  # noqa: TC003
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING, Annotated, Literal
 
 import tyro
 
@@ -60,11 +60,13 @@ class ViewAction(ModelAction):
     export: Annotated[
         Path | None,
         tyro.conf.arg(
-            aliases=("-e",),
-            metavar="output-path",
-            help="Output STEP or STL file path.",
+            aliases=("-e",), metavar="DIR", help="Export output directory."
         ),
     ] = None
+    format: Annotated[
+        Literal["step", "stl"],
+        tyro.conf.arg(aliases=["-f"], help="Output format."),
+    ] = "step"
 
     server_manager: tyro.conf.Suppress[ServerManager | None] = None
 
@@ -79,7 +81,7 @@ class ViewAction(ModelAction):
         show(geometry)
 
         if self.export:
-            ExportAction(output=self.export)()
+            ExportAction(output=self.export, format=self.format)()
 
     def before_harness(
         self, args: ModelAction.ModelHarnessProtocol

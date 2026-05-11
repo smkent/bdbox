@@ -2,20 +2,90 @@
 
 from __future__ import annotations
 
+from collections import Counter, defaultdict
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from pathlib import Path  # noqa: TC003
+from functools import cached_property
+from itertools import count
+from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Literal
 
 import tyro
 
-from bdbox.errors import Error
+from bdbox.errors import Error, InternalError
 from bdbox.geometry import resolve_geometry
+from bdbox.parameters.state import run_state
 
 from .action import ModelAction
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
+
+    from build123d import Shape
+
+
+@dataclass
+class Exports:
+    geometry: Shape
+    model_name: str
+    single: bool = False
+
+    @cached_property
+    def parts(self) -> dict[str, Shape]:
+        export_parts = {self.model_name: self.geometry}
+        if self.single or len(self.geometry.leaves) == 1:
+            return export_parts
+        for part in self.geometry.leaves:
+            part_name = ".".join(
+                [
+                    self.model_name,
+                    *[
+                        self.labels.get(id(c), self._shape_label(c))
+                        for c in part.path[1:]
+                    ],
+                ]
+            )
+            if part_name in export_parts:
+                raise InternalError(f"Duplicate part name {part_name!r}")
+            export_parts[part_name] = part
+        return export_parts
+
+    @cached_property
+    def labels(self) -> dict[int, str]:
+        """Map node IDs to deduplicated label names."""
+        labels = {}
+
+        def determine_labels(solid: object) -> None:
+            if not (children := getattr(solid, "children", ())):
+                return
+            existing_labels = [self._shape_label(c) for c in children]
+            assigned_labels = set(existing_labels)
+            totals = Counter(existing_labels)
+            seen_counts = defaultdict(count)
+            max_tries = min(len(children) + 1, 100)
+            for child, label in zip(children, existing_labels, strict=True):
+                if totals[label] == 1 or (n := next(seen_counts[label])) == 0:
+                    labels[id(child)] = label
+                    continue
+                for suffix_n in range(n + 1, n + 1 + max_tries):
+                    candidate = f"{label}_{suffix_n:03d}"
+                    if candidate not in assigned_labels:
+                        labels[id(child)] = candidate
+                        assigned_labels.add(candidate)
+                        break
+                else:
+                    raise InternalError(
+                        f"Unable to determine unique name for {label!r}"
+                    )
+            for child in children:
+                determine_labels(child)
+
+        determine_labels(self.geometry)
+        return labels
+
+    @staticmethod
+    def _shape_label(node: object) -> str:
+        return getattr(node, "label", None) or type(node).__name__
 
 
 @dataclass
@@ -25,14 +95,18 @@ class ExportAction(ModelAction):
     output: Annotated[
         Path,
         tyro.conf.Positional,
+        tyro.conf.arg(metavar="DIR", help="Output directory."),
+    ] = Path()
+
+    single: Annotated[
+        bool,
         tyro.conf.arg(
-            metavar="output-path",
-            help=(
-                "Output file path (single mode)"
-                " or directory (with --all-presets)."
-            ),
+            aliases=["-s"],
+            help=("Only create a single combined export file."),
+            help_behavior_hint="(default: no)",
         ),
-    ]
+        tyro.conf.FlagCreatePairsOff,
+    ] = field(default=False, kw_only=True)
 
     all_presets: Annotated[
         bool,
@@ -49,7 +123,7 @@ class ExportAction(ModelAction):
 
     format: Annotated[
         Literal["step", "stl"],
-        tyro.conf.arg(help="-a/--all-presets output format."),
+        tyro.conf.arg(aliases=["-f"], help="Output format."),
     ] = "step"
 
     default: Annotated[
@@ -62,18 +136,18 @@ class ExportAction(ModelAction):
         tyro.conf.FlagCreatePairsOff,
     ] = field(default=True, kw_only=True)
 
-    @property
+    @cached_property
     def _exporter(self) -> Callable[..., bool]:
-        match self.output.suffix.lower():
-            case ".step":
+        match self.format:
+            case "step":
                 from build123d import export_step  # noqa: PLC0415
 
                 return export_step
-            case ".stl":
+            case "stl":
                 from build123d import export_stl  # noqa: PLC0415
 
                 return export_stl
-        raise Error(f"Unknown file type {self.output.suffix}")
+        raise Error(f"Unknown format {self.format}")
 
     def __call__(self) -> None:
         """Export single render or all preset renders to a STEP or STL file."""
@@ -82,37 +156,41 @@ class ExportAction(ModelAction):
         geometry = resolve_geometry()
         if not geometry:
             raise Error("No geometry to export")
-        print(f"Exporting model geometry to {self.output}")  # noqa: T201
-        self._exporter(geometry, str(self.output))
+        model_name = run_state.model_name()
+        if run_state.model_cli and (preset := run_state.model_cli.preset):
+            model_name += f"-{preset}"
+        exports = Exports(geometry, model_name=model_name, single=self.single)
+        self.output.mkdir(exist_ok=True, parents=True)
+        for name, solid in exports.parts.items():
+            part_file = self.output / f"{name}.{self.format}"
+            print(f"Exporting model geometry to {part_file}")  # noqa: T201
+            self._exporter(solid, str(part_file))
 
     def before_harness(
         self, args: ModelAction.ModelHarnessProtocol
     ) -> ModelAction.BeforeHarnessResult:
         if self.all_presets:
-            runs = []
-            for preset in (
-                *((None,) if self.default else ()),
-                *getattr(args.model_params_cls, "presets", ()),
-            ):
-                name = preset.name if preset else "default"
-                dest = self.output / f"{name}.{self.format}"
-                runs.append(
-                    (
-                        [
-                            str(args.model),
-                            "export",
-                            str(dest),
-                            *(("--preset", preset.name) if preset else ()),
-                            *args.params_argv,
-                        ],
-                        ExportAction(
-                            all_presets=False,
-                            output=dest,
-                            format=self.format,
-                        ),
-                    )
+            runs = [
+                (
+                    [
+                        str(args.model),
+                        "export",
+                        str(self.output),
+                        *(("--preset", preset.name) if preset else ()),
+                        *args.params_argv,
+                    ],
+                    ExportAction(
+                        all_presets=False,
+                        output=self.output,
+                        single=self.single,
+                        format=self.format,
+                    ),
                 )
-            self.output.mkdir(parents=True, exist_ok=True)
+                for preset in (
+                    *((None,) if self.default else ()),
+                    *getattr(args.model_params_cls, "presets", ()),
+                )
+            ]
             return ModelAction.HarnessResult(runs=runs)
         return None
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Export test model (Params style)."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 
 from build123d import Box
@@ -24,4 +26,4 @@ class P(Params):
     presets = (Preset("mid", size=8.5),)
 
 
-box = Box(P.size, P.size, P.size)
+result = (Box(P.size, P.size, P.size), Box(P.size * 2, P.size * 2, P.size * 2))

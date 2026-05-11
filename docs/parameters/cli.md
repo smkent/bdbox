@@ -23,8 +23,8 @@ argument parsing code is needed.
     | `bdbox model.py --help` | Show all fields, defaults, presets, and actions |
     | `bdbox model.py run` | Explicitly run the model |
     | `bdbox model.py view` | View geometry in OCP CAD Viewer |
-    | `bdbox model.py export output.step` | Export geometry to a STEP file |
-    | `bdbox model.py export output.stl` | Export geometry to an STL file |
+    | `bdbox model.py export` | Export geometry to STEP files |
+    | `bdbox model.py export -f stl` | Export geometry to STL files |
 
 === "`bdbox` with **module**"
 
@@ -37,8 +37,8 @@ argument parsing code is needed.
     | `bdbox mypackage.mymodule --help` | Show all fields, defaults, presets, and actions |
     | `bdbox mypackage.mymodule run` | Explicitly run the model |
     | `bdbox mypackage.mymodule view` | View geometry in OCP CAD Viewer |
-    | `bdbox mypackage.mymodule export output.step` | Export geometry to a STEP file |
-    | `bdbox mypackage.mymodule export output.stl` | Export geometry to an STL file |
+    | `bdbox mypackage.mymodule export` | Export geometry to STEP files |
+    | `bdbox mypackage.mymodule export -f stl` | Export geometry to STL files |
 
 === "Direct with **file**"
 
@@ -51,8 +51,8 @@ argument parsing code is needed.
     | `python model.py --help` | Show all fields, defaults, presets, and actions |
     | `python model.py run` | Explicitly run the model |
     | `python model.py view` | View geometry in OCP CAD Viewer |
-    | `python model.py export output.step` | Export geometry to a STEP file |
-    | `python model.py export output.stl` | Export geometry to an STL file |
+    | `python model.py export` | Export geometry to STEP files |
+    | `python model.py export -f stl` | Export geometry to STL files |
 
 === "Direct with **module**"
 
@@ -65,8 +65,8 @@ argument parsing code is needed.
     | `python -m mypackage.mymodule --help` | Show all fields, defaults, presets, and actions |
     | `python -m mypackage.mymodule run` | Explicitly run the model |
     | `python -m mypackage.mymodule view` | View geometry in OCP CAD Viewer |
-    | `python -m mypackage.mymodule export output.step` | Export geometry to a STEP file |
-    | `python -m mypackage.mymodule export output.stl` | Export geometry to an STL file |
+    | `python -m mypackage.mymodule export` | Export geometry to STEP files |
+    | `python -m mypackage.mymodule export -f stl` | Export geometry to STL files |
 
 See the [Actions](../actions/index.md) documentation for full details,
 including the [view](../actions/view.md) and [export](../actions/export.md)
@@ -142,6 +142,7 @@ usage: MyBox [-h] [OPTIONS] [{run,view,export}]
 │   • export   Export geometry to a STEP or STL file.    │
 │   • view     View model geometry.                      │
 │   • viewer   Viewer control                            │
+│   • version  Show bdbox version and exit               │
 ╰────────────────────────────────────────────────────────╯
 ```
 

@@ -6,7 +6,7 @@ import atexit
 import os
 import sys
 from dataclasses import dataclass, fields
-from typing import TYPE_CHECKING, Any, TypeAlias
+from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
 from .actions.action import Action
 from .errors import MultipleModelsError
@@ -101,6 +101,7 @@ class Model(Params):
         run_state.ensure_module_filename(cls)
         try:
             cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
+            run_state.model_cli = cli_result.params
         finally:
             run_state.module_dict = sys.modules["__main__"].__dict__
         if run_state.action.mode != Action.Mode.HARNESS:
@@ -139,7 +140,7 @@ class Model(Params):
     @classmethod
     def _atexit_handler(cls) -> None:
         try:
-            if not (model_class := run_state.get_model()):
+            if not (model_class := cast("type[Model]", run_state.get_model())):
                 return
         except MultipleModelsError as e:
             print(  # noqa: T201

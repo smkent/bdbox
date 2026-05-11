@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import sys
-from contextlib import ExitStack
+from contextlib import ExitStack, suppress
 from dataclasses import dataclass, field
 from enum import Enum, auto
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from bdbox.actions.run import RunAction
-from bdbox.errors import MultipleModelsError, ParamsError
+from bdbox.errors import InternalError, MultipleModelsError, ParamsError
 
 from .serializer import Serializer
 
@@ -26,6 +27,7 @@ class RunState:
         default_factory=dict, init=False, repr=False
     )
     model_subclasses: list[Any] = field(default_factory=list)
+    model_cli: Params | None = None
     action: Action = field(default_factory=RunAction)
     acted: bool = False
     stack: ExitStack = field(default_factory=ExitStack, init=False)
@@ -58,7 +60,7 @@ class RunState:
     def close_stack(self) -> None:
         self.stack.__exit__(*sys.exc_info())
 
-    def get_model(self) -> type[Any] | None:
+    def get_model(self) -> type[Params] | None:
         if not self.model_subclasses:
             return None
         if len(self.model_subclasses) == 1:
@@ -72,6 +74,16 @@ class RunState:
                     return subc
             raise ParamsError(f"Model {self.class_name} not found")
         raise MultipleModelsError(self.model_subclasses)
+
+    def model_name(self) -> str:
+        if self.mode == self.Mode.PARAMS_CLASS and self.filename:
+            return Path(self.filename).stem
+        with suppress(InternalError):
+            if model_class := self.get_model():
+                return model_class.__name__
+        if self.filename:
+            return Path(self.filename).stem
+        raise InternalError("Unable to determine model name")
 
     def ensure_mode(self, style: RunState.Mode, msg: str) -> None:
         if self.mode is not None and self.mode is not style:

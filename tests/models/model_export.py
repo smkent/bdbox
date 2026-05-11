@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 """Export test model (Model subclass)."""
 
-from dataclasses import dataclass, field
+from __future__ import annotations
 
-from build123d import Box
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
+
+from build123d import Box, Compound
 
 from bdbox import Float, Model, Preset
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 @dataclass
@@ -23,6 +29,9 @@ class ExportModel(Model):
     size = Float(10.0, min=1.0, max=100.0)
     presets = (Preset("mid", size=8.5),)
 
-    def build(self) -> Box:
+    def build(self) -> Compound | Sequence[Compound]:
         """Build and return a box."""
-        return Box(self.size, self.size, self.size)
+        return (
+            Box(self.size, self.size, self.size),
+            Box(self.size * 2, self.size * 2, self.size * 2),
+        )
