@@ -106,7 +106,7 @@ def test_send_geometry_to_viewer(
     ):
         ModelRunner([Models.PARAMS_EXPORT, "view"], ViewAction())()
     mock_show.assert_called_once()
-    assert len(mock_show.call_args[0][0]) == 1
+    assert len(mock_show.call_args[0][0]) == 2
     assert capsys.readouterr().err == ""
 
 
@@ -114,9 +114,22 @@ def test_send_geometry_to_viewer(
 def test_view_with_export_creates_file(
     tmp_path: Path, model: Path, harness: HarnessWrapper, file_format: str
 ) -> None:
-    output_file = tmp_path / f"out.{file_format}"
-    harness([str(model), "view", "--no-watch", "--export", str(output_file)])()
-    assert output_file.exists()
+    output_file = tmp_path / "out"
+    harness(
+        [
+            str(model),
+            "view",
+            "--no-watch",
+            "--export",
+            str(output_file),
+            "--format",
+            file_format,
+        ]
+    )()
+    assert output_file.is_dir()
+    exported_files = list(output_file.iterdir())
+    assert len(exported_files) == 3
+    assert all(f.suffix == f".{file_format}" for f in exported_files)
 
 
 def test_send_to_viewer_warns_on_empty_geometry(

@@ -53,6 +53,8 @@ class ModelRunner(ModelLocator):
             raise RunError(e) from e
 
     def _run_model(self) -> dict[str, Any]:
+        if not run_state.filename:
+            run_state.filename = str(self.model_filename)
         if self.model_module:
             run_state.module_name = self.model_module
             run_state.class_name = self.model_class_name

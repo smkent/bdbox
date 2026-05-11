@@ -6,7 +6,7 @@ import subprocess
 import sys
 from dataclasses import InitVar, dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar, Protocol
+from typing import TYPE_CHECKING, Any, ClassVar, Literal, Protocol
 from unittest.mock import patch
 
 import pytest
@@ -36,8 +36,8 @@ class Runner(Protocol):
 
 @dataclass
 class ExportModelRunner:
-    file_format: str
-    output_file: Path = field(init=False)
+    file_format: Literal["step", "stl"]
+    output_dir: Path = field(init=False)
     tmp_path: InitVar[str | Path]
     monkeypatch: pytest.MonkeyPatch
 
@@ -47,24 +47,36 @@ class ExportModelRunner:
     }
 
     def __post_init__(self, tmp_path: str | Path) -> None:
-        self.output_file = Path(tmp_path) / f"out.{self.file_format}"
+        self.output_dir = Path(tmp_path) / "export"
 
     def __call__(
         self,
         filename: str | Path,
         argv: Sequence[Any],
         run_class: type[Runner] = ModelRunner,
+        num_outputs: int = 1,
+        *,
+        single: bool = True,
     ) -> None:
         kwargs = {}
         if run_class is ModelRunner:
-            kwargs["action"] = ExportAction(output=self.output_file)
+            kwargs["action"] = ExportAction(
+                output=self.output_dir, single=single, format=self.file_format
+            )
         args = [filename, *[str(a) for a in argv]]
+        if self.file_format == "stl":
+            args += ["--format", "stl"]
         self.monkeypatch.setattr(sys, "argv", args)
         run_class(args, **kwargs)()
-        assert self.output_file.exists()
-        assert self.output_file.read_text(
-            encoding="utf-8", errors="ignore"
-        ).startswith(self._FILE_HEADERS[self.file_format])
+        assert self.output_dir.exists()
+        output_files = list(self.output_dir.iterdir())
+        assert len(output_files) == num_outputs
+        for output_file in output_files:
+            format_header = self._FILE_HEADERS[self.file_format]
+            file_header = output_file.read_text(
+                encoding="utf-8", errors="ignore"
+            )[: len(format_header)]
+            assert file_header == format_header
 
 
 @dataclass
@@ -128,7 +140,10 @@ def test_model_export(
     run_class: type[Runner], model: Path, model_runner: ExportModelRunner
 ) -> None:
     model_runner(
-        model, ["export", model_runner.output_file], run_class=run_class
+        model,
+        ["export", "--single", model_runner.output_dir],
+        run_class=run_class,
+        single=True,
     )
 
 
@@ -139,8 +154,9 @@ def test_export_with_parameters_after(
 ) -> None:
     model_runner(
         model_with_params,
-        ["export", model_runner.output_file, "--size", "20"],
+        ["export", model_runner.output_dir, "--size", "20"],
         run_class=run_class,
+        num_outputs=3,
     )
 
 
@@ -151,22 +167,10 @@ def test_export_with_parameters_before(
 ) -> None:
     model_runner(
         model_with_params,
-        ["--size", "20", "export", model_runner.output_file],
+        ["--size", "20", "export", model_runner.output_dir],
         run_class=run_class,
+        num_outputs=3,
     )
-
-
-def test_export_no_output_arg(
-    run_class_info: RunClass,
-    model_with_params: Path,
-    model_runner: ExportModelRunner,
-) -> None:
-    with pytest.raises(run_class_info.exc_type or SystemExit):
-        model_runner(
-            model_with_params,
-            ["--size", "20", "export"],
-            run_class=run_class_info.cls,
-        )
 
 
 @pytest.mark.parametrize(
@@ -180,7 +184,11 @@ def test_export_no_output_arg(
 def test_main_export(
     model_file: Path, model_runner: ExportModelRunner
 ) -> None:
-    model_runner(MAIN_STUB, ["export", model_file, model_runner.output_file])
+    model_runner(
+        MAIN_STUB,
+        ["export", model_file, model_runner.output_dir],
+        num_outputs=3,
+    )
 
 
 def test_main_export_with_parameters(
@@ -191,10 +199,11 @@ def test_main_export_with_parameters(
         [
             "export",
             model_with_params,
-            model_runner.output_file,
+            model_runner.output_dir,
             "--size",
             "20",
         ],
+        num_outputs=3,
     )
 
 
@@ -237,7 +246,9 @@ def test_export_single_embedded_does_not_exec_harness(
 ) -> None:
     with patch.object(subprocess, "run") as mock_run:
         model_runner(
-            Models.PARAMS_EXPORT, ["export", model_runner.output_file]
+            Models.PARAMS_EXPORT,
+            ["export", model_runner.output_dir],
+            num_outputs=3,
         )
     mock_run.assert_not_called()
 
@@ -246,12 +257,38 @@ def test_export_single_embedded_does_not_exec_harness(
     ("model_file", "expected_stems"),
     [
         pytest.param(
-            Models.PARAMS_EXPORT, ["default", "mid"], id="Params-with-preset"
+            Models.PARAMS_EXPORT,
+            [
+                Models.PARAMS_EXPORT.stem,
+                f"{Models.PARAMS_EXPORT.stem}.Box",
+                f"{Models.PARAMS_EXPORT.stem}.Box_002",
+                f"{Models.PARAMS_EXPORT.stem}-mid",
+                f"{Models.PARAMS_EXPORT.stem}-mid.Box",
+                f"{Models.PARAMS_EXPORT.stem}-mid.Box_002",
+            ],
+            id="Params-with-preset",
         ),
         pytest.param(
-            Models.MODEL_EXPORT, ["default", "mid"], id="Model-with-preset"
+            Models.MODEL_EXPORT,
+            [
+                "ExportModel",
+                "ExportModel.Box",
+                "ExportModel.Box_002",
+                "ExportModel-mid",
+                "ExportModel-mid.Box",
+                "ExportModel-mid.Box_002",
+            ],
+            id="Model-with-preset",
         ),
-        pytest.param(Models.PLAIN_EXPORT, ["default"], id="plain-no-presets"),
+        pytest.param(
+            Models.PLAIN_EXPORT,
+            [
+                Models.PLAIN_EXPORT.stem,
+                f"{Models.PLAIN_EXPORT.stem}.Box",
+                f"{Models.PLAIN_EXPORT.stem}.Box_002",
+            ],
+            id="plain-no-presets",
+        ),
     ],
 )
 @pytest.mark.parametrize("file_format", ["step", "stl"])
@@ -260,7 +297,7 @@ def test_export_all_creates_preset_files(
     monkeypatch: pytest.MonkeyPatch,
     model_file: Path,
     expected_stems: list[str],
-    file_format: str,
+    file_format: Literal["step", "stl"],
 ) -> None:
     out_dir = tmp_path / "renders"
     args = [

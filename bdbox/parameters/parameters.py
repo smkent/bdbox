@@ -132,6 +132,7 @@ class Params(CLI, metaclass=ParamsType):
                 cli_result = cls.cli_config().instance_from_cli(
                     prog=Path(sys.argv[0]).name
                 )
+                run_state.model_cli = cli_result.params
             finally:
                 run_state.module_dict = sys.modules["__main__"].__dict__
             if run_state.action.mode != Action.Mode.HARNESS:

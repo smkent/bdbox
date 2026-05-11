@@ -87,11 +87,12 @@ from build123d import Box
 result = Box(10, 10, 10)
 ```
 
-Export to STEP or STL:
+Export geometry files:
 
 ```sh
-bdbox mymodel.py export out.step  # Export to STEP
-bdbox mymodel.py export out.stl   # Export to STL
+bdbox mymodel.py export           # Export STEP files to current directory
+bdbox mymodel.py export output/   # Export STEP files to output/
+bdbox mymodel.py export -f stl    # Export STL files to current directory
 ```
 
 View your model in the browser with [OCP CAD Viewer][ocp_vscode], started
@@ -105,7 +106,7 @@ Module paths work too:
 
 ```sh
 bdbox mypackage.mymodule view
-bdbox mypackage.mymodule export out.step
+bdbox mypackage.mymodule export
 ```
 
 **[See more about actions in the documentation!][docs-actions]**
@@ -170,11 +171,11 @@ python mymodel.py --preset large  # Apply a named preset
 python mymodel.py --help          # Usage info with all parameters
 ```
 
-Export geometry to STEP or STL files using the built-in `export` action:
+Export geometry files using the built-in `export` action:
 
 ```sh
-python mymodel.py export output.step  # Export to STEP
-python mymodel.py export output.stl   # Export to STL
+python mymodel.py export          # Export STEP files to current directory
+python mymodel.py export -f stl   # Export STL files to current directory
 ```
 
 **[See more about parameters in the documentation!][docs-parameters]**
