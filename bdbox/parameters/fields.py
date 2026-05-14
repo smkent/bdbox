@@ -4,7 +4,7 @@ import sys
 from collections.abc import Callable, Sequence
 from dataclasses import Field as DCField
 from dataclasses import dataclass, field
-from functools import cached_property, wraps
+from functools import wraps
 from typing import (
     Annotated,
     Any,
@@ -39,7 +39,7 @@ class Field:
 
     METADATA_KEY = "bdbox_field"
 
-    value_type: ClassVar[type]
+    value_type: ClassVar[type | None]
     default: Any
     description: Annotated[str | None, override(omit_if_default=True)] = None
 
@@ -97,7 +97,9 @@ class Field:
         arg_config = {}
         if description is not None:
             arg_config["help"] = description
-        if min is not None or max is not None or step is not None:
+        if self.value_type and (
+            min is not None or max is not None or step is not None
+        ):
             metavar = ""
             if min is not None:
                 metavar += f"{min} <= "
@@ -151,6 +153,8 @@ class NumberField(Field):
     description: Annotated[str | None, override(omit_if_default=True)] = None
 
     def __post_init__(self) -> None:
+        if not self.value_type:
+            return
         try:
             self.default = self._validate_number(
                 self.value_type, self.default, self.min, self.max, self.step
@@ -188,7 +192,7 @@ class NumberField(Field):
 class FloatField(NumberField):
     """Floating-point parameter."""
 
-    value_type: ClassVar[type] = float
+    value_type: ClassVar[type | None] = float
     default: float
     min: Annotated[
         float | None, override(rename="minimum", omit_if_default=True)
@@ -206,7 +210,7 @@ class FloatField(NumberField):
 class IntField(NumberField):
     """Integer parameter."""
 
-    value_type: ClassVar[type] = int
+    value_type: ClassVar[type | None] = int
     default: int
     min: Annotated[
         int | None, override(rename="minimum", omit_if_default=True)
@@ -224,7 +228,7 @@ class IntField(NumberField):
 class BoolField(Field):
     """Boolean parameter."""
 
-    value_type: ClassVar[type] = bool
+    value_type: ClassVar[type | None] = bool
     default: bool
     description: Annotated[str | None, override(omit_if_default=True)] = None
 
@@ -241,7 +245,7 @@ class BoolField(Field):
 class StrField(Field):
     """String parameter."""
 
-    value_type: ClassVar[type] = str
+    value_type: ClassVar[type | None] = str
     default: str
     min_length: Annotated[
         int | None, override(rename="minLength", omit_if_default=True)
@@ -282,10 +286,7 @@ class StrField(Field):
 class ChoiceField(Field, Generic[T]):
     """Choice parameter with a fixed set of choices."""
 
-    @cached_property
-    def value_type(self) -> type | None:
-        return None
-
+    value_type: ClassVar[type | None] = None
     default: T
     choices: Annotated[Sequence[T], override(rename="enum")]
     description: Annotated[str | None, override(omit_if_default=True)] = None
