@@ -14,6 +14,8 @@ from urllib.request import urlopen
 
 import psutil
 
+from bdbox.console import log
+
 
 @dataclass
 class _ViewerStub:
@@ -76,20 +78,21 @@ class ViewerManager:
         if proc := self.running_process():
             if not self.restart:
                 pid_str = f" (PID {proc.pid})" if proc.pid else ""
-                print(f"OCP viewer already running: {self.url}{pid_str}")  # noqa: T201
+                log.info(f"Already running on port {self._port}{pid_str}")
                 self._init_port()
                 return
             if proc.pid is None:
-                print(  # noqa: T201
-                    "OCP viewer running but PID unknown; skipping restart"
-                )
+                log.warning("Running but PID unknown; skipping restart")
                 self._init_port()
                 return
-            print(f"Stopping OCP viewer (PID {proc.pid})")  # noqa: T201
+            log.info(f"Stopping (PID {proc.pid})")
             self._terminate(proc)
-        print("Starting OCP viewer")  # noqa: T201
+        log.info("Starting OCP CAD Viewer")
         subprocess.Popen(
-            [sys.executable, "-m", "ocp_vscode"], start_new_session=True
+            [sys.executable, "-m", "ocp_vscode"],
+            start_new_session=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
         for _ in range(self._POLL_ATTEMPTS):
             try:
@@ -99,7 +102,7 @@ class ViewerManager:
                 time.sleep(self._POLL_INTERVAL)
         else:
             raise RuntimeError("OCP viewer failed to start")
-        print(f"OCP viewer running: {self.url}")  # noqa: T201
+        log.info(f"Running on port {self._port}")
         self._init_port()
         if self.open_browser:
             webbrowser.open_new_tab(self.url)
@@ -108,19 +111,19 @@ class ViewerManager:
     def stop(self) -> None:
         if proc := self.running_process():
             if proc.pid is None:
-                print("OCP viewer is running but PID is unknown; cannot stop")  # noqa: T201
+                log.warning("Running but PID unknown; cannot stop")
                 return
-            print(f"Stopping OCP viewer (PID {proc.pid})")  # noqa: T201
+            log.info(f"Stopping (PID {proc.pid})")
             self._terminate(proc)
         else:
-            print("OCP viewer is not running")  # noqa: T201
+            log.info("Not running")
 
     def status(self) -> None:
         if proc := self.running_process():
             pid_str = f" (PID {proc.pid})" if proc.pid else ""
-            print(f"OCP viewer running: {self.url}{pid_str}")  # noqa: T201
+            log.info(f"Running: {self.url}{pid_str}")
         else:
-            print("OCP viewer is not running")  # noqa: T201
+            log.info("Not running")
 
     def _terminate(self, proc: Any) -> None:
         proc.terminate()
@@ -144,4 +147,4 @@ class ViewerManager:
                 if self._send_command("status"):
                     return
             time.sleep(self._POLL_INTERVAL)
-        print("Warning: browser did not connect within timeout")  # noqa: T201
+        log.warning("Browser did not connect within timeout")

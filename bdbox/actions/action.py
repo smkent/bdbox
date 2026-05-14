@@ -11,6 +11,10 @@ from typing import TYPE_CHECKING, ClassVar, Protocol
 
 import tyro  # noqa: TC002
 
+from bdbox.console import console, log
+from bdbox.errors import RunError
+from bdbox.timer import Timer
+
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
     from pathlib import Path
@@ -52,9 +56,17 @@ class Action:
         """Executed prior to running the harness."""
 
     @contextmanager
-    def on_model_render(self) -> Iterator[None]:
+    def on_model_render(self) -> Iterator[Timer]:
         """Executed around model run."""
-        yield
+        timer = Timer()
+        with console.log_stdout_stderr(), console.activity_indicator():
+            try:
+                yield timer
+            except (Exception, SystemExit) as e:
+                log.exception("Run failed (%dms)", timer.end)
+                raise RunError(e) from e
+            else:
+                log.info("Run complete (%dms)", timer.end)
 
     def watch_end(self) -> None:
         """Executed after the harness finishes."""
@@ -65,9 +77,9 @@ class ModelAction(Action):
     def _ensure_runner(self) -> None:
         if self.mode != self.Mode.HARNESS:
             try:
-                returncode = subprocess.run(  # noqa: S603, PLW1510
-                    [sys.executable, "-m", "bdbox", *sys.argv]
-                ).returncode
+                cmd = [sys.executable, "-m", "bdbox", *sys.argv]
+                log.debug(f"Exec: {' '.join(cmd)}")
+                returncode = subprocess.run(cmd).returncode  # noqa: S603, PLW1510
             except KeyboardInterrupt:
                 sys.exit(130)
             except Exception:  # noqa: BLE001

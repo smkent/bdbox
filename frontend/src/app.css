@@ -181,23 +181,7 @@
   overflow: hidden;
 }
 
-.console-output {
+.console-panel .xterm {
   height: 100%;
-  margin: 0;
-  padding: 6px 8px;
-  overflow-y: auto;
-  font-family: monospace;
-  font-size: 12px;
-  color: #ccc;
-  white-space: pre-wrap;
-  word-break: break-all;
-  box-sizing: border-box;
-}
-
-.console-output span {
-  display: block;
-}
-
-.console-stderr {
-  color: #f86;
+  padding: 4px 6px;
 }

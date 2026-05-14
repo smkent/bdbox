@@ -1,8 +1,11 @@
 import { GoldenLayout } from "golden-layout";
 import Alpine from "alpinejs";
 import Jedison from "jedison";
+import { Terminal } from "@xterm/xterm";
+import { FitAddon } from "@xterm/addon-fit";
 import "golden-layout/dist/css/goldenlayout-base.css";
 import "golden-layout/dist/css/themes/goldenlayout-dark-theme.css";
+import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { connectWs, sendWs } from "./ws.js";
 
@@ -190,20 +193,39 @@ function registerComponents(layout) {
   layout.registerComponentFactoryFunction("console", (container) => {
     const div = document.createElement("div");
     div.className = "console-panel";
-    const pre = document.createElement("pre");
-    pre.className = "console-output";
-    div.appendChild(pre);
     container.element.appendChild(div);
 
-    window.addEventListener("bdbox:run_start", () => {
-      pre.textContent = "";
+    const terminal = new Terminal({
+      convertEol: true,
+      disableStdin: true,
+      scrollback: 1000,
+      theme: { background: "#1a1a1a", foreground: "#ccc" },
+      fontFamily: "monospace",
+      fontSize: 12,
     });
+    const fitAddon = new FitAddon();
+    terminal.loadAddon(fitAddon);
+    terminal.open(div);
+    fitAddon.fit();
+
+    const sendSize = () =>
+      sendWs({
+        type: "terminal_size",
+        cols: terminal.cols,
+        rows: terminal.rows,
+      });
+
+    const fit = () => {
+      fitAddon.fit();
+      sendSize();
+    };
+    new ResizeObserver(fit).observe(div);
+    container.on("resize", fit);
+
+    window.addEventListener("bdbox:ws_open", sendSize);
+    window.addEventListener("bdbox:run_start", () => terminal.clear());
     window.addEventListener("bdbox:console", ({ detail }) => {
-      const span = document.createElement("span");
-      span.className = `console-${detail.stream}`;
-      span.textContent = detail.text;
-      pre.appendChild(span);
-      pre.scrollTop = pre.scrollHeight;
+      terminal.write(detail.text);
     });
   });
 }

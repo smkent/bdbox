@@ -11,6 +11,10 @@ export function sendWs(msg) {
 export function connectWs() {
   _ws = new WebSocket(`ws://${window.location.host}/ws`);
 
+  _ws.addEventListener("open", () => {
+    window.dispatchEvent(new CustomEvent("bdbox:ws_open"));
+  });
+
   _ws.addEventListener("message", ({ data }) => {
     let msg;
     try {

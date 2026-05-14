@@ -12,6 +12,8 @@ from urllib.request import urlopen
 
 from uvicorn import Config, Server
 
+from bdbox.console import log
+
 from .app import App
 
 if TYPE_CHECKING:
@@ -52,7 +54,7 @@ class ServerManager:
                 time.sleep(self._POLL_INTERVAL)
         else:
             raise RuntimeError("bdbox server failed to start")
-        print(f"bdbox server running: {self.url}")  # noqa: T201
+        log.info(f"Server running: {self.url}")
         if self.open_browser:
             webbrowser.open_new_tab(self.url)
         return self

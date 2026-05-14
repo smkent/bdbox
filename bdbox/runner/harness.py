@@ -16,7 +16,7 @@ import tyro
 
 from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
-from bdbox.cli import CLI
+from bdbox.cli import CLI, CLIOptions
 from bdbox.errors import InternalError, RunError
 from bdbox.parameters.state import run_state
 
@@ -75,14 +75,16 @@ class ModelHarness(ModelLocator):
     )
 
     @dataclass
-    class HarnessCLI(CLI):
+    class HarnessCLI(CLI, CLIOptions):
         action: HarnessAction
 
     def __post_init__(
         self, model_argv: Sequence[Path | str] | Path | str
     ) -> None:
         Action.mode = Action.Mode.HARNESS
-        super().__post_init__(model_argv or sys.argv[1:].copy())
+        argv = self._setup_argv(model_argv or sys.argv[1:])
+        CLIOptions.configure_from_cli(args=argv)
+        super().__post_init__(argv)
         if len(sys.argv) == 1:
             self.argv.append("--help")
 
@@ -103,18 +105,20 @@ class ModelHarness(ModelLocator):
             return
         if hook_result and hook_result.runs:
             for argv, action in hook_result.runs:
-                ModelRunner(argv, action, preserve_exceptions=True)()
+                ModelRunner(
+                    argv, action, preserve_exceptions=True
+                ).run_or_exit()
             return
         runner = ModelRunner([self.model, *self.argv], cli_result.action)
         if cli_result.action.watch:
             ModelWatcher(runner=runner, change_event=self.rerender_event).run()
             return
         runner.preserve_exceptions = True
-        runner()
+        runner.run_or_exit()
 
     @cached_property
     def params_argv(self) -> Sequence[str]:
-        _, params_argv = (
+        inst, params_argv = (
             cast(
                 "CLI",
                 make_dataclass(
@@ -131,7 +135,7 @@ class ModelHarness(ModelLocator):
                 add_help=False,
             )
         )
-        return params_argv
+        return [*params_argv, *inst.to_args()]
 
     @cached_property
     def maybe_model(self) -> Path | str | None:

@@ -7,6 +7,8 @@ from contextlib import suppress
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
+from bdbox.console import log
+
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
 
@@ -78,9 +80,9 @@ class Geometry:
         if not geometry:
             return None
         try:
-            print(geometry.show_topology(limit_class="Solid"))  # noqa: T201
-        except Exception as e:  # noqa: BLE001
-            print("Error showing topology:", e)  # noqa: T201
+            log.debug(geometry.show_topology(limit_class="Solid"))
+        except Exception:  # noqa: BLE001
+            log.exception("Error showing geometry topology")
         return geometry
 
 

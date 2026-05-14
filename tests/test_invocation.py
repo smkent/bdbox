@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -30,7 +31,8 @@ class Runner:
         self, cmd: Sequence[Any], test_mode: str = "", **kwargs: Any
     ) -> str:
         kwargs.setdefault(
-            "env", os.environ | {"BDBOX_TEST_MODEL_MODE": test_mode}
+            "env",
+            os.environ | {"BDBOX_TEST_MODEL_MODE": test_mode, "COLUMNS": "80"},
         )
         kwargs.setdefault("text", True)
         kwargs.setdefault("stdout", subprocess.PIPE)
@@ -42,10 +44,13 @@ class Runner:
         assert result.returncode == 0
         return result.stdout.strip()
 
+    def sanitize(self, output: str) -> str:
+        return re.sub(r"\(\d+\s?ms\)", "([TIMER]ms)", output)
+
     def match_snapshot(
         self, cmd: Sequence[Any], *args: Any, **kwargs: Any
     ) -> None:
-        assert self(cmd, *args, **kwargs) == self.snapshot
+        assert self.sanitize(self(cmd, *args, **kwargs)) == self.snapshot
 
     def raises(
         self, cmd: Sequence[Any], match: str
@@ -302,7 +307,7 @@ def test_params_class_blank(
 def test_params_class_multiple_params_raises(runner: Runner) -> None:
     runner.raises(
         [Models.PARAMS_CLASS_MULTIPLE_PARAMS],
-        "a Params subclass is already defined in this script",
+        "ParamsError: Cannot define Params subclass",
     )
 
 

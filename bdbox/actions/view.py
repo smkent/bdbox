@@ -2,20 +2,18 @@
 
 from __future__ import annotations
 
-import sys
-import time
-import traceback
-from contextlib import contextmanager, nullcontext
+import io
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
 from dataclasses import dataclass
 from pathlib import Path  # noqa: TC003
 from typing import TYPE_CHECKING, Annotated, Literal
 
 import tyro
 
+from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.geometry import resolve_geometry
 from bdbox.parameters.state import run_state
-from bdbox.server.console import tee_stderr
 from bdbox.server.context import Context
 from bdbox.server.server import ServerManager
 from bdbox.viewer import ViewerManager
@@ -25,6 +23,8 @@ from .export import ExportAction
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
+
+    from build123d import Compound, Shape
 
 
 @dataclass
@@ -74,14 +74,23 @@ class ViewAction(ModelAction):
         """Send collected geometry to the viewer."""
         geometry = resolve_geometry()
         if not geometry:
-            print("Warning: no geometry collected", file=sys.stderr)  # noqa: T201
-        from ocp_vscode import show  # noqa: PLC0415
-
-        print("Sending model geometry to viewer")  # noqa: T201
-        show(geometry)
-
+            log.warning("No geometry collected")
+            return
+        self.show(geometry)
         if self.export:
             ExportAction(output=self.export, format=self.format)()
+
+    def show(self, geometry: Compound | Shape) -> None:
+        from ocp_vscode import show  # noqa: PLC0415
+
+        log.debug("Sending geometry to viewer")
+        buf = io.StringIO()
+        try:
+            with redirect_stdout(buf), redirect_stderr(buf):
+                show(geometry)
+        finally:
+            if ocp_vscode_output := buf.getvalue().strip():
+                log.debug(ocp_vscode_output)
 
     def before_harness(
         self, args: ModelAction.ModelHarnessProtocol
@@ -115,31 +124,30 @@ class ViewAction(ModelAction):
 
     @contextmanager
     def on_model_render(self) -> Iterator[None]:
-        self._ensure_runner()
-        if not self.server_manager:
-            yield
-            return
-        ctx = self.server_manager.context
-        run_state.param_overrides = dict(ctx.param_overrides)
-        start_time = time.monotonic()
-        ctx.msg_queue.put(
-            {"type": "run_start", "params": dict(ctx.param_overrides)}
-        )
-        with tee_stderr(ctx.msg_queue) if ctx else nullcontext():
+        with super().on_model_render() as timer:
+            self._ensure_runner()
+            if not self.server_manager:
+                yield
+                return
+            ctx = self.server_manager.context
+            run_state.param_overrides = dict(ctx.param_overrides)
+            ctx.msg_queue.put(
+                {"type": "run_start", "params": dict(ctx.param_overrides)}
+            )
+            log.info("Running model")
             try:
                 yield
-                elapsed = int((time.monotonic() - start_time) * 1000)
+            except (Exception, SystemExit):
+                ctx.msg_queue.put(
+                    {"type": "run_error", "elapsed_ms": timer.end}
+                )
+                raise
+            else:
                 self._update_schema(ctx)
                 ctx.msg_queue.put(
                     {
                         "type": "run_ok",
-                        "elapsed_ms": elapsed,
+                        "elapsed_ms": timer.end,
                         "current_values": dict(run_state.resolved_values),
                     }
                 )
-            except (Exception, SystemExit):
-                traceback.print_exc(file=sys.stderr)
-                if ctx:
-                    tb = traceback.format_exc()
-                    ctx.msg_queue.put({"type": "run_error", "traceback": tb})
-                raise

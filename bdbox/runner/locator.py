@@ -31,15 +31,20 @@ class ModelLocator:
     def __post_init__(
         self, model_argv: Sequence[Path | str] | Path | str
     ) -> None:
-        self.argv = (
-            [str(model_argv)]
-            if isinstance(model_argv, (Path, str))
-            else [str(v) for v in model_argv]
-        )
+        self.argv = self._setup_argv(model_argv)
         model_file = self._model_path_from_argv()
         if model_file:
             self.model_path = Path(model_file).resolve()
             self.model_filename = str(model_file)
+
+    def _setup_argv(
+        self, model_argv: Sequence[Path | str] | Path | str
+    ) -> list[str]:
+        return (
+            [str(model_argv)]
+            if isinstance(model_argv, (Path, str))
+            else [str(v) for v in model_argv]
+        )
 
     @cached_property
     def model_base_dir(self) -> Path:

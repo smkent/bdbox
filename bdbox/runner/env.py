@@ -8,6 +8,8 @@ from dataclasses import InitVar, dataclass, field
 from importlib.util import find_spec
 from pathlib import Path
 
+from bdbox.console import log
+
 ENV_VAR = "BDBOX_FOUND_ENVIRONMENT"
 
 
@@ -80,7 +82,7 @@ class EnvLocator:
 
     def exec(self, exec_executable: str) -> None:
         if existing_exe := os.environ.get(ENV_VAR):
-            print(  # noqa: T201
+            log.error(
                 f"Already reinvoked with {existing_exe}!"
                 " Preventing reinvocation loop."
             )
@@ -95,5 +97,6 @@ class EnvLocator:
         if Path(sys.executable).parent.parent == venv_dir.resolve():
             return
         if exec_executable := self.venv_python_if_module(venv_dir):
+            log.debug(f"Exec: {exec_executable}")
             self.exec(str(exec_executable))
         return

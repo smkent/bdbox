@@ -9,6 +9,7 @@ from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
 from .actions.action import Action
+from .console import log
 from .errors import MultipleModelsError
 from .geometry import show
 from .parameters.annotations import Annotater
@@ -143,10 +144,9 @@ class Model(Params):
             if not (model_class := cast("type[Model]", run_state.get_model())):
                 return
         except MultipleModelsError as e:
-            print(  # noqa: T201
-                f"Multiple Model subclasses defined: {', '.join(e.names)}."
-                " Call .run() explicitly.",
-                file=sys.stderr,
+            log.error(
+                f"Multiple Model subclasses defined:"
+                f" {', '.join(e.names)}. Call .run() explicitly."
             )
             return
         try:
@@ -157,3 +157,7 @@ class Model(Params):
             sys.stdout.flush()
             sys.stderr.flush()
             os._exit(exc.code if isinstance(exc.code, int) else 1)
+        except Exception:  # noqa: BLE001
+            sys.stdout.flush()
+            sys.stderr.flush()
+            os._exit(1)

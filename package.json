@@ -10,6 +10,8 @@
     "format": "prettier --write frontend/ package.json eslint.config.js"
   },
   "dependencies": {
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
     "alpinejs": "^3.14.0",
     "golden-layout": "^2.6.0",
     "jedison": "^1.11.2"

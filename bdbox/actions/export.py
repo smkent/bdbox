@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Annotated, Literal
 
 import tyro
 
+from bdbox.console import log
 from bdbox.errors import Error, InternalError
 from bdbox.geometry import resolve_geometry
 from bdbox.parameters.state import run_state
@@ -163,7 +164,7 @@ class ExportAction(ModelAction):
         self.output.mkdir(exist_ok=True, parents=True)
         for name, solid in exports.parts.items():
             part_file = self.output / f"{name}.{self.format}"
-            print(f"Exporting model geometry to {part_file}")  # noqa: T201
+            log.info(f"Exporting model geometry to {part_file}")
             self._exporter(solid, str(part_file))
 
     def before_harness(
@@ -196,6 +197,7 @@ class ExportAction(ModelAction):
 
     @contextmanager
     def on_model_render(self) -> Iterator[None]:
-        if self.all_presets:
-            self._ensure_runner()
-        yield
+        with super().on_model_render():
+            if self.all_presets:
+                self._ensure_runner()
+            yield

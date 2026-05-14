@@ -161,7 +161,7 @@ class Serializer:
         default: Any = MISSING
         if f.default is not MISSING:
             default = f.default
-        elif f.default_factory is not MISSING:  # type: ignore[misc]
+        elif f.default_factory is not MISSING:
             default = f.default_factory()
 
         return self._hint_to_schema(hint, default)
