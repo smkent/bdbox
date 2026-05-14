@@ -36,7 +36,7 @@ async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
     try:
         yield
     finally:
-        context.msg_queue.put(_STOP)
+        context.msg_queue.put(_STOP)  # ty: ignore[invalid-argument-type]
         await task
 
 
