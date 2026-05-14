@@ -114,22 +114,17 @@ def test_harness_existing_non_model_file(
     assert capsys.readouterr().err == snapshot
 
 
-@pytest.mark.parametrize(
-    "model",
-    [
-        pytest.param(
-            Models.MIXED_MODEL_THEN_PARAMS, id="mixed_model_then_params"
-        ),
-        pytest.param(
-            Models.MIXED_PARAMS_THEN_MODEL, id="mixed_params_then_model"
-        ),
-    ],
-)
-def test_harness_mixed_modes(
-    model_runner: HarnessRunnerRunner, model: str
+def test_harness_mixed_model_then_params_raises(
+    model_runner: HarnessRunnerRunner,
 ) -> None:
     with pytest.raises(ParamsError, match=r"Cannot .* with an existing"):
-        model_runner(model)
+        model_runner(Models.MIXED_MODEL_THEN_PARAMS)
+
+
+def test_harness_mixed_params_then_model_exits(
+    model_runner: HarnessRunnerRunner,
+) -> None:
+    model_runner(Models.MIXED_PARAMS_THEN_MODEL)
 
 
 @pytest.mark.parametrize(

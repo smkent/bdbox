@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, TextIO, cast
 
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 
+from bdbox.console import console, log
 from bdbox.parameters.serializer import Serializer
 
+from .console import WebStream
 from .context import Context
 
 routes_router = APIRouter()
@@ -27,7 +30,7 @@ class ConnectionManager:
     def disconnect(self, ws: WebSocket) -> None:
         self.active.remove(ws)
 
-    async def broadcast(self, message: dict) -> None:  # type: ignore[type-arg]
+    async def broadcast(self, message: dict) -> None:
         for ws in list(self.active):
             try:
                 await ws.send_json(message)
@@ -64,11 +67,19 @@ async def shell(request: Request) -> str:
     return _PAGE_TEMPLATE.format(viewer_port=Context.get(request).viewer_port)
 
 
-def _handle_client_message(data: dict[str, Any], context: Context) -> None:
+def _handle_client_message(
+    websocket: WebSocket, data: dict[str, Any], context: Context
+) -> None:
     msg_type = data.get("type")
-    if msg_type == "update_param":
+    if msg_type == "terminal_size":
+        cols = int(data.get("cols", 80))
+        console.add_web_output(
+            id(websocket), cast("TextIO", WebStream(context.msg_queue)), cols
+        )
+    elif msg_type == "update_param":
         context.param_overrides[data["field"]] = data["value"]
         context.rerender_event.set()
+        log.debug(f"Parameter updated: {data['field']} = {data['value']}")
     elif msg_type == "select_preset":
         if context.model_class:
             for preset in context.model_class.presets:
@@ -81,10 +92,12 @@ def _handle_client_message(data: dict[str, Any], context: Context) -> None:
                         }
                     )
                     context.rerender_event.set()
+                    log.debug(f"Preset selected: {preset.name}")
                     break
     elif msg_type == "reset_params":
         context.param_overrides.clear()
         context.rerender_event.set()
+        log.debug("Parameters reset")
 
 
 @routes_router.websocket("/ws")
@@ -93,27 +106,32 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
     await manager.connect(websocket)
     try:
         if context.model_class:
-            await websocket.send_json(
-                {
-                    "type": "schema",
-                    "schema": context.model_class.schema(),
-                    "current_values": context.current_values,
-                }
-            )
+            msg = {
+                "type": "schema",
+                "schema": context.model_class.schema(),
+                "current_values": context.current_values,
+            }
+            log.debug("Sent %s", msg["type"])
+            log.trace(json.dumps(msg, indent=4))
+            await websocket.send_json(msg)
         while True:
             try:
                 data = await websocket.receive_json()
             except ValueError:
                 continue
+            log.debug("Received %s", data["type"])
+            log.trace(json.dumps(data, indent=4))
             try:
-                _handle_client_message(data, context)
+                _handle_client_message(websocket, data, context)
             except (KeyError, TypeError):
                 continue
-            await websocket.send_json(
-                {
-                    "type": "param_overrides",
-                    "param_overrides": dict(context.param_overrides),
-                }
-            )
+            reply = {
+                "type": "param_overrides",
+                "param_overrides": dict(context.param_overrides),
+            }
+            log.debug("Sent %s", reply["type"])
+            log.trace(json.dumps(reply, indent=4))
+            await websocket.send_json(reply)
     except WebSocketDisconnect:
+        console.remove_web_output(id(websocket))
         manager.disconnect(websocket)

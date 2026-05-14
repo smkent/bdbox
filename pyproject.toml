@@ -34,6 +34,7 @@ dependencies = [
     "fastapi>=0.136.1",
     "ocp_vscode",
     "psutil>=5.0",
+    "rich>=15.0.0",
     "typing_extensions>=4.1; python_version < '3.12'",
     "tyro>=1.0.12",
     "uvicorn[standard]>=0.46.0",

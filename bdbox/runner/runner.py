@@ -52,6 +52,12 @@ class ModelRunner(ModelLocator):
                 raise
             raise RunError(e) from e
 
+    def run_or_exit(self, action: Action | None = None) -> None:
+        try:
+            self(action=action)
+        except RunError:
+            sys.exit(1)
+
     def _run_model(self) -> dict[str, Any]:
         if not run_state.filename:
             run_state.filename = str(self.model_filename)
@@ -71,5 +77,8 @@ class ModelRunner(ModelLocator):
     def _ensure_stack_closed(self) -> Iterator[None]:
         try:
             yield
-        finally:
+        except (SystemExit, Exception):
+            if not run_state.close_stack():
+                raise
+        else:
             run_state.close_stack()

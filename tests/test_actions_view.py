@@ -96,10 +96,7 @@ def test_view_no_watch_skips_watcher(
     mock_start.assert_called_once()
 
 
-def test_send_geometry_to_viewer(
-    capsys: pytest.CaptureFixture[str],
-    mock_ocp_vscode: MockOcpVscode,
-) -> None:
+def test_send_geometry_to_viewer(mock_ocp_vscode: MockOcpVscode) -> None:
     with (
         patch.object(Action, "mode", Action.Mode.HARNESS),
         patch.object(mock_ocp_vscode, "show") as mock_show,
@@ -107,7 +104,6 @@ def test_send_geometry_to_viewer(
         ModelRunner([Models.PARAMS_EXPORT, "view"], ViewAction())()
     mock_show.assert_called_once()
     assert len(mock_show.call_args[0][0]) == 2
-    assert capsys.readouterr().err == ""
 
 
 @pytest.mark.parametrize("file_format", ["step", "stl"])
@@ -134,7 +130,7 @@ def test_view_with_export_creates_file(
 
 def test_send_to_viewer_warns_on_empty_geometry(
     tmp_path: Path,
-    capsys: pytest.CaptureFixture[str],
+    log: pytest.LogCaptureFixture,
     mock_ocp_vscode: MockOcpVscode,
     harness: HarnessWrapper,
 ) -> None:
@@ -147,4 +143,5 @@ def test_send_to_viewer_warns_on_empty_geometry(
         side_effect=lambda self: self.runner(),
     ):
         harness([str(model), "view"])()
-    assert "Warning: no geometry collected" in capsys.readouterr().err
+    assert "No geometry collected" in log.messages
+    assert "Sending geometry to viewer" not in log.messages

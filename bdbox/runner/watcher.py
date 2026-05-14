@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
+from bdbox.console import log
 from bdbox.errors import InternalError, RunError
 
 if TYPE_CHECKING:
@@ -77,7 +78,8 @@ class ModelWatcher:
                     with self.handle_modules, suppress(RunError):
                         self.runner()
             except KeyboardInterrupt:
-                print("Quitting", file=sys.stderr)  # noqa: T201
+                print(file=sys.stderr)  # noqa: T201
+                log.info("Quitting")
             finally:
                 if self.runner.action:
                     self.runner.action.watch_end()

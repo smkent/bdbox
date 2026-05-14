@@ -18,6 +18,7 @@ import tyro
 
 from bdbox.actions.field import ActionField
 from bdbox.actions.run import RunAction
+from bdbox.console import console
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -30,6 +31,12 @@ if TYPE_CHECKING:
 
 T = TypeVar("T", bound="CLI")
 
+TYRO_CLI_CONFIG = (
+    tyro.conf.CascadeSubcommandArgs,
+    tyro.conf.OmitSubcommandPrefixes,
+    tyro.conf.SuppressFixed,
+)
+
 
 class CLIActions(Protocol[T]):
     params: T
@@ -37,15 +44,45 @@ class CLIActions(Protocol[T]):
 
 
 @dataclass
-class CLI:
-    _TYRO_CLI_CONFIG = (
-        tyro.conf.CascadeSubcommandArgs,
-        tyro.conf.OmitSubcommandPrefixes,
-        tyro.conf.SuppressFixed,
-    )
+class CLIOptions:
+    verbose: Annotated[
+        tyro.conf.UseCounterAction[int],
+        tyro.conf.arg(
+            aliases=["-v"],
+            help=("Increase logging verbosity."),
+        ),
+        tyro.conf.FlagCreatePairsOff,
+    ] = field(default=0, kw_only=True)
+
+    def configure(self) -> None:
+        console.configure(verbose=self.verbose)
 
     @classmethod
-    def cli_config(cls, base_cls: type[T] | None = None) -> type[CLIConfig[T]]:
+    def configure_from_cli(
+        cls, prog: str | None = None, *args: Any, **kwargs: Any
+    ) -> Self:
+        instance, _ = tyro.cli(
+            cls,
+            *args,
+            prog=prog,
+            return_unknown_args=True,
+            add_help=False,
+            config=TYRO_CLI_CONFIG,
+            **kwargs,
+        )
+        instance.configure()
+        return instance
+
+    def to_args(self) -> Sequence[str]:
+        if self.verbose:
+            return ["-" + ("v" * self.verbose)]
+        return []
+
+
+@dataclass
+class CLI:
+    @classmethod
+    def cli_config(cls) -> type[CLIConfig[T]]:
         return cast(
             "type[CLIConfig]",
             make_dataclass(
@@ -62,7 +99,7 @@ class CLI:
                         field(default_factory=RunAction, kw_only=True),
                     ),
                 ],
-                bases=(base_cls or CLI,),
+                bases=(CLI, CLIOptions),
             ),
         )
 
@@ -90,11 +127,14 @@ class CLI:
     def instance_from_cli(
         cls, prog: str | None = None, *args: Any, **kwargs: Any
     ) -> Self | tuple[Self, Sequence[str]]:
-        return tyro.cli(
-            cls, *args, prog=prog, config=cls._TYRO_CLI_CONFIG, **kwargs
+        result = tyro.cli(
+            cls, *args, prog=prog, config=TYRO_CLI_CONFIG, **kwargs
         )
+        if isinstance(result, CLIOptions):
+            result.configure()
+        return result
 
 
 @dataclass
-class CLIConfig(CLIActions, CLI, Generic[T]):
+class CLIConfig(CLIActions, CLI, CLIOptions, Generic[T]):
     pass

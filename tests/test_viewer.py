@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+import subprocess
 import sys
 import time
 import webbrowser
@@ -195,7 +196,10 @@ class PSMock:
 
     def assert_launched(self) -> None:
         self.mock_popen.assert_called_once_with(
-            [sys.executable, "-m", "ocp_vscode"], start_new_session=True
+            [sys.executable, "-m", "ocp_vscode"],
+            start_new_session=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
 
     def assert_not_launched(self) -> None:
@@ -300,7 +304,7 @@ def test_start_running_process_returns_none_when_all_attempts_fail(
 @pytest.mark.usefixtures("mock_net_connections_denied")
 def test_start_running_without_pid(
     ps_mock: PSMock,
-    capsys: pytest.CaptureFixture[str],
+    log: pytest.LogCaptureFixture,
     mock_ocp_vscode: MockOcpVscode,
     model: Path,
     watch_args: Sequence[str],
@@ -316,29 +320,28 @@ def test_start_running_without_pid(
         exec_main(str(model), "view", "--restart-viewer", *watch_args)
 
     mock_set_port.assert_called_once_with(ps_mock.ocp_port)
-    assert "running" in capsys.readouterr().out
+    assert "Running but PID unknown" in log.text
 
 
 @pytest.mark.usefixtures("mock_net_connections_denied")
 def test_stop_running_without_pid(
-    ps_mock: PSMock, capsys: pytest.CaptureFixture[str], exec_main: ExecMain
+    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     """stop() prints a message and skips termination without a PID."""
     with ps_mock():
         exec_main("viewer", "stop")
-    assert "cannot" in capsys.readouterr().out.lower()
+    assert "cannot" in log.text
 
 
 @pytest.mark.usefixtures("mock_net_connections_denied")
 def test_status_running_without_pid(
-    ps_mock: PSMock, capsys: pytest.CaptureFixture[str], exec_main: ExecMain
+    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     """status() shows URL but omits PID when process info is unavailable."""
     with ps_mock():
         exec_main("viewer", "status")
-    out = capsys.readouterr().out
-    assert "localhost" in out
-    assert "None" not in out
+    assert "localhost" in log.text
+    assert "None" not in log.text
 
 
 def test_start_launches(ps_mock: PSMock, exec_main: ExecMain) -> None:
@@ -437,7 +440,7 @@ def test_start_open_browser_wait(ps_mock: PSMock, exec_main: ExecMain) -> None:
 
 
 def test_start_open_browser_wait_timeout(
-    ps_mock: PSMock, capsys: pytest.CaptureFixture[str], exec_main: ExecMain
+    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     ps_mock.mock_send_command.side_effect = lambda cmd: {}
     with (
@@ -446,7 +449,7 @@ def test_start_open_browser_wait_timeout(
     ):
         exec_main("viewer", "start", "--open-browser")
     assert mock_sleep.call_count == 120
-    assert "Warning" in capsys.readouterr().out
+    assert "Browser did not connect" in log.text
 
 
 def test_start_viewer_timeout(
@@ -473,30 +476,29 @@ def test_stop_terminates_running_process(
 
 
 def test_stop_when_not_running(
-    ps_mock: PSMock, capsys: pytest.CaptureFixture[str], exec_main: ExecMain
+    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     with ps_mock(launches=False):
         exec_main("viewer", "stop")
-    assert "not running" in capsys.readouterr().out
+    assert "Not running" in log.text
 
 
 def test_status_running_shows_url_and_pid(
-    ps_mock: PSMock, capsys: pytest.CaptureFixture[str], exec_main: ExecMain
+    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     conn = ps_mock.add_connection(pid=1138)
     with ps_mock(launches=False):
         exec_main("viewer", "status")
-    out = capsys.readouterr().out
-    assert str(conn.pid) in out
-    assert "localhost" in out
+    assert str(conn.pid) in log.text
+    assert "localhost" in log.text
 
 
 def test_status_not_running(
-    ps_mock: PSMock, capsys: pytest.CaptureFixture[str], exec_main: ExecMain
+    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     with ps_mock(launches=False):
         exec_main("viewer", "status")
-    assert "not running" in capsys.readouterr().out
+    assert "Not running" in log.text
 
 
 def test_model_view_starts_viewer(
@@ -565,9 +567,9 @@ def test_viewer_stop(ps_mock: PSMock, exec_main: ExecMain) -> None:
 
 
 def test_viewer_status(
-    ps_mock: PSMock, capsys: pytest.CaptureFixture[str], exec_main: ExecMain
+    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     ps_mock.add_connection(pid=1138)
     with ps_mock(launches=False):
         exec_main("viewer", "status")
-    assert "running" in capsys.readouterr().out
+    assert "Running" in log.text

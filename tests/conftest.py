@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import random
 import subprocess
@@ -93,3 +94,11 @@ def mock_ocp_vscode(monkeypatch: pytest.MonkeyPatch) -> MockOcpVscode:
 )
 def model_base(request: pytest.FixtureRequest) -> type[Params]:
     return request.param
+
+
+@pytest.fixture
+def log(
+    caplog: pytest.LogCaptureFixture,
+) -> Iterator[pytest.LogCaptureFixture]:
+    with caplog.at_level(logging.DEBUG, logger="bdbox"):
+        yield caplog
