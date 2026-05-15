@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
-from bdbox.actions.run import RunAction
+from bdbox.action_state import action_state
 from bdbox.errors import InternalError, RunError
 from bdbox.parameters.state import run_state
 
@@ -30,7 +30,8 @@ class ModelRunner(ModelLocator):
         if not self.model_filename:
             raise InternalError("Model not found in arguments")
         reset_bdbox()
-        run_state.action = action or self.action or RunAction()
+        if set_action := (action or self.action):
+            action_state.action = set_action
         main_module = MainModule(
             filename=self.model_filename, module_name=self.model_module
         )
@@ -46,7 +47,7 @@ class ModelRunner(ModelLocator):
                 main_module.__dict__.update(self._run_model())
                 mock_main.start()
                 if not atexit_mock.hooks:
-                    run_state.act_once()
+                    action_state.act_once()
         except (SystemExit, Exception) as e:
             if self.preserve_exceptions:
                 raise
@@ -78,7 +79,7 @@ class ModelRunner(ModelLocator):
         try:
             yield
         except (SystemExit, Exception):
-            if not run_state.close_stack():
+            if not action_state.close_stack():
                 raise
         else:
-            run_state.close_stack()
+            action_state.close_stack()

@@ -137,23 +137,22 @@ class ViewAction(ModelAction):
                 yield
                 return
             ctx = self.server_manager.context
-            with ctx.mark_running():
-                run_state.param_overrides = dict(ctx.param_overrides)
+            run_state.param_overrides = dict(ctx.param_overrides)
+            ctx.enqueue(
+                {"type": "run_start", "params": dict(ctx.param_overrides)}
+            )
+            log.info("Running model")
+            try:
+                yield
+            except (Exception, SystemExit):
+                ctx.enqueue({"type": "run_error", "elapsed_ms": timer.end})
+                raise
+            else:
+                self._update_schema(ctx)
                 ctx.enqueue(
-                    {"type": "run_start", "params": dict(ctx.param_overrides)}
+                    {
+                        "type": "run_ok",
+                        "elapsed_ms": timer.end,
+                        "current_values": dict(run_state.resolved_values),
+                    }
                 )
-                log.info("Running model")
-                try:
-                    yield
-                except (Exception, SystemExit):
-                    ctx.enqueue({"type": "run_error", "elapsed_ms": timer.end})
-                    raise
-                else:
-                    self._update_schema(ctx)
-                    ctx.enqueue(
-                        {
-                            "type": "run_ok",
-                            "elapsed_ms": timer.end,
-                            "current_values": dict(run_state.resolved_values),
-                        }
-                    )

@@ -8,6 +8,7 @@ import sys
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
+from .action_state import action_state
 from .actions.action import Action
 from .console import log
 from .errors import MultipleModelsError
@@ -105,9 +106,9 @@ class Model(Params):
             run_state.model_cli = cli_result.params
         finally:
             run_state.module_dict = sys.modules["__main__"].__dict__
-        if run_state.action.mode != Action.Mode.HARNESS:
-            run_state.action = cli_result.action
-        with run_state.action.on_model_render():
+        if Action.mode != Action.Mode.HARNESS:
+            action_state.action = cli_result.action
+        with action_state.action.on_model_render():
             run_state.apply_overrides(cli_result.params)
             run_state.resolved_values = {
                 f.name: getattr(cli_result.params, f.name)
@@ -115,7 +116,7 @@ class Model(Params):
                 if Field.from_dataclass_field(f)
             }
             show(cli_result.params.build())
-            run_state.act_once()
+            action_state.act_once()
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         object.__init_subclass__(**kwargs)
