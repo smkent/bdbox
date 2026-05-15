@@ -89,7 +89,10 @@ class EnvLocator:
             return
         new_exec = [str(exec_executable), "-m", self.module, *sys.argv[1:]]
         os.environ[ENV_VAR] = str(exec_executable)
-        os.execv(new_exec[0], new_exec)  # noqa: S606
+        if os.name == "nt":
+            sys.exit(subprocess.call(new_exec))  # noqa: S603
+        else:
+            os.execv(new_exec[0], new_exec)  # noqa: S606
 
     def ensure_env(self) -> None:
         if not (venv_dir := self.find_venv()):

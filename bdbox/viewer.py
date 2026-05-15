@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import time
@@ -88,12 +89,15 @@ class ViewerManager:
             log.info(f"Stopping (PID {proc.pid})")
             self._terminate(proc)
         log.info("Starting OCP CAD Viewer")
-        subprocess.Popen(
-            [sys.executable, "-m", "ocp_vscode"],
-            start_new_session=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
+        popen_kwargs: dict[str, Any] = {
+            "stdout": subprocess.DEVNULL,
+            "stderr": subprocess.DEVNULL,
+        }
+        if os.name == "nt":
+            popen_kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
+        else:
+            popen_kwargs["start_new_session"] = True
+        subprocess.Popen([sys.executable, "-m", "ocp_vscode"], **popen_kwargs)
         for _ in range(self._POLL_ATTEMPTS):
             try:
                 urlopen(self.url).read()  # noqa: S310
