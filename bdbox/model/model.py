@@ -14,8 +14,8 @@ from bdbox.geometry import show
 
 from .annotations import Annotater
 from .fields import Field
-from .model_state import model_state
 from .parameters import Params
+from .state import model_state
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence

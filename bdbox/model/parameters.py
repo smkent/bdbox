@@ -13,8 +13,8 @@ from bdbox.errors import ParamsError
 from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
-from .model_state import model_state
 from .preset import Preset
+from .state import model_state
 
 if sys.version_info >= (3, 11):
     from typing import Self

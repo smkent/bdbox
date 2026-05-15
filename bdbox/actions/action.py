@@ -13,7 +13,7 @@ import tyro  # noqa: TC002
 
 from bdbox.console import console, log
 from bdbox.errors import RunError
-from bdbox.model.model_state import model_state
+from bdbox.model.state import model_state
 from bdbox.timer import Timer
 
 if TYPE_CHECKING:

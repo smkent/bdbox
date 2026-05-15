@@ -10,7 +10,7 @@ from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 
 from bdbox.console import console, log
-from bdbox.model.model_state import model_state
+from bdbox.model.state import model_state
 from bdbox.serializer import Serializer
 
 from .console import WebStream

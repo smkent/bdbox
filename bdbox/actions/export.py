@@ -15,7 +15,7 @@ import tyro
 from bdbox.console import log
 from bdbox.errors import InternalError, UsageError
 from bdbox.geometry import resolve_geometry
-from bdbox.model.model_state import model_state
+from bdbox.model.state import model_state
 
 from .action import ModelAction
 

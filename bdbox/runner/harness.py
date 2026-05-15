@@ -18,7 +18,7 @@ from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI, CLIOptions
 from bdbox.errors import InternalError, RunError
-from bdbox.model.model_state import model_state
+from bdbox.model.state import model_state
 
 from .env import EnvLocator
 from .locator import ModelLocator

@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 from bdbox.actions.state import action_state
 from bdbox.errors import InternalError, RunError
-from bdbox.model.model_state import model_state
+from bdbox.model.state import model_state
 
 from .locator import ModelLocator
 from .shims import AtExit, MainModule
