@@ -11,8 +11,7 @@ import pytest
 
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.runner.harness import ModelHarness
-
-from .utils import Models
+from tests.utils import Models
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
