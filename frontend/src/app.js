@@ -174,13 +174,16 @@ function registerComponents(layout) {
     const div = document.createElement("div");
     div.className = "params-panel";
     div.innerHTML = `
-      <div x-data class="status-bar">
-        <span x-show="$store.runStatus.wsState === 'connecting'" class="status-connecting">Connecting…</span>
-        <span x-show="$store.runStatus.wsState === 'disconnected'" class="status-disconnected">Disconnected</span>
-        <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'idle'" class="status-idle">Idle</span>
-        <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'running'" class="status-running">Running…</span>
-        <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'ok'" class="status-ok">Done (<span x-text="$store.runStatus.elapsedMs"></span>ms)</span>
-        <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'error'" class="status-error">Error</span>
+      <div x-data="{ get modelName() { const i = $store.modelInfo; const b = i.module ?? i.file; return b && i.cls ? b + ' · ' + i.cls : i.cls ?? b ?? null; } }" class="status-bar">
+        <span class="status-model-name" x-show="modelName" x-text="modelName" :title="modelName"></span>
+        <div class="status-run">
+          <span x-show="$store.runStatus.wsState === 'connecting'" class="status-connecting">Connecting…</span>
+          <span x-show="$store.runStatus.wsState === 'disconnected'" class="status-disconnected">Disconnected</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'idle'" class="status-idle">Idle</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'running'" class="status-running">Running…</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'ok'" class="status-ok">Done (<span x-text="$store.runStatus.elapsedMs"></span>ms)</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'error'" class="status-error">Error</span>
+        </div>
       </div>
       <div class="params-form"></div>
     `;
@@ -290,6 +293,12 @@ function initWs() {
     } else if (detail.model_running) {
       Alpine.store("runStatus").state = "running";
     }
+    if (detail.model_info) {
+      const info = Alpine.store("modelInfo");
+      info.file = detail.model_info.file ?? null;
+      info.module = detail.model_info.module ?? null;
+      info.cls = detail.model_info.cls ?? null;
+    }
     latestSchema = detail;
     if (paramsFormEl) {
       initJedison(detail);
@@ -343,6 +352,12 @@ Alpine.store("runStatus", {
   state: "idle",
   elapsedMs: "",
   wsState: "connecting",
+});
+
+Alpine.store("modelInfo", {
+  file: null,
+  module: null,
+  cls: null,
 });
 
 document.addEventListener("DOMContentLoaded", () => {
