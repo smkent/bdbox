@@ -48,6 +48,7 @@ _PAGE_TEMPLATE = """\
 <head>
   <meta charset="utf-8">
   <title>bdbox</title>
+  <link rel="icon" type="image/png" href="/static/favicon.png">
   <link rel="stylesheet" href="/static/app.css">
   <style>
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
