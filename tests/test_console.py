@@ -14,7 +14,7 @@ from unittest.mock import patch
 import pytest
 
 from bdbox.console import LoggingStream, LogLevel, console
-from bdbox.server.console import WebStream
+from bdbox.view.console import WebStream
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence

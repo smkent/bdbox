@@ -17,9 +17,9 @@ from bdbox.model import Model
 from bdbox.parameters.field_factories import Float, Int
 from bdbox.parameters.parameters import Params
 from bdbox.parameters.preset import Preset
-from bdbox.server.app import App
-from bdbox.server.routes import manager
-from bdbox.server.view_state import ViewState
+from bdbox.view.app import App
+from bdbox.view.routes import manager
+from bdbox.view.view_state import ViewState
 
 if sys.version_info >= (3, 11):
     from typing import Self

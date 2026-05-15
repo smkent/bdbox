@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import bdbox.server.server as server_module
+import bdbox.view.server as server_module
 from bdbox.actions.action import Action
 from bdbox.actions.view import ViewAction
 from bdbox.errors import RunError

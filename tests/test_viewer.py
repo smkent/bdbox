@@ -17,7 +17,7 @@ from urllib.error import URLError
 import psutil
 import pytest
 
-import bdbox.server.server as server_module
+import bdbox.view.server as server_module
 import bdbox.viewer as viewer_module
 from bdbox.__main__ import main
 from bdbox.runner.watcher import ModelWatcher
