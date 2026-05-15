@@ -197,7 +197,7 @@ class ExportAction(ModelAction):
 
     @contextmanager
     def on_model_render(self) -> Iterator[None]:
+        if self.all_presets:
+            self._ensure_runner()
         with super().on_model_render():
-            if self.all_presets:
-                self._ensure_runner()
             yield
