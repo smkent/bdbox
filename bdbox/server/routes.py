@@ -110,6 +110,8 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                 "type": "schema",
                 "schema": context.model_class.schema(),
                 "current_values": context.current_values,
+                "session_id": str(context.session_id),
+                "model_running": context.model_running,
             }
             log.debug("Sent %s", msg["type"])
             log.trace(json.dumps(msg, indent=4))

@@ -19,7 +19,7 @@ class InternalError(Error):
 
 @dataclass
 class MultipleModelsError(Error):
-    """Raise when multiple models are available but none were selected."""
+    """Raised when multiple models are available but none were selected."""
 
     classes: Sequence[type] = ()
 
@@ -44,3 +44,10 @@ class RunError(Error):
     """Raised when a model run fails."""
 
     exception: Exception | SystemExit
+
+
+@dataclass
+class UsageError(Error):
+    """Raised on usage or invocation errors."""
+
+    message: str

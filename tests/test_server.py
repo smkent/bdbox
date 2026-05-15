@@ -7,6 +7,7 @@ import threading
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
+from uuid import UUID
 
 import pytest
 from starlette.testclient import TestClient
@@ -32,10 +33,15 @@ if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
 
+TEST_SESSION_ID = UUID("deadbeef-0327-1138-2187-c01dc0ffee77")
+
+
 @dataclass
 class WSParamTest:
     snapshot: SnapshotAssertion | None = None
-    context: Context = field(default_factory=Context)
+    context: Context = field(
+        default_factory=lambda: Context(session_id=TEST_SESSION_ID)
+    )
     ws: WebSocketTestSession | None = field(default=None, init=False)
     client: TestClient | None = field(default=None, init=False)
 
@@ -133,6 +139,7 @@ def context(
         model_class=model_class,
         current_values=({"width": 10.0, "count": 3} if model_class else {}),
         param_overrides=param_overrides,
+        session_id=TEST_SESSION_ID,
     )
 
 

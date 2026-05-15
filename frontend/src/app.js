@@ -86,6 +86,7 @@ let jedison = null;
 let currentValues = {};
 let paramOverrides = {};
 let latestSchema = null;
+let lastSessionId = null;
 
 function initJedison(detail) {
   if (jedison) {
@@ -226,6 +227,7 @@ function registerComponents(layout) {
 
     window.addEventListener("bdbox:ws_open", sendSize);
     window.addEventListener("bdbox:run_start", () => terminal.clear());
+    window.addEventListener("bdbox:clear_console", () => terminal.clear());
     window.addEventListener("bdbox:console", ({ detail }) => {
       terminal.write(detail.text);
     });
@@ -279,6 +281,15 @@ function initIframeDragFix() {
 
 function initWs() {
   window.addEventListener("bdbox:schema", ({ detail }) => {
+    if (detail.session_id !== lastSessionId) {
+      window.dispatchEvent(new CustomEvent("bdbox:clear_console"));
+      const store = Alpine.store("runStatus");
+      store.state = detail.model_running ? "running" : "idle";
+      store.elapsedMs = "";
+      lastSessionId = detail.session_id;
+    } else if (detail.model_running) {
+      Alpine.store("runStatus").state = "running";
+    }
     latestSchema = detail;
     if (paramsFormEl) {
       initJedison(detail);
