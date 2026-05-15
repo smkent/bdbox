@@ -18,7 +18,7 @@ from bdbox.parameters.fields import (
     StrField,
 )
 from bdbox.parameters.preset import Preset
-from bdbox.parameters.serializer import Serializer
+from bdbox.serializer import Serializer
 
 if TYPE_CHECKING:
     from collections.abc import Callable

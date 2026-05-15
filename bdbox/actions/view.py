@@ -14,7 +14,7 @@ from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.geometry import resolve_geometry
 from bdbox.parameters.model_state import model_state
-from bdbox.parameters.serializer import Serializer
+from bdbox.serializer import Serializer
 from bdbox.view.server import ServerManager
 from bdbox.view.view_state import ViewState
 from bdbox.viewer import ViewerManager

@@ -8,8 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from bdbox.errors import InternalError, MultipleModelsError, ParamsError
-
-from .serializer import Serializer
+from bdbox.serializer import Serializer
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

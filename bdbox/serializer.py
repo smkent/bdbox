@@ -21,7 +21,7 @@ from typing import (
 
 from cattrs import Converter
 
-from .fields import Field
+from bdbox.parameters.fields import Field
 
 _UNION_ORIGINS: frozenset[Any] = frozenset({Union, _types.UnionType})
 

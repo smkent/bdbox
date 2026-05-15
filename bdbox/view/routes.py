@@ -11,7 +11,7 @@ from fastapi.responses import HTMLResponse
 
 from bdbox.console import console, log
 from bdbox.parameters.model_state import model_state
-from bdbox.parameters.serializer import Serializer
+from bdbox.serializer import Serializer
 
 from .console import WebStream
 from .view_state import ViewState
