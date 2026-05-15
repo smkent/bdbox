@@ -124,8 +124,8 @@ class ViewAction(ModelAction):
 
     @contextmanager
     def on_model_render(self) -> Iterator[None]:
+        self._ensure_runner()
         with super().on_model_render() as timer:
-            self._ensure_runner()
             if not self.server_manager:
                 yield
                 return
