@@ -181,6 +181,10 @@
   overflow: hidden;
 }
 
+.console-panel .xterm-viewport {
+  background: #1a1a1a;
+}
+
 .console-panel .xterm {
   height: 100%;
   padding: 4px 6px;
