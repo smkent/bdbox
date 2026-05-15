@@ -26,6 +26,8 @@ from rich.spinner import Spinner
 from rich.table import Table
 from rich.text import Text
 
+from .errors import UsageError
+
 if TYPE_CHECKING:
     from collections.abc import Iterator
     from types import TracebackType
@@ -250,6 +252,9 @@ class Console:
         ) -> None:
             if issubclass(exc_type, KeyboardInterrupt):
                 sys.__excepthook__(exc_type, exc_value, exc_traceback)
+                return
+            if isinstance(exc_value, UsageError):
+                log.error(exc_value.message)
                 return
             self.logger().error(
                 "Uncaught exception",

@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, Annotated, Literal
 import tyro
 
 from bdbox.console import log
-from bdbox.errors import Error, InternalError
+from bdbox.errors import InternalError, UsageError
 from bdbox.geometry import resolve_geometry
 from bdbox.parameters.state import run_state
 
@@ -148,7 +148,7 @@ class ExportAction(ModelAction):
                 from build123d import export_stl  # noqa: PLC0415
 
                 return export_stl
-        raise Error(f"Unknown format {self.format}")
+        raise InternalError(f"Unknown format {self.format}")
 
     def __call__(self) -> None:
         """Export single render or all preset renders to a STEP or STL file."""
@@ -156,7 +156,7 @@ class ExportAction(ModelAction):
             return
         geometry = resolve_geometry()
         if not geometry:
-            raise Error("No geometry to export")
+            raise UsageError("No geometry to export")
         model_name = run_state.model_name()
         if run_state.model_cli and (preset := run_state.model_cli.preset):
             model_name += f"-{preset}"

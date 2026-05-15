@@ -2,22 +2,32 @@
 
 from __future__ import annotations
 
-import time
 import webbrowser
 from dataclasses import dataclass, field
-from threading import Thread
-from typing import TYPE_CHECKING, ClassVar
-from urllib.error import URLError
-from urllib.request import urlopen
+from threading import Event, Thread
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from uvicorn import Config, Server
 
 from bdbox.console import log
+from bdbox.errors import UsageError
 
 from .app import App
 
 if TYPE_CHECKING:
     from .context import Context
+
+
+class _Server(Server):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.startup_complete = Event()
+
+    async def startup(self, sockets: Any = None) -> None:
+        try:
+            await super().startup(sockets=sockets)
+        finally:
+            self.startup_complete.set()
 
 
 @dataclass
@@ -26,11 +36,10 @@ class ServerManager:
     port: int = 4040
     open_browser: bool = True
 
-    _POLL_INTERVAL: ClassVar[float] = 0.25
-    _POLL_ATTEMPTS: ClassVar[int] = 40
+    _STARTUP_TIMEOUT: ClassVar[float] = 10.0
     _STOP_TIMEOUT: ClassVar[float] = 5.0
 
-    server: Server | None = field(default=None, init=False, repr=False)
+    server: _Server | None = field(default=None, init=False, repr=False)
     thread: Thread | None = field(default=None, init=False, repr=False)
 
     @property
@@ -39,21 +48,19 @@ class ServerManager:
 
     def start(self) -> ServerManager:
         app = App(self.context)
-        self.server = Server(
+        self.server = _Server(
             Config(
                 app=app, host="localhost", port=self.port, log_level="error"
             )
         )
         self.thread = Thread(target=self.server.run, daemon=True)
         self.thread.start()
-        for _ in range(self._POLL_ATTEMPTS):
-            try:
-                urlopen(self.url).read()  # noqa: S310
-                break
-            except URLError:
-                time.sleep(self._POLL_INTERVAL)
-        else:
-            raise RuntimeError("bdbox server failed to start")
+        self.server.startup_complete.wait(timeout=self._STARTUP_TIMEOUT)
+        if not self.server.started:
+            raise UsageError(
+                "The view server failed to start."
+                " Is another `view` instance already running?"
+            )
         log.info(f"Server running: {self.url}")
         if self.open_browser:
             webbrowser.open_new_tab(self.url)

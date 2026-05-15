@@ -256,10 +256,15 @@ def mock_watch_run() -> Iterator[MagicMock]:
         pytest.param(False, id="no_watch"),
     )
 )
+def watch(request: pytest.FixtureRequest) -> bool:
+    return request.param
+
+
+@pytest.fixture
 def watch_args(
-    request: pytest.FixtureRequest, mock_watch_run: MagicMock
+    *, watch: bool, mock_watch_run: MagicMock
 ) -> Iterator[Sequence[str]]:
-    watch_enabled = bool(request.param)
+    watch_enabled = watch
     yield [] if watch_enabled else ["--no-watch"]
     if watch_enabled:
         mock_watch_run.assert_called_once()
@@ -506,11 +511,16 @@ def test_model_view_starts_viewer(
     watch_args: Sequence[str],
     exec_main: ExecMain,
     mock_server_start: MagicMock,
+    *,
+    watch: bool,
 ) -> None:
     with patch.object(ViewerManager, "start") as mock_start:
         exec_main(str(model), "view", *watch_args)
     mock_start.assert_called_once()
-    mock_server_start.assert_called_once()
+    if watch:
+        mock_server_start.assert_called_once()
+    else:
+        mock_server_start.assert_not_called()
 
 
 def test_model_view_passes_flags_to_viewer(
@@ -534,12 +544,17 @@ def test_model_view_passes_flags_to_server(
     watch_args: Sequence[str],
     exec_main: ExecMain,
     mock_server_start: MagicMock,
+    *,
+    watch: bool,
 ) -> None:
     with patch.object(ViewerManager, "start"):
         exec_main(str(model), "view", *watch_args)
-    mock_server_start.assert_called_once()
-    server_instance = mock_server_start.call_args[0][0]
-    assert server_instance.open_browser is False
+    if watch:
+        mock_server_start.assert_called_once()
+        server_instance = mock_server_start.call_args[0][0]
+        assert server_instance.open_browser is False
+    else:
+        mock_server_start.assert_not_called()
 
 
 def test_viewer_start_open_browser(

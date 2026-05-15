@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import sys
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from queue import Queue
 from threading import Event
 from typing import TYPE_CHECKING, Any
+from uuid import UUID, uuid4
 
 from fastapi import FastAPI, Request
 
@@ -18,6 +20,8 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from bdbox.parameters.parameters import Params
 
 
@@ -29,6 +33,20 @@ class Context:
     msg_queue: Queue[dict[str, Any]] = field(default_factory=Queue)
     param_overrides: dict[str, Any] = field(default_factory=dict)
     current_values: dict[str, Any] = field(default_factory=dict)
+    session_id: UUID = field(default_factory=uuid4)
+    model_running: bool = False
+
+    def enqueue(self, msg: dict[str, Any]) -> None:
+        self.msg_queue.put({**msg, "session_id": str(self.session_id)})
+
+    @contextmanager
+    def mark_running(self) -> Iterator[None]:
+        was_running = self.model_running
+        self.model_running = True
+        try:
+            yield
+        finally:
+            self.model_running = was_running
 
     @classmethod
     def get(cls, obj: FastAPI | Request) -> Self:
