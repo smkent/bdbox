@@ -148,7 +148,7 @@ usage: MyBox [-h] [OPTIONS] [{run,view,export}]
 
 ## Automatic execution
 
-**Params:** Subclassing [``Params``][bdbox.parameters.parameters.Params]
+**Params:** Subclassing [``Params``][bdbox.model.parameters.Params]
 provides the CLI and resolves parameter values.
 
 **Model:** Defining exactly one [``Model``][bdbox.model.model.Model] subclass
@@ -188,7 +188,7 @@ warning is printed and `run` must be manually called on the desired class.
 
 **Params:** One or more calls to [``show``][bdbox.geometry.show] accumulate
 geometry in call order. If `show` is never called (and
-[``Params``][bdbox.parameters.parameters.Params] is subclassed within the
+[``Params``][bdbox.model.parameters.Params] is subclassed within the
 [invoked script][__main__]), bdbox scans the program's global variables for
 [``build123d.Shape``][topology.Shape] instances on completion.
 

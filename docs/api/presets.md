@@ -5,7 +5,7 @@ icon: lucide/sliders-vertical
 
 # Presets
 
-::: bdbox.parameters.preset
+::: bdbox.model.preset
     options:
       heading: "bdbox"
       members: [Preset]

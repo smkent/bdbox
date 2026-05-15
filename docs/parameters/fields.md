@@ -7,7 +7,7 @@ icon: lucide/text-cursor-input
 
 !!! info "Automatic [dataclasses][dataclasses]"
 
-    Subclasses of **[``Params``][bdbox.parameters.parameters.Params]** and
+    Subclasses of **[``Params``][bdbox.model.parameters.Params]** and
     **[``Model``][bdbox.model.model.Model]** are automatically created as
     [dataclasses][dataclasses] with no `@dataclass` decorator!
 
@@ -92,11 +92,11 @@ Fields can be created with constraints using these factory functions.
 
 | Factory | Value type | Required | Optional |
 |---|---|---|---|
-| [``Int``][bdbox.parameters.field_factories.Int] | `int` | `default` | `min`, `max`, `step`, `description` |
-| [``Float``][bdbox.parameters.field_factories.Float] | `float` | `default` | `min`, `max`, `step`, `description` |
-| [``Bool``][bdbox.parameters.field_factories.Bool] | `bool` | `default` | `description` |
-| [``Str``][bdbox.parameters.field_factories.Str] | `str` | `default` | `min_length`, `max_length`, `description` |
-| [``Choice``][bdbox.parameters.field_factories.Choice] | `T` | `default`, `choices` | `description` |
+| [``Int``][bdbox.model.field_factories.Int] | `int` | `default` | `min`, `max`, `step`, `description` |
+| [``Float``][bdbox.model.field_factories.Float] | `float` | `default` | `min`, `max`, `step`, `description` |
+| [``Bool``][bdbox.model.field_factories.Bool] | `bool` | `default` | `description` |
+| [``Str``][bdbox.model.field_factories.Str] | `str` | `default` | `min_length`, `max_length`, `description` |
+| [``Choice``][bdbox.model.field_factories.Choice] | `T` | `default`, `choices` | `description` |
 
 !!! Note "Static type checking"
 
@@ -235,7 +235,7 @@ time. If provided, the `default` value's length must fall within that range.
 
 #### Choice
 
-[``Choice``][bdbox.parameters.field_factories.Choice] lets you offer a fixed
+[``Choice``][bdbox.model.field_factories.Choice] lets you offer a fixed
 menu of values. This is useful for options such as material types, quality
 levels, or any other discrete selection. The default must be one of the listed
 choices:

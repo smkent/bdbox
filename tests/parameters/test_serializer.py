@@ -10,9 +10,9 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import pytest
 
-from bdbox.parameters.field_factories import Float, Int
-from bdbox.parameters.parameters import Params
-from bdbox.parameters.preset import Preset
+from bdbox.model.field_factories import Float, Int
+from bdbox.model.parameters import Params
+from bdbox.model.preset import Preset
 from bdbox.serializer import Serializer
 
 if TYPE_CHECKING:

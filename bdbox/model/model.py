@@ -1,5 +1,3 @@
-"""Model utilities."""
-
 from __future__ import annotations
 
 import atexit
@@ -13,10 +11,11 @@ from bdbox.actions.action import Action
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError
 from bdbox.geometry import show
-from bdbox.parameters.annotations import Annotater
-from bdbox.parameters.fields import Field
-from bdbox.parameters.model_state import model_state
-from bdbox.parameters.parameters import Params
+
+from .annotations import Annotater
+from .fields import Field
+from .model_state import model_state
+from .parameters import Params
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
@@ -43,7 +42,7 @@ class Model(Params):
     `Model` subclass is defined.
 
     A ``presets`` class attribute may declare a selection of
-    [``Preset``][bdbox.parameters.preset.Preset] objects.
+    [``Preset``][bdbox.model.preset.Preset] objects.
 
     Implement [``build``][bdbox.model.model.Model.build] to construct and
     return model geometry. Access parameter values as instance attributes.

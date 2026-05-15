@@ -112,7 +112,7 @@ def show(
     """Provide built model geometry for display or use.
 
     Info:
-        With a [``Params``][bdbox.parameters.parameters.Params] subclass,
+        With a [``Params``][bdbox.model.parameters.Params] subclass,
         call `show` with your built model geometry. Multiple `show` calls
         accumulate geometry in order.
 

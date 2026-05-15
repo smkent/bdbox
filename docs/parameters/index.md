@@ -19,7 +19,7 @@ icon: lucide/package-open
       re-render with the [`view` action](../actions/view.md)
 
 Choose from one of two declaration styles by subclassing either
-**[``Params``][bdbox.parameters.parameters.Params]** or
+**[``Params``][bdbox.model.parameters.Params]** or
 **[``Model``][bdbox.model.model.Model]**:
 
 === "Params class"
@@ -57,7 +57,7 @@ Choose from one of two declaration styles by subclassing either
 
 !!! Info "Automatic [dataclasses][dataclasses]"
 
-    Subclasses of **[``Params``][bdbox.parameters.parameters.Params]** and
+    Subclasses of **[``Params``][bdbox.model.parameters.Params]** and
     **[``Model``][bdbox.model.model.Model]** automatically function as
     [dataclasses][dataclasses] with no `@dataclass` decorator!
 
@@ -90,7 +90,7 @@ Choose from one of two declaration styles by subclassing either
 
 !!! warning "Use one style per script"
 
-    Subclassing both [``Params``][bdbox.parameters.parameters.Params] and
+    Subclassing both [``Params``][bdbox.model.parameters.Params] and
     [``Model``][bdbox.model.model.Model] in the same script is not supported and
     produces an error.
 

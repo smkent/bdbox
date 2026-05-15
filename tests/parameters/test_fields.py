@@ -7,9 +7,8 @@ from typing import TYPE_CHECKING, Any
 import pytest
 
 from bdbox.errors import ParamsError, ParamValidationError
-from bdbox.model.model import Model
-from bdbox.parameters.field_factories import Bool, Choice, Float, Int, Str
-from bdbox.parameters.fields import (
+from bdbox.model.field_factories import Bool, Choice, Float, Int, Str
+from bdbox.model.fields import (
     BoolField,
     ChoiceField,
     Field,
@@ -17,14 +16,15 @@ from bdbox.parameters.fields import (
     IntField,
     StrField,
 )
-from bdbox.parameters.preset import Preset
+from bdbox.model.model import Model
+from bdbox.model.preset import Preset
 from bdbox.serializer import Serializer
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from dataclasses import Field as DCField
 
-    from bdbox.parameters.parameters import Params
+    from bdbox.model.parameters import Params
 
 
 @pytest.mark.parametrize(

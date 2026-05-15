@@ -13,10 +13,10 @@ import pytest
 from starlette.testclient import TestClient
 
 from bdbox.errors import InternalError
+from bdbox.model.field_factories import Float, Int
 from bdbox.model.model import Model
-from bdbox.parameters.field_factories import Float, Int
-from bdbox.parameters.parameters import Params
-from bdbox.parameters.preset import Preset
+from bdbox.model.parameters import Params
+from bdbox.model.preset import Preset
 from bdbox.view.app import App
 from bdbox.view.routes import manager
 from bdbox.view.view_state import ViewState

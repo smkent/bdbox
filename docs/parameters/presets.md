@@ -13,12 +13,12 @@ variations of models such as different sizes and feature sets.
 ## Declaring presets
 
 Presets are declared alongside fields using
-[``Preset``][bdbox.parameters.preset.Preset].
+[``Preset``][bdbox.model.preset.Preset].
 
 === "Params class"
 
-    Define a `presets` tuple of [``Preset``][bdbox.parameters.preset.Preset] as
-    a [``Params``][bdbox.parameters.parameters.Params] subclass attribute:
+    Define a `presets` tuple of [``Preset``][bdbox.model.preset.Preset] as
+    a [``Params``][bdbox.model.parameters.Params] subclass attribute:
 
     ```python
     class P(Params):
@@ -33,7 +33,7 @@ Presets are declared alongside fields using
 
 === "Model class"
 
-    Define a `presets` tuple of [``Preset``][bdbox.parameters.preset.Preset] as
+    Define a `presets` tuple of [``Preset``][bdbox.model.preset.Preset] as
     a [``Model``][bdbox.model.model.Model] subclass attribute:
 
     ```python
@@ -133,7 +133,7 @@ Preset("large", description="Extra large version", width=100.0, thickness=10.0)
 
 Presets can be applied when instantiating a
 [``Model``][bdbox.model.model.Model] or
-[``Params``][bdbox.parameters.parameters.Params] subclass in code.
+[``Params``][bdbox.model.parameters.Params] subclass in code.
 
 * Apply a preset by name:
     ```python
@@ -143,7 +143,7 @@ Presets can be applied when instantiating a
     ```python
     model = MyBox(preset="large", thickness=5.0)
     ```
-* [``with_preset``][bdbox.parameters.parameters.Params.with_preset] is
+* [``with_preset``][bdbox.model.parameters.Params.with_preset] is
   equivalent but may more easily pass static type checks:
     ```python
     model = MyBox.with_preset("large", thickness=5.0)

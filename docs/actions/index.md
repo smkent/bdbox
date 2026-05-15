@@ -73,7 +73,7 @@ bdbox mypackage.mymodule:MyModel export output.step  # Export to STEP
 ### Direct
 
 The CLI is automatically provided on any model with a
-[``Params``][bdbox.parameters.parameters.Params] or
+[``Params``][bdbox.model.parameters.Params] or
 [``Model``][bdbox.model.model.Model] subclass. Run the model file itself to use
 the CLI:
 

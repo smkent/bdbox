@@ -9,10 +9,10 @@ from typing import TYPE_CHECKING, Any, Literal
 import pytest
 
 from bdbox.errors import ParamsError, ParamValidationError
-from bdbox.parameters.field_factories import Float, Int, Str
-from bdbox.parameters.model_state import model_state
-from bdbox.parameters.parameters import Params
-from bdbox.parameters.preset import Preset
+from bdbox.model.field_factories import Float, Int, Str
+from bdbox.model.model_state import model_state
+from bdbox.model.parameters import Params
+from bdbox.model.preset import Preset
 
 if TYPE_CHECKING:
     from collections.abc import Sequence

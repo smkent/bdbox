@@ -5,7 +5,7 @@ Note:
     ``int``, etc.). The underlying ``Field`` classes are an implementation
     detail.
 
-    When using a [``Params``][bdbox.parameters.parameters.Params] subclass,
+    When using a [``Params``][bdbox.model.parameters.Params] subclass,
     resolved values are accessible as class attributes (e.g. ``P.width``).
     When using a [``Model``][bdbox.model.model.Model] subclass, resolved values
     are accessible as instance attributes (e.g. ``self.width``).

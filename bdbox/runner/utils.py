@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 
 from bdbox.action_state import action_state
 from bdbox.geometry import reset_geometry
-from bdbox.parameters.model_state import model_state
+from bdbox.model.model_state import model_state
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

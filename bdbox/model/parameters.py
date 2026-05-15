@@ -1,5 +1,3 @@
-"""Parameter system utilities."""
-
 import atexit
 import sys
 from collections.abc import Sequence
@@ -74,7 +72,7 @@ class Params(CLI, metaclass=ParamsType):
     manually called.
 
     A ``presets`` class attribute may declare a selection of
-    [``Preset``][bdbox.parameters.preset.Preset] objects.
+    [``Preset``][bdbox.model.preset.Preset] objects.
 
     !!! Note
 

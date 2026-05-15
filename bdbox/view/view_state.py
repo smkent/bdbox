@@ -19,7 +19,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from bdbox.parameters.parameters import Params
+    from bdbox.model.parameters import Params
 
 
 @dataclass

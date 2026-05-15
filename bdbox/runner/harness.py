@@ -18,7 +18,7 @@ from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI, CLIOptions
 from bdbox.errors import InternalError, RunError
-from bdbox.parameters.model_state import model_state
+from bdbox.model.model_state import model_state
 
 from .env import EnvLocator
 from .locator import ModelLocator
@@ -30,7 +30,7 @@ from .watcher import ModelWatcher
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from bdbox.parameters.parameters import Params
+    from bdbox.model.parameters import Params
 
 
 class HarnessCLIFactory:
