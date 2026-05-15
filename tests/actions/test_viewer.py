@@ -23,14 +23,11 @@ from bdbox.__main__ import main
 from bdbox.actions.view import ViewAction
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.viewer import ViewerManager
-
-from .utils import MockOcpVscode, Models
+from tests.utils import MockOcpVscode, Models
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
     from pathlib import Path
-
-    from .utils import MockOcpVscode
 
 
 ExecMain = Callable[..., None]

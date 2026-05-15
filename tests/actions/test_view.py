@@ -19,8 +19,7 @@ from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.viewer import ViewerManager
-
-from .utils import MockOcpVscode, Models
+from tests.utils import MockOcpVscode, Models
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
