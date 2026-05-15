@@ -16,6 +16,12 @@
   align-items: center;
 }
 
+.status-connecting {
+  color: #fa0;
+}
+.status-disconnected {
+  color: #f86;
+}
 .status-idle {
   color: #888;
 }
