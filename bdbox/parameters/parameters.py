@@ -15,9 +15,9 @@ from bdbox.errors import ParamsError
 from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
+from .model_state import model_state
 from .preset import Preset
 from .serializer import Serializer
-from .state import run_state
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -118,31 +118,31 @@ class Params(CLI, metaclass=ParamsType):
             return
         Annotater(cls)()
 
-        if run_state.is_class_in_main(cls):
-            run_state.ensure_mode(
-                run_state.Mode.PARAMS_CLASS,
+        if model_state.is_class_in_main(cls):
+            model_state.ensure_mode(
+                model_state.Mode.PARAMS_CLASS,
                 "Cannot use Params subclass with an existing Model subclass",
             )
-            if run_state.model_subclasses:
+            if model_state.model_subclasses:
                 raise ParamsError(
                     f"Cannot define Params subclass {cls.__name__!r}:"
                     " a Params subclass is already defined in this script"
                 )
-            run_state.model_subclasses.append(cls)
+            model_state.model_subclasses.append(cls)
             try:
                 cli_result = cls.cli_config().instance_from_cli(
                     prog=Path(sys.argv[0]).name
                 )
-                run_state.model_cli = cli_result.params
+                model_state.model_cli = cli_result.params
             finally:
-                run_state.module_dict = sys.modules["__main__"].__dict__
+                model_state.module_dict = sys.modules["__main__"].__dict__
             if Action.mode != Action.Mode.HARNESS:
                 action_state.action = cli_result.action
             action_state.enter_on_model_render()
-            run_state.apply_overrides(cli_result.params)
+            model_state.apply_overrides(cli_result.params)
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
-            run_state.resolved_values = {
+            model_state.resolved_values = {
                 f.name: getattr(cls, f.name)
                 for f in fields(cls)
                 if Field.from_dataclass_field(f)
@@ -153,7 +153,7 @@ class Params(CLI, metaclass=ParamsType):
     def _atexit_handler(cls) -> None:
         atexit.unregister(Params._atexit_handler)
         action_state.close_stack()
-        if run_state.model_subclasses:
+        if model_state.model_subclasses:
             action_state.act_once()
 
     def __post_init__(self) -> None:

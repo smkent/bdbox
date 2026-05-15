@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 from bdbox.action_state import action_state
 from bdbox.errors import InternalError, RunError
-from bdbox.parameters.state import run_state
+from bdbox.parameters.model_state import model_state
 
 from .locator import ModelLocator
 from .shims import AtExit, MainModule
@@ -60,11 +60,11 @@ class ModelRunner(ModelLocator):
             sys.exit(1)
 
     def _run_model(self) -> dict[str, Any]:
-        if not run_state.filename:
-            run_state.filename = str(self.model_filename)
+        if not model_state.filename:
+            model_state.filename = str(self.model_filename)
         if self.model_module:
-            run_state.module_name = self.model_module
-            run_state.class_name = self.model_class_name
+            model_state.module_name = self.model_module
+            model_state.class_name = self.model_class_name
             results = runpy.run_module(
                 self.model_module, run_name="__main__", alter_sys=True
             )

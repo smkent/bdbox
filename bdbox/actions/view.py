@@ -13,7 +13,7 @@ import tyro
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.geometry import resolve_geometry
-from bdbox.parameters.state import run_state
+from bdbox.parameters.model_state import model_state
 from bdbox.server.context import Context
 from bdbox.server.server import ServerManager
 from bdbox.viewer import ViewerManager
@@ -113,19 +113,19 @@ class ViewAction(ModelAction):
 
     def _update_schema(self, ctx: Context) -> None:
         try:
-            new_class = run_state.get_model()
+            new_class = model_state.get_model()
         except (ParamsError, MultipleModelsError):
             new_class = None
         new_schema = new_class.schema() if new_class else {}
         old_schema = ctx.model_class.schema() if ctx.model_class else {}
-        ctx.current_values = dict(run_state.resolved_values)
+        ctx.current_values = dict(model_state.resolved_values)
         if new_schema != old_schema:
             ctx.model_class = new_class
             ctx.enqueue(
                 {
                     "type": "schema",
                     "schema": new_schema,
-                    "model_info": run_state.model_name_info(),
+                    "model_info": model_state.model_name_info(),
                 }
             )
 
@@ -137,7 +137,7 @@ class ViewAction(ModelAction):
                 yield
                 return
             ctx = self.server_manager.context
-            run_state.param_overrides = dict(ctx.param_overrides)
+            model_state.param_overrides = dict(ctx.param_overrides)
             ctx.enqueue(
                 {"type": "run_start", "params": dict(ctx.param_overrides)}
             )
@@ -153,6 +153,6 @@ class ViewAction(ModelAction):
                     {
                         "type": "run_ok",
                         "elapsed_ms": timer.end,
-                        "current_values": dict(run_state.resolved_values),
+                        "current_values": dict(model_state.resolved_values),
                     }
                 )

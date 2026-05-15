@@ -15,7 +15,7 @@ import tyro
 from bdbox.console import log
 from bdbox.errors import InternalError, UsageError
 from bdbox.geometry import resolve_geometry
-from bdbox.parameters.state import run_state
+from bdbox.parameters.model_state import model_state
 
 from .action import ModelAction
 
@@ -157,8 +157,8 @@ class ExportAction(ModelAction):
         geometry = resolve_geometry()
         if not geometry:
             raise UsageError("No geometry to export")
-        model_name = run_state.model_name()
-        if run_state.model_cli and (preset := run_state.model_cli.preset):
+        model_name = model_state.model_name()
+        if model_state.model_cli and (preset := model_state.model_cli.preset):
             model_name += f"-{preset}"
         exports = Exports(geometry, model_name=model_name, single=self.single)
         self.output.mkdir(exist_ok=True, parents=True)

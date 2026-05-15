@@ -15,8 +15,8 @@ from .errors import MultipleModelsError
 from .geometry import show
 from .parameters.annotations import Annotater
 from .parameters.fields import Field
+from .parameters.model_state import model_state
 from .parameters.parameters import Params
-from .parameters.state import run_state
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
@@ -100,17 +100,17 @@ class Model(Params):
             Python finishes.
         """
         atexit.unregister(Model._atexit_handler)
-        run_state.ensure_module_filename(cls)
+        model_state.ensure_module_filename(cls)
         try:
             cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
-            run_state.model_cli = cli_result.params
+            model_state.model_cli = cli_result.params
         finally:
-            run_state.module_dict = sys.modules["__main__"].__dict__
+            model_state.module_dict = sys.modules["__main__"].__dict__
         if Action.mode != Action.Mode.HARNESS:
             action_state.action = cli_result.action
         with action_state.action.on_model_render():
-            run_state.apply_overrides(cli_result.params)
-            run_state.resolved_values = {
+            model_state.apply_overrides(cli_result.params)
+            model_state.resolved_values = {
                 f.name: getattr(cli_result.params, f.name)
                 for f in fields(cli_result.params)
                 if Field.from_dataclass_field(f)
@@ -122,18 +122,18 @@ class Model(Params):
         object.__init_subclass__(**kwargs)
         Annotater(cls)()
 
-        if run_state.is_class_in_main(cls):
-            run_state.ensure_mode(
-                run_state.Mode.MODEL_CLASS,
+        if model_state.is_class_in_main(cls):
+            model_state.ensure_mode(
+                model_state.Mode.MODEL_CLASS,
                 f"Cannot define Model subclass {cls!r}"
                 " with an existing Params subclass",
             )
-            if not run_state.model_subclasses:
+            if not model_state.model_subclasses:
                 atexit.register(Model._atexit_handler)
-                run_state.filename = getattr(
+                model_state.filename = getattr(
                     sys.modules.get(cls.__module__), "__file__", None
                 )
-            run_state.model_subclasses.append(cls)
+            model_state.model_subclasses.append(cls)
 
     @classmethod
     def _init_this_subclass(cls) -> bool:
@@ -142,7 +142,9 @@ class Model(Params):
     @classmethod
     def _atexit_handler(cls) -> None:
         try:
-            if not (model_class := cast("type[Model]", run_state.get_model())):
+            if not (
+                model_class := cast("type[Model]", model_state.get_model())
+            ):
                 return
         except MultipleModelsError as e:
             log.error(

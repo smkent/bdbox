@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class RunState:
+class ModelState:
     filename: str | None = None
     module_name: str = "__main__"
     class_name: str | None = None
@@ -82,7 +82,7 @@ class RunState:
             return Path(self.filename).stem
         raise InternalError("Unable to determine model name")
 
-    def ensure_mode(self, style: RunState.Mode, msg: str) -> None:
+    def ensure_mode(self, style: ModelState.Mode, msg: str) -> None:
         if self.mode is not None and self.mode is not style:
             raise ParamsError(msg)
         self.mode = style
@@ -112,4 +112,4 @@ class RunState:
             self.model_running = was_running
 
 
-run_state = RunState()
+model_state = ModelState()

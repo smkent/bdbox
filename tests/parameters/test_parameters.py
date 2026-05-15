@@ -10,9 +10,9 @@ import pytest
 
 from bdbox.errors import ParamsError, ParamValidationError
 from bdbox.parameters.field_factories import Float, Int, Str
+from bdbox.parameters.model_state import model_state
 from bdbox.parameters.parameters import Params
 from bdbox.parameters.preset import Preset
-from bdbox.parameters.state import run_state
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -233,8 +233,8 @@ def test_apply_overrides(
         pass
 
     target = T()
-    run_state.param_overrides = overrides
-    run_state.apply_overrides(target)
+    model_state.param_overrides = overrides
+    model_state.apply_overrides(target)
     for name, value in expected.items():
         assert getattr(target, name) == value
     assert isinstance(target.x, float)
@@ -253,8 +253,8 @@ def test_apply_overrides_enum(model_base: type[Params]) -> None:
         color: Color = Color.RED
 
     target = T()
-    run_state.param_overrides = {"color": "blue"}
-    run_state.apply_overrides(target)
+    model_state.param_overrides = {"color": "blue"}
+    model_state.apply_overrides(target)
     assert target.color == Color.BLUE
 
 
@@ -288,8 +288,8 @@ def test_apply_overrides_misc(
         size: Literal["small", "medium", "large"] = "small"
 
     target = T()
-    run_state.param_overrides = overrides
-    run_state.apply_overrides(target)
+    model_state.param_overrides = overrides
+    model_state.apply_overrides(target)
     for name, value in expected.items():
         assert getattr(target, name) == value
 
@@ -319,7 +319,7 @@ def test_apply_overrides_nested_dataclass(model_base: type[Params]) -> None:
         point: Point = field(default_factory=lambda: Point(10.0, 20.0))
         top_several: Sequence[NestedNestedT] = field(default_factory=list)
 
-    run_state.param_overrides = {
+    model_state.param_overrides = {
         "point": {"x": 3.0, "y": 4.0},
         "nested": {
             "point": {"x": 1.5, "y": 2.5},
@@ -335,7 +335,7 @@ def test_apply_overrides_nested_dataclass(model_base: type[Params]) -> None:
         ],
     }
     t = T()
-    run_state.apply_overrides(t)
+    model_state.apply_overrides(t)
     expected = T(
         count=0,
         point=Point(x=3.0, y=4.0),

@@ -13,7 +13,7 @@ import tyro  # noqa: TC002
 
 from bdbox.console import console, log
 from bdbox.errors import RunError
-from bdbox.parameters.state import run_state
+from bdbox.parameters.model_state import model_state
 from bdbox.timer import Timer
 
 if TYPE_CHECKING:
@@ -61,7 +61,7 @@ class Action:
         """Executed around model run."""
         timer = Timer()
         with (
-            run_state.set_running(),
+            model_state.set_running(),
             console.log_stdout_stderr(),
             console.activity_indicator(),
         ):

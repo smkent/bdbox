@@ -10,8 +10,8 @@ from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 
 from bdbox.console import console, log
+from bdbox.parameters.model_state import model_state
 from bdbox.parameters.serializer import Serializer
-from bdbox.parameters.state import run_state
 
 from .console import WebStream
 from .context import Context
@@ -112,8 +112,8 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                 "schema": context.model_class.schema(),
                 "current_values": context.current_values,
                 "session_id": str(context.session_id),
-                "model_running": run_state.model_running,
-                "model_info": run_state.model_name_info(),
+                "model_running": model_state.model_running,
+                "model_info": model_state.model_name_info(),
             }
             log.debug("Sent %s", msg["type"])
             log.trace(json.dumps(msg, indent=4))
