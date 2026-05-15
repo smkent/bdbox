@@ -75,6 +75,13 @@ class RunState:
             raise ParamsError(f"Model {self.class_name} not found")
         raise MultipleModelsError(self.model_subclasses)
 
+    def model_name_info(self) -> dict[str, str | None]:
+        module = self.module_name if self.module_name != "__main__" else None
+        file = (
+            Path(self.filename).stem if self.filename and not module else None
+        )
+        return {"file": file, "module": module, "cls": self.class_name}
+
     def model_name(self) -> str:
         if self.mode == self.Mode.PARAMS_CLASS and self.filename:
             return Path(self.filename).stem

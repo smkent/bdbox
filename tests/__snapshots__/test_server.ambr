@@ -5,6 +5,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -41,6 +46,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -79,6 +89,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -115,6 +130,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -153,6 +173,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -189,6 +214,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -227,6 +257,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -263,6 +298,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -301,6 +341,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -337,6 +382,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -375,6 +425,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -411,6 +466,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -449,6 +509,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -486,6 +551,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -522,6 +592,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -568,6 +643,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -613,6 +693,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -649,6 +734,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -694,6 +784,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -730,6 +825,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -775,6 +875,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -811,6 +916,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -849,6 +959,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -885,6 +1000,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
@@ -923,6 +1043,11 @@
       'count': 3,
       'width': 10.0,
     }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
     'model_running': False,
     'schema': dict({
       'properties': dict({
@@ -959,6 +1084,11 @@
     'current_values': dict({
       'count': 3,
       'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
     }),
     'model_running': False,
     'schema': dict({
