@@ -6,8 +6,8 @@ import sys
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
-from bdbox.action_state import action_state
 from bdbox.actions.action import Action
+from bdbox.actions.state import action_state
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError
 from bdbox.geometry import show

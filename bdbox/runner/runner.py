@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
-from bdbox.action_state import action_state
+from bdbox.actions.state import action_state
 from bdbox.errors import InternalError, RunError
 from bdbox.model.model_state import model_state
 

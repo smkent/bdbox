@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
 
-from bdbox.action_state import action_state
+from bdbox.actions.state import action_state
 from bdbox.geometry import reset_geometry
 from bdbox.model.model_state import model_state
 

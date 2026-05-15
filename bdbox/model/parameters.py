@@ -5,8 +5,8 @@ from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import Any, ClassVar
 
-from bdbox.action_state import action_state
 from bdbox.actions.action import Action
+from bdbox.actions.state import action_state
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
 
