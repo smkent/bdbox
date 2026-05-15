@@ -174,10 +174,12 @@ function registerComponents(layout) {
     div.className = "params-panel";
     div.innerHTML = `
       <div x-data class="status-bar">
-        <span x-show="$store.runStatus.state === 'idle'" class="status-idle">Idle</span>
-        <span x-show="$store.runStatus.state === 'running'" class="status-running">Running…</span>
-        <span x-show="$store.runStatus.state === 'ok'" class="status-ok">Done (<span x-text="$store.runStatus.elapsedMs"></span>ms)</span>
-        <span x-show="$store.runStatus.state === 'error'" class="status-error">Error</span>
+        <span x-show="$store.runStatus.wsState === 'connecting'" class="status-connecting">Connecting…</span>
+        <span x-show="$store.runStatus.wsState === 'disconnected'" class="status-disconnected">Disconnected</span>
+        <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'idle'" class="status-idle">Idle</span>
+        <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'running'" class="status-running">Running…</span>
+        <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'ok'" class="status-ok">Done (<span x-text="$store.runStatus.elapsedMs"></span>ms)</span>
+        <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'error'" class="status-error">Error</span>
       </div>
       <div class="params-form"></div>
     `;
@@ -313,12 +315,23 @@ function initWs() {
     Alpine.store("runStatus").state = "error";
   });
 
+  window.addEventListener("bdbox:ws_connecting", () => {
+    Alpine.store("runStatus").wsState = "connecting";
+  });
+  window.addEventListener("bdbox:ws_open", () => {
+    Alpine.store("runStatus").wsState = "connected";
+  });
+  window.addEventListener("bdbox:ws_close", () => {
+    Alpine.store("runStatus").wsState = "disconnected";
+  });
+
   connectWs();
 }
 
 Alpine.store("runStatus", {
   state: "idle",
   elapsedMs: "",
+  wsState: "connecting",
 });
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -9,6 +9,7 @@ export function sendWs(msg) {
 }
 
 export function connectWs() {
+  window.dispatchEvent(new CustomEvent("bdbox:ws_connecting"));
   _ws = new WebSocket(`ws://${window.location.host}/ws`);
 
   _ws.addEventListener("open", () => {
@@ -27,6 +28,7 @@ export function connectWs() {
 
   _ws.addEventListener("close", () => {
     _ws = null;
+    window.dispatchEvent(new CustomEvent("bdbox:ws_close"));
     setTimeout(connectWs, RECONNECT_DELAY_MS);
   });
 
