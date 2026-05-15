@@ -55,7 +55,7 @@ exist. The current directory is used when no directory is specified:
 
 ## Export files
 
-Export file names are based on **[`Model`][bdbox.model.Model]** subclass names,
+Export file names are based on **[`Model`][bdbox.model.model.Model]** subclass names,
 or model file/module names for other types of models, along with the current
 [preset](../parameters/presets.md) name if one is selected.
 

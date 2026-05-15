@@ -6,7 +6,7 @@ from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
 
 class CustomBuildHook(BuildHookInterface):
-    ARTIFACTS = (f"bdbox/server/static/{fn}" for fn in ("app.css", "app.js"))
+    ARTIFACTS = (f"bdbox/view/static/{fn}" for fn in ("app.css", "app.js"))
 
     def initialize(self, version: str, build_data: dict) -> None:  # noqa: ARG002
         subprocess.run(["npm", "ci"], check=True)

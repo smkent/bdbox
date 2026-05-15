@@ -14,10 +14,10 @@ from bdbox.errors import (
     RunError,
 )
 from bdbox.geometry import show
-from bdbox.model import Model
-from bdbox.parameters.field_factories import Bool, Choice, Float, Int, Str
-from bdbox.parameters.parameters import Params
-from bdbox.parameters.preset import Preset
+from bdbox.model.field_factories import Bool, Choice, Float, Int, Str
+from bdbox.model.model import Model
+from bdbox.model.parameters import Params
+from bdbox.model.preset import Preset
 
 try:
     version = import_version(__name__)

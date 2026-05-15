@@ -7,9 +7,9 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
-from bdbox.actions.run import RunAction
+from bdbox.actions.state import action_state
 from bdbox.errors import InternalError, RunError
-from bdbox.parameters.state import run_state
+from bdbox.model.state import model_state
 
 from .locator import ModelLocator
 from .shims import AtExit, MainModule
@@ -30,7 +30,8 @@ class ModelRunner(ModelLocator):
         if not self.model_filename:
             raise InternalError("Model not found in arguments")
         reset_bdbox()
-        run_state.action = action or self.action or RunAction()
+        if set_action := (action or self.action):
+            action_state.action = set_action
         main_module = MainModule(
             filename=self.model_filename, module_name=self.model_module
         )
@@ -46,7 +47,7 @@ class ModelRunner(ModelLocator):
                 main_module.__dict__.update(self._run_model())
                 mock_main.start()
                 if not atexit_mock.hooks:
-                    run_state.act_once()
+                    action_state.act_once()
         except (SystemExit, Exception) as e:
             if self.preserve_exceptions:
                 raise
@@ -59,11 +60,11 @@ class ModelRunner(ModelLocator):
             sys.exit(1)
 
     def _run_model(self) -> dict[str, Any]:
-        if not run_state.filename:
-            run_state.filename = str(self.model_filename)
+        if not model_state.filename:
+            model_state.filename = str(self.model_filename)
         if self.model_module:
-            run_state.module_name = self.model_module
-            run_state.class_name = self.model_class_name
+            model_state.module_name = self.model_module
+            model_state.class_name = self.model_class_name
             results = runpy.run_module(
                 self.model_module, run_name="__main__", alter_sys=True
             )
@@ -78,7 +79,7 @@ class ModelRunner(ModelLocator):
         try:
             yield
         except (SystemExit, Exception):
-            if not run_state.close_stack():
+            if not action_state.close_stack():
                 raise
         else:
-            run_state.close_stack()
+            action_state.close_stack()

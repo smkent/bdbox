@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import bdbox.server.server as server_module
+import bdbox.view.server as server_module
 from bdbox.actions.action import Action
 from bdbox.actions.view import ViewAction
 from bdbox.errors import RunError
@@ -19,8 +19,7 @@ from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.viewer import ViewerManager
-
-from .utils import MockOcpVscode, Models
+from tests.utils import MockOcpVscode, Models
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence

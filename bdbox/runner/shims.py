@@ -7,8 +7,8 @@ from types import ModuleType
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
-from bdbox.model import Model
-from bdbox.parameters.parameters import Params
+from bdbox.model.model import Model
+from bdbox.model.parameters import Params
 
 if sys.version_info >= (3, 11):
     from typing import Self

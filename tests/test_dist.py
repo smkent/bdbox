@@ -34,7 +34,7 @@ def dist_wheel(
 
 def test_dist_ui_statics(dist_wheel: Path) -> None:
     expected_files = {
-        f"bdbox/server/static/{fn}" for fn in ("app.css", "app.js")
+        f"bdbox/view/static/{fn}" for fn in ("app.css", "app.js")
     }
     with ZipFile(dist_wheel, "r") as whl:
         present_files = expected_files & set(whl.namelist())

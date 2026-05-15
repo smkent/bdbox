@@ -15,7 +15,7 @@ from bdbox.errors import UsageError
 from .app import App
 
 if TYPE_CHECKING:
-    from .context import Context
+    from .state import ViewState
 
 
 class _Server(Server):
@@ -32,7 +32,7 @@ class _Server(Server):
 
 @dataclass
 class ServerManager:
-    context: Context
+    view_state: ViewState
     port: int = 4040
     open_browser: bool = True
 
@@ -47,7 +47,7 @@ class ServerManager:
         return f"http://localhost:{self.port}"
 
     def start(self) -> ServerManager:
-        app = App(self.context)
+        app = App(self.view_state)
         self.server = _Server(
             Config(
                 app=app, host="localhost", port=self.port, log_level="error"

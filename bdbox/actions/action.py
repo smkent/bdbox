@@ -13,6 +13,7 @@ import tyro  # noqa: TC002
 
 from bdbox.console import console, log
 from bdbox.errors import RunError
+from bdbox.model.state import model_state
 from bdbox.timer import Timer
 
 if TYPE_CHECKING:
@@ -20,7 +21,7 @@ if TYPE_CHECKING:
     from pathlib import Path
     from threading import Event
 
-    from bdbox.parameters.parameters import Params
+    from bdbox.model.parameters import Params
 
 
 @dataclass
@@ -59,7 +60,11 @@ class Action:
     def on_model_render(self) -> Iterator[Timer]:
         """Executed around model run."""
         timer = Timer()
-        with console.log_stdout_stderr(), console.activity_indicator():
+        with (
+            model_state.set_running(),
+            console.log_stdout_stderr(),
+            console.activity_indicator(),
+        ):
             try:
                 yield timer
             except (Exception, SystemExit) as e:

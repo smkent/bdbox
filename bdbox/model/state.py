@@ -1,25 +1,23 @@
 from __future__ import annotations
 
 import sys
-from contextlib import ExitStack, suppress
+from contextlib import contextmanager, suppress
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from bdbox.actions.run import RunAction
 from bdbox.errors import InternalError, MultipleModelsError, ParamsError
-
-from .serializer import Serializer
+from bdbox.serializer import Serializer
 
 if TYPE_CHECKING:
-    from bdbox.actions.action import Action
+    from collections.abc import Iterator
 
     from .parameters import Params
 
 
 @dataclass
-class RunState:
+class ModelState:
     filename: str | None = None
     module_name: str = "__main__"
     class_name: str | None = None
@@ -28,9 +26,6 @@ class RunState:
     )
     model_subclasses: list[Any] = field(default_factory=list)
     model_cli: Params | None = None
-    action: Action = field(default_factory=RunAction)
-    acted: bool = False
-    stack: ExitStack = field(default_factory=ExitStack, init=False)
     serializer: Serializer = field(default_factory=Serializer, init=False)
 
     class Mode(Enum):
@@ -40,6 +35,7 @@ class RunState:
     mode: Mode | None = None
     param_overrides: dict[str, Any] = field(default_factory=dict)
     resolved_values: dict[str, Any] = field(default_factory=dict)
+    model_running: bool = False
 
     def apply_overrides(self, target: Params) -> None:
         hints = self.serializer.get_type_hints(type(target))
@@ -52,13 +48,6 @@ class RunState:
                 current = getattr(target, name)
                 hint = type(current) if current is not None else None
             setattr(target, name, self.serializer.structure(raw_value, hint))
-
-    def enter_on_model_render(self) -> None:
-        if self.action:
-            self.stack.enter_context(self.action.on_model_render())
-
-    def close_stack(self) -> bool | None:
-        return self.stack.__exit__(*sys.exc_info())
 
     def get_model(self) -> type[Params] | None:
         if not self.model_subclasses:
@@ -92,16 +81,10 @@ class RunState:
             return Path(self.filename).stem
         raise InternalError("Unable to determine model name")
 
-    def ensure_mode(self, style: RunState.Mode, msg: str) -> None:
+    def ensure_mode(self, style: ModelState.Mode, msg: str) -> None:
         if self.mode is not None and self.mode is not style:
             raise ParamsError(msg)
         self.mode = style
-
-    def act_once(self) -> None:
-        if self.acted:
-            return
-        self.acted = True
-        self.action()
 
     def is_class_in_main(self, cls: type) -> bool:
         return cls.__module__ in (
@@ -118,5 +101,14 @@ class RunState:
         ):
             mm.__file__ = self.filename
 
+    @contextmanager
+    def set_running(self) -> Iterator[None]:
+        was_running = self.model_running
+        self.model_running = True
+        try:
+            yield
+        finally:
+            self.model_running = was_running
 
-run_state = RunState()
+
+model_state = ModelState()

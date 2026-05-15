@@ -7,8 +7,9 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
 
+from bdbox.actions.state import action_state
 from bdbox.geometry import reset_geometry
-from bdbox.parameters.state import run_state
+from bdbox.model.state import model_state
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -23,7 +24,8 @@ else:
 def reset_bdbox() -> None:
     """Reset all bdbox module-level state for runners or tests."""
     reset_geometry()
-    run_state.__init__()
+    model_state.__init__()
+    action_state.__init__()
 
 
 class Build123dStub(MagicMock):

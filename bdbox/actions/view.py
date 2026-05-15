@@ -13,9 +13,10 @@ import tyro
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.geometry import resolve_geometry
-from bdbox.parameters.state import run_state
-from bdbox.server.context import Context
-from bdbox.server.server import ServerManager
+from bdbox.model.state import model_state
+from bdbox.serializer import Serializer
+from bdbox.view.server import ServerManager
+from bdbox.view.state import ViewState
 from bdbox.viewer import ViewerManager
 
 from .action import ModelAction
@@ -25,6 +26,8 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from build123d import Compound, Shape
+
+serializer = Serializer()
 
 
 @dataclass
@@ -99,7 +102,7 @@ class ViewAction(ModelAction):
         viewer.start()
         if self.watch:
             self.server_manager = ServerManager(
-                context=Context(
+                view_state=ViewState(
                     rerender_event=args.rerender_event,
                     viewer_port=viewer.port,
                     model_class=args.model_params_cls,
@@ -111,21 +114,21 @@ class ViewAction(ModelAction):
         if self.server_manager:
             self.server_manager.stop()
 
-    def _update_schema(self, ctx: Context) -> None:
+    def _update_schema(self, ctx: ViewState) -> None:
         try:
-            new_class = run_state.get_model()
+            new_class = model_state.get_model()
         except (ParamsError, MultipleModelsError):
             new_class = None
-        new_schema = new_class.schema() if new_class else {}
-        old_schema = ctx.model_class.schema() if ctx.model_class else {}
-        ctx.current_values = dict(run_state.resolved_values)
+        new_schema = serializer.json_schema(new_class)
+        old_schema = serializer.json_schema(ctx.model_class)
+        ctx.current_values = dict(model_state.resolved_values)
         if new_schema != old_schema:
             ctx.model_class = new_class
             ctx.enqueue(
                 {
                     "type": "schema",
                     "schema": new_schema,
-                    "model_info": run_state.model_name_info(),
+                    "model_info": model_state.model_name_info(),
                 }
             )
 
@@ -136,24 +139,23 @@ class ViewAction(ModelAction):
             if not self.server_manager:
                 yield
                 return
-            ctx = self.server_manager.context
-            with ctx.mark_running():
-                run_state.param_overrides = dict(ctx.param_overrides)
+            ctx = self.server_manager.view_state
+            model_state.param_overrides = dict(ctx.param_overrides)
+            ctx.enqueue(
+                {"type": "run_start", "params": dict(ctx.param_overrides)}
+            )
+            log.info("Running model")
+            try:
+                yield
+            except (Exception, SystemExit):
+                ctx.enqueue({"type": "run_error", "elapsed_ms": timer.end})
+                raise
+            else:
+                self._update_schema(ctx)
                 ctx.enqueue(
-                    {"type": "run_start", "params": dict(ctx.param_overrides)}
+                    {
+                        "type": "run_ok",
+                        "elapsed_ms": timer.end,
+                        "current_values": dict(model_state.resolved_values),
+                    }
                 )
-                log.info("Running model")
-                try:
-                    yield
-                except (Exception, SystemExit):
-                    ctx.enqueue({"type": "run_error", "elapsed_ms": timer.end})
-                    raise
-                else:
-                    self._update_schema(ctx)
-                    ctx.enqueue(
-                        {
-                            "type": "run_ok",
-                            "elapsed_ms": timer.end,
-                            "current_values": dict(run_state.resolved_values),
-                        }
-                    )

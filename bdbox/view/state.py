@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import sys
-from contextlib import contextmanager
 from dataclasses import dataclass, field
 from queue import Queue
 from threading import Event
@@ -20,13 +19,11 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
-
-    from bdbox.parameters.parameters import Params
+    from bdbox.model.parameters import Params
 
 
 @dataclass
-class Context:
+class ViewState:
     rerender_event: Event = field(default_factory=Event, repr=False)
     viewer_port: int = 3939
     model_class: type[Params] | None = None
@@ -34,24 +31,14 @@ class Context:
     param_overrides: dict[str, Any] = field(default_factory=dict)
     current_values: dict[str, Any] = field(default_factory=dict)
     session_id: UUID = field(default_factory=uuid4)
-    model_running: bool = False
 
     def enqueue(self, msg: dict[str, Any]) -> None:
         self.msg_queue.put({**msg, "session_id": str(self.session_id)})
-
-    @contextmanager
-    def mark_running(self) -> Iterator[None]:
-        was_running = self.model_running
-        self.model_running = True
-        try:
-            yield
-        finally:
-            self.model_running = was_running
 
     @classmethod
     def get(cls, obj: FastAPI | Request) -> Self:
         if isinstance(obj, Request):
             obj = obj.app
         if isinstance(obj, FastAPI):
-            return obj.state.context
+            return obj.state.view_state
         raise InternalError(f"{cls.__name__} not found")

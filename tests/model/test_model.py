@@ -7,9 +7,9 @@ from typing import Any
 
 import pytest
 
-from bdbox.model import Model
-from bdbox.parameters.field_factories import Float, Int, Str
-from bdbox.parameters.preset import Preset
+from bdbox.model.field_factories import Float, Int, Str
+from bdbox.model.model import Model
+from bdbox.model.preset import Preset
 
 
 def test_model_presets_defined() -> None:

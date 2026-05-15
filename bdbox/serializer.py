@@ -21,7 +21,7 @@ from typing import (
 
 from cattrs import Converter
 
-from .fields import Field
+from bdbox.model.fields import Field
 
 _UNION_ORIGINS: frozenset[Any] = frozenset({Union, _types.UnionType})
 
@@ -137,7 +137,11 @@ class Serializer:
 
         self.converter.register_unstructure_hook(cls, _hook)
 
-    def generate(self, cls: type) -> dict:
+    def json_schema(self, cls: type | object | None) -> dict:
+        if cls is None:
+            return {}
+        if not isinstance(cls, type):
+            cls = type(cls)
         hints = self.get_type_hints(cls)
         field_schemas = {}
         for f in fields(cls):

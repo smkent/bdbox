@@ -15,15 +15,15 @@ from .routes import manager, routes_router
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
-    from .context import Context
+    from .state import ViewState
 
 _STATIC_DIR = Path(__file__).parent / "static"
 _STOP = object()
 
 
-async def _broadcast_loop(context: Context) -> None:
+async def _broadcast_loop(view_state: ViewState) -> None:
     while True:
-        msg = await asyncio.to_thread(context.msg_queue.get)
+        msg = await asyncio.to_thread(view_state.msg_queue.get)
         if msg is _STOP:
             break
         await manager.broadcast(msg)
@@ -31,19 +31,21 @@ async def _broadcast_loop(context: Context) -> None:
 
 @asynccontextmanager
 async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
-    context: Context = app.state.context
-    task = asyncio.create_task(_broadcast_loop(context))
+    view_state: ViewState = app.state.view_state
+    task = asyncio.create_task(_broadcast_loop(view_state))
     try:
         yield
     finally:
-        context.msg_queue.put(_STOP)  # ty: ignore[invalid-argument-type]
+        view_state.msg_queue.put(_STOP)  # ty: ignore[invalid-argument-type]
         await task
 
 
 class App(FastAPI):
-    def __init__(self, context: Context, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self, view_state: ViewState, *args: Any, **kwargs: Any
+    ) -> None:
         super().__init__(*args, lifespan=_lifespan, **kwargs)
-        self.state.context = context
+        self.state.view_state = view_state
         self.mount(
             "/static", StaticFiles(directory=_STATIC_DIR), name="static"
         )

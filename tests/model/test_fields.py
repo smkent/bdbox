@@ -7,9 +7,8 @@ from typing import TYPE_CHECKING, Any
 import pytest
 
 from bdbox.errors import ParamsError, ParamValidationError
-from bdbox.model import Model
-from bdbox.parameters.field_factories import Bool, Choice, Float, Int, Str
-from bdbox.parameters.fields import (
+from bdbox.model.field_factories import Bool, Choice, Float, Int, Str
+from bdbox.model.fields import (
     BoolField,
     ChoiceField,
     Field,
@@ -17,13 +16,15 @@ from bdbox.parameters.fields import (
     IntField,
     StrField,
 )
-from bdbox.parameters.preset import Preset
+from bdbox.model.model import Model
+from bdbox.model.preset import Preset
+from bdbox.serializer import Serializer
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from dataclasses import Field as DCField
 
-    from bdbox.parameters.parameters import Params
+    from bdbox.model.parameters import Params
 
 
 @pytest.mark.parametrize(
@@ -381,7 +382,9 @@ def test_field_to_schema(
     class T(model_base):  # ty: ignore[unsupported-base]
         things = field_value
 
-    assert T().schema()["properties"]["things"] == expected_schema
+    assert (
+        Serializer().json_schema(T)["properties"]["things"] == expected_schema
+    )
 
 
 def test_preset_to_schema(model_base: type[Params]) -> None:
@@ -393,7 +396,7 @@ def test_preset_to_schema(model_base: type[Params]) -> None:
             Preset("large", width=80.0, description="Full size"),
         )
 
-    assert T.schema() == {
+    assert Serializer().json_schema(T) == {
         "properties": {
             "count": {"default": 3, "type": "number"},
             "width": {"default": 10, "type": "number"},

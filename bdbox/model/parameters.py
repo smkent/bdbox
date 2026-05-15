@@ -1,5 +1,3 @@
-"""Parameter system utilities."""
-
 import atexit
 import sys
 from collections.abc import Sequence
@@ -8,6 +6,7 @@ from pathlib import Path
 from typing import Any, ClassVar
 
 from bdbox.actions.action import Action
+from bdbox.actions.state import action_state
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
 
@@ -15,8 +14,7 @@ from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .preset import Preset
-from .serializer import Serializer
-from .state import run_state
+from .state import model_state
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -74,7 +72,7 @@ class Params(CLI, metaclass=ParamsType):
     manually called.
 
     A ``presets`` class attribute may declare a selection of
-    [``Preset``][bdbox.parameters.preset.Preset] objects.
+    [``Preset``][bdbox.model.preset.Preset] objects.
 
     !!! Note
 
@@ -106,42 +104,37 @@ class Params(CLI, metaclass=ParamsType):
         """
         return cls(preset=preset, **overrides)
 
-    @classmethod
-    def schema(cls) -> dict:
-        """Return a JSON Schema describing fields and presets."""
-        return Serializer().generate(cls)
-
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
         if not cls._init_this_subclass():
             return
         Annotater(cls)()
 
-        if run_state.is_class_in_main(cls):
-            run_state.ensure_mode(
-                run_state.Mode.PARAMS_CLASS,
+        if model_state.is_class_in_main(cls):
+            model_state.ensure_mode(
+                model_state.Mode.PARAMS_CLASS,
                 "Cannot use Params subclass with an existing Model subclass",
             )
-            if run_state.model_subclasses:
+            if model_state.model_subclasses:
                 raise ParamsError(
                     f"Cannot define Params subclass {cls.__name__!r}:"
                     " a Params subclass is already defined in this script"
                 )
-            run_state.model_subclasses.append(cls)
+            model_state.model_subclasses.append(cls)
             try:
                 cli_result = cls.cli_config().instance_from_cli(
                     prog=Path(sys.argv[0]).name
                 )
-                run_state.model_cli = cli_result.params
+                model_state.model_cli = cli_result.params
             finally:
-                run_state.module_dict = sys.modules["__main__"].__dict__
-            if run_state.action.mode != Action.Mode.HARNESS:
-                run_state.action = cli_result.action
-            run_state.enter_on_model_render()
-            run_state.apply_overrides(cli_result.params)
+                model_state.module_dict = sys.modules["__main__"].__dict__
+            if Action.mode != Action.Mode.HARNESS:
+                action_state.action = cli_result.action
+            action_state.enter_on_model_render()
+            model_state.apply_overrides(cli_result.params)
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
-            run_state.resolved_values = {
+            model_state.resolved_values = {
                 f.name: getattr(cls, f.name)
                 for f in fields(cls)
                 if Field.from_dataclass_field(f)
@@ -151,9 +144,9 @@ class Params(CLI, metaclass=ParamsType):
     @classmethod
     def _atexit_handler(cls) -> None:
         atexit.unregister(Params._atexit_handler)
-        run_state.close_stack()
-        if run_state.model_subclasses:
-            run_state.act_once()
+        action_state.close_stack()
+        if model_state.model_subclasses:
+            action_state.act_once()
 
     def __post_init__(self) -> None:
         if self.preset:

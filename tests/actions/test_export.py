@@ -15,8 +15,7 @@ from bdbox.actions.export import ExportAction
 from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
-
-from .utils import Models
+from tests.utils import Models
 
 if TYPE_CHECKING:
     from collections.abc import Sequence

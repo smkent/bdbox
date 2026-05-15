@@ -1,5 +1,3 @@
-"""Model utilities."""
-
 from __future__ import annotations
 
 import atexit
@@ -8,14 +6,16 @@ import sys
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
-from .actions.action import Action
-from .console import log
-from .errors import MultipleModelsError
-from .geometry import show
-from .parameters.annotations import Annotater
-from .parameters.fields import Field
-from .parameters.parameters import Params
-from .parameters.state import run_state
+from bdbox.actions.action import Action
+from bdbox.actions.state import action_state
+from bdbox.console import log
+from bdbox.errors import MultipleModelsError
+from bdbox.geometry import show
+
+from .annotations import Annotater
+from .fields import Field
+from .parameters import Params
+from .state import model_state
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
@@ -37,15 +37,15 @@ class Model(Params):
     * [``dataclasses.field``][dataclasses.field] same as any other
       [dataclass][dataclasses.dataclass]
 
-    CLI arguments are parsed within [``run``][bdbox.model.Model.run]. A handler
-    is registered to invoke `run` if not called manually and only one `Model`
-    subclass is defined.
+    CLI arguments are parsed within [``run``][bdbox.model.model.Model.run]. A
+    handler is registered to invoke `run` if not called manually and only one
+    `Model` subclass is defined.
 
     A ``presets`` class attribute may declare a selection of
-    [``Preset``][bdbox.parameters.preset.Preset] objects.
+    [``Preset``][bdbox.model.preset.Preset] objects.
 
-    Implement [``build``][bdbox.model.Model.build] to construct and return
-    model geometry. Access parameter values as instance attributes.
+    Implement [``build``][bdbox.model.model.Model.build] to construct and
+    return model geometry. Access parameter values as instance attributes.
 
     !!! Note
 
@@ -85,7 +85,7 @@ class Model(Params):
     def run(cls) -> None:
         """Parse CLI arguments, build the model, and retrieve geometry.
 
-        Calls [``build``][bdbox.model.Model.build] with the resolved
+        Calls [``build``][bdbox.model.model.Model.build] with the resolved
         parameter values and passes the result to
         [``show``][bdbox.geometry.show].
 
@@ -94,45 +94,45 @@ class Model(Params):
 
         Note:
             If ``run`` is not called explicitly, and a single
-            [``Model``][bdbox.model.Model] subclass is defined in
+            [``Model``][bdbox.model.model.Model] subclass is defined in
             [``__main__``][__main__], ``run`` will be called automatically when
             Python finishes.
         """
         atexit.unregister(Model._atexit_handler)
-        run_state.ensure_module_filename(cls)
+        model_state.ensure_module_filename(cls)
         try:
             cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
-            run_state.model_cli = cli_result.params
+            model_state.model_cli = cli_result.params
         finally:
-            run_state.module_dict = sys.modules["__main__"].__dict__
-        if run_state.action.mode != Action.Mode.HARNESS:
-            run_state.action = cli_result.action
-        with run_state.action.on_model_render():
-            run_state.apply_overrides(cli_result.params)
-            run_state.resolved_values = {
+            model_state.module_dict = sys.modules["__main__"].__dict__
+        if Action.mode != Action.Mode.HARNESS:
+            action_state.action = cli_result.action
+        with action_state.action.on_model_render():
+            model_state.apply_overrides(cli_result.params)
+            model_state.resolved_values = {
                 f.name: getattr(cli_result.params, f.name)
                 for f in fields(cli_result.params)
                 if Field.from_dataclass_field(f)
             }
             show(cli_result.params.build())
-            run_state.act_once()
+            action_state.act_once()
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         object.__init_subclass__(**kwargs)
         Annotater(cls)()
 
-        if run_state.is_class_in_main(cls):
-            run_state.ensure_mode(
-                run_state.Mode.MODEL_CLASS,
+        if model_state.is_class_in_main(cls):
+            model_state.ensure_mode(
+                model_state.Mode.MODEL_CLASS,
                 f"Cannot define Model subclass {cls!r}"
                 " with an existing Params subclass",
             )
-            if not run_state.model_subclasses:
+            if not model_state.model_subclasses:
                 atexit.register(Model._atexit_handler)
-                run_state.filename = getattr(
+                model_state.filename = getattr(
                     sys.modules.get(cls.__module__), "__file__", None
                 )
-            run_state.model_subclasses.append(cls)
+            model_state.model_subclasses.append(cls)
 
     @classmethod
     def _init_this_subclass(cls) -> bool:
@@ -141,7 +141,9 @@ class Model(Params):
     @classmethod
     def _atexit_handler(cls) -> None:
         try:
-            if not (model_class := cast("type[Model]", run_state.get_model())):
+            if not (
+                model_class := cast("type[Model]", model_state.get_model())
+            ):
                 return
         except MultipleModelsError as e:
             log.error(

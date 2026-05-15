@@ -17,19 +17,17 @@ from urllib.error import URLError
 import psutil
 import pytest
 
-import bdbox.server.server as server_module
+import bdbox.view.server as server_module
 import bdbox.viewer as viewer_module
 from bdbox.__main__ import main
+from bdbox.actions.view import ViewAction
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.viewer import ViewerManager
-
-from .utils import MockOcpVscode, Models
+from tests.utils import MockOcpVscode, Models
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
     from pathlib import Path
-
-    from .utils import MockOcpVscode
 
 
 ExecMain = Callable[..., None]
@@ -108,6 +106,18 @@ def mock_browser_open() -> Iterator[MagicMock]:
 def mock_server_start() -> Iterator[MagicMock]:
     with patch.object(
         server_module.ServerManager, "start", autospec=True
+    ) as mocked:
+        yield mocked
+
+
+@pytest.fixture(autouse=True)
+def mock_view_action_on_model_render() -> Iterator[MagicMock]:
+    @contextmanager
+    def on_model_render() -> Iterator[None]:
+        yield
+
+    with patch.object(
+        ViewAction, "on_model_render", side_effect=on_model_render
     ) as mocked:
         yield mocked
 
