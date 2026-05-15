@@ -14,7 +14,7 @@ from bdbox.model.state import model_state
 from bdbox.serializer import Serializer
 
 from .console import WebStream
-from .view_state import ViewState
+from .state import ViewState
 
 routes_router = APIRouter()
 serializer = Serializer()

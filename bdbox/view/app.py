@@ -15,7 +15,7 @@ from .routes import manager, routes_router
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
 
-    from .view_state import ViewState
+    from .state import ViewState
 
 _STATIC_DIR = Path(__file__).parent / "static"
 _STOP = object()

@@ -19,7 +19,7 @@ from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
 from bdbox.view.app import App
 from bdbox.view.routes import manager
-from bdbox.view.view_state import ViewState
+from bdbox.view.state import ViewState
 
 if sys.version_info >= (3, 11):
     from typing import Self

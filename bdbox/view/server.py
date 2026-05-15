@@ -15,7 +15,7 @@ from bdbox.errors import UsageError
 from .app import App
 
 if TYPE_CHECKING:
-    from .view_state import ViewState
+    from .state import ViewState
 
 
 class _Server(Server):
