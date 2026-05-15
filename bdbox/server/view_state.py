@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class Context:
+class ViewState:
     rerender_event: Event = field(default_factory=Event, repr=False)
     viewer_port: int = 3939
     model_class: type[Params] | None = None
@@ -40,5 +40,5 @@ class Context:
         if isinstance(obj, Request):
             obj = obj.app
         if isinstance(obj, FastAPI):
-            return obj.state.context
+            return obj.state.view_state
         raise InternalError(f"{cls.__name__} not found")

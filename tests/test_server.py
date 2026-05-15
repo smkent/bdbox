@@ -18,8 +18,8 @@ from bdbox.parameters.field_factories import Float, Int
 from bdbox.parameters.parameters import Params
 from bdbox.parameters.preset import Preset
 from bdbox.server.app import App
-from bdbox.server.context import Context
 from bdbox.server.routes import manager
+from bdbox.server.view_state import ViewState
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -39,8 +39,8 @@ TEST_SESSION_ID = UUID("deadbeef-0327-1138-2187-c01dc0ffee77")
 @dataclass
 class WSParamTest:
     snapshot: SnapshotAssertion | None = None
-    context: Context = field(
-        default_factory=lambda: Context(session_id=TEST_SESSION_ID)
+    view_state: ViewState = field(
+        default_factory=lambda: ViewState(session_id=TEST_SESSION_ID)
     )
     ws: WebSocketTestSession | None = field(default=None, init=False)
     client: TestClient | None = field(default=None, init=False)
@@ -48,12 +48,12 @@ class WSParamTest:
     @contextmanager
     def __call__(self) -> Iterator[Self]:
         with (
-            TestClient(App(self.context)) as client,
+            TestClient(App(self.view_state)) as client,
         ):
             self.client = client
             with self.wsconn() as ws:
                 self.ws = ws
-                if self.context.model_class:
+                if self.view_state.model_class:
                     assert ws.receive_json() == self.snapshot
                 yield self
 
@@ -80,11 +80,11 @@ class WSParamTest:
             ack = self.ws.receive_json()
             if expect_overrides is not None:
                 assert ack["param_overrides"] == expect_overrides
-                assert self.context.param_overrides == expect_overrides
+                assert self.view_state.param_overrides == expect_overrides
         if expect_event:
-            assert self.context.rerender_event.is_set()
+            assert self.view_state.rerender_event.is_set()
         else:
-            assert not self.context.rerender_event.is_set()
+            assert not self.view_state.rerender_event.is_set()
         return ack
 
     def recv(self) -> dict[str, Any]:
@@ -97,10 +97,10 @@ class WSParamTest:
 
 @pytest.fixture(autouse=True)
 def wspt(
-    snapshot: SnapshotAssertion, context: Context
+    snapshot: SnapshotAssertion, view_state: ViewState
 ) -> Iterator[WSParamTest]:
     manager.active.clear()
-    with WSParamTest(snapshot=snapshot, context=context)() as wspt:
+    with WSParamTest(snapshot=snapshot, view_state=view_state)() as wspt:
         yield wspt
 
 
@@ -131,10 +131,10 @@ def param_overrides(request: pytest.FixtureRequest) -> dict[str, Any]:
 
 
 @pytest.fixture
-def context(
+def view_state(
     model_class: type[Params], param_overrides: dict[str, Any]
-) -> Context:
-    return Context(
+) -> ViewState:
+    return ViewState(
         rerender_event=threading.Event(),
         model_class=model_class,
         current_values=({"width": 10.0, "count": 3} if model_class else {}),
@@ -144,7 +144,7 @@ def context(
 
 
 def test_update_param_accumulates(wspt: WSParamTest) -> None:
-    assert not wspt.context.rerender_event.is_set()
+    assert not wspt.view_state.rerender_event.is_set()
     wspt.send(
         {"type": "update_param", "field": "width", "value": 50.0},
         expect_overrides={"width": 50.0},
@@ -252,7 +252,7 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
 
 def test_ws_broadcast_reaches_client(wspt: WSParamTest) -> None:
     msg = {"type": "run_ok", "elapsed_ms": 123, "current_values": {}}
-    wspt.context.msg_queue.put(msg)
+    wspt.view_state.msg_queue.put(msg)
     assert wspt.recv() == msg
 
 
@@ -260,6 +260,6 @@ def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
     msg = {"type": "run_start", "params": {}}
     with wspt.wsconn() as ws2:
         assert ws2.receive_json() == wspt.snapshot
-        wspt.context.msg_queue.put(msg)
+        wspt.view_state.msg_queue.put(msg)
         wspt.recv()
         assert ws2.receive_json() == msg

@@ -14,8 +14,8 @@ from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.geometry import resolve_geometry
 from bdbox.parameters.model_state import model_state
-from bdbox.server.context import Context
 from bdbox.server.server import ServerManager
+from bdbox.server.view_state import ViewState
 from bdbox.viewer import ViewerManager
 
 from .action import ModelAction
@@ -99,7 +99,7 @@ class ViewAction(ModelAction):
         viewer.start()
         if self.watch:
             self.server_manager = ServerManager(
-                context=Context(
+                view_state=ViewState(
                     rerender_event=args.rerender_event,
                     viewer_port=viewer.port,
                     model_class=args.model_params_cls,
@@ -111,7 +111,7 @@ class ViewAction(ModelAction):
         if self.server_manager:
             self.server_manager.stop()
 
-    def _update_schema(self, ctx: Context) -> None:
+    def _update_schema(self, ctx: ViewState) -> None:
         try:
             new_class = model_state.get_model()
         except (ParamsError, MultipleModelsError):
@@ -136,7 +136,7 @@ class ViewAction(ModelAction):
             if not self.server_manager:
                 yield
                 return
-            ctx = self.server_manager.context
+            ctx = self.server_manager.view_state
             model_state.param_overrides = dict(ctx.param_overrides)
             ctx.enqueue(
                 {"type": "run_start", "params": dict(ctx.param_overrides)}
