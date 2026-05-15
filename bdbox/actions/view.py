@@ -119,8 +119,8 @@ class ViewAction(ModelAction):
             new_class = model_state.get_model()
         except (ParamsError, MultipleModelsError):
             new_class = None
-        new_schema = serializer.generate(new_class)
-        old_schema = serializer.generate(ctx.model_class)
+        new_schema = serializer.json_schema(new_class)
+        old_schema = serializer.json_schema(ctx.model_class)
         ctx.current_values = dict(model_state.resolved_values)
         if new_schema != old_schema:
             ctx.model_class = new_class

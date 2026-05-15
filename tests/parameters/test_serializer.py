@@ -78,7 +78,7 @@ def test_schema_fields(model_base: type[Params]) -> None:
         width = Float(10.0, min=5.0, max=100.0)
         count = Int(3, min=1, max=10)
 
-    assert Serializer().generate(T) == {
+    assert Serializer().json_schema(T) == {
         "properties": {
             "count": {
                 "default": 3,
@@ -109,7 +109,7 @@ def test_schema_with_presets(model_base: type[Params]) -> None:
             Preset("large", description="Full size", width=80.0),
         )
 
-    schema = Serializer().generate(T)
+    schema = Serializer().json_schema(T)
     assert schema == {
         "properties": {
             "width": {
@@ -137,7 +137,7 @@ def test_schema_empty(model_base: type[Params]) -> None:
     class T(model_base):  # ty: ignore[unsupported-base]
         pass
 
-    assert Serializer().generate(T) == {
+    assert Serializer().json_schema(T) == {
         "type": "object",
         "properties": {},
         "required": [],
@@ -149,7 +149,7 @@ def test_schema_complex(
     model_base: type[Params], json_snapshot: JsonSnapshot
 ) -> None:
     T = Models.complex_model(model_base)  # noqa: N806
-    json_snapshot(Serializer().generate(T))
+    json_snapshot(Serializer().json_schema(T))
 
 
 def test_unstructure_complex(

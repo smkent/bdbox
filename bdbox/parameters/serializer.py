@@ -137,7 +137,7 @@ class Serializer:
 
         self.converter.register_unstructure_hook(cls, _hook)
 
-    def generate(self, cls: type | object | None) -> dict:
+    def json_schema(self, cls: type | object | None) -> dict:
         if cls is None:
             return {}
         if not isinstance(cls, type):
