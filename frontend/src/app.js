@@ -322,10 +322,9 @@ function initWs() {
     const store = Alpine.store("runStatus");
     store.state = "ok";
     store.elapsedMs = detail.elapsed_ms;
-    if (detail.current_values) {
+    if (detail.current_values && Object.keys(paramOverrides).length === 0) {
       currentValues = detail.current_values;
-      // Sync form when no pending overrides (e.g. after reset)
-      if (jedison && Object.keys(paramOverrides).length === 0) {
+      if (jedison) {
         jedison.setValue(currentValues);
       }
     }
