@@ -8,15 +8,15 @@ import sys
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
-from .action_state import action_state
-from .actions.action import Action
-from .console import log
-from .errors import MultipleModelsError
-from .geometry import show
-from .parameters.annotations import Annotater
-from .parameters.fields import Field
-from .parameters.model_state import model_state
-from .parameters.parameters import Params
+from bdbox.action_state import action_state
+from bdbox.actions.action import Action
+from bdbox.console import log
+from bdbox.errors import MultipleModelsError
+from bdbox.geometry import show
+from bdbox.parameters.annotations import Annotater
+from bdbox.parameters.fields import Field
+from bdbox.parameters.model_state import model_state
+from bdbox.parameters.parameters import Params
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
@@ -38,15 +38,15 @@ class Model(Params):
     * [``dataclasses.field``][dataclasses.field] same as any other
       [dataclass][dataclasses.dataclass]
 
-    CLI arguments are parsed within [``run``][bdbox.model.Model.run]. A handler
-    is registered to invoke `run` if not called manually and only one `Model`
-    subclass is defined.
+    CLI arguments are parsed within [``run``][bdbox.model.model.Model.run]. A
+    handler is registered to invoke `run` if not called manually and only one
+    `Model` subclass is defined.
 
     A ``presets`` class attribute may declare a selection of
     [``Preset``][bdbox.parameters.preset.Preset] objects.
 
-    Implement [``build``][bdbox.model.Model.build] to construct and return
-    model geometry. Access parameter values as instance attributes.
+    Implement [``build``][bdbox.model.model.Model.build] to construct and
+    return model geometry. Access parameter values as instance attributes.
 
     !!! Note
 
@@ -86,7 +86,7 @@ class Model(Params):
     def run(cls) -> None:
         """Parse CLI arguments, build the model, and retrieve geometry.
 
-        Calls [``build``][bdbox.model.Model.build] with the resolved
+        Calls [``build``][bdbox.model.model.Model.build] with the resolved
         parameter values and passes the result to
         [``show``][bdbox.geometry.show].
 
@@ -95,7 +95,7 @@ class Model(Params):
 
         Note:
             If ``run`` is not called explicitly, and a single
-            [``Model``][bdbox.model.Model] subclass is defined in
+            [``Model``][bdbox.model.model.Model] subclass is defined in
             [``__main__``][__main__], ``run`` will be called automatically when
             Python finishes.
         """

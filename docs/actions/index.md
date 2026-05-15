@@ -55,7 +55,7 @@ bdbox mypackage.mymodule view                # View in OCP CAD Viewer
 bdbox mypackage.mymodule export output.step  # Export to STEP
 ```
 
-A specific [``Model``][bdbox.model.Model] subclass within a module may be
+A specific [``Model``][bdbox.model.model.Model] subclass within a module may be
 selected:
 
 ```sh
@@ -74,7 +74,7 @@ bdbox mypackage.mymodule:MyModel export output.step  # Export to STEP
 
 The CLI is automatically provided on any model with a
 [``Params``][bdbox.parameters.parameters.Params] or
-[``Model``][bdbox.model.Model] subclass. Run the model file itself to use
+[``Model``][bdbox.model.model.Model] subclass. Run the model file itself to use
 the CLI:
 
 ```sh

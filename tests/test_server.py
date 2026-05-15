@@ -13,7 +13,7 @@ import pytest
 from starlette.testclient import TestClient
 
 from bdbox.errors import InternalError
-from bdbox.model import Model
+from bdbox.model.model import Model
 from bdbox.parameters.field_factories import Float, Int
 from bdbox.parameters.parameters import Params
 from bdbox.parameters.preset import Preset

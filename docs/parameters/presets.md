@@ -34,7 +34,7 @@ Presets are declared alongside fields using
 === "Model class"
 
     Define a `presets` tuple of [``Preset``][bdbox.parameters.preset.Preset] as
-    a [``Model``][bdbox.model.Model] subclass attribute:
+    a [``Model``][bdbox.model.model.Model] subclass attribute:
 
     ```python
     class MyBox(Model):
@@ -132,7 +132,7 @@ Preset("large", description="Extra large version", width=100.0, thickness=10.0)
 ## Programmatic use
 
 Presets can be applied when instantiating a
-[``Model``][bdbox.model.Model] or
+[``Model``][bdbox.model.model.Model] or
 [``Params``][bdbox.parameters.parameters.Params] subclass in code.
 
 * Apply a preset by name:

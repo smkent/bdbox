@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any
 import pytest
 
 from bdbox.errors import ParamsError, ParamValidationError
-from bdbox.model import Model
+from bdbox.model.model import Model
 from bdbox.parameters.field_factories import Bool, Choice, Float, Int, Str
 from bdbox.parameters.fields import (
     BoolField,

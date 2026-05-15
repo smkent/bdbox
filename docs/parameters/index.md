@@ -20,7 +20,7 @@ icon: lucide/package-open
 
 Choose from one of two declaration styles by subclassing either
 **[``Params``][bdbox.parameters.parameters.Params]** or
-**[``Model``][bdbox.model.Model]**:
+**[``Model``][bdbox.model.model.Model]**:
 
 === "Params class"
 
@@ -58,7 +58,7 @@ Choose from one of two declaration styles by subclassing either
 !!! Info "Automatic [dataclasses][dataclasses]"
 
     Subclasses of **[``Params``][bdbox.parameters.parameters.Params]** and
-    **[``Model``][bdbox.model.Model]** automatically function as
+    **[``Model``][bdbox.model.model.Model]** automatically function as
     [dataclasses][dataclasses] with no `@dataclass` decorator!
 
     Declare parameters as class attributes just like with dataclasses.
@@ -71,8 +71,8 @@ Choose from one of two declaration styles by subclassing either
 
 * **Model** subclasses provide parameter values as instance attributes within
   class methods (for example, `self.width`). With **Model**, implement
-  the [``build``][bdbox.model.Model.build] method to construct your model
-  geometry. Execute your model with the [``run``][bdbox.model.Model.run] method.
+  the [``build``][bdbox.model.model.Model.build] method to construct your model
+  geometry. Execute your model with the [``run``][bdbox.model.model.Model.run] method.
   If there is only one `Model` subclass, `run` will be called automatically if
   not invoked explicitly. Multiple `Model` subclasses in one script are
   supported, but `run` must then be called manually on each.
@@ -91,7 +91,7 @@ Choose from one of two declaration styles by subclassing either
 !!! warning "Use one style per script"
 
     Subclassing both [``Params``][bdbox.parameters.parameters.Params] and
-    [``Model``][bdbox.model.Model] in the same script is not supported and
+    [``Model``][bdbox.model.model.Model] in the same script is not supported and
     produces an error.
 
 [build123d]: https://build123d.readthedocs.io

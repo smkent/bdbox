@@ -11,7 +11,7 @@ from unittest.mock import patch
 import pytest
 
 from bdbox.actions.action import Action
-from bdbox.model import Model
+from bdbox.model.model import Model
 from bdbox.parameters.parameters import Params
 from bdbox.runner.utils import reset_bdbox
 

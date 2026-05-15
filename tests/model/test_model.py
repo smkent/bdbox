@@ -7,7 +7,7 @@ from typing import Any
 
 import pytest
 
-from bdbox.model import Model
+from bdbox.model.model import Model
 from bdbox.parameters.field_factories import Float, Int, Str
 from bdbox.parameters.preset import Preset
 

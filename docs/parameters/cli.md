@@ -151,9 +151,9 @@ usage: MyBox [-h] [OPTIONS] [{run,view,export}]
 **Params:** Subclassing [``Params``][bdbox.parameters.parameters.Params]
 provides the CLI and resolves parameter values.
 
-**Model:** Defining exactly one [``Model``][bdbox.model.Model] subclass
+**Model:** Defining exactly one [``Model``][bdbox.model.model.Model] subclass
 in a model program enables the model to be built without calling
-the [``run``][bdbox.model.Model.run] method. For more control over program
+the [``run``][bdbox.model.model.Model.run] method. For more control over program
 execution, `run` may be called manually. If multiple subclasses are defined, a
 warning is printed and `run` must be manually called on the desired class.
 
@@ -193,7 +193,7 @@ geometry in call order. If `show` is never called (and
 [``build123d.Shape``][topology.Shape] instances on completion.
 
 **Model:** Geometry must be returned from the
-[``build``][bdbox.model.Model.build] method.
+[``build``][bdbox.model.model.Model.build] method.
 
 === "Params class"
 

@@ -7,8 +7,8 @@ Note:
 
     When using a [``Params``][bdbox.parameters.parameters.Params] subclass,
     resolved values are accessible as class attributes (e.g. ``P.width``).
-    When using a [``Model``][bdbox.model.Model] subclass, resolved values are
-    accessible as instance attributes (e.g. ``self.width``).
+    When using a [``Model``][bdbox.model.model.Model] subclass, resolved values
+    are accessible as instance attributes (e.g. ``self.width``).
 """
 
 from __future__ import annotations

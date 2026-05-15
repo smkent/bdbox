@@ -8,7 +8,7 @@ icon: lucide/text-cursor-input
 !!! info "Automatic [dataclasses][dataclasses]"
 
     Subclasses of **[``Params``][bdbox.parameters.parameters.Params]** and
-    **[``Model``][bdbox.model.Model]** are automatically created as
+    **[``Model``][bdbox.model.model.Model]** are automatically created as
     [dataclasses][dataclasses] with no `@dataclass` decorator!
 
 Parameters are declared as class attributes just like with dataclasses.

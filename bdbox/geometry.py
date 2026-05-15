@@ -116,9 +116,9 @@ def show(
         call `show` with your built model geometry. Multiple `show` calls
         accumulate geometry in order.
 
-        With a [``Model``][bdbox.model.Model] subclass, return geometry
-        from the [``build``][bdbox.model.Model.build] method instead of calling
-        `show`.
+        With a [``Model``][bdbox.model.model.Model] subclass, return geometry
+        from the [``build``][bdbox.model.model.Model.build] method instead of
+        calling `show`.
 
     Note:
         If ``show()`` is never called, bdbox falls back to scanning the
