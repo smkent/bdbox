@@ -18,6 +18,7 @@ from bdbox.parameters.fields import (
     StrField,
 )
 from bdbox.parameters.preset import Preset
+from bdbox.parameters.serializer import Serializer
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -381,7 +382,7 @@ def test_field_to_schema(
     class T(model_base):  # ty: ignore[unsupported-base]
         things = field_value
 
-    assert T().schema()["properties"]["things"] == expected_schema
+    assert Serializer().generate(T)["properties"]["things"] == expected_schema
 
 
 def test_preset_to_schema(model_base: type[Params]) -> None:
@@ -393,7 +394,7 @@ def test_preset_to_schema(model_base: type[Params]) -> None:
             Preset("large", width=80.0, description="Full size"),
         )
 
-    assert T.schema() == {
+    assert Serializer().generate(T) == {
         "properties": {
             "count": {"default": 3, "type": "number"},
             "width": {"default": 10, "type": "number"},

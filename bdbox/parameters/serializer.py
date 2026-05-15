@@ -137,7 +137,11 @@ class Serializer:
 
         self.converter.register_unstructure_hook(cls, _hook)
 
-    def generate(self, cls: type) -> dict:
+    def generate(self, cls: type | object | None) -> dict:
+        if cls is None:
+            return {}
+        if not isinstance(cls, type):
+            cls = type(cls)
         hints = self.get_type_hints(cls)
         field_schemas = {}
         for f in fields(cls):

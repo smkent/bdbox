@@ -20,6 +20,7 @@ import pytest
 import bdbox.view.server as server_module
 import bdbox.viewer as viewer_module
 from bdbox.__main__ import main
+from bdbox.actions.view import ViewAction
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.viewer import ViewerManager
 
@@ -108,6 +109,18 @@ def mock_browser_open() -> Iterator[MagicMock]:
 def mock_server_start() -> Iterator[MagicMock]:
     with patch.object(
         server_module.ServerManager, "start", autospec=True
+    ) as mocked:
+        yield mocked
+
+
+@pytest.fixture(autouse=True)
+def mock_view_action_on_model_render() -> Iterator[MagicMock]:
+    @contextmanager
+    def on_model_render() -> Iterator[None]:
+        yield
+
+    with patch.object(
+        ViewAction, "on_model_render", side_effect=on_model_render
     ) as mocked:
         yield mocked
 

@@ -17,7 +17,6 @@ from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .model_state import model_state
 from .preset import Preset
-from .serializer import Serializer
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -106,11 +105,6 @@ class Params(CLI, metaclass=ParamsType):
             **overrides: Additional field values to apply after the preset.
         """
         return cls(preset=preset, **overrides)
-
-    @classmethod
-    def schema(cls) -> dict:
-        """Return a JSON Schema describing fields and presets."""
-        return Serializer().generate(cls)
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)

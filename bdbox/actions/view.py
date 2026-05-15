@@ -14,6 +14,7 @@ from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.geometry import resolve_geometry
 from bdbox.parameters.model_state import model_state
+from bdbox.parameters.serializer import Serializer
 from bdbox.view.server import ServerManager
 from bdbox.view.view_state import ViewState
 from bdbox.viewer import ViewerManager
@@ -25,6 +26,8 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from build123d import Compound, Shape
+
+serializer = Serializer()
 
 
 @dataclass
@@ -116,8 +119,8 @@ class ViewAction(ModelAction):
             new_class = model_state.get_model()
         except (ParamsError, MultipleModelsError):
             new_class = None
-        new_schema = new_class.schema() if new_class else {}
-        old_schema = ctx.model_class.schema() if ctx.model_class else {}
+        new_schema = serializer.generate(new_class)
+        old_schema = serializer.generate(ctx.model_class)
         ctx.current_values = dict(model_state.resolved_values)
         if new_schema != old_schema:
             ctx.model_class = new_class
