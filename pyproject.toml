@@ -195,6 +195,8 @@ addopts = [
     "--cov",
     "--strict-config",
     "--strict-markers",
+    "-n",
+    "auto",
 ]
 testpaths = ["tests"]
 filterwarnings = [
