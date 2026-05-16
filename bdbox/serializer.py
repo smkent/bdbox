@@ -137,7 +137,7 @@ class Serializer:
 
         self.converter.register_unstructure_hook(cls, _hook)
 
-    def json_schema(self, cls: type | object | None) -> dict:
+    def json_schema(self, cls: type | object | None) -> dict[str, Any]:
         if cls is None:
             return {}
         if not isinstance(cls, type):
@@ -185,7 +185,19 @@ class Serializer:
             schema["default"] = self.unstructure(default)
 
         if origin in _UNION_ORIGINS:
-            return schema | {"oneOf": [self._hint_to_schema(a) for a in args]}
+            return schema | {
+                "oneOf": [
+                    (
+                        self._hint_to_schema(a)
+                        | {
+                            "title": "None"
+                            if a is type(None)
+                            else str(a.__name__)
+                        }
+                    )
+                    for a in args
+                ]
+            }
 
         if origin is Literal:
             return schema | {"enum": list(args)}
