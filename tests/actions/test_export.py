@@ -39,6 +39,7 @@ class ExportModelRunner:
     output_dir: Path = field(init=False)
     tmp_path: InitVar[str | Path]
     monkeypatch: pytest.MonkeyPatch
+    caplog: pytest.LogCaptureFixture
 
     _FILE_HEADERS: ClassVar[dict] = {
         "step": "ISO-10303-21;",
@@ -76,6 +77,12 @@ class ExportModelRunner:
                 encoding="utf-8", errors="ignore"
             )[: len(format_header)]
             assert file_header == format_header
+        log_message_prefix = "Exporting model geometry to "
+        assert {
+            Path(m.removeprefix(log_message_prefix).strip())
+            for m in self.caplog.messages
+            if log_message_prefix in m
+        } == set(output_files)
 
 
 @dataclass
@@ -104,9 +111,13 @@ def model_runner(
     request: pytest.FixtureRequest,
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
 ) -> ExportModelRunner:
     return ExportModelRunner(
-        file_format=request.param, tmp_path=tmp_path, monkeypatch=monkeypatch
+        file_format=request.param,
+        tmp_path=tmp_path,
+        monkeypatch=monkeypatch,
+        caplog=caplog,
     )
 
 
