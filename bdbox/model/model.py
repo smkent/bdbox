@@ -13,7 +13,6 @@ from bdbox.errors import MultipleModelsError
 from bdbox.geometry import show
 
 from .annotations import Annotater
-from .fields import Field
 from .parameters import Params
 from .state import model_state
 
@@ -112,7 +111,6 @@ class Model(Params):
             model_state.resolved_values = {
                 f.name: getattr(cli_result.params, f.name)
                 for f in fields(cli_result.params)
-                if Field.from_dataclass_field(f)
             }
             show(cli_result.params.build())
             action_state.act_once()
