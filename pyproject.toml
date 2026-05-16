@@ -206,6 +206,7 @@ filterwarnings = [
 
 [tool.coverage.run]
 source = ["bdbox"]
+patch = ["subprocess"]
 branch = true
 
 [tool.coverage.report]
