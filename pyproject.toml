@@ -59,6 +59,7 @@ dev = [
     "pytest>=9",
     "pytest-cov>=7",
     "pytest-sugar>=1",
+    "pytest-xdist>=3",
     "ruff>=0.15",
     "syrupy>=5.1",
     "ty>=0.0.31",
