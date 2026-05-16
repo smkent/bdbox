@@ -14,7 +14,6 @@ import tyro  # noqa: TC002
 from bdbox.console import console, log
 from bdbox.errors import RunError
 from bdbox.model.state import model_state
-from bdbox.timer import Timer
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
@@ -22,6 +21,7 @@ if TYPE_CHECKING:
     from threading import Event
 
     from bdbox.model.parameters import Params
+    from bdbox.timer import Timer
 
 
 @dataclass
@@ -59,19 +59,18 @@ class Action:
     @contextmanager
     def on_model_render(self) -> Iterator[Timer]:
         """Executed around model run."""
-        timer = Timer()
         with (
-            model_state.set_running(),
+            model_state.set_running() as timer,
             console.log_stdout_stderr(),
-            console.activity_indicator(),
+            console.activity_indicator(timer),
         ):
             try:
                 yield timer
             except (Exception, SystemExit) as e:
-                log.exception("Run failed (%dms)", timer.end)
+                log.exception("Run failed (%s)", timer.end_str)
                 raise RunError(e) from e
             else:
-                log.info("Run complete (%dms)", timer.end)
+                log.info("Run complete (%s)", timer.end_str)
 
     def watch_end(self) -> None:
         """Executed after the harness finishes."""

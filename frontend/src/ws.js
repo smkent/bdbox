@@ -1,6 +1,12 @@
-const RECONNECT_DELAY_MS = 2000;
+const BASE_DELAY_MS = 1000;
+const MAX_DELAY_MS = 30000;
 
 let _ws = null;
+let retryCount = 0;
+
+function getRetryDelay() {
+  return Math.min(BASE_DELAY_MS * 2 ** retryCount, MAX_DELAY_MS);
+}
 
 export function sendWs(msg) {
   if (_ws && _ws.readyState === WebSocket.OPEN) {
@@ -13,6 +19,7 @@ export function connectWs() {
   _ws = new WebSocket(`ws://${window.location.host}/ws`);
 
   _ws.addEventListener("open", () => {
+    retryCount = 0;
     window.dispatchEvent(new CustomEvent("bdbox:ws_open"));
   });
 
@@ -28,8 +35,12 @@ export function connectWs() {
 
   _ws.addEventListener("close", () => {
     _ws = null;
-    window.dispatchEvent(new CustomEvent("bdbox:ws_close"));
-    setTimeout(connectWs, RECONNECT_DELAY_MS);
+    const delay = getRetryDelay();
+    retryCount++;
+    window.dispatchEvent(
+      new CustomEvent("bdbox:ws_close", { detail: { retryInMs: delay } }),
+    );
+    setTimeout(connectWs, delay);
   });
 
   _ws.addEventListener("error", () => {
