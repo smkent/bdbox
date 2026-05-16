@@ -106,6 +106,8 @@ class Model(Params):
             model_state.module_dict = sys.modules["__main__"].__dict__
         if Action.mode != Action.Mode.HARNESS:
             action_state.action = cli_result.action
+        if not model_state.class_name:
+            model_state.class_name = cls.__name__
         with action_state.action.on_model_render():
             model_state.apply_overrides(cli_result.params)
             model_state.resolved_values = {

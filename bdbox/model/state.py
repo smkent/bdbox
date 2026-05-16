@@ -37,6 +37,9 @@ class ModelState:
     mode: Mode | None = None
     param_overrides: dict[str, Any] = field(default_factory=dict)
     resolved_values: dict[str, Any] = field(default_factory=dict)
+    cached_schema: dict[str, Any] = field(
+        default_factory=dict, repr=False, init=False
+    )
 
     def apply_overrides(self, target: Params) -> None:
         hints = self.serializer.get_type_hints(type(target))
@@ -103,11 +106,21 @@ class ModelState:
             mm.__file__ = self.filename
 
     @property
+    def schema(self) -> dict[str, Any]:
+        if self.cached_schema:
+            return self.cached_schema
+        if model_class := self.get_model():
+            return self.serializer.json_schema(model_class)
+        return {}
+
+    @property
     def model_running(self) -> bool:
         return self.timer is not None
 
     @contextmanager
     def set_running(self) -> Iterator[Timer]:
+        if not self.cached_schema:
+            self.cached_schema = self.schema
         was_timer = self.timer
         self.timer = Timer()
         try:

@@ -114,7 +114,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
         if view_state.model_class:
             msg = {
                 "type": "schema",
-                "schema": serializer.json_schema(view_state.model_class),
+                "schema": model_state.schema,
                 "current_values": serializer.unstructure(
                     view_state.current_values
                 ),

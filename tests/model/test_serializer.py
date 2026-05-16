@@ -3,25 +3,37 @@
 from __future__ import annotations
 
 import json
+import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, Protocol
 
 import pytest
 
 from bdbox.model.field_factories import Float, Int
 from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
+from bdbox.model.state import model_state
+from bdbox.runner.harness import ModelHarness
+from bdbox.runner.runner import ModelRunner
 from bdbox.serializer import Serializer
+from tests.utils import Models
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+    from pathlib import Path
 
     from syrupy import SnapshotAssertion
 
 
-class Models:
+class Runner(Protocol):
+    def __init__(
+        self, model_argv: Sequence[Path | str] | Path | str = ()
+    ) -> None: ...
+
+
+class SchemaModels:
     @classmethod
     def complex_model(cls, model_base: type[Params]) -> type[Params]:
         @dataclass
@@ -71,6 +83,31 @@ def json_snapshot(snapshot: SnapshotAssertion) -> JsonSnapshot:
         assert json.dumps(value, indent=4) == snapshot
 
     return _assert
+
+
+@pytest.fixture(
+    params=[
+        pytest.param(Models.MODEL_EXPORT, id="Model"),
+        pytest.param(Models.PARAMS_EXPORT, id="Params"),
+        pytest.param(Models.MONO_MODEL, id="mono_model"),
+        pytest.param(Models.MONO_PARAMS, id="mono_params"),
+        pytest.param(Models.MONO_PLAIN, id="mono_plain"),
+        pytest.param(f"{Models.MONO_PARAMS}:P", id="mono_params_class"),
+        pytest.param(f"{Models.MONO_MODEL}:MyModel", id="mono_model_class"),
+    ]
+)
+def model(request: pytest.FixtureRequest) -> Path:
+    return request.param
+
+
+@pytest.fixture(
+    params=(
+        pytest.param(ModelHarness, id="harness"),
+        pytest.param(ModelRunner, id="runner"),
+    )
+)
+def runner(request: pytest.FixtureRequest) -> Runner:
+    return request.param
 
 
 def test_schema_fields(model_base: type[Params]) -> None:
@@ -148,12 +185,25 @@ def test_schema_empty(model_base: type[Params]) -> None:
 def test_schema_complex(
     model_base: type[Params], json_snapshot: JsonSnapshot
 ) -> None:
-    T = Models.complex_model(model_base)  # noqa: N806
+    T = SchemaModels.complex_model(model_base)  # noqa: N806
     json_snapshot(Serializer().json_schema(T))
 
 
 def test_unstructure_complex(
     model_base: type[Params], json_snapshot: JsonSnapshot
 ) -> None:
-    T = Models.complex_model(model_base)  # noqa: N806
+    T = SchemaModels.complex_model(model_base)  # noqa: N806
     json_snapshot(Serializer().unstructure(T()))
+
+
+def test_model_schema_cached_at_runtime(
+    runner: type[Runner],
+    model: Path,
+    json_snapshot: JsonSnapshot,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    if runner is ModelHarness:
+        monkeypatch.setattr(sys, "argv", ["bdbox", str(model)])
+    assert model_state.schema == {}
+    runner(model)()
+    json_snapshot(model_state.schema)

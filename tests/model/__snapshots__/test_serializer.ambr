@@ -1,4 +1,670 @@
 # serializer version: 1
+# name: test_model_schema_cached_at_runtime[harness-Model]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "sub": {
+              "default": {
+                  "x": 1,
+                  "y": 2,
+                  "z": 3,
+                  "do_the_thing": false
+              },
+              "type": "object",
+              "properties": {
+                  "x": {
+                      "type": "number"
+                  },
+                  "y": {
+                      "type": "number"
+                  },
+                  "z": {
+                      "type": "number"
+                  },
+                  "do_the_thing": {
+                      "default": false,
+                      "x-format": "checkbox",
+                      "type": "boolean"
+                  }
+              },
+              "required": [
+                  "do_the_thing",
+                  "x",
+                  "y",
+                  "z"
+              ]
+          },
+          "size": {
+              "default": 10.0,
+              "minimum": 1.0,
+              "maximum": 100.0,
+              "type": "number",
+              "x-format": "range"
+          }
+      },
+      "required": [
+          "size",
+          "sub"
+      ],
+      "x-presets": [
+          {
+              "name": "mid",
+              "values": {
+                  "size": 8.5
+              }
+          }
+      ]
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[harness-Params]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "sub": {
+              "default": {
+                  "x": 1,
+                  "y": 2,
+                  "z": 3,
+                  "do_the_thing": false
+              },
+              "type": "object",
+              "properties": {
+                  "x": {
+                      "type": "number"
+                  },
+                  "y": {
+                      "type": "number"
+                  },
+                  "z": {
+                      "type": "number"
+                  },
+                  "do_the_thing": {
+                      "default": false,
+                      "x-format": "checkbox",
+                      "type": "boolean"
+                  }
+              },
+              "required": [
+                  "do_the_thing",
+                  "x",
+                  "y",
+                  "z"
+              ]
+          },
+          "size": {
+              "default": 10.0,
+              "minimum": 1.0,
+              "maximum": 100.0,
+              "type": "number",
+              "x-format": "range"
+          }
+      },
+      "required": [
+          "size",
+          "sub"
+      ],
+      "x-presets": [
+          {
+              "name": "mid",
+              "values": {
+                  "size": 8.5
+              }
+          }
+      ]
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[harness-mono_model]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "a": {
+              "default": 2.5,
+              "type": "number"
+          },
+          "b": {
+              "default": 3,
+              "type": "number"
+          },
+          "c": {
+              "default": 5,
+              "minimum": 1,
+              "maximum": 10,
+              "type": "number",
+              "x-format": "range"
+          },
+          "d": {
+              "default": 5.0,
+              "minimum": 1.0,
+              "maximum": 10.0,
+              "type": "number",
+              "x-format": "range"
+          },
+          "material": {
+              "default": 1,
+              "enum": [
+                  1,
+                  2,
+                  3
+              ],
+              "x-enumTitles": [
+                  "TRANSPARENT_ALUMINUM",
+                  "NEUTRONIUM",
+                  "DURANIUM"
+              ],
+              "type": "number"
+          }
+      },
+      "required": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "material"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[harness-mono_model_class]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "a": {
+              "default": 2.5,
+              "type": "number"
+          },
+          "b": {
+              "default": 3,
+              "type": "number"
+          },
+          "c": {
+              "default": 5,
+              "minimum": 1,
+              "maximum": 10,
+              "type": "number",
+              "x-format": "range"
+          },
+          "d": {
+              "default": 5.0,
+              "minimum": 1.0,
+              "maximum": 10.0,
+              "type": "number",
+              "x-format": "range"
+          },
+          "material": {
+              "default": 1,
+              "enum": [
+                  1,
+                  2,
+                  3
+              ],
+              "x-enumTitles": [
+                  "TRANSPARENT_ALUMINUM",
+                  "NEUTRONIUM",
+                  "DURANIUM"
+              ],
+              "type": "number"
+          }
+      },
+      "required": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "material"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[harness-mono_params]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "a": {
+              "default": 2.5,
+              "type": "number"
+          },
+          "b": {
+              "default": 3,
+              "type": "number"
+          },
+          "c": {
+              "default": 5,
+              "minimum": 1,
+              "maximum": 10,
+              "type": "number",
+              "x-format": "range"
+          },
+          "d": {
+              "default": 5.0,
+              "minimum": 1.0,
+              "maximum": 10.0,
+              "type": "number",
+              "x-format": "range"
+          },
+          "material": {
+              "default": 1,
+              "enum": [
+                  1,
+                  2,
+                  3
+              ],
+              "x-enumTitles": [
+                  "TRANSPARENT_ALUMINUM",
+                  "NEUTRONIUM",
+                  "DURANIUM"
+              ],
+              "type": "number"
+          }
+      },
+      "required": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "material"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[harness-mono_params_class]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "a": {
+              "default": 2.5,
+              "type": "number"
+          },
+          "b": {
+              "default": 3,
+              "type": "number"
+          },
+          "c": {
+              "default": 5,
+              "minimum": 1,
+              "maximum": 10,
+              "type": "number",
+              "x-format": "range"
+          },
+          "d": {
+              "default": 5.0,
+              "minimum": 1.0,
+              "maximum": 10.0,
+              "type": "number",
+              "x-format": "range"
+          },
+          "material": {
+              "default": 1,
+              "enum": [
+                  1,
+                  2,
+                  3
+              ],
+              "x-enumTitles": [
+                  "TRANSPARENT_ALUMINUM",
+                  "NEUTRONIUM",
+                  "DURANIUM"
+              ],
+              "type": "number"
+          }
+      },
+      "required": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "material"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[harness-mono_plain]
+  '{}'
+# ---
+# name: test_model_schema_cached_at_runtime[runner-Model]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "sub": {
+              "default": {
+                  "x": 1,
+                  "y": 2,
+                  "z": 3,
+                  "do_the_thing": false
+              },
+              "type": "object",
+              "properties": {
+                  "x": {
+                      "type": "number"
+                  },
+                  "y": {
+                      "type": "number"
+                  },
+                  "z": {
+                      "type": "number"
+                  },
+                  "do_the_thing": {
+                      "default": false,
+                      "x-format": "checkbox",
+                      "type": "boolean"
+                  }
+              },
+              "required": [
+                  "do_the_thing",
+                  "x",
+                  "y",
+                  "z"
+              ]
+          },
+          "size": {
+              "default": 10.0,
+              "minimum": 1.0,
+              "maximum": 100.0,
+              "type": "number",
+              "x-format": "range"
+          }
+      },
+      "required": [
+          "size",
+          "sub"
+      ],
+      "x-presets": [
+          {
+              "name": "mid",
+              "values": {
+                  "size": 8.5
+              }
+          }
+      ]
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[runner-Params]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "sub": {
+              "default": {
+                  "x": 1,
+                  "y": 2,
+                  "z": 3,
+                  "do_the_thing": false
+              },
+              "type": "object",
+              "properties": {
+                  "x": {
+                      "type": "number"
+                  },
+                  "y": {
+                      "type": "number"
+                  },
+                  "z": {
+                      "type": "number"
+                  },
+                  "do_the_thing": {
+                      "default": false,
+                      "x-format": "checkbox",
+                      "type": "boolean"
+                  }
+              },
+              "required": [
+                  "do_the_thing",
+                  "x",
+                  "y",
+                  "z"
+              ]
+          },
+          "size": {
+              "default": 10.0,
+              "minimum": 1.0,
+              "maximum": 100.0,
+              "type": "number",
+              "x-format": "range"
+          }
+      },
+      "required": [
+          "size",
+          "sub"
+      ],
+      "x-presets": [
+          {
+              "name": "mid",
+              "values": {
+                  "size": 8.5
+              }
+          }
+      ]
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[runner-mono_model]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "a": {
+              "default": 2.5,
+              "type": "number"
+          },
+          "b": {
+              "default": 3,
+              "type": "number"
+          },
+          "c": {
+              "default": 5,
+              "minimum": 1,
+              "maximum": 10,
+              "type": "number",
+              "x-format": "range"
+          },
+          "d": {
+              "default": 5.0,
+              "minimum": 1.0,
+              "maximum": 10.0,
+              "type": "number",
+              "x-format": "range"
+          },
+          "material": {
+              "default": 1,
+              "enum": [
+                  1,
+                  2,
+                  3
+              ],
+              "x-enumTitles": [
+                  "TRANSPARENT_ALUMINUM",
+                  "NEUTRONIUM",
+                  "DURANIUM"
+              ],
+              "type": "number"
+          }
+      },
+      "required": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "material"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[runner-mono_model_class]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "a": {
+              "default": 2.5,
+              "type": "number"
+          },
+          "b": {
+              "default": 3,
+              "type": "number"
+          },
+          "c": {
+              "default": 5,
+              "minimum": 1,
+              "maximum": 10,
+              "type": "number",
+              "x-format": "range"
+          },
+          "d": {
+              "default": 5.0,
+              "minimum": 1.0,
+              "maximum": 10.0,
+              "type": "number",
+              "x-format": "range"
+          },
+          "material": {
+              "default": 1,
+              "enum": [
+                  1,
+                  2,
+                  3
+              ],
+              "x-enumTitles": [
+                  "TRANSPARENT_ALUMINUM",
+                  "NEUTRONIUM",
+                  "DURANIUM"
+              ],
+              "type": "number"
+          }
+      },
+      "required": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "material"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[runner-mono_params]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "a": {
+              "default": 2.5,
+              "type": "number"
+          },
+          "b": {
+              "default": 3,
+              "type": "number"
+          },
+          "c": {
+              "default": 5,
+              "minimum": 1,
+              "maximum": 10,
+              "type": "number",
+              "x-format": "range"
+          },
+          "d": {
+              "default": 5.0,
+              "minimum": 1.0,
+              "maximum": 10.0,
+              "type": "number",
+              "x-format": "range"
+          },
+          "material": {
+              "default": 1,
+              "enum": [
+                  1,
+                  2,
+                  3
+              ],
+              "x-enumTitles": [
+                  "TRANSPARENT_ALUMINUM",
+                  "NEUTRONIUM",
+                  "DURANIUM"
+              ],
+              "type": "number"
+          }
+      },
+      "required": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "material"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[runner-mono_params_class]
+  '''
+  {
+      "type": "object",
+      "properties": {
+          "a": {
+              "default": 2.5,
+              "type": "number"
+          },
+          "b": {
+              "default": 3,
+              "type": "number"
+          },
+          "c": {
+              "default": 5,
+              "minimum": 1,
+              "maximum": 10,
+              "type": "number",
+              "x-format": "range"
+          },
+          "d": {
+              "default": 5.0,
+              "minimum": 1.0,
+              "maximum": 10.0,
+              "type": "number",
+              "x-format": "range"
+          },
+          "material": {
+              "default": 1,
+              "enum": [
+                  1,
+                  2,
+                  3
+              ],
+              "x-enumTitles": [
+                  "TRANSPARENT_ALUMINUM",
+                  "NEUTRONIUM",
+                  "DURANIUM"
+              ],
+              "type": "number"
+          }
+      },
+      "required": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "material"
+      ],
+      "x-presets": []
+  }
+  '''
+# ---
+# name: test_model_schema_cached_at_runtime[runner-mono_plain]
+  '{}'
+# ---
 # name: test_schema_complex[Model]
   '''
   {
