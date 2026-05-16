@@ -144,18 +144,17 @@ class ViewAction(ModelAction):
             ctx.enqueue(
                 {"type": "run_start", "params": dict(ctx.param_overrides)}
             )
-            log.info("Running model")
             try:
                 yield
             except (Exception, SystemExit):
-                ctx.enqueue({"type": "run_error", "elapsed_ms": timer.end})
+                ctx.enqueue({"type": "run_error", "elapsed_ms": timer.end_str})
                 raise
             else:
                 self._update_schema(ctx)
                 ctx.enqueue(
                     {
                         "type": "run_ok",
-                        "elapsed_ms": timer.end,
+                        "elapsed_ms": timer.end_str,
                         "current_values": serializer.unstructure(
                             model_state.resolved_values
                         ),

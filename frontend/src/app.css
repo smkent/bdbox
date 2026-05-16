@@ -8,6 +8,7 @@
 }
 
 .status-bar {
+  font-size: 16px;
   padding: 4px 8px;
   background: #1a1a1a;
   border-bottom: 1px solid #333;
@@ -24,6 +25,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #aaa;
+  font-weight: bold;
 }
 
 .status-run {
@@ -197,15 +199,42 @@
 /* ── Console panel ──────────────────────────────────────── */
 
 .console-panel {
+  display: flex;
+  flex-direction: column;
   height: 100%;
+  color: #ddd;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.console-terminal {
+  flex: 1;
   overflow: hidden;
 }
 
-.console-panel .xterm-viewport {
+.console-terminal .xterm-viewport {
   background: #1a1a1a;
 }
 
-.console-panel .xterm {
+.console-terminal .xterm {
   height: 100%;
   padding: 4px 6px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-spinner {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 5px;
 }

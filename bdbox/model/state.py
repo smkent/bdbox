@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any
 
 from bdbox.errors import InternalError, MultipleModelsError, ParamsError
 from bdbox.serializer import Serializer
+from bdbox.timer import Timer
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -27,6 +28,7 @@ class ModelState:
     model_subclasses: list[Any] = field(default_factory=list)
     model_cli: Params | None = None
     serializer: Serializer = field(default_factory=Serializer, init=False)
+    timer: Timer | None = field(default=None, init=False)
 
     class Mode(Enum):
         PARAMS_CLASS = auto()
@@ -35,7 +37,6 @@ class ModelState:
     mode: Mode | None = None
     param_overrides: dict[str, Any] = field(default_factory=dict)
     resolved_values: dict[str, Any] = field(default_factory=dict)
-    model_running: bool = False
     cached_schema: dict[str, Any] = field(
         default_factory=dict, repr=False, init=False
     )
@@ -112,16 +113,20 @@ class ModelState:
             return self.serializer.json_schema(model_class)
         return {}
 
+    @property
+    def model_running(self) -> bool:
+        return self.timer is not None
+
     @contextmanager
-    def set_running(self) -> Iterator[None]:
+    def set_running(self) -> Iterator[Timer]:
         if not self.cached_schema:
             self.cached_schema = self.schema
-        was_running = self.model_running
-        self.model_running = True
+        was_timer = self.timer
+        self.timer = Timer()
         try:
-            yield
+            yield self.timer
         finally:
-            self.model_running = was_running
+            self.timer = was_timer
 
 
 model_state = ModelState()
