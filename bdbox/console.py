@@ -19,7 +19,7 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, TextIO, cast
 
 from rich.console import Console as RichConsole
-from rich.console import ConsoleRenderable
+from rich.console import ConsoleOptions, ConsoleRenderable, RenderResult
 from rich.live import Live
 from rich.logging import RichHandler
 from rich.spinner import Spinner
@@ -27,6 +27,7 @@ from rich.table import Table
 from rich.text import Text
 
 from .errors import UsageError
+from .timer import Timer
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -234,6 +235,26 @@ class TerminalConsoleOutput(ConsoleOutput):
 
 
 @dataclass
+class RunningSpinner:
+    text: str = "Running model..."
+    timer: Timer = field(default_factory=Timer)
+
+    @cached_property
+    def spinner(self) -> Spinner:
+        return Spinner("dots", text=self.format_text())
+
+    def format_text(self, suffix: str = "") -> Text:
+        return Text.from_markup(f"[bold]{self.text}{suffix}[/bold]")
+
+    def __rich_console__(
+        self, console: RichConsole, options: ConsoleOptions
+    ) -> RenderResult:
+        if self.timer.elapsed >= 2000:
+            self.spinner.text = self.format_text(f" ({self.timer})")
+        yield self.spinner
+
+
+@dataclass
 class Console:
     verbose: int = 0
 
@@ -283,11 +304,11 @@ class Console:
             stderr_stream.flush()
 
     @contextmanager
-    def activity_indicator(self) -> Iterator[None]:
+    def activity_indicator(self, timer: Timer | None = None) -> Iterator[None]:
         term = console.terminal_output
         if term and sys.__stderr__ and sys.__stderr__.isatty():
             with Live(
-                Spinner("dots", text="[bold]Running model...[/bold]"),
+                RunningSpinner(timer=timer) if timer else RunningSpinner(),
                 console=term.console,
                 refresh_per_second=8,
                 transient=True,

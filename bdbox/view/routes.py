@@ -120,6 +120,11 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                 ),
                 "session_id": str(view_state.session_id),
                 "model_running": model_state.model_running,
+                "model_run_started": (
+                    model_state.timer.started_at.isoformat()
+                    if model_state.timer
+                    else None
+                ),
                 "model_info": model_state.model_name_info(),
             }
             log.debug("Sent %s", msg["type"])

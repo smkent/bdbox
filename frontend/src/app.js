@@ -176,14 +176,6 @@ function registerComponents(layout) {
     div.innerHTML = `
       <div x-data="{ get modelName() { const i = $store.modelInfo; const b = i.module ?? i.file; return b && i.cls ? b + ' · ' + i.cls : i.cls ?? b ?? null; } }" class="status-bar">
         <span class="status-model-name" x-show="modelName" x-text="modelName" :title="modelName"></span>
-        <div class="status-run">
-          <span x-show="$store.runStatus.wsState === 'connecting'" class="status-connecting">Connecting…</span>
-          <span x-show="$store.runStatus.wsState === 'disconnected'" class="status-disconnected">Disconnected</span>
-          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'idle'" class="status-idle">Idle</span>
-          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'running'" class="status-running">Running…</span>
-          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'ok'" class="status-ok">Done (<span x-text="$store.runStatus.elapsedMs"></span>ms)</span>
-          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'error'" class="status-error">Error</span>
-        </div>
       </div>
       <div class="params-form"></div>
     `;
@@ -199,7 +191,24 @@ function registerComponents(layout) {
   layout.registerComponentFactoryFunction("console", (container) => {
     const div = document.createElement("div");
     div.className = "console-panel";
+
+    div.innerHTML = `
+      <div class="status-bar">
+        <div class="status-run" x-data="{ formatElapsed(s) { const m = Math.floor(s / 60) % 60, h = Math.floor(s / 3600) % 24, d = Math.floor(s / 86400); const p = []; if (d) p.push(d + 'd'); if (h) p.push(h + 'h'); if (m) p.push(m + 'm'); p.push((s % 60) + 's'); return p.join(' '); } }">
+          <span x-show="$store.runStatus.wsState === 'connecting'" class="status-connecting"><span class="status-spinner"></span>Connecting…</span>
+          <span x-show="$store.runStatus.wsState === 'disconnected'" class="status-disconnected">Disconnected (retry in <span x-text="$store.runStatus.retryIn"></span>s)</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'idle'" class="status-idle">Idle</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'running'" class="status-running"><span class="status-spinner"></span>Running…<span x-show="$store.runStatus.runElapsedS >= 2"> (<span x-text="formatElapsed($store.runStatus.runElapsedS)"></span>)</span></span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'ok'" class="status-ok">Done (<span x-text="$store.runStatus.elapsedMs"></span>)</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'error'" class="status-error">Error</span>
+        </div>
+      </div>
+      <div class="console-terminal"></div>
+    `;
     container.element.appendChild(div);
+    Alpine.initTree(div);
+
+    const terminalEl = div.querySelector(".console-terminal");
 
     const terminal = new Terminal({
       convertEol: true,
@@ -211,7 +220,7 @@ function registerComponents(layout) {
     });
     const fitAddon = new FitAddon();
     terminal.loadAddon(fitAddon);
-    terminal.open(div);
+    terminal.open(terminalEl);
     fitAddon.fit();
 
     const sendSize = () =>
@@ -225,7 +234,7 @@ function registerComponents(layout) {
       fitAddon.fit();
       sendSize();
     };
-    new ResizeObserver(fit).observe(div);
+    new ResizeObserver(fit).observe(terminalEl);
     container.on("resize", fit);
 
     window.addEventListener("bdbox:ws_open", sendSize);
@@ -287,7 +296,19 @@ function initWs() {
     if (detail.session_id !== lastSessionId) {
       window.dispatchEvent(new CustomEvent("bdbox:clear_console"));
       const store = Alpine.store("runStatus");
-      store.state = detail.model_running ? "running" : "idle";
+      if (detail.model_running) {
+        store.state = "running";
+        if (tickInterval) clearInterval(tickInterval);
+        runStartedAt = detail.model_run_started
+          ? new Date(detail.model_run_started).getTime()
+          : Date.now();
+        store.runElapsedS = 0;
+        tickInterval = setInterval(() => {
+          store.runElapsedS = Math.round((Date.now() - runStartedAt) / 1000);
+        }, 1000);
+      } else {
+        store.state = "idle";
+      }
       store.elapsedMs = "";
       lastSessionId = detail.session_id;
     } else if (detail.model_running) {
@@ -316,12 +337,23 @@ function initWs() {
     const store = Alpine.store("runStatus");
     store.state = "running";
     store.elapsedMs = "";
+    if (tickInterval) clearInterval(tickInterval);
+    runStartedAt = Date.now();
+    store.runElapsedS = 0;
+    tickInterval = setInterval(() => {
+      store.runElapsedS = Math.round((Date.now() - runStartedAt) / 1000);
+    }, 1000);
   });
 
   window.addEventListener("bdbox:run_ok", ({ detail }) => {
     const store = Alpine.store("runStatus");
     store.state = "ok";
     store.elapsedMs = detail.elapsed_ms;
+    store.runElapsedS = 0;
+    if (tickInterval) {
+      clearInterval(tickInterval);
+      tickInterval = null;
+    }
     if (detail.current_values && Object.keys(paramOverrides).length === 0) {
       currentValues = detail.current_values;
       if (jedison) {
@@ -331,17 +363,42 @@ function initWs() {
   });
 
   window.addEventListener("bdbox:run_error", () => {
-    Alpine.store("runStatus").state = "error";
+    const store = Alpine.store("runStatus");
+    store.state = "error";
+    store.runElapsedS = 0;
+    if (tickInterval) {
+      clearInterval(tickInterval);
+      tickInterval = null;
+    }
   });
 
+  let tickInterval = null;
+  let retryAt = null;
+  let runStartedAt = null;
+
   window.addEventListener("bdbox:ws_connecting", () => {
+    if (tickInterval) {
+      clearInterval(tickInterval);
+      tickInterval = null;
+    }
+    retryAt = null;
     Alpine.store("runStatus").wsState = "connecting";
   });
   window.addEventListener("bdbox:ws_open", () => {
     Alpine.store("runStatus").wsState = "connected";
   });
-  window.addEventListener("bdbox:ws_close", () => {
-    Alpine.store("runStatus").wsState = "disconnected";
+  window.addEventListener("bdbox:ws_close", ({ detail }) => {
+    const store = Alpine.store("runStatus");
+    store.wsState = "disconnected";
+    retryAt = Date.now() + detail.retryInMs;
+    store.retryIn = Math.round(detail.retryInMs / 1000);
+    tickInterval = setInterval(() => {
+      store.retryIn = Math.max(0, Math.round((retryAt - Date.now()) / 1000));
+      if (store.retryIn <= 0) {
+        clearInterval(tickInterval);
+        tickInterval = null;
+      }
+    }, 1000);
   });
 
   connectWs();
@@ -351,6 +408,8 @@ Alpine.store("runStatus", {
   state: "idle",
   elapsedMs: "",
   wsState: "connecting",
+  retryIn: 0,
+  runElapsedS: 0,
 });
 
 Alpine.store("modelInfo", {
