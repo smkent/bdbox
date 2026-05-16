@@ -192,7 +192,7 @@ help = "Run tests using Python 3.12"
 [tool.pytest]
 addopts = [
     "-ra",
-    "--cov",
+    "--cov=bdbox",
     "--strict-config",
     "--strict-markers",
     "-n",
