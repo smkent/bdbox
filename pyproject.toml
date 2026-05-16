@@ -59,6 +59,7 @@ dev = [
     "pytest>=9",
     "pytest-cov>=7",
     "pytest-sugar>=1",
+    "pytest-xdist>=3",
     "ruff>=0.15",
     "syrupy>=5.1",
     "ty>=0.0.31",
@@ -191,9 +192,11 @@ help = "Run tests using Python 3.12"
 [tool.pytest]
 addopts = [
     "-ra",
-    "--cov",
+    "--cov=bdbox",
     "--strict-config",
     "--strict-markers",
+    "-n",
+    "auto",
 ]
 testpaths = ["tests"]
 filterwarnings = [
@@ -203,6 +206,7 @@ filterwarnings = [
 
 [tool.coverage.run]
 source = ["bdbox"]
+patch = ["subprocess"]
 branch = true
 
 [tool.coverage.report]
