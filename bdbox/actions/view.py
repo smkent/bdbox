@@ -156,6 +156,8 @@ class ViewAction(ModelAction):
                     {
                         "type": "run_ok",
                         "elapsed_ms": timer.end,
-                        "current_values": dict(model_state.resolved_values),
+                        "current_values": serializer.unstructure(
+                            model_state.resolved_values
+                        ),
                     }
                 )
