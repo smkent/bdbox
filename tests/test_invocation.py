@@ -29,20 +29,20 @@ class Runner:
 
     def __call__(
         self, cmd: Sequence[Any], test_mode: str = "", **kwargs: Any
-    ) -> str:
+    ) -> subprocess.CompletedProcess:
         kwargs.setdefault(
             "env",
             os.environ | {"BDBOX_TEST_MODEL_MODE": test_mode, "COLUMNS": "80"},
         )
         kwargs.setdefault("text", True)
         kwargs.setdefault("stdout", subprocess.PIPE)
-        kwargs.setdefault("stderr", subprocess.STDOUT)
+        kwargs.setdefault("stderr", subprocess.PIPE)
         with self.disallow_subprocess.pause():
             result = subprocess.run(  # noqa: S603
                 [sys.executable, *[str(c) for c in cmd]], check=True, **kwargs
             )
         assert result.returncode == 0
-        return result.stdout.strip()
+        return result
 
     def sanitize(self, output: str) -> str:
         return re.sub(r"\(\d+\s?ms\)", "([TIMER]ms)", output)
@@ -50,7 +50,9 @@ class Runner:
     def match_snapshot(
         self, cmd: Sequence[Any], *args: Any, **kwargs: Any
     ) -> None:
-        assert self.sanitize(self(cmd, *args, **kwargs)) == self.snapshot
+        result = self(cmd, *args, **kwargs)
+        assert result.stdout.strip() == self.snapshot
+        assert self.sanitize(result.stderr.strip()) == self.snapshot
 
     def raises(
         self, cmd: Sequence[Any], match: str
@@ -61,7 +63,7 @@ class Runner:
         ) as ee:
             self(cmd)
         assert ee.value.returncode != 0
-        assert match in (ee.value.output or "")
+        assert match in (ee.value.stderr or "")
         return ee.value
 
 
