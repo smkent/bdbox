@@ -11,14 +11,14 @@ from bdbox.actions.state import action_state
 from bdbox.geometry import reset_geometry
 from bdbox.model.state import model_state
 
-if TYPE_CHECKING:
-    from collections.abc import Iterator
-    from types import ModuleType, TracebackType
-
 if sys.version_info >= (3, 11):
     from typing import Self
 else:
     from typing_extensions import Self
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+    from types import ModuleType, TracebackType
 
 
 def reset_bdbox() -> None:
