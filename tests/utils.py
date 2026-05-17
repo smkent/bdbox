@@ -8,6 +8,8 @@ from types import ModuleType
 from typing import TYPE_CHECKING, Any
 from unittest.mock import MagicMock, patch
 
+from bdbox import examples
+
 if sys.version_info >= (3, 11):
     from typing import Self
 else:
@@ -17,6 +19,12 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Iterator, Sequence
 
     import pytest
+
+
+class Examples:
+    DIR = Path(examples.__file__).parent
+
+    DEMO = DIR / "demo.py"
 
 
 class Models:
