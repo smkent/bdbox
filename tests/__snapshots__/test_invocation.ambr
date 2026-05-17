@@ -58,7 +58,13 @@
   ╰──────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model[normal-help].1
+  ''
+# ---
 # name: test_model[normal-render]
+  ''
+# ---
+# name: test_model[normal-render].1
   '''
   25.4x2,en=False,thing=third,text=nope
   Run complete ([TIMER]ms)
@@ -123,7 +129,13 @@
   ╰──────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model[run-help].1
+  ''
+# ---
 # name: test_model[run-render]
+  ''
+# ---
+# name: test_model[run-render].1
   '''
   25.4x2,en=False,thing=third,text=nope
   Run complete ([TIMER]ms)
@@ -147,7 +159,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_blank[normal-help].1
+  ''
+# ---
 # name: test_model_blank[normal-render]
+  ''
+# ---
+# name: test_model_blank[normal-render].1
   '''
   hm
   Run complete ([TIMER]ms)
@@ -171,31 +189,49 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_blank[run-help].1
+  ''
+# ---
 # name: test_model_blank[run-render]
+  ''
+# ---
+# name: test_model_blank[run-render].1
   '''
   hm
   Run complete ([TIMER]ms)
   '''
 # ---
 # name: test_model_multiple[normal-class-help]
+  ''
+# ---
+# name: test_model_multiple[normal-class-help].1
   '''
   Multiple Model subclasses defined: FirstModel, SecondModel. Call .run()         
   explicitly.
   '''
 # ---
 # name: test_model_multiple[normal-class-render]
+  ''
+# ---
+# name: test_model_multiple[normal-class-render].1
   '''
   Multiple Model subclasses defined: FirstModel, SecondModel. Call .run()         
   explicitly.
   '''
 # ---
 # name: test_model_multiple[normal-file-help]
+  ''
+# ---
+# name: test_model_multiple[normal-file-help].1
   '''
   Multiple Model subclasses defined: FirstModel, SecondModel. Call .run()         
   explicitly.
   '''
 # ---
 # name: test_model_multiple[normal-file-render]
+  ''
+# ---
+# name: test_model_multiple[normal-file-render].1
   '''
   Multiple Model subclasses defined: FirstModel, SecondModel. Call .run()         
   explicitly.
@@ -222,7 +258,13 @@
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_multiple[run-class-help].1
+  ''
+# ---
 # name: test_model_multiple[run-class-render]
+  ''
+# ---
+# name: test_model_multiple[run-class-render].1
   '''
   FirstModel 10.0
   Run complete ([TIMER]ms)
@@ -249,7 +291,13 @@
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_multiple[run-file-help].1
+  ''
+# ---
 # name: test_model_multiple[run-file-render]
+  ''
+# ---
+# name: test_model_multiple[run-file-render].1
   '''
   FirstModel 10.0
   Run complete ([TIMER]ms)
@@ -276,7 +324,13 @@
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_multiple_harness[normal-class_multi_first-help].1
+  ''
+# ---
 # name: test_model_multiple_harness[normal-class_multi_first-render]
+  ''
+# ---
+# name: test_model_multiple_harness[normal-class_multi_first-render].1
   '''
   FirstModel 10.0
   Run complete ([TIMER]ms)
@@ -301,7 +355,13 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_multiple_harness[normal-class_multi_second-help].1
+  ''
+# ---
 # name: test_model_multiple_harness[normal-class_multi_second-render]
+  ''
+# ---
+# name: test_model_multiple_harness[normal-class_multi_second-render].1
   '''
   SecondModel 10
   Run complete ([TIMER]ms)
@@ -328,7 +388,13 @@
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_multiple_harness[run-class_multi_first-help].1
+  ''
+# ---
 # name: test_model_multiple_harness[run-class_multi_first-render]
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_first-render].1
   '''
   FirstModel 10.0
   Run complete ([TIMER]ms)
@@ -353,19 +419,31 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_multiple_harness[run-class_multi_second-help].1
+  ''
+# ---
 # name: test_model_multiple_harness[run-class_multi_second-render]
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_second-render].1
   '''
   FirstModel 10.0
   Run complete ([TIMER]ms)
   '''
 # ---
 # name: test_model_subclass[normal-help]
+  ''
+# ---
+# name: test_model_subclass[normal-help].1
   '''
   Multiple Model subclasses defined: ChildModel, ParentModel. Call .run()         
   explicitly.
   '''
 # ---
 # name: test_model_subclass[normal-render]
+  ''
+# ---
+# name: test_model_subclass[normal-render].1
   '''
   Multiple Model subclasses defined: ChildModel, ParentModel. Call .run()         
   explicitly.
@@ -393,7 +471,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_model_subclass[run-help].1
+  ''
+# ---
 # name: test_model_subclass[run-render]
+  ''
+# ---
+# name: test_model_subclass[run-render].1
   '''
   ChildModel 25.4 10
   Run complete ([TIMER]ms)
@@ -421,7 +505,13 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_class_model[mod_model-help].1
+  ''
+# ---
 # name: test_module_class_model[mod_model-render]
+  ''
+# ---
+# name: test_module_class_model[mod_model-render].1
   '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
@@ -450,7 +540,13 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_class_model[mod_params-help].1
+  ''
+# ---
 # name: test_module_class_model[mod_params-render]
+  ''
+# ---
+# name: test_module_class_model[mod_params-render].1
   '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
@@ -483,7 +579,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_class_model[mono_model-help].1
+  ''
+# ---
 # name: test_module_class_model[mono_model-render]
+  ''
+# ---
+# name: test_module_class_model[mono_model-render].1
   '''
   b1 <SnapshotMock name='b123d.Box()'>
   b2 <SnapshotMock name='b123d.Box()'>
@@ -516,7 +618,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_class_model[mono_params-help].1
+  ''
+# ---
 # name: test_module_class_model[mono_params-render]
+  ''
+# ---
+# name: test_module_class_model[mono_params-render].1
   '''
   b1 <SnapshotMock name='b123d.Box()'>
   b2 <SnapshotMock name='b123d.Box()'>
@@ -546,6 +654,9 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mod_model-help-embedded].1
+  ''
+# ---
 # name: test_module_models[tests.models.mod_model-help-harness]
   '''
   Model main
@@ -569,21 +680,30 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mod_model-help-harness].1
+  ''
+# ---
 # name: test_module_models[tests.models.mod_model-render-embedded]
+  'Model main'
+# ---
+# name: test_module_models[tests.models.mod_model-render-embedded].1
   '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
   Run complete ([TIMER]ms)
-  Model main
   '''
 # ---
 # name: test_module_models[tests.models.mod_model-render-harness]
   '''
+  Model main
+  Model main
+  '''
+# ---
+# name: test_module_models[tests.models.mod_model-render-harness].1
+  '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
   Run complete ([TIMER]ms)
-  Model main
-  Model main
   '''
 # ---
 # name: test_module_models[tests.models.mod_model.model-help-embedded]
@@ -608,6 +728,9 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mod_model.model-help-embedded].1
+  ''
+# ---
 # name: test_module_models[tests.models.mod_model.model-help-harness]
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
@@ -630,7 +753,13 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mod_model.model-help-harness].1
+  ''
+# ---
 # name: test_module_models[tests.models.mod_model.model-render-embedded]
+  ''
+# ---
+# name: test_module_models[tests.models.mod_model.model-render-embedded].1
   '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
@@ -638,6 +767,9 @@
   '''
 # ---
 # name: test_module_models[tests.models.mod_model.model-render-harness]
+  ''
+# ---
+# name: test_module_models[tests.models.mod_model.model-render-harness].1
   '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
@@ -650,6 +782,9 @@
   b2 Box(x=3, y=5, z=5.0)
   Model main P(Params)(a=2.5, b=3, c=5, d=5.0)
   '''
+# ---
+# name: test_module_models[tests.models.mod_params-help-embedded].1
+  ''
 # ---
 # name: test_module_models[tests.models.mod_params-help-harness]
   '''
@@ -673,6 +808,9 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mod_params-help-harness].1
+  ''
+# ---
 # name: test_module_models[tests.models.mod_params-render-embedded]
   '''
   b1 Box(x=2.5, y=3, z=5)
@@ -680,7 +818,13 @@
   Model main P(Params)(a=2.5, b=3, c=5, d=5.0)
   '''
 # ---
+# name: test_module_models[tests.models.mod_params-render-embedded].1
+  ''
+# ---
 # name: test_module_models[tests.models.mod_params-render-harness]
+  ''
+# ---
+# name: test_module_models[tests.models.mod_params-render-harness].1
   '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
@@ -710,6 +854,9 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mod_params.model-help-embedded].1
+  ''
+# ---
 # name: test_module_models[tests.models.mod_params.model-help-harness]
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
@@ -732,7 +879,13 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mod_params.model-help-harness].1
+  ''
+# ---
 # name: test_module_models[tests.models.mod_params.model-render-embedded]
+  ''
+# ---
+# name: test_module_models[tests.models.mod_params.model-render-embedded].1
   '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
@@ -740,6 +893,9 @@
   '''
 # ---
 # name: test_module_models[tests.models.mod_params.model-render-harness]
+  ''
+# ---
+# name: test_module_models[tests.models.mod_params.model-render-harness].1
   '''
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
@@ -772,6 +928,9 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mono_model.models.model-help-embedded].1
+  ''
+# ---
 # name: test_module_models[tests.models.mono_model.models.model-help-harness]
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
@@ -798,7 +957,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mono_model.models.model-help-harness].1
+  ''
+# ---
 # name: test_module_models[tests.models.mono_model.models.model-render-embedded]
+  ''
+# ---
+# name: test_module_models[tests.models.mono_model.models.model-render-embedded].1
   '''
   b1 <SnapshotMock name='b123d.Box()'>
   b2 <SnapshotMock name='b123d.Box()'>
@@ -806,6 +971,9 @@
   '''
 # ---
 # name: test_module_models[tests.models.mono_model.models.model-render-harness]
+  ''
+# ---
+# name: test_module_models[tests.models.mono_model.models.model-render-harness].1
   '''
   b1 <SnapshotMock name='b123d.Box()'>
   b2 <SnapshotMock name='b123d.Box()'>
@@ -838,6 +1006,9 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mono_params.models.model-help-embedded].1
+  ''
+# ---
 # name: test_module_models[tests.models.mono_params.models.model-help-harness]
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
@@ -864,7 +1035,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mono_params.models.model-help-harness].1
+  ''
+# ---
 # name: test_module_models[tests.models.mono_params.models.model-render-embedded]
+  ''
+# ---
+# name: test_module_models[tests.models.mono_params.models.model-render-embedded].1
   '''
   b1 <SnapshotMock name='b123d.Box()'>
   b2 <SnapshotMock name='b123d.Box()'>
@@ -872,6 +1049,9 @@
   '''
 # ---
 # name: test_module_models[tests.models.mono_params.models.model-render-harness]
+  ''
+# ---
+# name: test_module_models[tests.models.mono_params.models.model-render-harness].1
   '''
   b1 <SnapshotMock name='b123d.Box()'>
   b2 <SnapshotMock name='b123d.Box()'>
@@ -880,6 +1060,9 @@
 # ---
 # name: test_module_models[tests.models.mono_plain.models.model-help-embedded]
   'Box count: 2'
+# ---
+# name: test_module_models[tests.models.mono_plain.models.model-help-embedded].1
+  ''
 # ---
 # name: test_module_models[tests.models.mono_plain.models.model-help-harness]
   '''
@@ -900,8 +1083,14 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_module_models[tests.models.mono_plain.models.model-help-harness].1
+  ''
+# ---
 # name: test_module_models[tests.models.mono_plain.models.model-render-embedded]
   'Box count: 2'
+# ---
+# name: test_module_models[tests.models.mono_plain.models.model-render-embedded].1
+  ''
 # ---
 # name: test_module_models[tests.models.mono_plain.models.model-render-harness]
   '''
@@ -909,11 +1098,20 @@
   Box count: 2
   '''
 # ---
+# name: test_module_models[tests.models.mono_plain.models.model-render-harness].1
+  ''
+# ---
 # name: test_params_class[noparams-help]
   'params() not called'
 # ---
+# name: test_params_class[noparams-help].1
+  ''
+# ---
 # name: test_params_class[noparams-render]
   'params() not called'
+# ---
+# name: test_params_class[noparams-render].1
+  ''
 # ---
 # name: test_params_class[normal-help]
   '''
@@ -974,7 +1172,13 @@
   ╰──────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_params_class[normal-help].1
+  ''
+# ---
 # name: test_params_class[normal-render]
+  ''
+# ---
+# name: test_params_class[normal-render].1
   '''
   25.4x2,en=False,thing=third,text=nope
   Run complete ([TIMER]ms)
@@ -1039,7 +1243,13 @@
   ╰──────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_params_class[show-help].1
+  ''
+# ---
 # name: test_params_class[show-render]
+  ''
+# ---
+# name: test_params_class[show-render].1
   '''
   25.4x2,en=False,thing=third,text=nope
   Run complete ([TIMER]ms)
@@ -1063,7 +1273,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_params_class_blank[noparams-help].1
+  ''
+# ---
 # name: test_params_class_blank[noparams-render]
+  ''
+# ---
+# name: test_params_class_blank[noparams-render].1
   '''
   Blank model!
   Run complete ([TIMER]ms)
@@ -1087,7 +1303,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_params_class_blank[normal-help].1
+  ''
+# ---
 # name: test_params_class_blank[normal-render]
+  ''
+# ---
+# name: test_params_class_blank[normal-render].1
   '''
   Blank model!
   Run complete ([TIMER]ms)
@@ -1111,7 +1333,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_params_class_blank[show-help].1
+  ''
+# ---
 # name: test_params_class_blank[show-render]
+  ''
+# ---
+# name: test_params_class_blank[show-render].1
   '''
   Blank model!
   Run complete ([TIMER]ms)
@@ -1146,7 +1374,13 @@
   ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
+# name: test_params_class_instance[help].1
+  ''
+# ---
 # name: test_params_class_instance[render]
+  ''
+# ---
+# name: test_params_class_instance[render].1
   '''
   50.0x5,en=False,thing=first,text=nope
   Run complete ([TIMER]ms)
