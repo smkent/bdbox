@@ -130,7 +130,7 @@ class Params(CLI, metaclass=ParamsType):
                 model_state.module_dict = sys.modules["__main__"].__dict__
             if Action.mode != Action.Mode.HARNESS:
                 action_state.action = cli_result.action
-            action_state.enter_on_model_render()
+            action_state.on_model_render().__enter__()
             model_state.apply_overrides(cli_result.params)
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
@@ -142,7 +142,7 @@ class Params(CLI, metaclass=ParamsType):
     @classmethod
     def _atexit_handler(cls) -> None:
         atexit.unregister(Params._atexit_handler)
-        action_state.close_stack()
+        action_state.on_model_render().__exit__(*sys.exc_info())
         if model_state.model_subclasses:
             action_state.act_once()
 

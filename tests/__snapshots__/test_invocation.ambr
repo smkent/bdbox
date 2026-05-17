@@ -694,13 +694,11 @@
   '''
 # ---
 # name: test_module_models[tests.models.mod_model-render-harness]
-  '''
-  Model main
-  Model main
-  '''
+  'Model main'
 # ---
 # name: test_module_models[tests.models.mod_model-render-harness].1
   '''
+  Model main
   b1 Box(x=2.5, y=3, z=5)
   b2 Box(x=3, y=5, z=5.0)
   Run complete ([TIMER]ms)
@@ -1093,13 +1091,13 @@
   ''
 # ---
 # name: test_module_models[tests.models.mono_plain.models.model-render-harness]
-  '''
-  Box count: 2
-  Box count: 2
-  '''
+  'Box count: 2'
 # ---
 # name: test_module_models[tests.models.mono_plain.models.model-render-harness].1
-  ''
+  '''
+  Box count: 2
+  Run complete ([TIMER]ms)
+  '''
 # ---
 # name: test_params_class[noparams-help]
   'params() not called'

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import ast
 import operator
 import os
 import sys
@@ -156,31 +155,6 @@ class ModelHarness(ModelLocator):
             return self.package
         return argv0.name
 
-    @cached_property
-    def imports_detected(self) -> bool:
-        """Return True if the model file imports bdbox."""
-
-        def _checkname(name: str) -> bool:
-            return name == self.package or name.startswith(f"{self.package}.")
-
-        if self.model_module:
-            return True
-        if not self.model_path:
-            return False
-        with suppress(OSError, SyntaxError):
-            tree = ast.parse(self.model_path.read_text(encoding="utf-8"))
-            for node in ast.walk(tree):
-                if isinstance(node, ast.Import):
-                    if any(_checkname(alias.name) for alias in node.names):
-                        return True
-                elif (
-                    isinstance(node, ast.ImportFrom)
-                    and node.module
-                    and _checkname(node.module)
-                ):
-                    return True
-        return False
-
     def get_model(self) -> type[Params] | None:
         with (
             patch.dict(
@@ -193,7 +167,7 @@ class ModelHarness(ModelLocator):
             self.module_cleanup(),
             suppress(RunError, InternalError),
         ):
-            ModelRunner([self.model, "--help"])()
+            ModelRunner([self.model, "--help"], discovery_mode=True)()
         return model_state.get_model()
 
     @cached_property
@@ -218,6 +192,7 @@ class ModelHarness(ModelLocator):
                     del self.model
                     if model_class := self.get_model():
                         return model_class
+                    self.model_module = None
             return None
         if getattr(model_class, "__module__", None) != "__main__":
             model_class.__module__ = "__main__"
