@@ -17,7 +17,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Iterator, Sequence
     from types import ModuleType, TracebackType
 
 
@@ -39,6 +39,10 @@ class Build123dStub(MagicMock):
     G = 1
     KG = 1000 * G
     LB = 453.59237 * G
+
+    @property
+    def __all__(self) -> Sequence[str]:
+        return list(set(dir(self)) - set(dir(MagicMock())))
 
 
 @contextmanager
