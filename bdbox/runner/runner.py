@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import runpy
 import sys
-from contextlib import contextmanager, nullcontext
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
@@ -25,24 +25,24 @@ if TYPE_CHECKING:
 class ModelRunner(ModelLocator):
     action: Action | None = None
     preserve_exceptions: bool = False
+    discovery_mode: bool = False
 
-    def __call__(self, action: Action | None = None) -> None:
+    def __call__(self) -> None:
         if not self.model_filename:
             raise InternalError("Model not found in arguments")
         reset_bdbox()
-        if set_action := (action or self.action):
-            action_state.action = set_action
+        if self.action:
+            action_state.action = self.action
         main_module = MainModule(
             filename=self.model_filename, module_name=self.model_module
         )
         try:
             with (
-                action.on_model_render() if action else nullcontext(),
+                self.action_on_model_render(),
                 PatchModule("__main__", main_module, auto=False) as mock_main,
                 patch.object(sys, "argv", [self.model_filename, *self.argv]),
                 exit_mock(),
                 AtExit.mock() as atexit_mock,
-                self._ensure_stack_closed(),
             ):
                 main_module.__dict__.update(self._run_model())
                 mock_main.start()
@@ -53,9 +53,9 @@ class ModelRunner(ModelLocator):
                 raise
             raise RunError(e) from e
 
-    def run_or_exit(self, action: Action | None = None) -> None:
+    def run_or_exit(self) -> None:
         try:
-            self(action=action)
+            self()
         except RunError:
             sys.exit(1)
 
@@ -75,11 +75,9 @@ class ModelRunner(ModelLocator):
         return results
 
     @contextmanager
-    def _ensure_stack_closed(self) -> Iterator[None]:
-        try:
-            yield
-        except (SystemExit, Exception):
-            if not action_state.close_stack():
-                raise
+    def action_on_model_render(self) -> Iterator[None]:
+        if self.action and not self.discovery_mode:
+            with action_state.on_model_render():
+                yield
         else:
-            action_state.close_stack()
+            yield

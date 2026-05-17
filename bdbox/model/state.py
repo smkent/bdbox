@@ -22,13 +22,11 @@ class ModelState:
     filename: str | None = None
     module_name: str = "__main__"
     class_name: str | None = None
-    module_dict: dict[str, Any] = field(
-        default_factory=dict, init=False, repr=False
-    )
+    module_dict: dict[str, Any] = field(default_factory=dict, repr=False)
     model_subclasses: list[Any] = field(default_factory=list)
     model_cli: Params | None = None
     serializer: Serializer = field(default_factory=Serializer, init=False)
-    timer: Timer | None = field(default=None, init=False)
+    timer: Timer | None = field(default=None)
 
     class Mode(Enum):
         PARAMS_CLASS = auto()
