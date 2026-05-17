@@ -15,7 +15,7 @@ from bdbox.actions.export import ExportAction
 from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
-from tests.utils import Models
+from tests.utils import Examples, Models
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -298,6 +298,17 @@ def test_export_single_embedded_does_not_exec_harness(
                 f"{Models.PLAIN_EXPORT.stem}.Box_002",
             ],
             id="plain-no-presets",
+        ),
+        pytest.param(
+            Examples.DEMO,
+            [
+                "DemoModel",
+                "DemoModel-chamfer-cube",
+                "DemoModel-cube",
+                "DemoModel-lime-chamfer-cube",
+                "DemoModel-thin",
+            ],
+            id="examples-demo",
         ),
     ],
 )
