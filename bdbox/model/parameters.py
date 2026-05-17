@@ -135,7 +135,9 @@ class Params(CLI, metaclass=ParamsType):
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
             model_state.resolved_values = {
-                f.name: getattr(cls, f.name) for f in fields(cls)
+                f.name: getattr(cls, f.name)
+                for f in fields(cls)
+                if f.name != "preset"
             }
             atexit.register(Params._atexit_handler)
 
