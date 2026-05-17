@@ -11,14 +11,14 @@ from bdbox.actions.state import action_state
 from bdbox.geometry import reset_geometry
 from bdbox.model.state import model_state
 
-if TYPE_CHECKING:
-    from collections.abc import Iterator
-    from types import ModuleType, TracebackType
-
 if sys.version_info >= (3, 11):
     from typing import Self
 else:
     from typing_extensions import Self
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator, Sequence
+    from types import ModuleType, TracebackType
 
 
 def reset_bdbox() -> None:
@@ -39,6 +39,10 @@ class Build123dStub(MagicMock):
     G = 1
     KG = 1000 * G
     LB = 453.59237 * G
+
+    @property
+    def __all__(self) -> Sequence[str]:
+        return list(set(dir(self)) - set(dir(MagicMock())))
 
 
 @contextmanager
