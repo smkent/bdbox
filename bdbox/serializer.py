@@ -142,6 +142,8 @@ class Serializer:
             return {}
         if not isinstance(cls, type):
             cls = type(cls)
+        if not is_dataclass(cls):
+            return {}
         hints = self.get_type_hints(cls)
         field_schemas = {}
         for f in fields(cls):
