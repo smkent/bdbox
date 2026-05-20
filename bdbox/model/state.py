@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from bdbox.errors import InternalError, MultipleModelsError, ParamsError
-from bdbox.serializer import Serializer
+from bdbox.serializer import serializer
 from bdbox.timer import Timer
 
 if TYPE_CHECKING:
@@ -25,7 +25,6 @@ class ModelState:
     module_dict: dict[str, Any] = field(default_factory=dict, repr=False)
     model_subclasses: list[Any] = field(default_factory=list)
     model_cli: Params | None = None
-    serializer: Serializer = field(default_factory=Serializer, init=False)
     timer: Timer | None = field(default=None)
 
     class Mode(Enum):
@@ -40,7 +39,7 @@ class ModelState:
     )
 
     def apply_overrides(self, target: Params) -> None:
-        hints = self.serializer.get_type_hints(type(target))
+        hints = serializer.get_type_hints(type(target))
 
         for name, raw_value in self.param_overrides.items():
             if not hasattr(target, name):
@@ -49,7 +48,7 @@ class ModelState:
             if hint is None:
                 current = getattr(target, name)
                 hint = type(current) if current is not None else None
-            setattr(target, name, self.serializer.structure(raw_value, hint))
+            setattr(target, name, serializer.structure(raw_value, hint))
 
     def get_model(self) -> type[Params] | None:
         if not self.model_subclasses:
@@ -108,7 +107,7 @@ class ModelState:
         if self.cached_schema:
             return self.cached_schema
         if model_class := self.get_model():
-            return self.serializer.json_schema(model_class)
+            return serializer.json_schema(model_class)
         return {}
 
     @property

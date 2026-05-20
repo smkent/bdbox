@@ -262,3 +262,6 @@ class Serializer:
             "properties": field_schemas,
             "required": sorted(field_schemas.keys()),
         }
+
+
+serializer = Serializer()

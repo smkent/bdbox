@@ -14,7 +14,7 @@ from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.geometry import resolve_geometry
 from bdbox.model.state import model_state
-from bdbox.serializer import Serializer
+from bdbox.serializer import serializer
 from bdbox.view.server import ServerManager
 from bdbox.view.state import ViewState
 from bdbox.viewer import ViewerManager
@@ -26,8 +26,6 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from build123d import Compound, Shape
-
-serializer = Serializer()
 
 
 @dataclass
