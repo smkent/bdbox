@@ -11,13 +11,12 @@ from fastapi.responses import HTMLResponse
 
 from bdbox.console import console, log
 from bdbox.model.state import model_state
-from bdbox.serializer import Serializer
+from bdbox.serializer import serializer
 
 from .console import WebStream
 from .state import ViewState
 
 routes_router = APIRouter()
-serializer = Serializer()
 
 
 @dataclass

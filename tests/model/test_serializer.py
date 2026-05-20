@@ -17,7 +17,7 @@ from bdbox.model.preset import Preset
 from bdbox.model.state import model_state
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
-from bdbox.serializer import Serializer
+from bdbox.serializer import serializer
 from tests.utils import Models
 
 if TYPE_CHECKING:
@@ -115,7 +115,7 @@ def test_schema_fields(model_base: type[Params]) -> None:
         width = Float(10.0, min=5.0, max=100.0)
         count = Int(3, min=1, max=10)
 
-    assert Serializer().json_schema(T) == {
+    assert serializer.json_schema(T) == {
         "properties": {
             "count": {
                 "default": 3,
@@ -146,7 +146,7 @@ def test_schema_with_presets(model_base: type[Params]) -> None:
             Preset("large", description="Full size", width=80.0),
         )
 
-    schema = Serializer().json_schema(T)
+    schema = serializer.json_schema(T)
     assert schema == {
         "properties": {
             "width": {
@@ -174,7 +174,7 @@ def test_schema_empty(model_base: type[Params]) -> None:
     class T(model_base):  # ty: ignore[unsupported-base]
         pass
 
-    assert Serializer().json_schema(T) == {
+    assert serializer.json_schema(T) == {
         "type": "object",
         "properties": {},
         "required": [],
@@ -186,14 +186,14 @@ def test_schema_complex(
     model_base: type[Params], json_snapshot: JsonSnapshot
 ) -> None:
     T = SchemaModels.complex_model(model_base)  # noqa: N806
-    json_snapshot(Serializer().json_schema(T))
+    json_snapshot(serializer.json_schema(T))
 
 
 def test_unstructure_complex(
     model_base: type[Params], json_snapshot: JsonSnapshot
 ) -> None:
     T = SchemaModels.complex_model(model_base)  # noqa: N806
-    json_snapshot(Serializer().unstructure(T()))
+    json_snapshot(serializer.unstructure(T()))
 
 
 def test_model_schema_cached_at_runtime(
