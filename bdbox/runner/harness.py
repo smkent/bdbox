@@ -108,7 +108,7 @@ class ModelHarness(ModelLocator):
                     argv, action, preserve_exceptions=True
                 ).run_or_exit()
             return
-        runner = ModelRunner([self.model, *self.argv], cli_result.action)
+        runner = ModelRunner([self.model_arg, *self.argv], cli_result.action)
         if cli_result.action.watch:
             ModelWatcher(runner=runner, change_event=self.rerender_event).run()
             return
@@ -139,10 +139,10 @@ class ModelHarness(ModelLocator):
     @cached_property
     def maybe_model(self) -> Path | str | None:
         with suppress(InternalError):
-            return self.model
+            return self.model_arg
 
     @cached_property
-    def model(self) -> Path | str:
+    def model_arg(self) -> Path | str:
         if self.model_module and self.model_class_name:
             return f"{self.model_module}:{self.model_class_name}"
         if result := (self.model_module or self.model_path):
@@ -167,7 +167,7 @@ class ModelHarness(ModelLocator):
             self.module_cleanup(),
             suppress(RunError, InternalError),
         ):
-            ModelRunner([self.model, "--help"], discovery_mode=True)()
+            ModelRunner([self.model_arg, "--help"], discovery_mode=True)()
         return model_state.get_model()
 
     @cached_property
@@ -177,7 +177,7 @@ class ModelHarness(ModelLocator):
         Returns a list of (name, annotation, field) tuples for user-defined
         parameters, or None if no bdbox Params/Model class was found.
         """
-        if not self.model:
+        if not self.model_arg:
             return None
         if not (model_class := self.get_model()):
             if not self.model_module and self.model_path:
@@ -189,7 +189,7 @@ class ModelHarness(ModelLocator):
                         str(relative).removesuffix(".py").replace(os.sep, ".")
                     )
                     self.model_module = mod_name
-                    del self.model
+                    del self.model_arg
                     if model_class := self.get_model():
                         return model_class
                     self.model_module = None
