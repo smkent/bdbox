@@ -13,6 +13,7 @@ from bdbox.errors import ParamsError
 from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
+from .info import ModelInfo
 from .preset import Preset
 from .state import model_state
 
@@ -110,9 +111,9 @@ class Params(CLI, metaclass=ParamsType):
             return
         Annotater(cls)()
 
-        if model_state.is_class_in_main(cls):
-            model_state.ensure_mode(
-                model_state.Mode.PARAMS_CLASS,
+        if model_state.model.is_class_in_main(cls):
+            model_state.model.ensure_mode(
+                ModelInfo.Mode.PARAMS_CLASS,
                 "Cannot use Params subclass with an existing Model subclass",
             )
             if model_state.model_subclasses:

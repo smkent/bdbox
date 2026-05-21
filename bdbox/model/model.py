@@ -13,6 +13,7 @@ from bdbox.errors import MultipleModelsError
 from bdbox.geometry import show
 
 from .annotations import Annotater
+from .info import ModelInfo
 from .parameters import Params
 from .state import model_state
 
@@ -106,8 +107,8 @@ class Model(Params):
             model_state.module_dict = sys.modules["__main__"].__dict__
         if Action.mode != Action.Mode.HARNESS:
             action_state.action = cli_result.action
-        if not model_state.class_name:
-            model_state.class_name = cls.__name__
+        if not model_state.model.class_name:
+            model_state.model.class_name = cls.__name__
         with action_state.on_model_render():
             model_state.apply_overrides(cli_result.params)
             model_state.resolved_values = {
@@ -122,15 +123,15 @@ class Model(Params):
         object.__init_subclass__(**kwargs)
         Annotater(cls)()
 
-        if model_state.is_class_in_main(cls):
-            model_state.ensure_mode(
-                model_state.Mode.MODEL_CLASS,
+        if model_state.model.is_class_in_main(cls):
+            model_state.model.ensure_mode(
+                ModelInfo.Mode.MODEL_CLASS,
                 f"Cannot define Model subclass {cls!r}"
                 " with an existing Params subclass",
             )
             if not model_state.model_subclasses:
                 atexit.register(Model._atexit_handler)
-                model_state.filename = getattr(
+                model_state.model.filename = getattr(
                     sys.modules.get(cls.__module__), "__file__", None
                 )
             model_state.model_subclasses.append(cls)

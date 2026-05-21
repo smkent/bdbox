@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar
 
 from bdbox.errors import InternalError
+from bdbox.model.info import ModelInfo
 
 from .env import EnvLocator
 
@@ -19,13 +20,10 @@ if TYPE_CHECKING:
 
 @dataclass
 class ModelLocator:
+    model: ModelInfo = field(default_factory=ModelInfo, init=False)
     env_search: ClassVar[bool] = False
     clean_modules: ClassVar[bool] = False
     model_argv: InitVar[Sequence[Path | str] | Path | str] = ()
-    model_path: Path | None = field(default=None, init=False)
-    model_module: str | None = field(default=None, init=False)
-    model_filename: str | None = field(default=None, init=False)
-    model_class_name: str | None = field(default=None, init=False)
     argv: list[str] = field(default_factory=list, init=False)
 
     def __post_init__(
@@ -34,8 +32,8 @@ class ModelLocator:
         self.argv = self._setup_argv(model_argv)
         model_file = self._model_path_from_argv()
         if model_file:
-            self.model_path = Path(model_file).resolve()
-            self.model_filename = str(model_file)
+            self.model.path = Path(model_file).resolve()
+            self.model.filename = str(model_file)
 
     def _setup_argv(
         self, model_argv: Sequence[Path | str] | Path | str
@@ -48,21 +46,24 @@ class ModelLocator:
 
     @cached_property
     def model_base_dir(self) -> Path:
-        if self.model_module:
-            base_module = self.model_module.split(".", 1)[0]
+        if self.model.module_name:
+            base_module = self.model.module_name.split(".", 1)[0]
             if file := getattr(sys.modules.get(base_module), "__file__", None):
                 return Path(file).parent
-        if not self.model_path:
+        if not self.model.path:
             raise InternalError("Model path missing")
-        return self.model_path.parent
+        return self.model.path.parent
 
     @contextmanager
     def module_cleanup(self, name: str | None = None) -> Iterator[None]:
-        name = name or self.model_module
+        name = name or self.model.module_name
         if not self.clean_modules or not name:
             yield
-            if self.model_module and self.model_module in sys.modules:
-                sys.modules.pop(self.model_module)
+            if (
+                self.model.module_name
+                and self.model.module_name in sys.modules
+            ):
+                sys.modules.pop(self.model.module_name)
             return
         before_keys = set(sys.modules.keys())
         yield
@@ -80,8 +81,8 @@ class ModelLocator:
             if self.env_search:
                 EnvLocator(target_module=mod_name).ensure_env()
             if (spec := find_spec(mod_name)) and spec.origin:
-                self.model_module = mod_name
-                self.model_class_name = mod_attr or None
+                self.model.module_name = mod_name
+                self.model.class_name = mod_attr or None
                 return spec.origin
         return None
 

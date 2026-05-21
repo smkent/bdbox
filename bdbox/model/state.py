@@ -3,13 +3,14 @@ from __future__ import annotations
 import sys
 from contextlib import contextmanager, suppress
 from dataclasses import dataclass, field
-from enum import Enum, auto
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from bdbox.errors import InternalError, MultipleModelsError, ParamsError
 from bdbox.serializer import serializer
 from bdbox.timer import Timer
+
+from .info import ModelInfo
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -19,19 +20,12 @@ if TYPE_CHECKING:
 
 @dataclass
 class ModelState:
-    filename: str | None = None
-    module_name: str = "__main__"
-    class_name: str | None = None
+    model: ModelInfo = field(default_factory=ModelInfo)
     module_dict: dict[str, Any] = field(default_factory=dict, repr=False)
     model_subclasses: list[Any] = field(default_factory=list)
     model_cli: Params | None = None
     timer: Timer | None = field(default=None)
 
-    class Mode(Enum):
-        PARAMS_CLASS = auto()
-        MODEL_CLASS = auto()
-
-    mode: Mode | None = None
     param_overrides: dict[str, Any] = field(default_factory=dict)
     resolved_values: dict[str, Any] = field(default_factory=dict)
     cached_schema: dict[str, Any] = field(
@@ -55,52 +49,52 @@ class ModelState:
             return None
         if len(self.model_subclasses) == 1:
             subc = self.model_subclasses[0]
-            if self.class_name and subc.__name__ != self.class_name:
-                raise ParamsError(f"Model {self.class_name} not found")
+            if (
+                self.model.class_name
+                and subc.__name__ != self.model.class_name
+            ):
+                raise ParamsError(f"Model {self.model.class_name} not found")
             return subc
-        if self.class_name:
+        if self.model.class_name:
             for subc in self.model_subclasses:
-                if subc.__name__ == self.class_name:
+                if subc.__name__ == self.model.class_name:
                     return subc
-            raise ParamsError(f"Model {self.class_name} not found")
+            raise ParamsError(f"Model {self.model.class_name} not found")
         raise MultipleModelsError(self.model_subclasses)
 
     def model_name_info(self) -> dict[str, str | None]:
-        module = self.module_name if self.module_name != "__main__" else None
         file = (
-            Path(self.filename).stem if self.filename and not module else None
+            Path(self.model.filename).stem
+            if self.model.filename and not self.model.module_name
+            else None
         )
-        return {"file": file, "module": module, "cls": self.class_name}
+        return {
+            "file": file,
+            "module": self.model.module_name,
+            "cls": self.model.class_name,
+        }
 
     def model_name(self) -> str:
-        if self.mode == self.Mode.PARAMS_CLASS and self.filename:
-            return Path(self.filename).stem
+        if (
+            self.model.mode == self.model.Mode.PARAMS_CLASS
+            and self.model.filename
+        ):
+            return Path(self.model.filename).stem
         with suppress(InternalError):
             if model_class := self.get_model():
                 return model_class.__name__
-        if self.filename:
-            return Path(self.filename).stem
+        if self.model.filename:
+            return Path(self.model.filename).stem
         raise InternalError("Unable to determine model name")
-
-    def ensure_mode(self, style: ModelState.Mode, msg: str) -> None:
-        if self.mode is not None and self.mode is not style:
-            raise ParamsError(msg)
-        self.mode = style
-
-    def is_class_in_main(self, cls: type) -> bool:
-        return cls.__module__ in (
-            "__main__",
-            self.module_name,
-        ) or cls.__module__.startswith(f"{self.module_name}.")
 
     def ensure_module_filename(self, cls: type) -> None:
         if (
-            self.is_class_in_main(cls)
+            self.model.is_class_in_main(cls)
             and (mm := sys.modules.get(cls.__module__))
             and getattr(mm, "__file__", None)
-            and self.filename
+            and self.model.filename
         ):
-            mm.__file__ = self.filename
+            mm.__file__ = self.model.filename
 
     @property
     def schema(self) -> dict[str, Any]:
