@@ -174,7 +174,7 @@ class ExportAction(ModelAction):
             runs = [
                 (
                     [
-                        str(args.model),
+                        str(args.model_arg),
                         "export",
                         str(self.output),
                         *(("--preset", preset.name) if preset else ()),

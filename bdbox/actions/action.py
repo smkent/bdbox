@@ -36,7 +36,7 @@ class Action:
     watch: tyro.conf.Fixed[bool] = field(default=False, kw_only=True)
 
     class ModelHarnessProtocol(Protocol):
-        model: Path | str
+        model_arg: Path | str
         params_argv: Sequence[str]
         model_params_cls: type[Params] | None
         rerender_event: Event
