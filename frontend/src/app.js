@@ -320,9 +320,11 @@ function initWs() {
       info.module = detail.model_info.module ?? null;
       info.cls = detail.model_info.cls ?? null;
     }
-    latestSchema = detail;
-    if (paramsFormEl) {
-      initJedison(detail);
+    if (detail.schema !== undefined) {
+      latestSchema = detail;
+      if (paramsFormEl) {
+        initJedison(detail);
+      }
     }
   });
 
