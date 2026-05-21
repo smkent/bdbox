@@ -143,9 +143,9 @@ class ModelHarness(ModelLocator):
 
     @cached_property
     def model_arg(self) -> Path | str:
-        if self.model_module and self.model_class_name:
-            return f"{self.model_module}:{self.model_class_name}"
-        if result := (self.model_module or self.model_path):
+        if self.model.module_name and self.model.class_name:
+            return f"{self.model.module_name}:{self.model.class_name}"
+        if result := (self.model.module_name or self.model.path):
             return result
         raise InternalError("No model found")
 
@@ -180,19 +180,19 @@ class ModelHarness(ModelLocator):
         if not self.model_arg:
             return None
         if not (model_class := self.get_model()):
-            if not self.model_module and self.model_path:
+            if not self.model.module_name and self.model.path:
                 with suppress(ValueError):
-                    env = EnvLocator(self.model_path).project_root()
-                    relative = self.model_path.relative_to(env)
+                    env = EnvLocator(self.model.path).project_root()
+                    relative = self.model.path.relative_to(env)
                     os.chdir(env)
                     mod_name = (
                         str(relative).removesuffix(".py").replace(os.sep, ".")
                     )
-                    self.model_module = mod_name
+                    self.model.module_name = mod_name
                     del self.model_arg
                     if model_class := self.get_model():
                         return model_class
-                    self.model_module = None
+                    self.model.module_name = None
             return None
         if getattr(model_class, "__module__", None) != "__main__":
             model_class.__module__ = "__main__"

@@ -3,6 +3,7 @@ from __future__ import annotations
 import runpy
 import sys
 from contextlib import contextmanager
+from copy import deepcopy
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
@@ -28,19 +29,19 @@ class ModelRunner(ModelLocator):
     discovery_mode: bool = False
 
     def __call__(self) -> None:
-        if not self.model_filename:
+        if not self.model.filename:
             raise InternalError("Model not found in arguments")
         reset_bdbox()
         if self.action:
             action_state.action = self.action
         main_module = MainModule(
-            filename=self.model_filename, module_name=self.model_module
+            filename=self.model.filename, module_name=self.model.module_name
         )
         try:
             with (
                 self.action_on_model_render(),
                 PatchModule("__main__", main_module, auto=False) as mock_main,
-                patch.object(sys, "argv", [self.model_filename, *self.argv]),
+                patch.object(sys, "argv", [self.model.filename, *self.argv]),
                 exit_mock(),
                 AtExit.mock() as atexit_mock,
             ):
@@ -60,16 +61,13 @@ class ModelRunner(ModelLocator):
             sys.exit(1)
 
     def _run_model(self) -> dict[str, Any]:
-        if not model_state.filename:
-            model_state.filename = str(self.model_filename)
-        if self.model_module:
-            model_state.module_name = self.model_module
-            model_state.class_name = self.model_class_name
+        model_state.model = deepcopy(self.model)
+        if self.model.module_name:
             results = runpy.run_module(
-                self.model_module, run_name="__main__", alter_sys=True
+                self.model.module_name, run_name="__main__", alter_sys=True
             )
-        elif self.model_filename:
-            results = runpy.run_path(self.model_filename, run_name="__main__")
+        elif self.model.filename:
+            results = runpy.run_path(self.model.filename, run_name="__main__")
         else:
             raise InternalError("One of filename or module_name are required")
         return results

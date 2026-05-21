@@ -59,9 +59,9 @@ class ModelWatcher:
 
     @cached_property
     def model_path(self) -> Path:
-        if not self.runner.model_path:
+        if not self.runner.model.path:
             raise InternalError("Model path missing")
-        return self.runner.model_path
+        return self.runner.model.path
 
     @property
     def watched_files(self) -> frozenset[Path]:
