@@ -120,15 +120,11 @@ class ViewAction(ModelAction):
         new_schema = serializer.json_schema(new_class)
         old_schema = serializer.json_schema(ctx.model_class)
         ctx.current_values = dict(model_state.resolved_values)
+        ctx.model_class = new_class
+        msg = {"type": "schema", "model_info": model_state.model_name_info()}
         if new_schema != old_schema:
-            ctx.model_class = new_class
-            ctx.enqueue(
-                {
-                    "type": "schema",
-                    "schema": new_schema,
-                    "model_info": model_state.model_name_info(),
-                }
-            )
+            msg |= {"schema": new_schema}
+        ctx.enqueue(msg)
 
     @contextmanager
     def on_model_render(self) -> Iterator[None]:
