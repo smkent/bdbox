@@ -193,6 +193,14 @@ help = "Run tests using Python 3.12"
 cmd = "pytest --numprocesses 0 --no-cov -vv"
 help = "Run tests with debug friendly options"
 
+[tool.pysentry.ignore]
+ids = [
+    # VTK <= 9.5.0, dependency of cadquery-ocp via build123d
+    "PYSEC-2025-224",
+    "PYSEC-2025-225",
+    "PYSEC-2025-226",
+]
+
 [tool.pytest]
 addopts = [
     "-ra",
