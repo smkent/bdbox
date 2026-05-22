@@ -55,7 +55,6 @@ need to be stored as secrets.
 [pypi-publishing-settings]: https://pypi.org/manage/account/publishing/
 [pypi-trusted-publishing]: https://docs.pypi.org/trusted-publishers/
 [renovate]: https://github.com/apps/renovate
-[repo-releases]: https://github.com/smkent/bdbox/releases
 [repo-settings]: https://github.com/smkent/bdbox/settings
 [repo-settings-envs]: https://github.com/smkent/bdbox/settings/environments
 [repo-settings-branches]: https://github.com/smkent/bdbox/settings/branches

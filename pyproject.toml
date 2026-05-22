@@ -54,19 +54,19 @@ dev = [
     "bump-my-version>=1.3.0",
     "hatchling>=1.29.0",
     "poethepoet>=0.42",
-    "prek>=0.3",
+    "prek>=0.4",
     "pysentry-rs>=0.4",
     "pytest>=9",
     "pytest-cov>=7",
     "pytest-sugar>=1",
     "pytest-xdist>=3",
     "ruff>=0.15",
-    "syrupy>=5.1",
-    "ty>=0.0.31",
+    "syrupy>=5",
+    "ty>=0.0.38",
 ]
 docs = [
     "mkdocstrings[python]>=1",
-    "zensical>=0.0.33",
+    "zensical>=0.0.43",
 ]
 
 [tool.bumpversion]
@@ -163,7 +163,7 @@ sequence = [
 help = "Install project dependencies and git hooks"
 
 [tool.poe.tasks.snapup]
-cmd = "pytest --snapshot-update"
+cmd = "pytest --snapshot-update --numprocesses 0"
 help = "Update test snapshots"
 
 [tool.poe.tasks.test]
@@ -189,13 +189,25 @@ cmd = "pytest"
 executor = {isolated = true, python = "3.12"}
 help = "Run tests using Python 3.12"
 
+[tool.poe.tasks.ti]
+cmd = "pytest --numprocesses 0 --no-cov -vv"
+help = "Run tests with debug friendly options"
+
+[tool.pysentry.ignore]
+ids = [
+    # VTK <= 9.5.0, dependency of cadquery-ocp via build123d
+    "PYSEC-2025-224",
+    "PYSEC-2025-225",
+    "PYSEC-2025-226",
+]
+
 [tool.pytest]
 addopts = [
     "-ra",
     "--cov=bdbox",
     "--strict-config",
     "--strict-markers",
-    "-n",
+    "--numprocesses",
     "auto",
 ]
 testpaths = ["tests"]

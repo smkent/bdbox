@@ -27,7 +27,7 @@ To apply updates without being prompted (reusing all previous answers), run:
 copier update -l
 ```
 
-When `copier update` is finished, view changes with `git status` and `git diff`.
-Resolve any conflicts, and then commit the result.
+When [`copier update`][copier-update] is finished, view changes with
+`git status` and `git diff`. Resolve any conflicts, and then commit the result.
 
 [copier-update]: https://copier.readthedocs.io/en/stable/updating/
