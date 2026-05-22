@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: v0.7.1
+_commit: v0.11.0
 _src_path: gh:smkent/copier-python
 copyright_holder: Stephen Kent
 copyright_holder_email: smkent@smkent.net
@@ -8,6 +8,9 @@ copyright_year: '2026'
 enable_container: false
 enable_coverage: true
 enable_docs: true
+enable_features:
+- syrupy
+- xdist
 enable_pypi: true
 github_user: smkent
 project_description: build123d development with live preview and interactive parameters.

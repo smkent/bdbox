@@ -54,6 +54,8 @@ Start the development server with:
 poe docs
 ```
 
-The documentation site will be served at **<http://localhost:8000>**.
+The documentation site will be served at:
+
+[**http://localhost:8000**](http://localhost:8000){ .md-button .md-button--primary target="_blank" }
 
 To use a different bind host/port, run `poe --help docs` for arguments info.
