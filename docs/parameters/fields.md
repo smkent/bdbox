@@ -301,5 +301,4 @@ For complex types or custom defaults, use
     [command line interface](cli.md).
 
 
-[tyro]: https://brentyi.github.io/tyro/
 [tyro-supported]: https://brentyi.github.io/tyro/whats_supported/
