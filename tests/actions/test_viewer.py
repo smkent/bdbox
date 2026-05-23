@@ -533,6 +533,18 @@ def test_model_view_starts_viewer(
         mock_server_start.assert_not_called()
 
 
+def test_model_view_without_model_does_not_start_viewer(
+    exec_main: ExecMain, mock_server_start: MagicMock, *, watch: bool
+) -> None:
+    with (
+        patch.object(ViewerManager, "start") as mock_start,
+        pytest.raises(SystemExit),
+    ):
+        exec_main("view", *([] if watch else ["--no-watch"]))
+    mock_start.assert_not_called()
+    mock_server_start.assert_not_called()
+
+
 def test_model_view_passes_flags_to_viewer(
     model: Path, watch_args: Sequence[str], exec_main: ExecMain
 ) -> None:

@@ -80,6 +80,17 @@ def test_embedded_mode_execs_harness(monkeypatch: pytest.MonkeyPatch) -> None:
     )
 
 
+def test_view_without_model_does_not_start_watcher(
+    harness: HarnessWrapper,
+) -> None:
+    with (
+        patch.object(ModelWatcher, "run") as mock_run,
+        pytest.raises(SystemExit),
+    ):
+        harness(["view"])()
+    mock_run.assert_not_called()
+
+
 def test_view_starts_watcher(model: Path, harness: HarnessWrapper) -> None:
     with patch.object(ModelWatcher, "run") as mock_run:
         harness([str(model), "view"])()
