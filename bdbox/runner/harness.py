@@ -177,7 +177,7 @@ class ModelHarness(ModelLocator):
         Returns a list of (name, annotation, field) tuples for user-defined
         parameters, or None if no bdbox Params/Model class was found.
         """
-        if not self.model_arg:
+        if not self.maybe_model:
             return None
         if not (model_class := self.get_model()):
             if not self.model.module_name and self.model.path:
