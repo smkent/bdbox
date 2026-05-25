@@ -193,6 +193,7 @@ class ModelHarness(ModelLocator):
                     if model_class := self.get_model():
                         return model_class
                     self.model.module_name = None
+                    del self.model_arg
             return None
         if getattr(model_class, "__module__", None) != "__main__":
             model_class.__module__ = "__main__"

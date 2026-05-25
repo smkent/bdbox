@@ -431,6 +431,60 @@
   Run complete ([TIMER]ms)
   '''
 # ---
+# name: test_model_plain[help]
+  '''
+  usage: bdbox [-h] [-v] [{run,export,view,viewer,version}]
+  
+  ╭─ options ───────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit          │
+  │ -v, --verbose  Increase logging verbosity. (repeatable) │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ subcommands ───────────────────────────────────────────╮
+  │ (default: run)                                          │
+  │   • run        Run the model.                           │
+  │   • export     Export geometry to a STEP or STL file.   │
+  │   • view       View model geometry.                     │
+  │   • viewer     Viewer control                           │
+  │   • version    Show bdbox version and exit              │
+  ╰─────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_plain[help].1
+  ''
+# ---
+# name: test_model_plain[render]
+  ''
+# ---
+# name: test_model_plain[render].1
+  'Run complete ([TIMER]ms)'
+# ---
+# name: test_model_plain_not_importable[help]
+  '''
+  usage: bdbox [-h] [-v] [{run,export,view,viewer,version}]
+  
+  ╭─ options ───────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit          │
+  │ -v, --verbose  Increase logging verbosity. (repeatable) │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ subcommands ───────────────────────────────────────────╮
+  │ (default: run)                                          │
+  │   • run        Run the model.                           │
+  │   • export     Export geometry to a STEP or STL file.   │
+  │   • view       View model geometry.                     │
+  │   • viewer     Viewer control                           │
+  │   • version    Show bdbox version and exit              │
+  ╰─────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_plain_not_importable[help].1
+  ''
+# ---
+# name: test_model_plain_not_importable[render]
+  ''
+# ---
+# name: test_model_plain_not_importable[render].1
+  'Run complete ([TIMER]ms)'
+# ---
 # name: test_model_subclass[normal-help]
   ''
 # ---
