@@ -45,7 +45,7 @@ class Runner:
         return result
 
     def sanitize(self, output: str) -> str:
-        return re.sub(r"\(\d+\s?ms\)", "([TIMER]ms)", output)
+        return re.sub(r"\([\d.]+\s?m?s\)", "([TIMER]ms)", output)
 
     def match_snapshot(
         self, cmd: Sequence[Any], *args: Any, **kwargs: Any
@@ -160,6 +160,28 @@ def test_model_multiple(
     model: Sequence[str | Path],
 ) -> None:
     runner.match_snapshot([*model, *args], model_class_test_mode)
+
+
+@pytest.mark.parametrize(
+    "args",
+    [pytest.param(["--help"], id="help"), pytest.param([], id="render")],
+)
+def test_model_plain(runner: Runner, args: Sequence[str]) -> None:
+    runner.match_snapshot(["-m", "bdbox", Models.PLAIN_EXPORT, *args])
+
+
+@pytest.mark.parametrize(
+    "args",
+    [pytest.param(["--help"], id="help"), pytest.param([], id="render")],
+)
+def test_model_plain_not_importable(
+    tmp_path: Path, runner: Runner, args: Sequence[str]
+) -> None:
+    model = tmp_path / "model filename that is not a valid import name.py"
+    model.write_text(Models.PLAIN_EXPORT.read_text())
+    runner.match_snapshot(
+        ["-m", "bdbox", model.resolve(), *args], cwd=model.parent
+    )
 
 
 @pytest.mark.parametrize(
