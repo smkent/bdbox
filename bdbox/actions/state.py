@@ -15,12 +15,7 @@ if TYPE_CHECKING:
 class ActionState:
     """Holds the active action and manages its lifecycle."""
 
-    def _run_action() -> Action:
-        from bdbox.actions.run import RunAction  # noqa: PLC0415
-
-        return RunAction()
-
-    action: Action = field(default_factory=_run_action)
+    action: Action | None = None
     acted: bool = False
     stack: ExitStack = field(default_factory=ExitStack, init=False, repr=False)
     render_active: bool = False
@@ -29,13 +24,21 @@ class ActionState:
         if self.acted:
             return
         self.acted = True
-        self.action()
+        self.action_or_run()
+
+    @property
+    def action_or_run(self) -> Action:
+        from bdbox.actions.run import RunAction  # noqa: PLC0415
+
+        return self.action or RunAction()
 
     def on_model_render(self) -> AbstractContextManager[None]:
         class OnRender:
             def __enter__(_self) -> None:  # noqa: N805
                 if not self.render_active:
-                    self.stack.enter_context(self.action.on_model_render())
+                    self.stack.enter_context(
+                        self.action_or_run.on_model_render()
+                    )
                 self.render_active = True
                 return
 
@@ -51,6 +54,3 @@ class ActionState:
                 return self.stack.__exit__(exc_type, exc_val, exc_tb)
 
         return OnRender()
-
-
-action_state = ActionState()

@@ -14,8 +14,7 @@ import tyro
 
 from bdbox.console import log
 from bdbox.errors import InternalError, UsageError
-from bdbox.geometry import resolve_geometry
-from bdbox.model.state import model_state
+from bdbox.runner.state import run_state
 
 from .action import ModelAction
 
@@ -154,11 +153,13 @@ class ExportAction(ModelAction):
         """Export single render or all preset renders to a STEP or STL file."""
         if self.all_presets:
             return
-        geometry = resolve_geometry()
+        geometry = run_state.geometry.resolve()
         if not geometry:
             raise UsageError("No geometry to export")
-        model_name = model_state.model_name()
-        if model_state.model_cli and (preset := model_state.model_cli.preset):
+        model_name = run_state.model_state.model_name()
+        if run_state.model_state.model_cli and (
+            preset := run_state.model_state.model_cli.preset
+        ):
             model_name += f"-{preset}"
         exports = Exports(geometry, model_name=model_name, single=self.single)
         self.output.mkdir(exist_ok=True, parents=True)

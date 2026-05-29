@@ -20,10 +20,6 @@ class Geometry:
     # Geometry collected via show() calls during execution.
     geometry: list[Compound | Shape] = field(default_factory=list)
 
-    def reset(self) -> None:
-        """Clear any active geometry for runners or tests."""
-        self.clear_geometry()
-
     def accumulate_geometry(
         self,
         *shapes: Compound
@@ -34,9 +30,6 @@ class Geometry:
         self.geometry.extend(
             [shape for s in shapes if (shape := self.filter_geometry(s))]
         )
-
-    def clear_geometry(self) -> None:
-        self.geometry = []
 
     def filter_geometry(
         self, data: Any, label: str = ""
@@ -63,7 +56,7 @@ class Geometry:
             return geometry[0]
         return Compound(label=label, children=geometry)
 
-    def resolve_geometry(self) -> Compound | Shape | None:
+    def resolve(self) -> Compound | Shape | None:
         if "build123d" not in sys.modules:
             return None
 
@@ -84,45 +77,3 @@ class Geometry:
         except Exception:  # noqa: BLE001
             log.exception("Error showing geometry topology")
         return geometry
-
-
-_geometry = Geometry()
-
-
-def reset_geometry() -> None:
-    """Clear collected geometry for runners or tests."""
-    _geometry.reset()
-
-
-def resolve_geometry() -> Compound | Shape | None:
-    """Retrieve geometry for processing.
-
-    Uses geometry collected by ``show()`` if called. Otherwise falls back to
-    scanning ``__main__`` globals for build123d ``Shape`` instances.
-    """
-    return _geometry.resolve_geometry()
-
-
-def show(
-    *geometry: Compound
-    | Shape
-    | Sequence[Compound | Shape]
-    | Mapping[str, Compound | Shape],
-) -> None:
-    """Provide built model geometry for display or use.
-
-    Info:
-        With a [``Params``][bdbox.model.parameters.Params] subclass,
-        call `show` with your built model geometry. Multiple `show` calls
-        accumulate geometry in order.
-
-        With a [``Model``][bdbox.model.model.Model] subclass, return geometry
-        from the [``build``][bdbox.model.model.Model.build] method instead of
-        calling `show`.
-
-    Note:
-        If ``show()`` is never called, bdbox falls back to scanning the
-        script's globals for [``build123d.Shape``][topology.Shape] instances,
-        but calling ``show()`` manually is recommended.
-    """
-    _geometry.accumulate_geometry(*geometry)

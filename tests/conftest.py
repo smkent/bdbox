@@ -14,7 +14,7 @@ from bdbox.actions.action import Action
 from bdbox.console import console
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
-from bdbox.runner.utils import reset_bdbox
+from bdbox.runner.state import run_state
 
 from .utils import DisallowCallable, MockBuild123d, MockOcpVscode
 
@@ -49,7 +49,7 @@ def random_seed() -> None:
 @pytest.fixture(autouse=True)
 def reset_all() -> None:
     """Reset all bdbox state before each test."""
-    reset_bdbox()
+    run_state.reset()
     Action.mode = Action.Mode.EMBEDDED
 
 

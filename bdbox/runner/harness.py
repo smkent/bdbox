@@ -17,7 +17,7 @@ from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI, CLIOptions
 from bdbox.errors import InternalError, RunError
-from bdbox.model.state import model_state
+from bdbox.runner.state import run_state
 
 from .env import EnvLocator
 from .locator import ModelLocator
@@ -94,7 +94,7 @@ class ModelHarness(ModelLocator):
             else self.HarnessCLI
         )
         main_module = MainModule()
-        main_module.__dict__.update(model_state.module_dict)
+        main_module.__dict__.update(run_state.model_state.module_dict)
         with PatchModule("__main__", main_module, auto=True):
             cli_result = cli_cls.instance_from_cli(
                 prog=self.prog, args=self.argv
@@ -168,7 +168,7 @@ class ModelHarness(ModelLocator):
             suppress(RunError, InternalError),
         ):
             ModelRunner([self.model_arg, "--help"], discovery_mode=True)()
-        return model_state.get_model()
+        return run_state.model_state.get_model()
 
     @cached_property
     def model_params_cls(self) -> type[Params] | None:

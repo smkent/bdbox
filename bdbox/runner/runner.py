@@ -8,13 +8,12 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
-from bdbox.actions.state import action_state
 from bdbox.errors import InternalError, RunError
-from bdbox.model.state import model_state
+from bdbox.runner.state import run_state
 
 from .locator import ModelLocator
 from .shims import AtExit, MainModule
-from .utils import PatchModule, exit_mock, reset_bdbox
+from .utils import PatchModule, exit_mock
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -31,9 +30,9 @@ class ModelRunner(ModelLocator):
     def __call__(self) -> None:
         if not self.model.filename:
             raise InternalError("Model not found in arguments")
-        reset_bdbox()
+        run_state.reset()
         if self.action:
-            action_state.action = self.action
+            run_state.action_state.action = self.action
         main_module = MainModule(
             filename=self.model.filename, module_name=self.model.module_name
         )
@@ -48,7 +47,7 @@ class ModelRunner(ModelLocator):
                 main_module.__dict__.update(self._run_model())
                 mock_main.start()
                 if not atexit_mock.hooks:
-                    action_state.act_once()
+                    run_state.action_state.act_once()
         except (SystemExit, Exception) as e:
             if self.preserve_exceptions:
                 raise
@@ -61,7 +60,7 @@ class ModelRunner(ModelLocator):
             sys.exit(1)
 
     def _run_model(self) -> dict[str, Any]:
-        model_state.model = deepcopy(self.model)
+        run_state.model_state.model = deepcopy(self.model)
         if self.model.module_name:
             results = runpy.run_module(
                 self.model.module_name, run_name="__main__", alter_sys=True
@@ -75,7 +74,7 @@ class ModelRunner(ModelLocator):
     @contextmanager
     def action_on_model_render(self) -> Iterator[None]:
         if self.action and not self.discovery_mode:
-            with action_state.on_model_render():
+            with run_state.action_state.on_model_render():
                 yield
         else:
             yield

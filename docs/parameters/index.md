@@ -66,7 +66,7 @@ Choose from one of two declaration styles by subclassing either
 * **Params** subclasses provide parameter values as direct class attributes (for
   example, `P.width`). With **Params**, construct your model after the class
   declaration to access parameter values. Geometry is collected either by
-  [``show``][bdbox.geometry.show], or by scanning the script's global variables
+  [``show``][bdbox.geometry.geometry.show], or by scanning the script's global variables
   as a fallback. Only one `Params` subclass per script is permitted.
 
 * **Model** subclasses provide parameter values as instance attributes within
