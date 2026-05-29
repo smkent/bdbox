@@ -21,6 +21,12 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(autouse=True)
+def console_verbosity() -> None:
+    """Disable console verbosity override in console tests."""
+    return
+
+
+@pytest.fixture(autouse=True)
 def reset_console() -> None:
     console.reset()
 
