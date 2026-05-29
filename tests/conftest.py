@@ -5,12 +5,13 @@ import os
 import random
 import subprocess
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
 import pytest
 
 from bdbox.actions.action import Action
+from bdbox.console import console
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.utils import reset_bdbox
@@ -19,6 +20,19 @@ from .utils import DisallowCallable, MockBuild123d, MockOcpVscode
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
+
+
+def pytest_addoption(parser: pytest.Parser) -> None:
+    parser.addoption(
+        "--vv",
+        type=int,
+        action="store",
+        metavar="level",
+        default=-1,
+        nargs="?",
+        const=1,
+        help="bdbox verbosity level (1 for -v, 2 for -vv, etc.)",
+    )
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -102,3 +116,21 @@ def log(
 ) -> Iterator[pytest.LogCaptureFixture]:
     with caplog.at_level(logging.DEBUG, logger="bdbox"):
         yield caplog
+
+
+@pytest.fixture(autouse=True)
+def console_verbosity(request: pytest.FixtureRequest) -> Iterator[None]:
+    if (verbosity_level := request.config.getoption("--vv")) < 0:
+        yield
+        return
+
+    original = console.configure
+
+    def wrapper(**kwargs: Any) -> Any:
+        kwargs["verbose"] = verbosity_level
+        original(**kwargs)
+
+    with patch.object(
+        console, "configure", autospec=True, side_effect=wrapper
+    ):
+        yield
