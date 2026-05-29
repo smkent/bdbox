@@ -62,7 +62,7 @@ def mock_urlopen() -> Iterator[MagicMock]:
 
 @pytest.fixture
 def mock_popen() -> Iterator[MagicMock]:
-    with patch.object(viewer_module.subprocess, "Popen") as mocked:
+    with patch.object(subprocess, "Popen") as mocked:
         yield mocked
 
 
