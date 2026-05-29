@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, TypeAlias, cast
 from bdbox.actions.action import Action
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError
-from bdbox.geometry.geometry import show
+from bdbox.geometry.show import show
 from bdbox.runner.state import run_state
 
 from .annotations import Annotater

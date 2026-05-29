@@ -12,7 +12,6 @@ import tyro
 
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
-from bdbox.geometry.geometry import resolve_geometry
 from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
 from bdbox.view.server import ServerManager
@@ -73,7 +72,7 @@ class ViewAction(ModelAction):
 
     def __call__(self) -> None:
         """Send collected geometry to the viewer."""
-        geometry = resolve_geometry()
+        geometry = run_state.geometry.resolve()
         if not geometry:
             log.warning("No geometry collected")
             return

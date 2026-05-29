@@ -6,11 +6,12 @@ import sys
 from types import ModuleType
 from typing import TYPE_CHECKING, Any
 
-from bdbox.geometry.geometry import resolve_geometry, show
+import pytest
+
+from bdbox.geometry.show import show
+from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
-    import pytest
-
     from tests.utils import MockBuild123d
 
 
@@ -28,12 +29,12 @@ def test_show_multiple_args(mock_b123d: MockBuild123d) -> None:
         object(),
     )
     show(obj0, obj1, obj2, obj3, obj4)  # ty: ignore [invalid-argument-type]
-    assert resolve_geometry() == mock_b123d.Compound(
+    assert run_state.geometry.resolve() == mock_b123d.Compound(
         children=[obj1, obj2, obj3], label="bdbox collected geometry"
     )
 
 
-def test_resolve_geometry_returns_shown(mock_b123d: MockBuild123d) -> None:
+def test_geometry_resolve_returns_shown(mock_b123d: MockBuild123d) -> None:
     obj1, obj2, obj3, obj4 = (
         mock_b123d.Shape(),
         object(),
@@ -44,21 +45,20 @@ def test_resolve_geometry_returns_shown(mock_b123d: MockBuild123d) -> None:
     show(obj2)  # ty: ignore [invalid-argument-type]
     show(obj3)  # ty: ignore [invalid-argument-type]
     show(obj4)  # ty: ignore [invalid-argument-type]
-    assert resolve_geometry() == mock_b123d.Compound(
+    assert run_state.geometry.resolve() == mock_b123d.Compound(
         children=[obj1, obj3], label="bdbox collected geometry"
     )
 
 
-def test_resolve_geometry_empty_no_build123d(
+def test_geometry_resolve_empty_no_build123d(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.delitem(sys.modules, "build123d", raising=False)
-    assert resolve_geometry() is None
+    assert run_state.geometry.resolve() is None
 
 
-def test_scan_main_globals_no_shapes(
-    monkeypatch: pytest.MonkeyPatch, mock_b123d: MockBuild123d
-) -> None:
+@pytest.mark.usefixtures("mock_b123d")
+def test_scan_main_globals_no_shapes(monkeypatch: pytest.MonkeyPatch) -> None:
     class MockMain(MockMainBase):
         count: int
 
@@ -66,7 +66,7 @@ def test_scan_main_globals_no_shapes(
     monkeypatch.setitem(sys.modules, "__main__", mock_main)
 
     mock_main.count = 42
-    assert resolve_geometry() is None
+    assert run_state.geometry.resolve() is None
 
 
 def test_scan_main_globals_returns_shapes(
@@ -102,7 +102,7 @@ def test_scan_main_globals_returns_shapes(
     mock_main.count = 42
     monkeypatch.setitem(sys.modules, "__main__", mock_main)
 
-    assert resolve_geometry() == mock_b123d.Compound(
+    assert run_state.geometry.resolve() == mock_b123d.Compound(
         children=[
             shape1,
             shape2,
