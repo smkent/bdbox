@@ -6,7 +6,7 @@ import sys
 from types import ModuleType
 from typing import TYPE_CHECKING, Any
 
-from bdbox.geometry import resolve_geometry, show
+from bdbox.geometry.geometry import resolve_geometry, show
 
 if TYPE_CHECKING:
     import pytest

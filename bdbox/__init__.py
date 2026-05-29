@@ -13,7 +13,7 @@ from bdbox.errors import (
     ParamValidationError,
     RunError,
 )
-from bdbox.geometry import show
+from bdbox.geometry.geometry import show
 from bdbox.model.field_factories import Bool, Choice, Float, Int, Str
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params

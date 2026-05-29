@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from bdbox.actions.state import ActionState
-from bdbox.geometry import reset_geometry
+from bdbox.geometry.geometry import reset_geometry
 from bdbox.model.state import ModelState
 
 

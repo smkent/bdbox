@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, TypeAlias, cast
 from bdbox.actions.action import Action
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError
-from bdbox.geometry import show
+from bdbox.geometry.geometry import show
 from bdbox.runner.state import run_state
 
 from .annotations import Annotater
@@ -86,7 +86,7 @@ class Model(Params):
 
         Calls [``build``][bdbox.model.model.Model.build] with the resolved
         parameter values and passes the result to
-        [``show``][bdbox.geometry.show].
+        [``show``][bdbox.geometry.geometry.show].
 
         Info:
             Call this to build and use your model geometry.
