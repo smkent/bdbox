@@ -6,16 +6,15 @@ from pathlib import Path
 from typing import Any, ClassVar
 
 from bdbox.actions.action import Action
-from bdbox.actions.state import action_state
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
+from bdbox.runner.state import run_state
 
 from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .info import ModelInfo
 from .preset import Preset
-from .state import model_state
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -111,31 +110,33 @@ class Params(CLI, metaclass=ParamsType):
             return
         Annotater(cls)()
 
-        if model_state.model.is_class_in_main(cls):
-            model_state.model.ensure_mode(
+        if run_state.model_state.model.is_class_in_main(cls):
+            run_state.model_state.model.ensure_mode(
                 ModelInfo.Mode.PARAMS_CLASS,
                 "Cannot use Params subclass with an existing Model subclass",
             )
-            if model_state.model_subclasses:
+            if run_state.model_state.model_subclasses:
                 raise ParamsError(
                     f"Cannot define Params subclass {cls.__name__!r}:"
                     " a Params subclass is already defined in this script"
                 )
-            model_state.model_subclasses.append(cls)
+            run_state.model_state.model_subclasses.append(cls)
             try:
                 cli_result = cls.cli_config().instance_from_cli(
                     prog=Path(sys.argv[0]).name
                 )
-                model_state.model_cli = cli_result.params
+                run_state.model_state.model_cli = cli_result.params
             finally:
-                model_state.module_dict = sys.modules["__main__"].__dict__
+                run_state.model_state.module_dict = sys.modules[
+                    "__main__"
+                ].__dict__
             if Action.mode != Action.Mode.HARNESS:
-                action_state.action = cli_result.action
-            action_state.on_model_render().__enter__()
-            model_state.apply_overrides(cli_result.params)
+                run_state.action_state.action = cli_result.action
+            run_state.action_state.on_model_render().__enter__()
+            run_state.model_state.apply_overrides(cli_result.params)
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
-            model_state.resolved_values = {
+            run_state.model_state.resolved_values = {
                 f.name: getattr(cls, f.name)
                 for f in fields(cls)
                 if f.name != "preset"
@@ -145,9 +146,9 @@ class Params(CLI, metaclass=ParamsType):
     @classmethod
     def _atexit_handler(cls) -> None:
         atexit.unregister(Params._atexit_handler)
-        action_state.on_model_render().__exit__(*sys.exc_info())
-        if model_state.model_subclasses:
-            action_state.act_once()
+        run_state.action_state.on_model_render().__exit__(*sys.exc_info())
+        if run_state.model_state.model_subclasses:
+            run_state.action_state.act_once()
 
     def __post_init__(self) -> None:
         if self.preset:

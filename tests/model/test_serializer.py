@@ -14,9 +14,9 @@ import pytest
 from bdbox.model.field_factories import Float, Int
 from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
-from bdbox.model.state import model_state
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
+from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
 from tests.utils import Models
 
@@ -204,6 +204,6 @@ def test_model_schema_cached_at_runtime(
 ) -> None:
     if runner is ModelHarness:
         monkeypatch.setattr(sys, "argv", ["bdbox", str(model)])
-    assert model_state.schema == {}
+    assert run_state.model_state.schema == {}
     runner(model)()
-    json_snapshot(model_state.schema)
+    json_snapshot(run_state.model_state.schema)

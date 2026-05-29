@@ -13,7 +13,7 @@ import tyro  # noqa: TC002
 
 from bdbox.console import console, log
 from bdbox.errors import RunError
-from bdbox.model.state import model_state
+from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
@@ -60,7 +60,7 @@ class Action:
     def on_model_render(self) -> Iterator[Timer]:
         """Executed around model run."""
         with (
-            model_state.set_running() as timer,
+            run_state.model_state.set_running() as timer,
             console.log_stdout_stderr(),
             console.activity_indicator(timer),
         ):

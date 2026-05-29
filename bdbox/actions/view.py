@@ -13,7 +13,7 @@ import tyro
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.geometry import resolve_geometry
-from bdbox.model.state import model_state
+from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
 from bdbox.view.server import ServerManager
 from bdbox.view.state import ViewState
@@ -114,14 +114,17 @@ class ViewAction(ModelAction):
 
     def _update_schema(self, ctx: ViewState) -> None:
         try:
-            new_class = model_state.get_model()
+            new_class = run_state.model_state.get_model()
         except (ParamsError, MultipleModelsError):
             new_class = None
         new_schema = serializer.json_schema(new_class)
         old_schema = serializer.json_schema(ctx.model_class)
-        ctx.current_values = dict(model_state.resolved_values)
+        ctx.current_values = dict(run_state.model_state.resolved_values)
         ctx.model_class = new_class
-        msg = {"type": "schema", "model_info": model_state.model_name_info()}
+        msg = {
+            "type": "schema",
+            "model_info": run_state.model_state.model_name_info(),
+        }
         if new_schema != old_schema:
             msg |= {"schema": new_schema}
         ctx.enqueue(msg)
@@ -134,7 +137,7 @@ class ViewAction(ModelAction):
                 yield
                 return
             ctx = self.server_manager.view_state
-            model_state.param_overrides = dict(ctx.param_overrides)
+            run_state.model_state.param_overrides = dict(ctx.param_overrides)
             ctx.enqueue(
                 {"type": "run_start", "params": dict(ctx.param_overrides)}
             )
@@ -150,7 +153,7 @@ class ViewAction(ModelAction):
                         "type": "run_ok",
                         "elapsed_ms": timer.end_str,
                         "current_values": serializer.unstructure(
-                            model_state.resolved_values
+                            run_state.model_state.resolved_values
                         ),
                     }
                 )

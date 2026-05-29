@@ -10,7 +10,7 @@ from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 
 from bdbox.console import console, log
-from bdbox.model.state import model_state
+from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
 
 from .console import WebStream
@@ -114,18 +114,18 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
         if view_state.model_class:
             msg = {
                 "type": "schema",
-                "schema": model_state.schema,
+                "schema": run_state.model_state.schema,
                 "current_values": serializer.unstructure(
                     view_state.current_values
                 ),
                 "session_id": str(view_state.session_id),
-                "model_running": model_state.model_running,
+                "model_running": run_state.model_state.model_running,
                 "model_run_started": (
-                    model_state.timer.started_at.isoformat()
-                    if model_state.timer
+                    run_state.model_state.timer.started_at.isoformat()
+                    if run_state.model_state.timer
                     else None
                 ),
-                "model_info": model_state.model_name_info(),
+                "model_info": run_state.model_state.model_name_info(),
             }
             log.debug("Sent %s", msg["type"])
             log.trace(json.dumps(msg, indent=4))

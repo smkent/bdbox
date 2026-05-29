@@ -17,7 +17,7 @@ from bdbox.model.field_factories import Float, Int
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
-from bdbox.model.state import model_state
+from bdbox.runner.state import run_state
 from bdbox.view.app import App
 from bdbox.view.routes import manager
 from bdbox.view.state import ViewState
@@ -135,7 +135,7 @@ def param_overrides(request: pytest.FixtureRequest) -> dict[str, Any]:
 def view_state(
     model_class: type[Params], param_overrides: dict[str, Any]
 ) -> ViewState:
-    model_state.model_subclasses = [model_class]
+    run_state.model_state.model_subclasses = [model_class]
     return ViewState(
         rerender_event=threading.Event(),
         model_class=model_class,
