@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import threading
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -137,3 +138,35 @@ class MockOcpVscode(ModuleType):
         pass
 
     comms = Comms()
+
+
+@dataclass
+class ThreadExceptions:
+    exceptions: list[BaseException] = field(default_factory=list, init=False)
+
+    class MissingExceptionError(Exception):
+        pass
+
+    @contextmanager
+    def catch(self) -> Iterator[None]:
+        def excepthook(args: threading.ExceptHookArgs) -> None:
+            self.exceptions.append(
+                args.exc_value or Exception("Exception value missing")
+            )
+
+        with patch.object(threading, "excepthook", excepthook):
+            yield
+        assert not self.exceptions
+
+    @contextmanager
+    def raises(
+        self, exc_type: type[BaseException] | tuple[type[BaseException], ...]
+    ) -> Iterator[None]:
+        context_exceptions = []
+        with patch.object(self, "exceptions", context_exceptions):
+            yield
+        if not context_exceptions:
+            raise self.MissingExceptionError(exc_type)
+        for exception in context_exceptions:
+            if not isinstance(exception, exc_type):
+                raise exception

@@ -17,7 +17,12 @@ from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.state import run_state
 
-from .utils import DisallowCallable, MockBuild123d, MockOcpVscode
+from .utils import (
+    DisallowCallable,
+    MockBuild123d,
+    MockOcpVscode,
+    ThreadExceptions,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -139,3 +144,10 @@ def console_verbosity(request: pytest.FixtureRequest) -> Iterator[None]:
         console, "configure", autospec=True, side_effect=wrapper
     ):
         yield
+
+
+@pytest.fixture(autouse=True)
+def thread_exceptions() -> Iterator[ThreadExceptions]:
+    instance = ThreadExceptions()
+    with instance.catch():
+        yield instance
