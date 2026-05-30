@@ -12,11 +12,17 @@ import pytest
 
 from bdbox.actions.action import Action
 from bdbox.console import console
+from bdbox.dispatch import dispatch
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.state import run_state
 
-from .utils import DisallowCallable, MockBuild123d, MockOcpVscode
+from .utils import (
+    DisallowCallable,
+    MockBuild123d,
+    MockOcpVscode,
+    ThreadExceptions,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -47,10 +53,14 @@ def random_seed() -> None:
 
 
 @pytest.fixture(autouse=True)
-def reset_all() -> None:
+def reset_all() -> Iterator[None]:
     """Reset all bdbox state before each test."""
     run_state.reset()
+    dispatch.reset()
     Action.mode = Action.Mode.EMBEDDED
+    yield
+    dispatch.exit.set()
+    dispatch.exit_join()
 
 
 @pytest.fixture
@@ -134,3 +144,10 @@ def console_verbosity(request: pytest.FixtureRequest) -> Iterator[None]:
         console, "configure", autospec=True, side_effect=wrapper
     ):
         yield
+
+
+@pytest.fixture(autouse=True)
+def thread_exceptions() -> Iterator[ThreadExceptions]:
+    instance = ThreadExceptions()
+    with instance.catch():
+        yield instance

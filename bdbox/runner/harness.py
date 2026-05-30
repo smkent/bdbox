@@ -7,7 +7,6 @@ from contextlib import suppress
 from dataclasses import dataclass, field, make_dataclass
 from functools import cached_property, reduce
 from pathlib import Path
-from threading import Event
 from typing import TYPE_CHECKING, Annotated, Any, ClassVar, cast, get_args
 from unittest.mock import MagicMock, patch
 
@@ -16,6 +15,7 @@ import tyro
 from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI, CLIOptions
+from bdbox.dispatch import Event, dispatch
 from bdbox.errors import InternalError, RunError
 from bdbox.runner.state import run_state
 
@@ -70,7 +70,9 @@ class ModelHarness(ModelLocator):
     clean_modules: ClassVar[bool] = True
     package: ClassVar[str] = (__package__ or "bdbox").split(".", 1)[0]
     rerender_event: Event = field(
-        default_factory=Event, init=False, repr=False
+        default_factory=lambda: Event(name="rerender_event"),
+        init=False,
+        repr=False,
     )
 
     @dataclass
@@ -111,9 +113,13 @@ class ModelHarness(ModelLocator):
         runner = ModelRunner([self.model_arg, *self.argv], cli_result.action)
         if cli_result.action.watch:
             ModelWatcher(runner=runner, change_event=self.rerender_event).run()
+            dispatch.exit.set()
+            dispatch.exit_join()
             return
         runner.preserve_exceptions = True
         runner.run_or_exit()
+        dispatch.exit.set()
+        dispatch.exit_join()
 
     @cached_property
     def params_argv(self) -> Sequence[str]:

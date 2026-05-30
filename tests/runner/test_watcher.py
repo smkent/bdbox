@@ -15,6 +15,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from bdbox.dispatch import Event
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
 
@@ -168,15 +169,13 @@ def test_runloop_with_rerun(
     modules: Modules,
 ) -> None:
     """After the first run, runloop() blocks until change_event is set."""
-    first_run_done = threading.Event()
+    first_run_done = Event(name="first_run_done")
 
-    # Subclass threading.Event with a wait start signal
     @dataclass
-    class _SignalingEvent(threading.Event):
-        waiting: threading.Event = field(default_factory=threading.Event)
-
-        def __post_init__(self) -> None:
-            super().__init__()
+    class SignalingEvent(Event):
+        waiting: Event = field(
+            default_factory=lambda: Event(name="signaling_event_waiting")
+        )
 
         def wait(self, timeout: float | None = None) -> bool:
             self.waiting.set()
@@ -189,7 +188,7 @@ def test_runloop_with_rerun(
         first_run_done.set()
 
     mock_runner_call.side_effect = _call
-    watcher.change_event = _SignalingEvent()
+    watcher.change_event = SignalingEvent()
 
     t = threading.Thread(target=watcher.run, daemon=True)
     t.start()

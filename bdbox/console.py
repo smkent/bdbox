@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import sys
 import sysconfig
+import threading
 from abc import ABC, abstractmethod
 from contextlib import (
     contextmanager,
@@ -12,9 +13,10 @@ from contextlib import (
     redirect_stdout,
     suppress,
 )
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from enum import IntEnum
-from functools import cached_property
+from functools import cached_property, partial
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, TextIO, cast
 
@@ -120,6 +122,10 @@ class LogHandler(RichHandler):
         self, record: logging.LogRecord, message: str
     ) -> ConsoleRenderable:
         msg_text = cast("Text", super().render_message(record, message))
+        bdbox_thread = getattr(record, "bdbox_thread", None)
+        if bdbox_thread:
+            msg_text = Text.assemble(f"[{bdbox_thread}] ", msg_text)
+
         level_style = self.LOG_LEVEL_STYLES.get(record.levelno)
         if level_style:
             msg_text.stylize_before(level_style)
@@ -257,6 +263,9 @@ class RunningSpinner:
 @dataclass
 class Console:
     verbose: int = 0
+    log_thread: ContextVar[str | None] = field(
+        default_factory=lambda: ContextVar("log_thread", default=None)
+    )
 
     terminal_output: TerminalConsoleOutput | None = field(
         default=None, init=False
@@ -266,23 +275,15 @@ class Console:
     def __post_init__(self) -> None:
         self.reset()
 
-        def excepthook(
-            exc_type: type[BaseException],
-            exc_value: BaseException,
-            exc_traceback: TracebackType | None,
-        ) -> None:
-            if issubclass(exc_type, KeyboardInterrupt):
-                sys.__excepthook__(exc_type, exc_value, exc_traceback)
-                return
-            if isinstance(exc_value, UsageError):
-                log.error(exc_value.message)
-                return
-            self.logger().error(
-                "Uncaught exception",
-                exc_info=(exc_type, exc_value, exc_traceback),
+        def threading_excepthook(args: threading.ExceptHookArgs) -> None:
+            return excepthook(
+                args.exc_type,
+                args.exc_value or Exception("Exception value missing"),
+                args.exc_traceback,
+                args.thread,
             )
 
-        sys.excepthook = excepthook
+        threading.excepthook = threading_excepthook
 
     def logger(self) -> Logger:
         return Logger(logging.getLogger("bdbox"))
@@ -324,6 +325,15 @@ class Console:
             self.verbose = verbose
             self.reset()
 
+    def log_filter(self) -> logging.Filter:
+        class Filter(logging.Filter):
+            def filter(_self, record: logging.LogRecord) -> bool:  # noqa: N805
+                if self.log_level <= logging.DEBUG:
+                    record.bdbox_thread = self.log_thread.get()
+                return True
+
+        return Filter()
+
     def reset(self) -> None:
         log = logging.getLogger()
         if self.terminal_output and self.terminal_output.handler:
@@ -341,6 +351,7 @@ class Console:
             else logging.INFO
         )
         self.terminal_output = TerminalConsoleOutput(level=bdbox_level)
+        self.terminal_output.handler.addFilter(self.log_filter())
         log.addHandler(self.terminal_output.handler)
         logging.getLogger().setLevel(
             logging.DEBUG if self.verbose >= 3 else logging.WARNING
@@ -357,6 +368,7 @@ class Console:
             self.web_outputs[ws_id].console.width = width
             return
         web_console = WebConsoleOutput(stream=stream, width=width)
+        web_console.handler.addFilter(self.log_filter())
         self.web_outputs[ws_id] = web_console
         logging.getLogger().addHandler(web_console.handler)
         return
@@ -367,6 +379,28 @@ class Console:
         with suppress(ValueError):
             web_console = self.web_outputs.pop(ws_id)
             logging.getLogger().removeHandler(web_console.handler)
+
+
+def excepthook(
+    exc_type: type[BaseException],
+    exc_value: BaseException,
+    exc_traceback: TracebackType | None,
+    thread: threading.Thread | None = None,
+) -> None:
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    if isinstance(exc_value, UsageError):
+        log.error(exc_value.message)
+        return
+    suffix = f" in thread: {thread.name}" if thread else ""
+    log.error(
+        f"Uncaught exception{suffix}",
+        exc_info=(exc_type, exc_value, exc_traceback),
+    )
+
+
+sys.excepthook = partial(excepthook, thread=None)
 
 
 console = Console()

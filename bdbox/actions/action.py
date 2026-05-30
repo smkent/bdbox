@@ -18,8 +18,8 @@ from bdbox.runner.state import run_state
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
     from pathlib import Path
-    from threading import Event
 
+    from bdbox.dispatch import Event
     from bdbox.model.parameters import Params
     from bdbox.timer import Timer
 
@@ -71,9 +71,6 @@ class Action:
                 raise RunError(e) from e
             else:
                 log.info("Run complete (%s)", timer.end_str)
-
-    def watch_end(self) -> None:
-        """Executed after the harness finishes."""
 
 
 @dataclass
