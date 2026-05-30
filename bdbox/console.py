@@ -122,11 +122,9 @@ class LogHandler(RichHandler):
         self, record: logging.LogRecord, message: str
     ) -> ConsoleRenderable:
         msg_text = cast("Text", super().render_message(record, message))
-        bdbox_process = getattr(record, "bdbox_process", None)
         bdbox_thread = getattr(record, "bdbox_thread", None)
-        if bdbox_process or bdbox_thread:
-            prefix = ":".join(p for p in [bdbox_process, bdbox_thread] if p)
-            msg_text = Text.assemble(f"[{prefix}] ", msg_text)
+        if bdbox_thread:
+            msg_text = Text.assemble(f"[{bdbox_thread}] ", msg_text)
 
         level_style = self.LOG_LEVEL_STYLES.get(record.levelno)
         if level_style:
@@ -265,9 +263,6 @@ class RunningSpinner:
 @dataclass
 class Console:
     verbose: int = 0
-    log_model: ContextVar[str | None] = field(
-        default_factory=lambda: ContextVar("log_model", default=None)
-    )
     log_thread: ContextVar[str | None] = field(
         default_factory=lambda: ContextVar("log_thread", default=None)
     )
@@ -334,7 +329,6 @@ class Console:
         class Filter(logging.Filter):
             def filter(_self, record: logging.LogRecord) -> bool:  # noqa: N805
                 if self.log_level <= logging.DEBUG:
-                    record.bdbox_process = self.log_model.get()
                     record.bdbox_thread = self.log_thread.get()
                 return True
 
