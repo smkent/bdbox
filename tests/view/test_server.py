@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import sys
-import threading
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
@@ -12,6 +11,7 @@ from uuid import UUID
 import pytest
 from starlette.testclient import TestClient
 
+from bdbox.dispatch import Event
 from bdbox.errors import InternalError
 from bdbox.model.field_factories import Float, Int
 from bdbox.model.model import Model
@@ -137,7 +137,7 @@ def view_state(
 ) -> ViewState:
     run_state.model_state.model_subclasses = [model_class]
     return ViewState(
-        rerender_event=threading.Event(),
+        rerender_event=Event(name="test_rerender_event"),
         model_class=model_class,
         current_values=({"width": 10.0, "count": 3} if model_class else {}),
         param_overrides=param_overrides,

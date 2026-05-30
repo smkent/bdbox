@@ -18,13 +18,12 @@ if TYPE_CHECKING:
     from .state import ViewState
 
 _STATIC_DIR = Path(__file__).parent / "static"
-_STOP = object()
 
 
 async def _broadcast_loop(view_state: ViewState) -> None:
     while True:
         msg = await asyncio.to_thread(view_state.msg_queue.get)
-        if msg is _STOP:
+        if not isinstance(msg, dict):
             break
         await manager.broadcast(msg)
 
@@ -36,7 +35,7 @@ async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
     try:
         yield
     finally:
-        view_state.msg_queue.put(_STOP)  # ty: ignore[invalid-argument-type]
+        view_state.stop_queue()
         await task
 
 

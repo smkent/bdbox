@@ -8,13 +8,13 @@ from contextlib import contextmanager, suppress
 from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
-from threading import Event
 from typing import TYPE_CHECKING
 
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
 from bdbox.console import log
+from bdbox.dispatch import Event, dispatch
 from bdbox.errors import InternalError, RunError
 
 if TYPE_CHECKING:
@@ -30,9 +30,16 @@ class ModelWatcher:
     """Tracks local module dependencies and signals on file changes."""
 
     runner: ModelRunner
-    change_event: Event = field(default_factory=Event, repr=False)
+    change_event: Event = field(
+        default_factory=lambda: Event(name="change_event"), repr=False
+    )
     local_modules: dict[str, str] = field(default_factory=dict, init=False)
     started: bool = field(default=False, init=False)
+
+    def __post_init__(self) -> None:
+        dispatch.on_exit(
+            self.change_event.set, name="Set ModelWatcher change_event"
+        )
 
     @property
     @contextmanager
@@ -73,16 +80,12 @@ class ModelWatcher:
     def run(self) -> None:
         with self.observer:
             try:
-                while True:
-                    self.wait_for_change()
+                while self.wait_for_change():
                     with self.handle_modules, suppress(RunError):
                         self.runner()
             except KeyboardInterrupt:
                 print(file=sys.stderr)  # noqa: T201
                 log.info("Quitting")
-            finally:
-                if self.runner.action:
-                    self.runner.action.watch_end()
 
     @property
     @contextmanager
@@ -117,12 +120,14 @@ class ModelWatcher:
         for name in list(self.local_modules):
             sys.modules.pop(name, None)
 
-    def wait_for_change(self) -> None:
+    def wait_for_change(self) -> bool:
         """Block the main thread until a file changes, with debounce."""
         if not self.started:
             self.started = True
-            return
+            return True
         self.change_event.wait()
+        if dispatch.exit.is_set():
+            return False
         # Keep clearing and re-waiting until no new events arrive within the
         # debounce window. This handles editors that write multiple events per
         # save.
@@ -131,3 +136,4 @@ class ModelWatcher:
             time.sleep(_DEBOUNCE_SECS)
             if not self.change_event.is_set():
                 break
+        return True
