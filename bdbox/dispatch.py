@@ -150,6 +150,7 @@ class Dispatch:
                     "Joining thread %d / %d: %s", i + 1, count, thread.name
                 )
                 thread.join()
+            log.trace("Joined %d threads", count)
             self.threads = []
 
 
