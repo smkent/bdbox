@@ -17,7 +17,9 @@ from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.state import run_state
 
-from .utils import (
+pytest.register_assert_rewrite("tests.utils")
+
+from tests.utils import (  # noqa: E402
     DisallowCallable,
     MockBuild123d,
     MockOcpVscode,
