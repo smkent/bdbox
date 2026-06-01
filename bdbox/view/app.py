@@ -22,8 +22,7 @@ _STATIC_DIR = Path(__file__).parent / "static"
 
 async def _broadcast_loop(view_state: ViewState) -> None:
     while True:
-        msg = await asyncio.to_thread(view_state.msg_queue.get)
-        if not isinstance(msg, dict):
+        if (msg := await asyncio.to_thread(view_state.msg_queue.get)) is None:
             break
         await manager.broadcast(msg)
 

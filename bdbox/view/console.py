@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class WebStream:
     """Write-only stream that forwards text to the WebSocket message queue."""
 
-    q: queue.Queue[Mapping[str, Any] | object] = field(
+    q: queue.Queue[Mapping[str, Any] | None] = field(
         default_factory=queue.Queue
     )
 
