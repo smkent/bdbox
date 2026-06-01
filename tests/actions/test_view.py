@@ -30,7 +30,7 @@ pytestmark = pytest.mark.usefixtures("ensure_sys_modules", "mock_ocp_vscode")
 
 
 @pytest.fixture(autouse=True)
-def mock_start() -> Iterator[MagicMock]:
+def mock_viewer_start() -> Iterator[MagicMock]:
     with patch.object(ViewerManager, "start") as mocked:
         yield mocked
 
@@ -98,12 +98,12 @@ def test_view_starts_watcher(model: Path, harness: HarnessWrapper) -> None:
 
 
 def test_view_no_watch_skips_watcher(
-    mock_start: MagicMock, model: Path, harness: HarnessWrapper
+    mock_viewer_start: MagicMock, model: Path, harness: HarnessWrapper
 ) -> None:
     with patch.object(ModelWatcher, "run") as mock_run:
         harness([str(model), "view", "--no-watch"])()
     mock_run.assert_not_called()
-    mock_start.assert_called_once()
+    mock_viewer_start.assert_called_once()
 
 
 def test_send_geometry_to_viewer(mock_ocp_vscode: MockOcpVscode) -> None:

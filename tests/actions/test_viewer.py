@@ -517,9 +517,9 @@ def test_model_view_starts_viewer(
     *,
     watch: bool,
 ) -> None:
-    with patch.object(ViewerManager, "start") as mock_start:
+    with patch.object(ViewerManager, "start") as mock_viewer_start:
         exec_main(str(model), "view", *watch_args)
-    mock_start.assert_called_once()
+    mock_viewer_start.assert_called_once()
     if watch:
         mock_server_start.assert_called_once()
     else:
@@ -530,11 +530,11 @@ def test_model_view_without_model_does_not_start_viewer(
     exec_main: ExecMain, mock_server_start: MagicMock, *, watch: bool
 ) -> None:
     with (
-        patch.object(ViewerManager, "start") as mock_start,
+        patch.object(ViewerManager, "start") as mock_viewer_start,
         pytest.raises(SystemExit),
     ):
         exec_main("view", *([] if watch else ["--no-watch"]))
-    mock_start.assert_not_called()
+    mock_viewer_start.assert_not_called()
     mock_server_start.assert_not_called()
 
 
@@ -549,9 +549,9 @@ def test_model_view_passes_flags_to_viewer(
 
     with patch.object(
         ViewerManager, "start", autospec=True, side_effect=check_args
-    ) as mock_start:
+    ) as mock_viewer_start:
         exec_main(str(model), "view", "--restart-viewer", *watch_args)
-    mock_start.assert_called_once()
+    mock_viewer_start.assert_called_once()
 
 
 def test_model_view_passes_flags_to_server(
