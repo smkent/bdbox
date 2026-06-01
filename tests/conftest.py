@@ -21,6 +21,7 @@ pytest.register_assert_rewrite("tests.utils")
 
 from tests.utils import (  # noqa: E402
     DisallowCallable,
+    ExecMain,
     MockBuild123d,
     MockOcpVscode,
     ThreadExceptions,
@@ -98,6 +99,11 @@ def disallow_os_exec(
 ) -> Iterator[DisallowCallable]:
     with DisallowCallable(request, os, "execv")() as mock:
         yield mock
+
+
+@pytest.fixture
+def exec_main(monkeypatch: pytest.MonkeyPatch) -> ExecMain:
+    return ExecMain(monkeypatch)
 
 
 @pytest.fixture
