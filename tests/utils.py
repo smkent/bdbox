@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any
 from unittest.mock import MagicMock, patch
 
 from bdbox import examples
+from bdbox.__main__ import main
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -20,6 +21,15 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Iterator, Sequence
 
     import pytest
+
+
+@dataclass
+class ExecMain:
+    monkeypatch: pytest.MonkeyPatch
+
+    def __call__(self, *args: str) -> None:
+        self.monkeypatch.setattr(sys, "argv", ["bdbox", *args])
+        main()
 
 
 class Examples:

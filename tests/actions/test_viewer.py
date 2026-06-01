@@ -7,8 +7,7 @@ import subprocess
 import sys
 import time
 import webbrowser
-from collections.abc import Callable, Sequence
-from contextlib import contextmanager, nullcontext
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 from unittest.mock import MagicMock, patch
@@ -19,29 +18,14 @@ import pytest
 
 import bdbox.view.server as server_module
 import bdbox.viewer as viewer_module
-from bdbox.__main__ import main
 from bdbox.actions.view import ViewAction
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.viewer import ViewerManager
-from tests.utils import MockOcpVscode, Models
+from tests.utils import ExecMain, MockOcpVscode, Models
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Iterator, Sequence
     from pathlib import Path
-
-
-ExecMain = Callable[..., None]
-
-
-@pytest.fixture
-def exec_main(monkeypatch: pytest.MonkeyPatch) -> ExecMain:
-    def wrapper(*args: str) -> None:
-        monkeypatch.setattr(sys, "argv", ["bdbox", *args])
-        is_viewer = "viewer" in args[:1]
-        with pytest.raises(SystemExit) if is_viewer else nullcontext():
-            main()
-
-    return wrapper
 
 
 @pytest.fixture(
@@ -343,7 +327,7 @@ def test_stop_running_without_pid(
     ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     """stop() prints a message and skips termination without a PID."""
-    with ps_mock():
+    with ps_mock(), pytest.raises(SystemExit):
         exec_main("viewer", "stop")
     assert "cannot" in log.text
 
@@ -353,7 +337,7 @@ def test_status_running_without_pid(
     ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     """status() shows URL but omits PID when process info is unavailable."""
-    with ps_mock():
+    with ps_mock(), pytest.raises(SystemExit):
         exec_main("viewer", "status")
     assert "localhost" in log.text
     assert "None" not in log.text
@@ -361,7 +345,7 @@ def test_status_running_without_pid(
 
 def test_start_launches(ps_mock: PSMock, exec_main: ExecMain) -> None:
     ps_mock.add_connection(pid=1138, port=8)
-    with ps_mock(launches=True):
+    with ps_mock(launches=True), pytest.raises(SystemExit):
         exec_main("viewer", "start")
 
 
@@ -370,7 +354,7 @@ def test_start_already_running_skips_subprocess(
 ) -> None:
     ps_mock.add_connection(pid=1138)
     ps_mock.add_connection(port=ps_mock.ocp_port - 1, pid=4002)
-    with ps_mock(launches=False):
+    with ps_mock(launches=False), pytest.raises(SystemExit):
         exec_main("viewer", "start")
 
 
@@ -378,7 +362,7 @@ def test_start_restart_terminates_old_process_and_relaunches(
     ps_mock: PSMock, exec_main: ExecMain
 ) -> None:
     conn = ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=True, terminates=True):
+    with ps_mock(launches=True, terminates=True), pytest.raises(SystemExit):
         exec_main("viewer", "start", "--restart")
     ps_mock.assert_terminated(conn.pid)
 
@@ -399,7 +383,7 @@ def test_start_skips_browser_when_disabled(
         pass
 
     ps_mock.mock_browser_open.side_effect = TempError
-    with ps_mock(launches=True):
+    with ps_mock(launches=True), pytest.raises(SystemExit):
         exec_main("viewer", "start")
 
 
@@ -409,6 +393,7 @@ def test_start_initializes_port_when_freshly_launched(
     with (
         ps_mock(launches=True),
         patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
+        pytest.raises(SystemExit),
     ):
         exec_main("viewer", "start")
     mock_set_port.assert_called_once_with(ps_mock.ocp_port)
@@ -421,6 +406,7 @@ def test_start_initializes_port_when_already_running(
     with (
         ps_mock(launches=False),
         patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
+        pytest.raises(SystemExit),
     ):
         exec_main("viewer", "start")
     mock_set_port.assert_called_once_with(ps_mock.ocp_port)
@@ -429,7 +415,11 @@ def test_start_initializes_port_when_already_running(
 def test_start_skips_wait_when_not_opening_browser(
     ps_mock: PSMock, exec_main: ExecMain
 ) -> None:
-    with ps_mock(launches=True), patch.object(time, "sleep") as mock_sleep:
+    with (
+        ps_mock(launches=True),
+        patch.object(time, "sleep") as mock_sleep,
+        pytest.raises(SystemExit),
+    ):
         exec_main("viewer", "start")
     mock_sleep.assert_not_called()
 
@@ -438,6 +428,7 @@ def test_start_open_browser(ps_mock: PSMock, exec_main: ExecMain) -> None:
     with (
         ps_mock(launches=True, opens_browser=True),
         patch.object(time, "sleep") as mock_sleep,
+        pytest.raises(SystemExit),
     ):
         exec_main("viewer", "start", "--open-browser")
     mock_sleep.assert_not_called()
@@ -449,6 +440,7 @@ def test_start_open_browser_wait(ps_mock: PSMock, exec_main: ExecMain) -> None:
     with (
         ps_mock(launches=True, opens_browser=True),
         patch.object(time, "sleep") as mock_sleep,
+        pytest.raises(SystemExit),
     ):
         exec_main("viewer", "start", "--open-browser")
     assert mock_sleep.call_count == 2
@@ -461,6 +453,7 @@ def test_start_open_browser_wait_timeout(
     with (
         ps_mock(launches=True, opens_browser=True),
         patch.object(time, "sleep") as mock_sleep,
+        pytest.raises(SystemExit),
     ):
         exec_main("viewer", "start", "--open-browser")
     assert mock_sleep.call_count == 120
@@ -485,7 +478,7 @@ def test_stop_terminates_running_process(
     ps_mock: PSMock, exec_main: ExecMain
 ) -> None:
     conn = ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=False, terminates=True):
+    with ps_mock(launches=False, terminates=True), pytest.raises(SystemExit):
         exec_main("viewer", "stop")
     ps_mock.assert_terminated(conn.pid)
 
@@ -493,7 +486,7 @@ def test_stop_terminates_running_process(
 def test_stop_when_not_running(
     ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
-    with ps_mock(launches=False):
+    with ps_mock(launches=False), pytest.raises(SystemExit):
         exec_main("viewer", "stop")
     assert "Not running" in log.text
 
@@ -502,7 +495,7 @@ def test_status_running_shows_url_and_pid(
     ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     conn = ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=False):
+    with ps_mock(launches=False), pytest.raises(SystemExit):
         exec_main("viewer", "status")
     assert str(conn.pid) in log.text
     assert "localhost" in log.text
@@ -511,7 +504,7 @@ def test_status_running_shows_url_and_pid(
 def test_status_not_running(
     ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
-    with ps_mock(launches=False):
+    with ps_mock(launches=False), pytest.raises(SystemExit):
         exec_main("viewer", "status")
     assert "Not running" in log.text
 
@@ -585,20 +578,25 @@ def test_viewer_start_open_browser(
     with (
         ps_mock(launches=True, opens_browser=True),
         patch.object(time, "sleep") as mock_sleep,
+        pytest.raises(SystemExit),
     ):
         exec_main("viewer", "start", "--open-browser")
     mock_sleep.assert_not_called()
 
 
 def test_viewer_start_no_browser(ps_mock: PSMock, exec_main: ExecMain) -> None:
-    with ps_mock(launches=True), patch.object(time, "sleep") as mock_sleep:
+    with (
+        ps_mock(launches=True),
+        patch.object(time, "sleep") as mock_sleep,
+        pytest.raises(SystemExit),
+    ):
         exec_main("viewer", "start")
     mock_sleep.assert_not_called()
 
 
 def test_viewer_stop(ps_mock: PSMock, exec_main: ExecMain) -> None:
     conn = ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=False, terminates=True):
+    with ps_mock(launches=False, terminates=True), pytest.raises(SystemExit):
         exec_main("viewer", "stop")
     ps_mock.assert_terminated(conn.pid)
 
@@ -607,6 +605,6 @@ def test_viewer_status(
     ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
 ) -> None:
     ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=False):
+    with ps_mock(launches=False), pytest.raises(SystemExit):
         exec_main("viewer", "status")
     assert "Running" in log.text

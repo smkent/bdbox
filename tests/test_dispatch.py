@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import sys
-from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 from unittest.mock import MagicMock, patch
@@ -9,19 +7,15 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 import bdbox.view.server as server_module
-from bdbox.__main__ import main
 from bdbox.console import LogLevel
 from bdbox.dispatch import Event, Thread, dispatch
 from bdbox.runner.harness import ModelHarness
 from bdbox.viewer import ViewerManager
-from tests.utils import Models, ThreadExceptions
+from tests.utils import ExecMain, Models, ThreadExceptions
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
     from pathlib import Path
-
-
-ExecMain = Callable[..., None]
 
 
 @dataclass
@@ -55,15 +49,6 @@ def mock_server_start() -> Iterator[MagicMock]:
         server_module.ServerManager, "start", autospec=True
     ) as mocked:
         yield mocked
-
-
-@pytest.fixture
-def exec_main(monkeypatch: pytest.MonkeyPatch) -> ExecMain:
-    def wrapper(*args: str) -> None:
-        monkeypatch.setattr(sys, "argv", ["bdbox", *args])
-        main()
-
-    return wrapper
 
 
 @pytest.fixture(
