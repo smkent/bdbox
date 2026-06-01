@@ -8,7 +8,7 @@ from threading import Event as StdlibEvent
 from threading import Thread as StdlibThread
 from typing import TYPE_CHECKING, Any
 
-from bdbox.console import console, excepthook, log
+from bdbox.console import excepthook, log
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
@@ -65,7 +65,6 @@ class Thread(StdlibThread):
             self.name = self._name  # ty: ignore[unresolved-attribute]
 
     def run(self) -> None:
-        console.log_thread.set(self.name)
         log.trace("Thread start")
         try:
             super().run()

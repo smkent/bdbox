@@ -13,7 +13,6 @@ from contextlib import (
     redirect_stdout,
     suppress,
 )
-from contextvars import ContextVar
 from dataclasses import dataclass, field
 from enum import IntEnum
 from functools import cached_property, partial
@@ -92,6 +91,7 @@ class LogHandler(RichHandler):
         self.show_path = kwargs.get("show_path", True)
         self.compact = compact
         self.setLevel(level)
+        self.main_thread_ident = threading.main_thread().ident
 
     def get_level_text(self, record: logging.LogRecord) -> Text:
         if record.levelno == LogLevel.TRACE:
@@ -122,9 +122,10 @@ class LogHandler(RichHandler):
         self, record: logging.LogRecord, message: str
     ) -> ConsoleRenderable:
         msg_text = cast("Text", super().render_message(record, message))
-        bdbox_thread = getattr(record, "bdbox_thread", None)
-        if bdbox_thread:
-            msg_text = Text.assemble(f"[{bdbox_thread}] ", msg_text)
+        if record.thread != self.main_thread_ident and (
+            thread_name := record.threadName
+        ):
+            msg_text = Text.assemble(f"[{thread_name}] ", msg_text)
 
         level_style = self.LOG_LEVEL_STYLES.get(record.levelno)
         if level_style:
@@ -263,9 +264,6 @@ class RunningSpinner:
 @dataclass
 class Console:
     verbose: int = 0
-    log_thread: ContextVar[str | None] = field(
-        default_factory=lambda: ContextVar("log_thread", default=None)
-    )
 
     terminal_output: TerminalConsoleOutput | None = field(
         default=None, init=False
@@ -325,15 +323,6 @@ class Console:
             self.verbose = verbose
             self.reset()
 
-    def log_filter(self) -> logging.Filter:
-        class Filter(logging.Filter):
-            def filter(_self, record: logging.LogRecord) -> bool:  # noqa: N805
-                if self.log_level <= logging.DEBUG:
-                    record.bdbox_thread = self.log_thread.get()
-                return True
-
-        return Filter()
-
     def reset(self) -> None:
         log = logging.getLogger()
         if self.terminal_output and self.terminal_output.handler:
@@ -351,7 +340,6 @@ class Console:
             else logging.INFO
         )
         self.terminal_output = TerminalConsoleOutput(level=bdbox_level)
-        self.terminal_output.handler.addFilter(self.log_filter())
         log.addHandler(self.terminal_output.handler)
         logging.getLogger().setLevel(
             logging.DEBUG if self.verbose >= 3 else logging.WARNING
@@ -368,7 +356,6 @@ class Console:
             self.web_outputs[ws_id].console.width = width
             return
         web_console = WebConsoleOutput(stream=stream, width=width)
-        web_console.handler.addFilter(self.log_filter())
         self.web_outputs[ws_id] = web_console
         logging.getLogger().addHandler(web_console.handler)
         return
