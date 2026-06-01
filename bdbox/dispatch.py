@@ -148,7 +148,10 @@ class Dispatch:
                 log.trace(
                     "Joining thread %d / %d: %s", i + 1, count, thread.name
                 )
-                thread.join()
+                try:
+                    thread.join()
+                except RuntimeError as e:
+                    log.debug("Error joining thread: %s", str(e))
             log.trace("Joined %d threads", count)
             self.threads = []
 
