@@ -31,7 +31,7 @@ class ViewState:
     )
     viewer_port: int = 3939
     model_class: type[Params] | None = None
-    msg_queue: Queue[Mapping[str, Any] | object] = field(default_factory=Queue)
+    msg_queue: Queue[Mapping[str, Any] | None] = field(default_factory=Queue)
     param_overrides: dict[str, Any] = field(default_factory=dict)
     current_values: dict[str, Any] = field(default_factory=dict)
     session_id: UUID = field(default_factory=uuid4)
@@ -43,7 +43,7 @@ class ViewState:
         self.msg_queue.put({**msg, "session_id": str(self.session_id)})
 
     def stop_queue(self) -> None:
-        self.msg_queue.put(object())
+        self.msg_queue.put(None)
 
     @classmethod
     def get(cls, obj: FastAPI | Request) -> Self:

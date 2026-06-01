@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from typing import Any, TextIO, cast
+from typing import TYPE_CHECKING, Any, TextIO, cast
 
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
@@ -15,6 +15,9 @@ from bdbox.serializer import serializer
 
 from .console import WebStream
 from .state import ViewState
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 routes_router = APIRouter()
 
@@ -31,7 +34,7 @@ class ConnectionManager:
         if ws in self.active:
             self.active.remove(ws)
 
-    async def broadcast(self, message: dict) -> None:
+    async def broadcast(self, message: Mapping[str, Any]) -> None:
         for ws in list(self.active):
             try:
                 await ws.send_json(message)
