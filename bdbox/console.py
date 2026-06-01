@@ -122,8 +122,8 @@ class LogHandler(RichHandler):
         self, record: logging.LogRecord, message: str
     ) -> ConsoleRenderable:
         msg_text = cast("Text", super().render_message(record, message))
-        if (thread_name := getattr(record, "threadName", None)) and (
-            record.thread != self.main_thread_ident
+        if record.thread != self.main_thread_ident and (
+            thread_name := record.threadName
         ):
             msg_text = Text.assemble(f"[{thread_name}] ", msg_text)
 
