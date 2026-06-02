@@ -19,9 +19,8 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
-
     from bdbox.model.parameters import Params
+    from bdbox.protocol import Message
 
 
 @dataclass
@@ -31,7 +30,7 @@ class ViewState:
     )
     viewer_port: int = 3939
     model_class: type[Params] | None = None
-    msg_queue: Queue[Mapping[str, Any] | None] = field(default_factory=Queue)
+    msg_queue: Queue[Message | None] = field(default_factory=Queue)
     param_overrides: dict[str, Any] = field(default_factory=dict)
     current_values: dict[str, Any] = field(default_factory=dict)
     session_id: UUID = field(default_factory=uuid4)
@@ -39,8 +38,8 @@ class ViewState:
     def __post_init__(self) -> None:
         dispatch.on_exit(self.stop_queue, name="Stop ViewState message queue")
 
-    def enqueue(self, msg: dict[str, Any]) -> None:
-        self.msg_queue.put({**msg, "session_id": str(self.session_id)})
+    def enqueue(self, msg: Message) -> None:
+        self.msg_queue.put(msg)
 
     def stop_queue(self) -> None:
         self.msg_queue.put(None)

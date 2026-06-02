@@ -12,6 +12,12 @@ import tyro
 
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
+from bdbox.protocol import (
+    RunErrorMessage,
+    RunOKMessage,
+    RunStartMessage,
+    SchemaMessage,
+)
 from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
 from bdbox.view.server import ServerManager
@@ -117,12 +123,11 @@ class ViewAction(ModelAction):
         old_schema = serializer.json_schema(ctx.model_class)
         ctx.current_values = dict(run_state.model_state.resolved_values)
         ctx.model_class = new_class
-        msg = {
-            "type": "schema",
-            "model_info": run_state.model_state.model_name_info(),
-        }
-        if new_schema != old_schema:
-            msg |= {"schema": new_schema}
+        msg = SchemaMessage(
+            session_id=ctx.session_id,
+            model_info=run_state.model_state.model_name_info(),
+            schema=new_schema if new_schema != old_schema else None,
+        )
         ctx.enqueue(msg)
 
     @contextmanager
@@ -135,21 +140,29 @@ class ViewAction(ModelAction):
             ctx = self.server_manager.view_state
             run_state.model_state.param_overrides = dict(ctx.param_overrides)
             ctx.enqueue(
-                {"type": "run_start", "params": dict(ctx.param_overrides)}
+                RunStartMessage(
+                    session_id=ctx.session_id,
+                    params=dict(ctx.param_overrides),
+                )
             )
             try:
                 yield
             except (Exception, SystemExit):
-                ctx.enqueue({"type": "run_error", "elapsed_ms": timer.end_str})
+                ctx.enqueue(
+                    RunErrorMessage(
+                        session_id=ctx.session_id,
+                        elapsed_ms=timer.end_str,
+                    )
+                )
                 raise
             else:
                 self._update_schema(ctx)
                 ctx.enqueue(
-                    {
-                        "type": "run_ok",
-                        "elapsed_ms": timer.end_str,
-                        "current_values": serializer.unstructure(
+                    RunOKMessage(
+                        session_id=ctx.session_id,
+                        elapsed_ms=timer.end_str,
+                        current_values=serializer.unstructure(
                             run_state.model_state.resolved_values
                         ),
-                    }
+                    )
                 )

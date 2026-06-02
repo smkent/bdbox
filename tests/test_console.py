@@ -14,6 +14,7 @@ from unittest.mock import patch
 import pytest
 
 from bdbox.console import LoggingStream, LogLevel, console
+from bdbox.protocol import ConsoleMessage
 from bdbox.view.console import WebStream
 
 if TYPE_CHECKING:
@@ -159,11 +160,7 @@ def test_web_stream_write() -> None:
     value = "I can't see a thing in this helmet"
     s = WebStream()
     assert s.write(value) == len(value)
-    assert s.q.get_nowait() == {
-        "type": "console",
-        "stream": "stdout",
-        "text": value,
-    }
+    assert s.q.get_nowait() == ConsoleMessage(text=value)
 
 
 @pytest.mark.parametrize(

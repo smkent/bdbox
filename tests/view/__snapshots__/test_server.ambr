@@ -648,7 +648,8 @@
   dict({
     'current_values': dict({
     }),
-    'elapsed_ms': 123,
+    'elapsed_ms': '123ms',
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
     'type': 'run_ok',
   })
 # ---
@@ -699,7 +700,8 @@
   dict({
     'current_values': dict({
     }),
-    'elapsed_ms': 123,
+    'elapsed_ms': '123ms',
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
     'type': 'run_ok',
   })
 # ---
@@ -793,6 +795,7 @@
   dict({
     'params': dict({
     }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
     'type': 'run_start',
   })
 # ---
@@ -886,6 +889,7 @@
   dict({
     'params': dict({
     }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
     'type': 'run_start',
   })
 # ---
