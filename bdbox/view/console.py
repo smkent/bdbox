@@ -4,23 +4,24 @@ from __future__ import annotations
 
 import queue
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+
+from bdbox.protocol import ConsoleMessage
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from bdbox.protocol import Message
 
 
 @dataclass
 class WebStream:
     """Write-only stream that forwards text to the WebSocket message queue."""
 
-    q: queue.Queue[Mapping[str, Any] | None] = field(
-        default_factory=queue.Queue
-    )
+    q: queue.Queue[Message | None] = field(default_factory=queue.Queue)
 
     def write(self, text: str) -> int:
+        message = ConsoleMessage(text=text)
         if text.strip():
-            self.q.put({"type": "console", "stream": "stdout", "text": text})
+            self.q.put(message)
         return len(text)
 
     def flush(self) -> None:

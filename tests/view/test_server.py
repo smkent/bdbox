@@ -17,6 +17,7 @@ from bdbox.model.field_factories import Float, Int
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
+from bdbox.protocol import RunOKMessage, RunStartMessage, protocol_serializer
 from bdbox.runner.state import run_state
 from bdbox.view.app import App
 from bdbox.view.routes import manager
@@ -201,7 +202,7 @@ def test_reset_params(wspt: WSParamTest) -> None:
 def test_unknown_message_type_ignored(wspt: WSParamTest) -> None:
     wspt.send(
         {"type": "detention_block", "value": "aa23"},
-        expect_overrides={},
+        expect_response=False,
         expect_event=False,
     )
 
@@ -253,15 +254,15 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
 
 
 def test_ws_broadcast_reaches_client(wspt: WSParamTest) -> None:
-    msg = {"type": "run_ok", "elapsed_ms": 123, "current_values": {}}
+    msg = RunOKMessage(session_id=TEST_SESSION_ID, elapsed_ms="123ms")
     wspt.view_state.msg_queue.put(msg)
-    assert wspt.recv() == msg
+    assert wspt.recv() == protocol_serializer.to_dict(msg)
 
 
 def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
-    msg = {"type": "run_start", "params": {}}
+    msg = RunStartMessage(session_id=TEST_SESSION_ID)
     with wspt.wsconn() as ws2:
         assert ws2.receive_json() == wspt.snapshot
         wspt.view_state.msg_queue.put(msg)
         wspt.recv()
-        assert ws2.receive_json() == msg
+        assert ws2.receive_json() == protocol_serializer.to_dict(msg)
