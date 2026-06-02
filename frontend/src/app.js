@@ -89,6 +89,10 @@ let latestSchema = null;
 let lastSessionId = null;
 
 function initJedison(detail) {
+  if (!(detail.schema && detail.schema.properties && detail.schema.required)) {
+    return;
+  }
+
   if (jedison) {
     jedison.destroy();
     jedison = null;
@@ -320,7 +324,7 @@ function initWs() {
       info.module = detail.model_info.module ?? null;
       info.cls = detail.model_info.cls ?? null;
     }
-    if (detail.schema !== undefined) {
+    if (detail.schema !== undefined && detail.schema !== null) {
       latestSchema = detail;
       if (paramsFormEl) {
         initJedison(detail);
