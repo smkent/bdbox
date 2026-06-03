@@ -16,9 +16,13 @@ if TYPE_CHECKING:
 
 @dataclass
 class Service(ABC):
+    def __post_init__(self) -> None:
+        dispatch.on_exit(self.stop)
+        self.start()
+
     @abstractmethod
     def start(self) -> None:
-        dispatch.on_exit(self.stop)
+        pass
 
     @abstractmethod
     def stop(self) -> None:

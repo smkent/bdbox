@@ -112,7 +112,6 @@ class ViewAction(ModelAction):
                 ),
                 open_browser=self.open_browser,
             )
-            self.server_manager.start()
 
     def _update_schema(self, ctx: ViewState) -> None:
         try:
