@@ -52,7 +52,6 @@ class ServerManager(Service):
         return f"http://localhost:{self.port}"
 
     def start(self) -> None:
-        super().start()
         app = App(self.view_state)
         self.server = UIServer(
             Config(
