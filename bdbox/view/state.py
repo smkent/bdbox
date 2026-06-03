@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from queue import Queue
 from typing import TYPE_CHECKING, Any
 from uuid import UUID, uuid4
@@ -20,7 +20,7 @@ else:
 
 if TYPE_CHECKING:
     from bdbox.model.parameters import Params
-    from bdbox.protocol import Message
+    from bdbox.protocol import Message, MessageWithSessionID
 
 
 @dataclass
@@ -38,8 +38,8 @@ class ViewState:
     def __post_init__(self) -> None:
         dispatch.on_exit(self.stop_queue, name="Stop ViewState message queue")
 
-    def enqueue(self, msg: Message) -> None:
-        self.msg_queue.put(msg)
+    def enqueue(self, msg: MessageWithSessionID) -> None:
+        self.msg_queue.put(replace(msg, session_id=self.session_id))
 
     def stop_queue(self) -> None:
         self.msg_queue.put(None)

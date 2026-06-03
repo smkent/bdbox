@@ -601,7 +601,7 @@
     'type': 'schema',
   })
 # ---
-# name: test_ws_broadcast_reaches_client[Model-param_overrides0]
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-param_overrides]
   dict({
     'current_values': dict({
       'count': 3,
@@ -644,16 +644,16 @@
     'type': 'schema',
   })
 # ---
-# name: test_ws_broadcast_reaches_client[Model-param_overrides0].1
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-param_overrides].1
   dict({
-    'current_values': dict({
+    'param_overrides': dict({
+      'foor': 'bar',
     }),
-    'elapsed_ms': '123ms',
     'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
-    'type': 'run_ok',
+    'type': 'param_overrides',
   })
 # ---
-# name: test_ws_broadcast_reaches_client[Params-param_overrides0]
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error]
   dict({
     'current_values': dict({
       'count': 3,
@@ -696,13 +696,439 @@
     'type': 'schema',
   })
 # ---
-# name: test_ws_broadcast_reaches_client[Params-param_overrides0].1
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error].1
+  dict({
+    'elapsed_ms': '234ms',
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'run_error',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': None,
+    'model_running': False,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok].1
   dict({
     'current_values': dict({
     }),
     'elapsed_ms': '123ms',
     'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
     'type': 'run_ok',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': None,
+    'model_running': False,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start].1
+  dict({
+    'params': dict({
+      'foo': 'bar',
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'run_start',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': None,
+    'model_running': False,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema].1
+  dict({
+    'current_values': dict({
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': '1977-05-25T11:38:00+00:00',
+    'model_running': True,
+    'schema': None,
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-param_overrides]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': None,
+    'model_running': False,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-param_overrides].1
+  dict({
+    'param_overrides': dict({
+      'foor': 'bar',
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'param_overrides',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': None,
+    'model_running': False,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error].1
+  dict({
+    'elapsed_ms': '234ms',
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'run_error',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': None,
+    'model_running': False,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok].1
+  dict({
+    'current_values': dict({
+    }),
+    'elapsed_ms': '123ms',
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'run_ok',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': None,
+    'model_running': False,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start].1
+  dict({
+    'params': dict({
+      'foo': 'bar',
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'run_start',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema]
+  dict({
+    'current_values': dict({
+      'count': 3,
+      'width': 10.0,
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': None,
+    'model_running': False,
+    'schema': dict({
+      'properties': dict({
+        'count': dict({
+          'default': 3,
+          'type': 'number',
+        }),
+        'width': dict({
+          'default': 10.0,
+          'type': 'number',
+        }),
+      }),
+      'required': list([
+        'count',
+        'width',
+      ]),
+      'type': 'object',
+      'x-presets': list([
+        dict({
+          'name': 'small',
+          'values': dict({
+            'count': 1,
+            'width': 5.0,
+          }),
+        }),
+      ]),
+    }),
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
+  })
+# ---
+# name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema].1
+  dict({
+    'current_values': dict({
+    }),
+    'model_info': dict({
+      'cls': None,
+      'file': None,
+      'module': None,
+    }),
+    'model_run_started': '1977-05-25T11:38:00+00:00',
+    'model_running': True,
+    'schema': None,
+    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
+    'type': 'schema',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0]

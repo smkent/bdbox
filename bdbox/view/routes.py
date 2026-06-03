@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, TextIO, cast
+from typing import TextIO, cast
 
 from cattrs.errors import BaseValidationError
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
@@ -27,9 +27,6 @@ from bdbox.serializer import serializer
 
 from .console import WebStream
 from .state import ViewState
-
-if TYPE_CHECKING:
-    from bdbox.protocol import Message
 
 routes_router = APIRouter()
 
@@ -163,7 +160,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
                     ),
                     model_running=run_state.model_state.model_running,
                     model_run_started=(
-                        run_state.model_state.timer.started_at.isoformat()
+                        run_state.model_state.timer.started_at
                         if run_state.model_state.timer
                         else None
                     ),

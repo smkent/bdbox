@@ -123,12 +123,12 @@ class ViewAction(ModelAction):
         old_schema = serializer.json_schema(ctx.model_class)
         ctx.current_values = dict(run_state.model_state.resolved_values)
         ctx.model_class = new_class
-        msg = SchemaMessage(
-            session_id=ctx.session_id,
-            model_info=run_state.model_state.model_name_info(),
-            schema=new_schema if new_schema != old_schema else None,
+        ctx.enqueue(
+            SchemaMessage(
+                model_info=run_state.model_state.model_name_info(),
+                schema=new_schema if new_schema != old_schema else None,
+            )
         )
-        ctx.enqueue(msg)
 
     @contextmanager
     def on_model_render(self) -> Iterator[None]:
@@ -139,27 +139,16 @@ class ViewAction(ModelAction):
                 return
             ctx = self.server_manager.view_state
             run_state.model_state.param_overrides = dict(ctx.param_overrides)
-            ctx.enqueue(
-                RunStartMessage(
-                    session_id=ctx.session_id,
-                    params=dict(ctx.param_overrides),
-                )
-            )
+            ctx.enqueue(RunStartMessage(params=dict(ctx.param_overrides)))
             try:
                 yield
             except (Exception, SystemExit):
-                ctx.enqueue(
-                    RunErrorMessage(
-                        session_id=ctx.session_id,
-                        elapsed_ms=timer.end_str,
-                    )
-                )
+                ctx.enqueue(RunErrorMessage(elapsed_ms=timer.end_str))
                 raise
             else:
                 self._update_schema(ctx)
                 ctx.enqueue(
                     RunOKMessage(
-                        session_id=ctx.session_id,
                         elapsed_ms=timer.end_str,
                         current_values=serializer.unstructure(
                             run_state.model_state.resolved_values
