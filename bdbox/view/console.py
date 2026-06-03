@@ -19,9 +19,8 @@ class WebStream:
     q: queue.Queue[Message | None] = field(default_factory=queue.Queue)
 
     def write(self, text: str) -> int:
-        message = ConsoleMessage(text=text)
         if text.strip():
-            self.q.put(message)
+            self.q.put(ConsoleMessage(text=text))
         return len(text)
 
     def flush(self) -> None:
