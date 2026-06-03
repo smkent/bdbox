@@ -15,6 +15,7 @@ from bdbox.errors import InternalError
 @dataclass
 class Message:
     type: ClassVar[str] = ""
+    log_ok: ClassVar[bool] = True
 
     def __post_init__(self) -> None:
         if not self.type:
@@ -39,6 +40,7 @@ class TerminalSizeMessage(Message):
 @dataclass
 class ConsoleMessage(Message):
     type: ClassVar[str] = "console"
+    log_ok: ClassVar[bool] = False
     text: str
     stream: Literal["stdout"] = "stdout"
 
