@@ -5,6 +5,7 @@ from __future__ import annotations
 import sys
 from contextlib import contextmanager
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
 from uuid import UUID
 
@@ -17,7 +18,19 @@ from bdbox.model.field_factories import Float, Int
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
-from bdbox.protocol import RunOKMessage, RunStartMessage, protocol_serializer
+from bdbox.protocol import (
+    Message,
+    MessageWithSessionID,
+    ParamOverridesMessage,
+    ResetParamsMessage,
+    RunErrorMessage,
+    RunOKMessage,
+    RunStartMessage,
+    SchemaMessage,
+    SelectPresetMessage,
+    UpdateParamMessage,
+    protocol_serializer,
+)
 from bdbox.runner.state import run_state
 from bdbox.view.app import App
 from bdbox.view.routes import manager
@@ -68,7 +81,7 @@ class WSParamTest:
 
     def send(
         self,
-        msg: dict[str, Any],
+        msg: Message | dict[str, Any],
         expect_overrides: dict[str, Any] | None = None,
         *,
         expect_response: bool = True,
@@ -76,6 +89,8 @@ class WSParamTest:
     ) -> Any:
         if not self.ws:
             raise InternalError("Websocket connection not available")
+        if isinstance(msg, Message):
+            msg = protocol_serializer.unstructure(msg)
         self.ws.send_json(msg)
         ack = None
         if expect_response:
@@ -149,12 +164,12 @@ def view_state(
 def test_update_param_accumulates(wspt: WSParamTest) -> None:
     assert not wspt.view_state.rerender_event.is_set()
     wspt.send(
-        {"type": "update_param", "field": "width", "value": 50.0},
+        UpdateParamMessage(field="width", value=50.0),
         expect_overrides={"width": 50.0},
         expect_event=True,
     )
     wspt.send(
-        {"type": "update_param", "field": "count", "value": 2},
+        UpdateParamMessage(field="count", value=2),
         expect_overrides={"width": 50.0, "count": 2},
         expect_event=True,
     )
@@ -167,7 +182,7 @@ def test_update_param_accumulates(wspt: WSParamTest) -> None:
 )
 def test_select_preset_replaces_overrides(wspt: WSParamTest) -> None:
     wspt.send(
-        {"type": "select_preset", "preset": "small"},
+        SelectPresetMessage(preset="small"),
         expect_overrides={"width": 5.0, "count": 1},
         expect_event=True,
     )
@@ -175,7 +190,7 @@ def test_select_preset_replaces_overrides(wspt: WSParamTest) -> None:
 
 def test_select_preset_unknown_ignored(wspt: WSParamTest) -> None:
     wspt.send(
-        {"type": "select_preset", "preset": "does_not_exist"},
+        SelectPresetMessage(preset="does_not_exist"),
         expect_overrides={},
         expect_event=False,
     )
@@ -184,7 +199,7 @@ def test_select_preset_unknown_ignored(wspt: WSParamTest) -> None:
 @pytest.mark.parametrize("model_class", [None], indirect=True)
 def test_select_preset_no_model_class(wspt: WSParamTest) -> None:
     wspt.send(
-        {"type": "select_preset", "preset": "small"},
+        SelectPresetMessage(preset="small"),
         expect_overrides={},
         expect_event=False,
     )
@@ -196,7 +211,7 @@ def test_select_preset_no_model_class(wspt: WSParamTest) -> None:
     indirect=True,
 )
 def test_reset_params(wspt: WSParamTest) -> None:
-    wspt.send({"type": "reset_params"}, expect_overrides={}, expect_event=True)
+    wspt.send(ResetParamsMessage(), expect_overrides={}, expect_event=True)
 
 
 def test_unknown_message_type_ignored(wspt: WSParamTest) -> None:
@@ -211,7 +226,7 @@ def test_malformed_json_ignored(wspt: WSParamTest) -> None:
     assert wspt.ws
     wspt.ws.send_text("not valid json {{{")
     wspt.send(
-        {"type": "update_param", "field": "width", "value": 50.0},
+        UpdateParamMessage(field="width", value=50.0),
         expect_overrides={"width": 50.0},
         expect_event=True,
     )
@@ -226,19 +241,19 @@ def test_missing_message_fields_ignored(wspt: WSParamTest) -> None:
 @pytest.mark.parametrize("model_class", [None], indirect=True)
 def test_ws_connect_no_model_sends_no_schema(wspt: WSParamTest) -> None:
     wspt.send(
-        {"type": "update_param", "field": "width", "value": 5.0},
+        UpdateParamMessage(field="width", value=5.0),
         expect_overrides={"width": 5.0},
         expect_event=True,
     )
 
 
 def test_ws_update_param(wspt: WSParamTest) -> None:
-    wspt.send({"type": "update_param", "field": "width", "value": 75.0})
+    wspt.send(UpdateParamMessage(field="width", value=75.0))
 
 
 def test_ws_select_preset(wspt: WSParamTest) -> None:
     wspt.send(
-        {"type": "select_preset", "preset": "small"},
+        SelectPresetMessage(preset="small"),
         expect_overrides={"width": 5.0, "count": 1},
         expect_event=True,
     )
@@ -250,19 +265,49 @@ def test_ws_select_preset(wspt: WSParamTest) -> None:
     indirect=True,
 )
 def test_ws_reset_params(wspt: WSParamTest) -> None:
-    wspt.send({"type": "reset_params"}, expect_overrides={}, expect_event=True)
+    wspt.send(ResetParamsMessage(), expect_overrides={}, expect_event=True)
 
 
-def test_ws_broadcast_reaches_client(wspt: WSParamTest) -> None:
-    msg = RunOKMessage(session_id=TEST_SESSION_ID, elapsed_ms="123ms")
-    wspt.view_state.msg_queue.put(msg)
-    assert wspt.recv() == protocol_serializer.to_dict(msg)
+@pytest.mark.parametrize(
+    "message",
+    [
+        pytest.param(
+            SchemaMessage(
+                model_running=True,
+                model_run_started=(
+                    datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
+                ),
+            ),
+            id="schema",
+        ),
+        pytest.param(
+            ParamOverridesMessage(param_overrides={"foor": "bar"}),
+            id="param_overrides",
+        ),
+        pytest.param(RunStartMessage(params={"foo": "bar"}), id="run_start"),
+        pytest.param(RunOKMessage(elapsed_ms="123ms"), id="run_ok"),
+        pytest.param(RunErrorMessage(elapsed_ms="234ms"), id="run_error"),
+    ],
+)
+def test_ws_broadcast_reaches_client(
+    wspt: WSParamTest, message: MessageWithSessionID
+) -> None:
+    wspt.view_state.enqueue(message)
+    received_data = wspt.recv()
+    assert received_data.pop("session_id") == str(TEST_SESSION_ID)
+    received_data["session_id"] = None
+    assert received_data == protocol_serializer.to_dict(message)
+    assert protocol_serializer.from_dict(received_data) == message
 
 
 def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
-    msg = RunStartMessage(session_id=TEST_SESSION_ID)
+    message = RunStartMessage()
     with wspt.wsconn() as ws2:
         assert ws2.receive_json() == wspt.snapshot
-        wspt.view_state.msg_queue.put(msg)
+        wspt.view_state.enqueue(message)
         wspt.recv()
-        assert ws2.receive_json() == protocol_serializer.to_dict(msg)
+        received_data = ws2.receive_json()
+        assert received_data.pop("session_id") == str(TEST_SESSION_ID)
+        received_data["session_id"] = None
+        assert received_data == protocol_serializer.to_dict(message)
+        assert protocol_serializer.from_dict(received_data) == message
