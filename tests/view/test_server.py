@@ -33,7 +33,6 @@ from bdbox.protocol import (
 )
 from bdbox.runner.state import run_state
 from bdbox.view.app import App
-from bdbox.view.routes import manager
 from bdbox.view.state import ViewState
 
 if sys.version_info >= (3, 11):
@@ -116,7 +115,6 @@ class WSParamTest:
 def wspt(
     snapshot: SnapshotAssertion, view_state: ViewState
 ) -> Iterator[WSParamTest]:
-    manager.active.clear()
     with WSParamTest(snapshot=snapshot, view_state=view_state)() as wspt:
         yield wspt
 

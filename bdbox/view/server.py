@@ -18,10 +18,15 @@ if TYPE_CHECKING:
     from .state import ViewState
 
 
-class _Server(Server):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.startup_complete = Event(name="server_startup_complete")
+@dataclass
+class UIServer(Server):
+    config: Config
+    startup_complete: Event = field(
+        default_factory=lambda: Event(name="server_startup_complete")
+    )
+
+    def __post_init__(self) -> None:
+        super().__init__(config=self.config)
 
     async def startup(self, sockets: Any = None) -> None:
         try:
@@ -39,7 +44,7 @@ class ServerManager(Service):
     _STARTUP_TIMEOUT: ClassVar[float] = 10.0
     _STOP_TIMEOUT: ClassVar[float] = 5.0
 
-    server: _Server | None = field(default=None, init=False, repr=False)
+    server: UIServer | None = field(default=None, init=False, repr=False)
     thread: Thread | None = field(default=None, init=False, repr=False)
 
     @property
@@ -49,7 +54,7 @@ class ServerManager(Service):
     def start(self) -> None:
         super().start()
         app = App(self.view_state)
-        self.server = _Server(
+        self.server = UIServer(
             Config(
                 app=app, host="localhost", port=self.port, log_level="error"
             )
