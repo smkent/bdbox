@@ -19,6 +19,7 @@ else:
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator, Sequence
+    from types import TracebackType
 
     import pytest
 
@@ -152,7 +153,9 @@ class MockOcpVscode(ModuleType):
 
 @dataclass
 class ThreadExceptions:
-    exceptions: list[BaseException] = field(default_factory=list, init=False)
+    exceptions: list[
+        tuple[type[BaseException], BaseException, TracebackType | None]
+    ] = field(default_factory=list, init=False)
 
     class MissingExceptionError(Exception):
         pass
@@ -161,11 +164,17 @@ class ThreadExceptions:
     def catch(self) -> Iterator[None]:
         def excepthook(args: threading.ExceptHookArgs) -> None:
             self.exceptions.append(
-                args.exc_value or Exception("Exception value missing")
+                (
+                    args.exc_type,
+                    args.exc_value or Exception("Exception value missing"),
+                    args.exc_traceback,
+                )
             )
 
         with patch.object(threading, "excepthook", excepthook):
             yield
+        for exc_info in self.exceptions:
+            raise exc_info[1].with_traceback(exc_info[2])
         assert not self.exceptions
 
     @contextmanager
@@ -177,6 +186,6 @@ class ThreadExceptions:
             yield
         if not context_exceptions:
             raise self.MissingExceptionError(exc_type)
-        for exception in context_exceptions:
+        for _, exception, _ in context_exceptions:
             if not isinstance(exception, exc_type):
                 raise exception
