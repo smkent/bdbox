@@ -2,23 +2,32 @@
 
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass, field, replace
 from queue import Queue
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TextIO, cast
 from uuid import UUID, uuid4
 
-from fastapi import FastAPI, Request
-
+from bdbox.console import console, log
 from bdbox.dispatch import Event, dispatch
 from bdbox.errors import InternalError
+from bdbox.protocol import (
+    Message,
+    ParamOverridesMessage,
+    ResetParamsMessage,
+    SchemaMessage,
+    SelectPresetMessage,
+    TerminalSizeMessage,
+    UpdateParamMessage,
+)
+from bdbox.runner.state import run_state
+from bdbox.serializer import serializer
 
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
+from .console import WebStream
+from .websocket import WebSocketConnection
 
 if TYPE_CHECKING:
+    from fastapi import WebSocket
+
     from bdbox.model.parameters import Params
     from bdbox.protocol import Message, MessageWithSessionID
 
@@ -44,10 +53,63 @@ class ViewState:
     def stop_queue(self) -> None:
         self.msg_queue.put(None)
 
-    @classmethod
-    def get(cls, obj: FastAPI | Request) -> Self:
-        if isinstance(obj, Request):
-            obj = obj.app
-        if isinstance(obj, FastAPI):
-            return obj.state.view_state
-        raise InternalError(f"{cls.__name__} not found")
+    async def handle_client_connection(self, websocket: WebSocket) -> None:
+        view_websocket = WebSocketConnection(websocket)
+        if self.model_class:
+            await view_websocket.send_message(
+                SchemaMessage(
+                    session_id=self.session_id,
+                    schema=run_state.model_state.schema,
+                    current_values=serializer.unstructure(self.current_values),
+                    model_running=run_state.model_state.model_running,
+                    model_run_started=(
+                        run_state.model_state.timer.started_at
+                        if run_state.model_state.timer
+                        else None
+                    ),
+                    model_info=run_state.model_state.model_name_info(),
+                )
+            )
+        while True:
+            if message := await view_websocket.receive_message():
+                self.handle_client_message(view_websocket, message)
+                await view_websocket.send_message(
+                    ParamOverridesMessage(
+                        session_id=self.session_id,
+                        param_overrides=dict(self.param_overrides),
+                    )
+                )
+
+    def handle_client_message(
+        self, view_websocket: WebSocketConnection, msg: Message
+    ) -> None:
+        if isinstance(msg, TerminalSizeMessage):
+            console.add_web_output(
+                id(view_websocket.websocket),
+                cast("TextIO", WebStream(self.msg_queue)),
+                msg.cols,
+            )
+        elif isinstance(msg, UpdateParamMessage):
+            self.param_overrides[msg.field] = msg.value
+            self.rerender_event.set()
+            log.debug(f"Parameter updated: {msg.field} = {msg.value}")
+        elif isinstance(msg, SelectPresetMessage):
+            if self.model_class:
+                for preset in self.model_class.presets:
+                    if preset.name == msg.preset:
+                        self.param_overrides.clear()
+                        self.param_overrides.update(
+                            {
+                                name: serializer.unstructure(value)
+                                for name, value in preset.values.items()
+                            }
+                        )
+                        self.rerender_event.set()
+                        log.debug(f"Preset selected: {preset.name}")
+                        break
+        elif isinstance(msg, ResetParamsMessage):
+            self.param_overrides.clear()
+            self.rerender_event.set()
+            log.debug("Parameters reset")
+        else:
+            raise InternalError(f"Unable to handle message {msg}")
