@@ -1,20 +1,22 @@
+import type { IncomingMessage, OutgoingMessage } from "./protocol.js";
+
 const BASE_DELAY_MS = 1000;
 const MAX_DELAY_MS = 30000;
 
-let _ws = null;
+let _ws: WebSocket | null = null;
 let retryCount = 0;
 
-function getRetryDelay() {
+function getRetryDelay(): number {
   return Math.min(BASE_DELAY_MS * 2 ** retryCount, MAX_DELAY_MS);
 }
 
-export function sendWs(msg) {
+export function sendWs(msg: OutgoingMessage): void {
   if (_ws && _ws.readyState === WebSocket.OPEN) {
     _ws.send(JSON.stringify(msg));
   }
 }
 
-export function connectWs() {
+export function connectWs(): void {
   window.dispatchEvent(new CustomEvent("bdbox:ws_connecting"));
   _ws = new WebSocket(`ws://${window.location.host}/ws`);
 
@@ -24,9 +26,9 @@ export function connectWs() {
   });
 
   _ws.addEventListener("message", ({ data }) => {
-    let msg;
+    let msg: IncomingMessage;
     try {
-      msg = JSON.parse(data);
+      msg = JSON.parse(data) as IncomingMessage;
     } catch {
       return;
     }
@@ -44,6 +46,6 @@ export function connectWs() {
   });
 
   _ws.addEventListener("error", () => {
-    _ws.close();
+    _ws!.close();
   });
 }

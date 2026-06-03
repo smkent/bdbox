@@ -1,4 +1,5 @@
-import { GoldenLayout } from "golden-layout";
+import { GoldenLayout, ComponentContainer } from "golden-layout";
+import type { LayoutConfig } from "golden-layout";
 import Alpine from "alpinejs";
 import Jedison from "jedison";
 import { Terminal } from "@xterm/xterm";
@@ -8,6 +9,7 @@ import "golden-layout/dist/css/themes/goldenlayout-dark-theme.css";
 import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { connectWs, sendWs } from "./ws.js";
+import type { SchemaMessage } from "./protocol.js";
 
 const LAYOUT_VERSION = 1;
 const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
@@ -52,10 +54,10 @@ const DEFAULT_LAYOUT = {
 
 // The viewer iframe lives outside GoldenLayout's DOM so maximize/restore
 // doesn't reload it. Repositioned to track container.element on each frame.
-let viewerIframe = null;
-let viewerContainerEl = null;
+let viewerIframe: HTMLIFrameElement | null = null;
+let viewerContainerEl: HTMLElement | null = null;
 
-function positionViewerIframe() {
+function positionViewerIframe(): void {
   if (!viewerIframe || !viewerContainerEl) return;
 
   // Hide if a non-viewer panel is maximised (would otherwise float above it)
@@ -81,14 +83,14 @@ function positionViewerIframe() {
 }
 
 // Params panel state
-let paramsFormEl = null;
-let jedison = null;
-let currentValues = {};
-let paramOverrides = {};
-let latestSchema = null;
-let lastSessionId = null;
+let paramsFormEl: HTMLElement | null = null;
+let jedison: JedisonInstance | null = null;
+let currentValues: Record<string, unknown> = {};
+let paramOverrides: Record<string, unknown> = {};
+let latestSchema: SchemaMessage | null = null;
+let lastSessionId: string | null = null;
 
-function initJedison(detail) {
+function initJedison(detail: SchemaMessage): void {
   if (!(detail.schema && detail.schema.properties && detail.schema.required)) {
     return;
   }
@@ -98,15 +100,15 @@ function initJedison(detail) {
     jedison = null;
   }
 
-  const schemaData = detail.schema || {};
-  currentValues = detail.current_values || {};
+  const schemaData = detail.schema;
+  currentValues = detail.current_values;
   paramOverrides = {};
-  paramsFormEl.innerHTML = "";
+  paramsFormEl!.innerHTML = "";
 
   // Controls bar: preset buttons + reset
   const controls = document.createElement("div");
   controls.className = "params-controls";
-  const presets = schemaData["x-presets"] || [];
+  const presets = schemaData["x-presets"] ?? [];
   presets.forEach(({ name, description }) => {
     const btn = document.createElement("button");
     btn.className = "params-preset-btn";
@@ -122,11 +124,11 @@ function initJedison(detail) {
   resetBtn.textContent = "Reset";
   resetBtn.addEventListener("click", () => sendWs({ type: "reset_params" }));
   controls.appendChild(resetBtn);
-  paramsFormEl.appendChild(controls);
+  paramsFormEl!.appendChild(controls);
 
   // Jedison form
   const jedContainer = document.createElement("div");
-  paramsFormEl.appendChild(jedContainer);
+  paramsFormEl!.appendChild(jedContainer);
 
   const schema = {
     type: "object",
@@ -154,49 +156,59 @@ function initJedison(detail) {
   });
 }
 
-function registerComponents(layout) {
-  layout.registerComponentFactoryFunction("viewer", (container) => {
-    const { viewerPort } = window.__BDBOX__;
-    viewerContainerEl = container.element;
+function registerComponents(layout: GoldenLayout): void {
+  layout.registerComponentFactoryFunction(
+    "viewer",
+    (container: ComponentContainer) => {
+      const { viewerPort } = window.__BDBOX__;
+      viewerContainerEl = container.element;
 
-    if (!viewerIframe) {
-      viewerIframe = document.createElement("iframe");
-      viewerIframe.src = `http://localhost:${viewerPort}/viewer`;
-      Object.assign(viewerIframe.style, {
-        position: "fixed",
-        border: "none",
-        display: "none",
-        zIndex: "45",
-      });
-      document.body.appendChild(viewerIframe);
-    }
+      if (!viewerIframe) {
+        viewerIframe = document.createElement("iframe");
+        viewerIframe.src = `http://localhost:${viewerPort}/viewer`;
+        Object.assign(viewerIframe.style, {
+          position: "fixed",
+          border: "none",
+          display: "none",
+          zIndex: "45",
+        });
+        document.body.appendChild(viewerIframe);
+      }
 
-    requestAnimationFrame(positionViewerIframe);
-  });
+      requestAnimationFrame(positionViewerIframe);
+      return undefined;
+    },
+  );
 
-  layout.registerComponentFactoryFunction("params", (container) => {
-    const div = document.createElement("div");
-    div.className = "params-panel";
-    div.innerHTML = `
+  layout.registerComponentFactoryFunction(
+    "params",
+    (container: ComponentContainer) => {
+      const div = document.createElement("div");
+      div.className = "params-panel";
+      div.innerHTML = `
       <div x-data="{ get modelName() { const i = $store.modelInfo; const b = i.module ?? i.file; return b && i.cls ? b + ' · ' + i.cls : i.cls ?? b ?? null; } }" class="status-bar">
         <span class="status-model-name" x-show="modelName" x-text="modelName" :title="modelName"></span>
       </div>
       <div class="params-form"></div>
     `;
-    container.element.appendChild(div);
-    Alpine.initTree(div);
+      container.element.appendChild(div);
+      Alpine.initTree(div);
 
-    paramsFormEl = div.querySelector(".params-form");
-    if (latestSchema) {
-      initJedison(latestSchema);
-    }
-  });
+      paramsFormEl = div.querySelector(".params-form");
+      if (latestSchema) {
+        initJedison(latestSchema);
+      }
+      return undefined;
+    },
+  );
 
-  layout.registerComponentFactoryFunction("console", (container) => {
-    const div = document.createElement("div");
-    div.className = "console-panel";
+  layout.registerComponentFactoryFunction(
+    "console",
+    (container: ComponentContainer) => {
+      const div = document.createElement("div");
+      div.className = "console-panel";
 
-    div.innerHTML = `
+      div.innerHTML = `
       <div class="status-bar">
         <div class="status-run" x-data="{ formatElapsed(s) { const m = Math.floor(s / 60) % 60, h = Math.floor(s / 3600) % 24, d = Math.floor(s / 86400); const p = []; if (d) p.push(d + 'd'); if (h) p.push(h + 'h'); if (m) p.push(m + 'm'); p.push((s % 60) + 's'); return p.join(' '); } }">
           <span x-show="$store.runStatus.wsState === 'connecting'" class="status-connecting"><span class="status-spinner"></span>Connecting…</span>
@@ -209,49 +221,51 @@ function registerComponents(layout) {
       </div>
       <div class="console-terminal"></div>
     `;
-    container.element.appendChild(div);
-    Alpine.initTree(div);
+      container.element.appendChild(div);
+      Alpine.initTree(div);
 
-    const terminalEl = div.querySelector(".console-terminal");
+      const terminalEl = div.querySelector(".console-terminal") as HTMLElement;
 
-    const terminal = new Terminal({
-      convertEol: true,
-      disableStdin: true,
-      scrollback: 1000,
-      theme: { background: "#1a1a1a", foreground: "#ccc" },
-      fontFamily: "monospace",
-      fontSize: 12,
-    });
-    const fitAddon = new FitAddon();
-    terminal.loadAddon(fitAddon);
-    terminal.open(terminalEl);
-    fitAddon.fit();
-
-    const sendSize = () =>
-      sendWs({
-        type: "terminal_size",
-        cols: terminal.cols,
-        rows: terminal.rows,
+      const terminal = new Terminal({
+        convertEol: true,
+        disableStdin: true,
+        scrollback: 1000,
+        theme: { background: "#1a1a1a", foreground: "#ccc" },
+        fontFamily: "monospace",
+        fontSize: 12,
       });
-
-    const fit = () => {
+      const fitAddon = new FitAddon();
+      terminal.loadAddon(fitAddon);
+      terminal.open(terminalEl);
       fitAddon.fit();
-      sendSize();
-    };
-    new ResizeObserver(fit).observe(terminalEl);
-    container.on("resize", fit);
 
-    window.addEventListener("bdbox:ws_open", sendSize);
-    window.addEventListener("bdbox:run_start", () => terminal.clear());
-    window.addEventListener("bdbox:clear_console", () => terminal.clear());
-    window.addEventListener("bdbox:console", ({ detail }) => {
-      terminal.write(detail.text);
-    });
-  });
+      const sendSize = (): void =>
+        sendWs({
+          type: "terminal_size",
+          cols: terminal.cols,
+          rows: terminal.rows,
+        });
+
+      const fit = (): void => {
+        fitAddon.fit();
+        sendSize();
+      };
+      new ResizeObserver(fit).observe(terminalEl);
+      container.on("resize", fit);
+
+      window.addEventListener("bdbox:ws_open", sendSize);
+      window.addEventListener("bdbox:run_start", () => terminal.clear());
+      window.addEventListener("bdbox:clear_console", () => terminal.clear());
+      window.addEventListener("bdbox:console", ({ detail }) => {
+        terminal.write(detail.text);
+      });
+      return undefined;
+    },
+  );
 }
 
-function initLayout() {
-  const container = document.getElementById("layout");
+function initLayout(): void {
+  const container = document.getElementById("layout") as HTMLElement;
   const layout = new GoldenLayout(container);
 
   registerComponents(layout);
@@ -260,14 +274,14 @@ function initLayout() {
   let loaded = false;
   if (saved) {
     try {
-      layout.loadLayout(JSON.parse(saved));
+      layout.loadLayout(JSON.parse(saved) as LayoutConfig);
       loaded = true;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
     }
   }
   if (!loaded) {
-    layout.loadLayout(DEFAULT_LAYOUT);
+    layout.loadLayout(DEFAULT_LAYOUT as unknown as LayoutConfig);
   }
 
   layout.on("stateChanged", () => {
@@ -282,7 +296,7 @@ function initLayout() {
   }).observe(container);
 }
 
-function initIframeDragFix() {
+function initIframeDragFix(): void {
   document.addEventListener("mousedown", () => {
     document.querySelectorAll("iframe").forEach((f) => {
       f.style.pointerEvents = "none";
@@ -295,7 +309,7 @@ function initIframeDragFix() {
   });
 }
 
-function initWs() {
+function initWs(): void {
   window.addEventListener("bdbox:schema", ({ detail }) => {
     if (detail.session_id !== lastSessionId) {
       window.dispatchEvent(new CustomEvent("bdbox:clear_console"));
@@ -308,7 +322,7 @@ function initWs() {
           : Date.now();
         store.runElapsedS = 0;
         tickInterval = setInterval(() => {
-          store.runElapsedS = Math.round((Date.now() - runStartedAt) / 1000);
+          store.runElapsedS = Math.round((Date.now() - runStartedAt!) / 1000);
         }, 1000);
       } else {
         store.state = "idle";
@@ -347,7 +361,7 @@ function initWs() {
     runStartedAt = Date.now();
     store.runElapsedS = 0;
     tickInterval = setInterval(() => {
-      store.runElapsedS = Math.round((Date.now() - runStartedAt) / 1000);
+      store.runElapsedS = Math.round((Date.now() - runStartedAt!) / 1000);
     }, 1000);
   });
 
@@ -378,9 +392,9 @@ function initWs() {
     }
   });
 
-  let tickInterval = null;
-  let retryAt = null;
-  let runStartedAt = null;
+  let tickInterval: ReturnType<typeof setInterval> | null = null;
+  let retryAt: number | null = null;
+  let runStartedAt: number | null = null;
 
   window.addEventListener("bdbox:ws_connecting", () => {
     if (tickInterval) {
@@ -399,9 +413,9 @@ function initWs() {
     retryAt = Date.now() + detail.retryInMs;
     store.retryIn = Math.round(detail.retryInMs / 1000);
     tickInterval = setInterval(() => {
-      store.retryIn = Math.max(0, Math.round((retryAt - Date.now()) / 1000));
+      store.retryIn = Math.max(0, Math.round((retryAt! - Date.now()) / 1000));
       if (store.retryIn <= 0) {
-        clearInterval(tickInterval);
+        clearInterval(tickInterval!);
         tickInterval = null;
       }
     }, 1000);
@@ -411,9 +425,9 @@ function initWs() {
 }
 
 Alpine.store("runStatus", {
-  state: "idle",
+  state: "idle" as RunStatusStore["state"],
   elapsedMs: "",
-  wsState: "connecting",
+  wsState: "connecting" as RunStatusStore["wsState"],
   retryIn: 0,
   runElapsedS: 0,
 });
