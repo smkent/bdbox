@@ -94,9 +94,7 @@ class Field:
         step: float | None = None,
         description: str | None = None,
     ) -> object:
-        arg_config = {}
-        if description is not None:
-            arg_config["help"] = description
+        metavar = None
         if self.value_type and (
             min is not None or max is not None or step is not None
         ):
@@ -108,8 +106,7 @@ class Field:
                 metavar += f" <= {max}"
             if step is not None:
                 metavar += f" ({step})"
-            arg_config["metavar"] = metavar
-        return tyro.conf.arg(**arg_config)
+        return tyro.conf.arg(help=description, metavar=metavar)
 
     def _validate_number(
         self,
