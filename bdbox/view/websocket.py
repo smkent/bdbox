@@ -19,8 +19,9 @@ class WebSocketConnection:
 
     async def send_message(self, message: Message) -> None:
         msg_json = protocol_serializer.to_dict(message)
-        log.debug("Sent %s", msg_json["type"])
-        log.trace(json.dumps(msg_json, indent=4))
+        if message.log_ok:
+            log.debug("Sent %s", msg_json["type"])
+            log.trace(json.dumps(msg_json, indent=4))
         return await self.websocket.send_json(msg_json)
 
     async def receive_message(self) -> Message | None:
@@ -49,9 +50,12 @@ class WebSocketConnectionManager:
             self.connections.remove(ws)
 
     async def send(self, message: Message) -> None:
-        log.debug("Sent %s (%d clients)", message.type, len(self.connections))
         msg_json = protocol_serializer.to_dict(message)
-        log.trace(json.dumps(msg_json, indent=4))
+        if message.log_ok:
+            log.debug(
+                "Sent %s (%d clients)", message.type, len(self.connections)
+            )
+            log.trace(json.dumps(msg_json, indent=4))
         for ws in list(self.connections):
             try:
                 await ws.send_json(msg_json)
