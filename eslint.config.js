@@ -1,11 +1,14 @@
 import js from "@eslint/js";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 
-export default [
+export default tseslint.config(
   js.configs.recommended,
+  tseslint.configs.recommended,
   {
     languageOptions: {
       globals: globals.browser,
     },
+    files: ["frontend/src/**/*.{ts,js}"],
   },
-];
+);

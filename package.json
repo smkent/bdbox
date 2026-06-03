@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild frontend/src/app.js --bundle --minify --outdir=bdbox/view/static/ --loader:.png=dataurl",
-    "dev": "esbuild frontend/src/app.js --bundle --watch --outdir=bdbox/view/static/ --loader:.png=dataurl",
+    "build": "esbuild frontend/src/app.ts --bundle --minify --outdir=bdbox/view/static/ --loader:.png=dataurl",
+    "dev": "esbuild frontend/src/app.ts --bundle --watch --outdir=bdbox/view/static/ --loader:.png=dataurl",
+    "typecheck": "tsc --noEmit",
     "lint:fix": "eslint --fix frontend/",
-    "format": "prettier --write frontend/ package.json eslint.config.js"
+    "format": "prettier --write frontend/ package.json eslint.config.js tsconfig.json"
   },
   "dependencies": {
     "@xterm/addon-fit": "^0.11.0",
@@ -21,6 +22,8 @@
     "esbuild": "^0.25.0",
     "eslint": "^10.2.1",
     "globals": "^17.5.0",
-    "prettier": "^3.8.3"
+    "prettier": "^3.8.3",
+    "typescript": "^5.8.0",
+    "typescript-eslint": "^8.0.0"
   }
 }
