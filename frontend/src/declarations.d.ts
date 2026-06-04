@@ -1,4 +1,5 @@
 import type {
+  ConnectedMessage,
   ConsoleMessage,
   ParamOverridesMessage,
   RunErrorMessage,
@@ -14,6 +15,7 @@ declare global {
     "bdbox:ws_close": CustomEvent<{ retryInMs: number }>;
     "bdbox:clear_console": CustomEvent;
     "bdbox:console": CustomEvent<ConsoleMessage>;
+    "bdbox:hello": CustomEvent<ConnectedMessage>;
     "bdbox:schema": CustomEvent<SchemaMessage>;
     "bdbox:param_overrides": CustomEvent<ParamOverridesMessage>;
     "bdbox:run_start": CustomEvent<RunStartMessage>;

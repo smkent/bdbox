@@ -33,6 +33,17 @@ else:
     from typing_extensions import Self
 
 
+def _bdbox_version() -> str:
+    from bdbox import version  # noqa: PLC0415
+
+    return version
+
+
+@dataclass
+class VersionInfo:
+    bdbox: str = field(default_factory=_bdbox_version)
+
+
 @dataclass
 class ModelDisplayInfo:
     filename: Annotated[str | None, override(rename="file")] = None
@@ -86,12 +97,18 @@ class BrowserModelMessage(BrowserMessage, ModelMessage):
 
 @dataclass
 class ServerMessage(Message):
-    session_id: UUID | None = field(default=None, kw_only=True)
+    pass
 
 
 @dataclass
 class ServerModelMessage(ServerMessage, ModelMessage):
     pass
+
+
+@dataclass
+class ConnectedMessage(ServerMessage, type="hello"):
+    session_id: UUID | None = field(default=None, kw_only=True)
+    version: VersionInfo = field(default_factory=VersionInfo)
 
 
 @dataclass
