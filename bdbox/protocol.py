@@ -159,13 +159,13 @@ class RunStartMessage(ServerModelMessage, type="run_start"):
 
 @dataclass
 class RunOKMessage(ServerModelMessage, type="run_ok"):
-    elapsed_ms: str
+    elapsed_ms: int
     current_values: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class RunErrorMessage(ServerModelMessage, type="run_error"):
-    elapsed_ms: str
+    elapsed_ms: int
 
 
 class ProtocolConverter(cattrs.Converter):

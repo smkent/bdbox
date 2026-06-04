@@ -96,13 +96,32 @@ export interface RunStartMessage {
 
 export interface RunOKMessage {
   type: "run_ok";
-  elapsed_ms: string;
+  elapsed_ms: number;
   current_values: Record<string, unknown>;
 }
 
 export interface RunErrorMessage {
   type: "run_error";
-  elapsed_ms: string;
+  elapsed_ms: number;
+}
+
+export function formatElapsedMs(ms: number): string {
+  if (ms < 1000) return `${Math.floor(ms)}ms`;
+  if (ms < 10_000) return `${(ms / 1000).toFixed(1)}s`;
+  const totalS = Math.floor(ms / 1000);
+  if (totalS < 60) return `${totalS}s`;
+  const s = totalS % 60;
+  const totalM = Math.floor(totalS / 60);
+  const m = totalM % 60;
+  const totalH = Math.floor(totalM / 60);
+  const h = totalH % 24;
+  const d = Math.floor(totalH / 24);
+  const parts: string[] = [];
+  if (d) parts.push(`${d}d`);
+  if (h || d) parts.push(`${h}h`);
+  parts.push(`${m}m`);
+  parts.push(`${s}s`);
+  return parts.join(" ");
 }
 
 export type ServerMessage =
