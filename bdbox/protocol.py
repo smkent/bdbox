@@ -98,6 +98,7 @@ class ServerModelMessage(ServerMessage, ModelMessage):
 @dataclass
 class TerminalSizeMessage(BrowserMessage, type="terminal_size"):
     cols: int = 80
+    rows: int | None = None
 
 
 @dataclass
