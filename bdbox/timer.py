@@ -13,30 +13,32 @@ def get_time() -> float:
 @dataclass
 class Timer:
     start: float = field(default_factory=get_time, repr=False)
+    stopped: float | None = field(default=None, repr=False)
 
-    @property
+    @cached_property
     def started_at(self) -> datetime:
         return datetime.now(timezone.utc) - timedelta(
             seconds=self.elapsed / 1000
         )
 
-    @property
-    def stopped(self) -> bool:
-        return "end" in self.__dict__
+    def stop(self) -> float:
+        if not self.stopped:
+            self.stopped = get_time()
+        return self.stopped
 
     @property
     def elapsed(self) -> float:
-        if self.stopped:
-            return self.end
-        return (get_time() - self.start) * 1000
+        return ((self.stopped or get_time()) - self.start) * 1000
 
-    @cached_property
-    def end(self) -> int:
+    @property
+    def elapsed_ms(self) -> int:
         return round(self.elapsed)
 
     @cached_property
-    def end_str(self) -> str:
-        return self._format(self.end)
+    def elapsed_str(self) -> str:
+        if not self.stopped:
+            self.stop()
+        return self._format(self.elapsed_ms)
 
     def _format(self, ms: float) -> str:
         if ms < 1000:
@@ -57,4 +59,4 @@ class Timer:
         return " ".join(parts)
 
     def __str__(self) -> str:
-        return self._format(self.elapsed)
+        return self._format(self.elapsed_ms)

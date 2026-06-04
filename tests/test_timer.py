@@ -56,9 +56,10 @@ def test_timer(start: float, end: float, expected_str: str) -> None:
         time, "monotonic", side_effect=[start, end]
     ) as mock_time:
         timer = Timer()
-        assert not timer.stopped
-        assert timer.end == round((end - start) * 1000)
-        assert timer.stopped
+        assert timer.stopped is None
+        timer.stop()
+        assert timer.stopped is not None
+        assert timer.elapsed_ms == round((end - start) * 1000)
         assert str(timer) == expected_str
-        assert timer.end_str == expected_str
+        assert timer.elapsed_str == expected_str
     assert mock_time.call_args_list == [call()] * 2
