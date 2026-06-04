@@ -1,4 +1,4 @@
-import type { IncomingMessage, OutgoingMessage } from "./protocol.js";
+import type { ServerMessage, BrowserMessage } from "./protocol.js";
 
 const BASE_DELAY_MS = 1000;
 const MAX_DELAY_MS = 30000;
@@ -10,7 +10,7 @@ function getRetryDelay(): number {
   return Math.min(BASE_DELAY_MS * 2 ** retryCount, MAX_DELAY_MS);
 }
 
-export function sendWs(msg: OutgoingMessage): void {
+export function sendWs(msg: BrowserMessage): void {
   if (_ws && _ws.readyState === WebSocket.OPEN) {
     _ws.send(JSON.stringify(msg));
   }
@@ -26,9 +26,9 @@ export function connectWs(): void {
   });
 
   _ws.addEventListener("message", ({ data }) => {
-    let msg: IncomingMessage;
+    let msg: ServerMessage;
     try {
-      msg = JSON.parse(data) as IncomingMessage;
+      msg = JSON.parse(data) as ServerMessage;
     } catch {
       return;
     }

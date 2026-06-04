@@ -1,4 +1,4 @@
-// Outgoing messages (browser → server)
+// Browser to Server message types
 
 export type TerminalSizeMessage = {
   type: "terminal_size";
@@ -21,13 +21,13 @@ export type ResetParamsMessage = {
   type: "reset_params";
 };
 
-export type OutgoingMessage =
+export type BrowserMessage =
   | TerminalSizeMessage
   | UpdateParamMessage
   | SelectPresetMessage
   | ResetParamsMessage;
 
-export const OutgoingMessage = {
+export const BrowserMessage = {
   terminalSize: (cols: number, rows?: number): TerminalSizeMessage => ({
     type: "terminal_size",
     cols,
@@ -45,7 +45,7 @@ export const OutgoingMessage = {
   resetParams: (): ResetParamsMessage => ({ type: "reset_params" }),
 } as const;
 
-// Incoming messages (server → browser)
+// Server to browser message types
 
 export type ConsoleMessage = {
   type: "console";
@@ -66,11 +66,11 @@ export type JsonSchema = {
   "x-presets"?: Array<{ name: string; description?: string }>;
 };
 
-interface ServerMessage {
+interface ServerMessageWithSessionID {
   session_id: string;
 }
 
-export interface SchemaMessage extends ServerMessage {
+export interface SchemaMessage extends ServerMessageWithSessionID {
   type: "schema";
   schema: JsonSchema | null;
   current_values: Record<string, unknown>;
@@ -79,28 +79,28 @@ export interface SchemaMessage extends ServerMessage {
   model_info: ModelDisplayInfo | null;
 }
 
-export interface ParamOverridesMessage extends ServerMessage {
+export interface ParamOverridesMessage extends ServerMessageWithSessionID {
   type: "param_overrides";
   param_overrides: Record<string, unknown>;
 }
 
-export interface RunStartMessage extends ServerMessage {
+export interface RunStartMessage extends ServerMessageWithSessionID {
   type: "run_start";
   params: Record<string, unknown>;
 }
 
-export interface RunOKMessage extends ServerMessage {
+export interface RunOKMessage extends ServerMessageWithSessionID {
   type: "run_ok";
   elapsed_ms: string;
   current_values: Record<string, unknown>;
 }
 
-export interface RunErrorMessage extends ServerMessage {
+export interface RunErrorMessage extends ServerMessageWithSessionID {
   type: "run_error";
   elapsed_ms: string;
 }
 
-export type IncomingMessage =
+export type ServerMessage =
   | ConsoleMessage
   | SchemaMessage
   | ParamOverridesMessage
