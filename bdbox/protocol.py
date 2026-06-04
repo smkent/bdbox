@@ -8,7 +8,6 @@ from typing import (
     Annotated,
     Any,
     ClassVar,
-    Literal,
     TypeVar,
     get_args,
     get_origin,
@@ -120,7 +119,6 @@ class ResetParamsMessage(BrowserModelMessage, type="reset_params"):
 @dataclass
 class ConsoleMessage(ServerModelMessage, type="console", log_ok=False):
     text: str
-    stream: Literal["stdout"] = "stdout"
 
 
 @dataclass

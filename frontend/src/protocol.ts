@@ -67,7 +67,6 @@ interface ServerMessageWithSessionID {
 export interface ConsoleMessage extends ServerMessageWithSessionID {
   type: "console";
   text: string;
-  stream: "stdout";
 }
 
 export interface SchemaMessage extends ServerMessageWithSessionID {
