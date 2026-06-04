@@ -124,7 +124,7 @@ class ViewAction(ModelAction):
         ctx.model_class = new_class
         ctx.enqueue(
             SchemaMessage(
-                model_info=run_state.model_state.model_name_info(),
+                model_info=run_state.model_state.model,
                 schema=new_schema if new_schema != old_schema else None,
             )
         )

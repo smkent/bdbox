@@ -854,11 +854,7 @@
   dict({
     'current_values': dict({
     }),
-    'model_info': dict({
-      'cls': None,
-      'file': None,
-      'module': None,
-    }),
+    'model_info': None,
     'model_run_started': '1977-05-25T11:38:00+00:00',
     'model_running': True,
     'schema': None,
@@ -1119,11 +1115,7 @@
   dict({
     'current_values': dict({
     }),
-    'model_info': dict({
-      'cls': None,
-      'file': None,
-      'module': None,
-    }),
+    'model_info': None,
     'model_run_started': '1977-05-25T11:38:00+00:00',
     'model_running': True,
     'schema': None,

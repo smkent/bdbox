@@ -1,15 +1,44 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import sys
+from dataclasses import dataclass, field, fields, is_dataclass
 from datetime import datetime
 from functools import partial
-from typing import Any, ClassVar, Literal
+from typing import (
+    Annotated,
+    Any,
+    ClassVar,
+    Literal,
+    TypeVar,
+    get_args,
+    get_origin,
+    get_type_hints,
+    overload,
+)
 from uuid import UUID
 
 import cattrs
 import cattrs.strategies
+from cattrs.gen import (
+    AttributeOverride,
+    make_dict_structure_fn,
+    make_dict_unstructure_fn,
+    override,
+)
 
 from bdbox.errors import InternalError
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
+
+
+@dataclass
+class ModelDisplayInfo:
+    filename: Annotated[str | None, override(rename="file")] = None
+    module_name: Annotated[str | None, override(rename="module")] = None
+    class_name: Annotated[str | None, override(rename="cls")] = None
 
 
 @dataclass
@@ -21,96 +50,147 @@ class Message:
         if not self.type:
             raise InternalError(f"{self} is missing type property value")
 
-    def __init_subclass__(cls, *, abstract: bool = False) -> None:
-        if not abstract and not cls.type:
-            raise InternalError(f"{cls} is missing type property value")
+    def __init_subclass__(
+        cls,
+        *,
+        type: str | None = None,  # noqa: A002
+        log_ok: bool | None = None,
+    ) -> None:
+        cls.type = type or cls.type
+        cls.log_ok = log_ok if log_ok is not None else cls.log_ok
+
+    def to_dict(self) -> dict[str, object]:
+        return protocol_serializer.unstructure(obj=self)
+
+    @classmethod
+    def from_dict(cls, obj: dict[str, object]) -> Self:
+        return protocol_serializer.structure(obj=obj, cl=cls)
+
+
+MessageT = TypeVar("MessageT", bound=Message)
 
 
 @dataclass
-class MessageWithSessionID(Message, abstract=True):
+class ModelMessage(Message):
+    pass
+
+
+@dataclass
+class BrowserMessage(Message):
+    pass
+
+
+@dataclass
+class BrowserModelMessage(BrowserMessage, ModelMessage):
+    pass
+
+
+@dataclass
+class ServerMessage(Message):
     session_id: UUID | None = field(default=None, kw_only=True)
 
 
 @dataclass
-class TerminalSizeMessage(Message):
-    type: ClassVar[str] = "terminal_size"
+class ServerModelMessage(ServerMessage, ModelMessage):
+    pass
+
+
+@dataclass
+class TerminalSizeMessage(BrowserMessage, type="terminal_size"):
     cols: int = 80
 
 
 @dataclass
-class ConsoleMessage(Message):
-    type: ClassVar[str] = "console"
-    log_ok: ClassVar[bool] = False
-    text: str
-    stream: Literal["stdout"] = "stdout"
-
-
-@dataclass
-class UpdateParamMessage(Message):
-    type: ClassVar[str] = "update_param"
+class UpdateParamMessage(BrowserModelMessage, type="update_param"):
     field: str
     value: Any
 
 
 @dataclass
-class SelectPresetMessage(Message):
-    type: ClassVar[str] = "select_preset"
+class SelectPresetMessage(BrowserModelMessage, type="select_preset"):
     preset: str
 
 
 @dataclass
-class ResetParamsMessage(Message):
-    type: ClassVar[str] = "reset_params"
+class ResetParamsMessage(BrowserModelMessage, type="reset_params"):
+    pass
 
 
 @dataclass
-class ModelNameInfo:
-    file: str | None = None
-    module: str | None = None
-    cls: str | None = None
+class ConsoleMessage(ServerModelMessage, type="console", log_ok=False):
+    text: str
+    stream: Literal["stdout"] = "stdout"
 
 
 @dataclass
-class SchemaMessage(MessageWithSessionID):
-    type: ClassVar[str] = "schema"
+class SchemaMessage(ServerModelMessage, type="schema"):
     schema: dict[str, Any] | None = None
     current_values: dict[str, Any] = field(default_factory=dict)
     model_running: bool | None = None
     model_run_started: datetime | None = None
-    model_info: ModelNameInfo = field(default_factory=ModelNameInfo)
+    model_info: ModelDisplayInfo | None = None
 
 
 @dataclass
-class ParamOverridesMessage(MessageWithSessionID):
-    type: ClassVar[str] = "param_overrides"
+class ParamOverridesMessage(ServerModelMessage, type="param_overrides"):
     param_overrides: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class RunStartMessage(MessageWithSessionID):
-    type: ClassVar[str] = "run_start"
+class RunStartMessage(ServerModelMessage, type="run_start"):
     params: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class RunOKMessage(MessageWithSessionID):
-    type: ClassVar[str] = "run_ok"
+class RunOKMessage(ServerModelMessage, type="run_ok"):
     elapsed_ms: str
     current_values: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class RunErrorMessage(MessageWithSessionID):
-    type: ClassVar[str] = "run_error"
+class RunErrorMessage(ServerModelMessage, type="run_error"):
     elapsed_ms: str
 
 
 class ProtocolConverter(cattrs.Converter):
     def __init__(self) -> None:
         super().__init__()
+        self.register_hooks()
+
+    def to_dict(self, obj: Message) -> dict[str, object]:
+        return self.unstructure(obj=obj, unstructure_as=Message)
+
+    @overload
+    def from_dict(self, obj: dict[str, object]) -> Message: ...
+    @overload
+    def from_dict(
+        self, obj: dict[str, object], cl: type[MessageT]
+    ) -> MessageT: ...
+    def from_dict(
+        self, obj: dict[str, object], cl: type[Message] = Message
+    ) -> Message:
+        return self.structure(obj=obj, cl=cl)
+
+    def register_hooks(self) -> None:
+        self.register_structure_hook_factory(
+            is_dataclass,
+            lambda target: make_dict_structure_fn(
+                target,
+                self,
+                **self.get_type_hints(target),  # ty: ignore[invalid-argument-type]
+            ),
+        )
         self.register_structure_hook(UUID, lambda val, _: UUID(val))
         self.register_structure_hook(
             datetime, lambda val, _: datetime.fromisoformat(val)
+        )
+        self.register_unstructure_hook_factory(
+            is_dataclass,
+            lambda target: make_dict_unstructure_fn(
+                target,
+                self,
+                **self.get_type_hints(target),  # ty: ignore[invalid-argument-type]
+            ),
         )
         self.register_unstructure_hook(UUID, str)
         self.register_unstructure_hook(datetime, lambda val: val.isoformat())
@@ -120,15 +200,25 @@ class ProtocolConverter(cattrs.Converter):
             union_strategy=partial(
                 cattrs.strategies.configure_tagged_union,
                 tag_name="type",
-                tag_generator=lambda cls: cls.type,
+                tag_generator=lambda target: target.type,
             ),
         )
 
-    def to_dict(self, obj: Any) -> Any:
-        return self.unstructure(obj=obj, unstructure_as=Message)
-
-    def from_dict(self, obj: Any) -> Message:
-        return self.structure(obj=obj, cl=Message)
+    def get_type_hints(self, target: type) -> dict[str, AttributeOverride]:
+        try:
+            hints = get_type_hints(target, include_extras=True)
+        except NameError:
+            return {}
+        overrides = {}
+        for f in fields(target):
+            hint = hints.get(f.name)
+            if get_origin(hint) is not Annotated:
+                continue
+            for extra in get_args(hint)[1:]:
+                if isinstance(extra, AttributeOverride):
+                    overrides[f.name] = extra
+                    break
+        return overrides
 
 
 protocol_serializer = ProtocolConverter()
