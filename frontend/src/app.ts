@@ -243,7 +243,12 @@ function registerComponents(layout: GoldenLayout): void {
       fitAddon.fit();
 
       const sendSize = (): void =>
-        sendWs(BrowserMessage.terminalSize(terminal.cols, terminal.rows));
+        sendWs(
+          BrowserMessage.clientInfo({
+            cols: terminal.cols,
+            rows: terminal.rows,
+          }),
+        );
 
       const fit = (): void => {
         fitAddon.fit();

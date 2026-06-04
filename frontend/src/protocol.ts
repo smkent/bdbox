@@ -1,9 +1,13 @@
 // Browser to Server message types
 
-export interface TerminalSizeMessage {
-  type: "terminal_size";
-  cols: number;
+export interface TerminalInfo {
   rows?: number;
+  cols: number;
+}
+
+export interface ClientInfoMessage {
+  type: "client_info";
+  terminal: TerminalInfo;
 }
 
 export interface UpdateParamMessage {
@@ -22,16 +26,15 @@ export interface ResetParamsMessage {
 }
 
 export type BrowserMessage =
-  | TerminalSizeMessage
+  | ClientInfoMessage
   | UpdateParamMessage
   | SelectPresetMessage
   | ResetParamsMessage;
 
 export const BrowserMessage = {
-  terminalSize: (cols: number, rows?: number): TerminalSizeMessage => ({
-    type: "terminal_size",
-    cols,
-    rows,
+  clientInfo: (terminalInfo: TerminalInfo): ClientInfoMessage => ({
+    type: "client_info",
+    terminal: terminalInfo,
   }),
   updateParam: (field: string, value: unknown): UpdateParamMessage => ({
     type: "update_param",

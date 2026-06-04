@@ -52,6 +52,12 @@ class ModelDisplayInfo:
 
 
 @dataclass
+class TerminalInfo:
+    cols: int = 80
+    rows: int | None = None
+
+
+@dataclass
 class Message:
     type: ClassVar[str] = ""
     log_ok: ClassVar[bool] = True
@@ -112,9 +118,8 @@ class ConnectedMessage(ServerMessage, type="hello"):
 
 
 @dataclass
-class TerminalSizeMessage(BrowserMessage, type="terminal_size"):
-    cols: int = 80
-    rows: int | None = None
+class ClientInfoMessage(BrowserMessage, type="client_info"):
+    terminal: TerminalInfo = field(default_factory=TerminalInfo)
 
 
 @dataclass

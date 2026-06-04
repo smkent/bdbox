@@ -11,12 +11,12 @@ from bdbox.console import console, log
 from bdbox.dispatch import Event, dispatch
 from bdbox.errors import InternalError
 from bdbox.protocol import (
+    ClientInfoMessage,
     ConnectedMessage,
     ModelDetailsMessage,
     ParamOverridesMessage,
     ResetParamsMessage,
     SelectPresetMessage,
-    TerminalSizeMessage,
     UpdateParamMessage,
 )
 from bdbox.runner.state import run_state
@@ -84,11 +84,11 @@ class ViewState:
     def handle_client_message(
         self, view_websocket: WebSocketConnection, msg: BrowserMessage
     ) -> None:
-        if isinstance(msg, TerminalSizeMessage):
+        if isinstance(msg, ClientInfoMessage):
             console.add_web_output(
                 id(view_websocket.websocket),
                 cast("TextIO", WebStream(self.msg_queue)),
-                msg.cols,
+                msg.terminal.cols,
             )
         elif isinstance(msg, UpdateParamMessage):
             self.param_overrides[msg.field] = msg.value
