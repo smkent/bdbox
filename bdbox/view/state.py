@@ -12,9 +12,9 @@ from bdbox.dispatch import Event, dispatch
 from bdbox.errors import InternalError
 from bdbox.protocol import (
     ConnectedMessage,
+    ModelDetailsMessage,
     ParamOverridesMessage,
     ResetParamsMessage,
-    SchemaMessage,
     SelectPresetMessage,
     TerminalSizeMessage,
     UpdateParamMessage,
@@ -60,7 +60,7 @@ class ViewState:
         )
         if self.model_class:
             await view_websocket.send_message(
-                SchemaMessage(
+                ModelDetailsMessage(
                     schema=run_state.model_state.schema,
                     current_values=serializer.unstructure(self.current_values),
                     model_running=run_state.model_state.model_running,

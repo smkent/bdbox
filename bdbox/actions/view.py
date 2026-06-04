@@ -13,10 +13,10 @@ import tyro
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.protocol import (
+    ModelDetailsMessage,
     RunErrorMessage,
     RunOKMessage,
     RunStartMessage,
-    SchemaMessage,
 )
 from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
@@ -123,7 +123,7 @@ class ViewAction(ModelAction):
         ctx.current_values = dict(run_state.model_state.resolved_values)
         ctx.model_class = new_class
         ctx.enqueue(
-            SchemaMessage(
+            ModelDetailsMessage(
                 model_info=run_state.model_state.model,
                 schema=new_schema if new_schema != old_schema else None,
             )

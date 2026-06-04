@@ -139,7 +139,7 @@ class ConsoleMessage(ServerModelMessage, type="console", log_ok=False):
 
 
 @dataclass
-class SchemaMessage(ServerModelMessage, type="schema"):
+class ModelDetailsMessage(ServerModelMessage, type="model_details"):
     schema: dict[str, Any] | None = None
     current_values: dict[str, Any] = field(default_factory=dict)
     model_running: bool = False
