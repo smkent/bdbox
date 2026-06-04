@@ -834,7 +834,7 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error].2
   dict({
-    'elapsed_ms': '234ms',
+    'elapsed_ms': 234,
     'type': 'run_error',
   })
 # ---
@@ -893,7 +893,7 @@
   dict({
     'current_values': dict({
     }),
-    'elapsed_ms': '123ms',
+    'elapsed_ms': 123,
     'type': 'run_ok',
   })
 # ---
@@ -1130,7 +1130,7 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error].2
   dict({
-    'elapsed_ms': '234ms',
+    'elapsed_ms': 234,
     'type': 'run_error',
   })
 # ---
@@ -1189,7 +1189,7 @@
   dict({
     'current_values': dict({
     }),
-    'elapsed_ms': '123ms',
+    'elapsed_ms': 123,
     'type': 'run_ok',
   })
 # ---

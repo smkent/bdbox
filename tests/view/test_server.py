@@ -302,8 +302,8 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
             id="param_overrides",
         ),
         pytest.param(RunStartMessage(params={"foo": "bar"}), id="run_start"),
-        pytest.param(RunOKMessage(elapsed_ms="123ms"), id="run_ok"),
-        pytest.param(RunErrorMessage(elapsed_ms="234ms"), id="run_error"),
+        pytest.param(RunOKMessage(elapsed_ms=123), id="run_ok"),
+        pytest.param(RunErrorMessage(elapsed_ms=234), id="run_error"),
     ],
 )
 def test_ws_broadcast_reaches_client(

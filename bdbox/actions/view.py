@@ -142,13 +142,15 @@ class ViewAction(ModelAction):
             try:
                 yield
             except (Exception, SystemExit):
-                ctx.enqueue(RunErrorMessage(elapsed_ms=timer.elapsed_str))
+                timer.stop()
+                ctx.enqueue(RunErrorMessage(elapsed_ms=timer.elapsed_ms))
                 raise
             else:
+                timer.stop()
                 self._update_schema(ctx)
                 ctx.enqueue(
                     RunOKMessage(
-                        elapsed_ms=timer.elapsed_str,
+                        elapsed_ms=timer.elapsed_ms,
                         current_values=serializer.unstructure(
                             run_state.model_state.resolved_values
                         ),

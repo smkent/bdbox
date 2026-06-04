@@ -9,7 +9,7 @@ import "golden-layout/dist/css/themes/goldenlayout-dark-theme.css";
 import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { connectWs, sendWs } from "./ws.js";
-import { BrowserMessage } from "./protocol.js";
+import { BrowserMessage, formatElapsedMs } from "./protocol.js";
 import type { SchemaMessage } from "./protocol.js";
 
 const LAYOUT_VERSION = 1;
@@ -313,7 +313,7 @@ function initWs(): void {
     if (detail.session_id !== lastSessionId) {
       const store = Alpine.store("runStatus");
       store.state = "idle";
-      store.elapsedMs = "";
+      store.elapsedMs = null;
       if (tickInterval) {
         clearInterval(tickInterval);
         tickInterval = null;
@@ -365,7 +365,7 @@ function initWs(): void {
   window.addEventListener("bdbox:run_start", () => {
     const store = Alpine.store("runStatus");
     store.state = "running";
-    store.elapsedMs = "";
+    store.elapsedMs = null;
     if (tickInterval) clearInterval(tickInterval);
     runStartedAt = Date.now();
     store.runElapsedS = 0;
@@ -377,7 +377,7 @@ function initWs(): void {
   window.addEventListener("bdbox:run_ok", ({ detail }) => {
     const store = Alpine.store("runStatus");
     store.state = "ok";
-    store.elapsedMs = detail.elapsed_ms;
+    store.elapsedMs = formatElapsedMs(detail.elapsed_ms);
     store.runElapsedS = 0;
     if (tickInterval) {
       clearInterval(tickInterval);
@@ -435,7 +435,7 @@ function initWs(): void {
 
 Alpine.store("runStatus", {
   state: "idle" as RunStatusStore["state"],
-  elapsedMs: "",
+  elapsedMs: null,
   wsState: "connecting" as RunStatusStore["wsState"],
   retryIn: 0,
   runElapsedS: 0,
