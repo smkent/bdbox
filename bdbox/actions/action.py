@@ -67,10 +67,10 @@ class Action:
             try:
                 yield timer
             except (Exception, SystemExit) as e:
-                log.exception("Run failed (%s)", timer.end_str)
+                log.exception("Run failed (%s)", timer.elapsed_str)
                 raise RunError(e) from e
             else:
-                log.info("Run complete (%s)", timer.end_str)
+                log.info("Run complete (%s)", timer.elapsed_str)
 
 
 @dataclass
