@@ -9,14 +9,14 @@ from typing import TYPE_CHECKING
 from bdbox.protocol import ConsoleMessage
 
 if TYPE_CHECKING:
-    from bdbox.protocol import Message
+    from bdbox.protocol import ServerMessage
 
 
 @dataclass
 class WebStream:
     """Write-only stream that forwards text to the WebSocket message queue."""
 
-    q: queue.Queue[Message | None] = field(default_factory=queue.Queue)
+    q: queue.Queue[ServerMessage | None] = field(default_factory=queue.Queue)
 
     def write(self, text: str) -> int:
         if text.strip():

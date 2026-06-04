@@ -20,7 +20,6 @@ from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
 from bdbox.protocol import (
     Message,
-    MessageWithSessionID,
     ParamOverridesMessage,
     ResetParamsMessage,
     RunErrorMessage,
@@ -28,8 +27,8 @@ from bdbox.protocol import (
     RunStartMessage,
     SchemaMessage,
     SelectPresetMessage,
+    ServerMessage,
     UpdateParamMessage,
-    protocol_serializer,
 )
 from bdbox.runner.state import run_state
 from bdbox.view.app import App
@@ -89,7 +88,7 @@ class WSParamTest:
         if not self.ws:
             raise InternalError("Websocket connection not available")
         if isinstance(msg, Message):
-            msg = protocol_serializer.unstructure(msg)
+            msg = msg.to_dict()
         self.ws.send_json(msg)
         ack = None
         if expect_response:
@@ -288,14 +287,14 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
     ],
 )
 def test_ws_broadcast_reaches_client(
-    wspt: WSParamTest, message: MessageWithSessionID
+    wspt: WSParamTest, message: ServerMessage
 ) -> None:
     wspt.view_state.enqueue(message)
     received_data = wspt.recv()
     assert received_data.pop("session_id") == str(TEST_SESSION_ID)
     received_data["session_id"] = None
-    assert received_data == protocol_serializer.to_dict(message)
-    assert protocol_serializer.from_dict(received_data) == message
+    assert received_data == message.to_dict()
+    assert Message.from_dict(received_data) == message
 
 
 def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
@@ -307,5 +306,5 @@ def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
         received_data = ws2.receive_json()
         assert received_data.pop("session_id") == str(TEST_SESSION_ID)
         received_data["session_id"] = None
-        assert received_data == protocol_serializer.to_dict(message)
-        assert protocol_serializer.from_dict(received_data) == message
+        assert received_data == message.to_dict()
+        assert Message.from_dict(received_data) == message

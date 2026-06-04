@@ -7,7 +7,10 @@ from typing import TYPE_CHECKING
 from cattrs.errors import BaseValidationError
 
 from bdbox.console import log
-from bdbox.protocol import Message, protocol_serializer
+from bdbox.protocol import (
+    BrowserMessage,
+    ServerMessage,
+)
 
 if TYPE_CHECKING:
     from fastapi import WebSocket
@@ -17,14 +20,14 @@ if TYPE_CHECKING:
 class WebSocketConnection:
     websocket: WebSocket
 
-    async def send_message(self, message: Message) -> None:
-        msg_json = protocol_serializer.to_dict(message)
+    async def send_message(self, message: ServerMessage) -> None:
+        msg_json = message.to_dict()
         if message.log_ok:
             log.debug("Sent %s", msg_json["type"])
             log.trace(json.dumps(msg_json, indent=4))
         return await self.websocket.send_json(msg_json)
 
-    async def receive_message(self) -> Message | None:
+    async def receive_message(self) -> BrowserMessage | None:
         try:
             data = await self.websocket.receive_json()
         except ValueError:
@@ -32,7 +35,7 @@ class WebSocketConnection:
         log.debug("Received %s", data["type"])
         log.trace(json.dumps(data, indent=4))
         try:
-            return protocol_serializer.from_dict(data)
+            return BrowserMessage.from_dict(data)
         except (KeyError, TypeError, BaseValidationError):
             return None
 
@@ -49,8 +52,8 @@ class WebSocketConnectionManager:
         if ws in self.connections:
             self.connections.remove(ws)
 
-    async def send(self, message: Message) -> None:
-        msg_json = protocol_serializer.to_dict(message)
+    async def send(self, message: ServerMessage) -> None:
+        msg_json = message.to_dict()
         if message.log_ok:
             log.debug(
                 "Sent %s (%d clients)", message.type, len(self.connections)

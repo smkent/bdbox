@@ -11,7 +11,6 @@ from bdbox.console import console, log
 from bdbox.dispatch import Event, dispatch
 from bdbox.errors import InternalError
 from bdbox.protocol import (
-    Message,
     ParamOverridesMessage,
     ResetParamsMessage,
     SchemaMessage,
@@ -29,7 +28,7 @@ if TYPE_CHECKING:
     from fastapi import WebSocket
 
     from bdbox.model.parameters import Params
-    from bdbox.protocol import Message, MessageWithSessionID
+    from bdbox.protocol import BrowserMessage, ServerMessage
 
 
 @dataclass
@@ -39,7 +38,7 @@ class ViewState:
     )
     viewer_port: int = 3939
     model_class: type[Params] | None = None
-    msg_queue: Queue[Message | None] = field(default_factory=Queue)
+    msg_queue: Queue[ServerMessage | None] = field(default_factory=Queue)
     param_overrides: dict[str, Any] = field(default_factory=dict)
     current_values: dict[str, Any] = field(default_factory=dict)
     session_id: UUID = field(default_factory=uuid4)
@@ -47,7 +46,7 @@ class ViewState:
     def __post_init__(self) -> None:
         dispatch.on_exit(self.stop_queue, name="Stop ViewState message queue")
 
-    def enqueue(self, msg: MessageWithSessionID) -> None:
+    def enqueue(self, msg: ServerMessage) -> None:
         self.msg_queue.put(replace(msg, session_id=self.session_id))
 
     def stop_queue(self) -> None:
@@ -81,7 +80,7 @@ class ViewState:
                 )
 
     def handle_client_message(
-        self, view_websocket: WebSocketConnection, msg: Message
+        self, view_websocket: WebSocketConnection, msg: BrowserMessage
     ) -> None:
         if isinstance(msg, TerminalSizeMessage):
             console.add_web_output(
