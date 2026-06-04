@@ -9,6 +9,7 @@ import "golden-layout/dist/css/themes/goldenlayout-dark-theme.css";
 import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { connectWs, sendWs } from "./ws.js";
+import { OutgoingMessage } from "./protocol.js";
 import type { SchemaMessage } from "./protocol.js";
 
 const LAYOUT_VERSION = 1;
@@ -115,14 +116,16 @@ function initJedison(detail: SchemaMessage): void {
     btn.textContent = name;
     if (description) btn.title = description;
     btn.addEventListener("click", () =>
-      sendWs({ type: "select_preset", preset: name }),
+      sendWs(OutgoingMessage.selectPreset(name)),
     );
     controls.appendChild(btn);
   });
   const resetBtn = document.createElement("button");
   resetBtn.className = "params-reset-btn";
   resetBtn.textContent = "Reset";
-  resetBtn.addEventListener("click", () => sendWs({ type: "reset_params" }));
+  resetBtn.addEventListener("click", () =>
+    sendWs(OutgoingMessage.resetParams()),
+  );
   controls.appendChild(resetBtn);
   paramsFormEl!.appendChild(controls);
 
@@ -152,7 +155,7 @@ function initJedison(detail: SchemaMessage): void {
     const topKey = parts[1];
     const value = instance.getValue();
     paramOverrides = { ...paramOverrides, [topKey]: value };
-    sendWs({ type: "update_param", field: topKey, value });
+    sendWs(OutgoingMessage.updateParam(topKey, value));
   });
 }
 
@@ -240,11 +243,7 @@ function registerComponents(layout: GoldenLayout): void {
       fitAddon.fit();
 
       const sendSize = (): void =>
-        sendWs({
-          type: "terminal_size",
-          cols: terminal.cols,
-          rows: terminal.rows,
-        });
+        sendWs(OutgoingMessage.terminalSize(terminal.cols, terminal.rows));
 
       const fit = (): void => {
         fitAddon.fit();
