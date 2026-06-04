@@ -125,7 +125,7 @@ class ConsoleMessage(ServerModelMessage, type="console", log_ok=False):
 class SchemaMessage(ServerModelMessage, type="schema"):
     schema: dict[str, Any] | None = None
     current_values: dict[str, Any] = field(default_factory=dict)
-    model_running: bool | None = None
+    model_running: bool = False
     model_run_started: datetime | None = None
     model_info: ModelDisplayInfo | None = None
 
