@@ -27,6 +27,24 @@ export type OutgoingMessage =
   | SelectPresetMessage
   | ResetParamsMessage;
 
+export const OutgoingMessage = {
+  terminalSize: (cols: number, rows?: number): TerminalSizeMessage => ({
+    type: "terminal_size",
+    cols,
+    rows,
+  }),
+  updateParam: (field: string, value: unknown): UpdateParamMessage => ({
+    type: "update_param",
+    field,
+    value,
+  }),
+  selectPreset: (preset: string): SelectPresetMessage => ({
+    type: "select_preset",
+    preset,
+  }),
+  resetParams: (): ResetParamsMessage => ({ type: "reset_params" }),
+} as const;
+
 // Incoming messages (server → browser)
 
 export type ConsoleMessage = {
