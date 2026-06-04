@@ -1,25 +1,25 @@
 // Browser to Server message types
 
-export type TerminalSizeMessage = {
+export interface TerminalSizeMessage {
   type: "terminal_size";
   cols: number;
   rows?: number;
-};
+}
 
-export type UpdateParamMessage = {
+export interface UpdateParamMessage {
   type: "update_param";
   field: string;
   value: unknown;
-};
+}
 
-export type SelectPresetMessage = {
+export interface SelectPresetMessage {
   type: "select_preset";
   preset: string;
-};
+}
 
-export type ResetParamsMessage = {
+export interface ResetParamsMessage {
   type: "reset_params";
-};
+}
 
 export type BrowserMessage =
   | TerminalSizeMessage
@@ -47,18 +47,18 @@ export const BrowserMessage = {
 
 // Server to browser message types
 
-export type ModelDisplayInfo = {
+export interface ModelDisplayInfo {
   file: string | null;
   module: string | null;
   cls: string | null;
-};
+}
 
-export type JsonSchema = {
+export interface JsonSchema {
   type: string;
   properties?: Record<string, unknown>;
   required?: string[];
   "x-presets"?: Array<{ name: string; description?: string }>;
-};
+}
 
 interface ServerMessageWithSessionID {
   session_id: string;
