@@ -73,7 +73,7 @@ export interface SchemaMessage extends ServerMessageWithSessionID {
   type: "schema";
   schema: JsonSchema | null;
   current_values: Record<string, unknown>;
-  model_running: boolean | null;
+  model_running: boolean;
   model_run_started: string | null;
   model_info: ModelDisplayInfo | null;
 }
