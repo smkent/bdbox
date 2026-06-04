@@ -338,7 +338,12 @@ function initWs(): void {
       info.module = detail.model_info.module ?? null;
       info.cls = detail.model_info.cls ?? null;
     }
-    if (detail.schema !== undefined && detail.schema !== null) {
+    if (
+      detail.schema !== undefined &&
+      detail.schema !== null &&
+      detail.schema.properties &&
+      detail.schema.required
+    ) {
       latestSchema = detail;
       if (paramsFormEl) {
         initJedison(detail);
