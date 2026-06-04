@@ -23,6 +23,7 @@ from cattrs.gen import (
     AttributeOverride,
     make_dict_structure_fn,
     make_dict_unstructure_fn,
+    override,
 )
 
 from bdbox.errors import InternalError
@@ -31,6 +32,13 @@ if sys.version_info >= (3, 11):
     from typing import Self
 else:
     from typing_extensions import Self
+
+
+@dataclass
+class ModelDisplayInfo:
+    filename: Annotated[str | None, override(rename="file")] = None
+    module_name: Annotated[str | None, override(rename="module")] = None
+    class_name: Annotated[str | None, override(rename="cls")] = None
 
 
 @dataclass
@@ -115,19 +123,12 @@ class ConsoleMessage(ServerModelMessage, type="console", log_ok=False):
 
 
 @dataclass
-class ModelNameInfo:
-    file: str | None = None
-    module: str | None = None
-    cls: str | None = None
-
-
-@dataclass
 class SchemaMessage(ServerModelMessage, type="schema"):
     schema: dict[str, Any] | None = None
     current_values: dict[str, Any] = field(default_factory=dict)
     model_running: bool | None = None
     model_run_started: datetime | None = None
-    model_info: ModelNameInfo = field(default_factory=ModelNameInfo)
+    model_info: ModelDisplayInfo | None = None
 
 
 @dataclass

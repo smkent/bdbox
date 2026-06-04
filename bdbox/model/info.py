@@ -5,16 +5,14 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 from bdbox.errors import ParamsError
+from bdbox.protocol import ModelDisplayInfo
 
 if TYPE_CHECKING:
     from pathlib import Path
 
 
 @dataclass
-class ModelInfo:
-    filename: str | None = None
-    module_name: str | None = None
-    class_name: str | None = field(default=None, init=False)
+class ModelInfo(ModelDisplayInfo):
     path: Path | None = field(default=None, init=False)
 
     class Mode(Enum):

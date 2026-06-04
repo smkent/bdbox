@@ -66,7 +66,7 @@ class ViewState:
                         if run_state.model_state.timer
                         else None
                     ),
-                    model_info=run_state.model_state.model_name_info(),
+                    model_info=run_state.model_state.model,
                 )
             )
         while True:

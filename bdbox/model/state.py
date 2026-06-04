@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from bdbox.errors import InternalError, MultipleModelsError, ParamsError
-from bdbox.protocol import ModelNameInfo
 from bdbox.serializer import serializer
 from bdbox.timer import Timer
 
@@ -62,17 +61,6 @@ class ModelState:
                     return subc
             raise ParamsError(f"Model {self.model.class_name} not found")
         raise MultipleModelsError(self.model_subclasses)
-
-    def model_name_info(self) -> ModelNameInfo:
-        return ModelNameInfo(
-            file=(
-                Path(self.model.filename).stem
-                if self.model.filename and not self.model.module_name
-                else None
-            ),
-            module=self.model.module_name,
-            cls=self.model.class_name,
-        )
 
     def model_name(self) -> str:
         if (

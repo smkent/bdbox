@@ -35,7 +35,7 @@ export type ConsoleMessage = {
   stream: "stdout";
 };
 
-export type ModelRunInfo = {
+export type ModelDisplayInfo = {
   file: string | null;
   module: string | null;
   cls: string | null;
@@ -58,7 +58,7 @@ export interface SchemaMessage extends ServerMessage {
   current_values: Record<string, unknown>;
   model_running: boolean | null;
   model_run_started: string | null;
-  model_info: ModelRunInfo;
+  model_info: ModelDisplayInfo | null;
 }
 
 export interface ParamOverridesMessage extends ServerMessage {
