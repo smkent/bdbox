@@ -75,8 +75,8 @@ export interface ConsoleMessage {
   text: string;
 }
 
-export interface SchemaMessage {
-  type: "schema";
+export interface ModelDetailsMessage {
+  type: "model_details";
   schema: JsonSchema | null;
   current_values: Record<string, unknown>;
   model_running: boolean;
@@ -127,7 +127,7 @@ export function formatElapsedMs(ms: number): string {
 export type ServerMessage =
   | ConnectedMessage
   | ConsoleMessage
-  | SchemaMessage
+  | ModelDetailsMessage
   | ParamOverridesMessage
   | RunStartMessage
   | RunOKMessage

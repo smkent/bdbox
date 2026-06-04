@@ -22,12 +22,12 @@ from bdbox.model.preset import Preset
 from bdbox.protocol import (
     ConnectedMessage,
     Message,
+    ModelDetailsMessage,
     ParamOverridesMessage,
     ResetParamsMessage,
     RunErrorMessage,
     RunOKMessage,
     RunStartMessage,
-    SchemaMessage,
     SelectPresetMessage,
     ServerMessage,
     UpdateParamMessage,
@@ -289,7 +289,7 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
     "message",
     [
         pytest.param(
-            SchemaMessage(
+            ModelDetailsMessage(
                 model_running=True,
                 model_run_started=(
                     datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)

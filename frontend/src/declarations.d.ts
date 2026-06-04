@@ -5,7 +5,7 @@ import type {
   RunErrorMessage,
   RunOKMessage,
   RunStartMessage,
-  SchemaMessage,
+  ModelDetailsMessage,
 } from "./protocol.js";
 
 declare global {
@@ -16,7 +16,7 @@ declare global {
     "bdbox:clear_console": CustomEvent;
     "bdbox:console": CustomEvent<ConsoleMessage>;
     "bdbox:hello": CustomEvent<ConnectedMessage>;
-    "bdbox:schema": CustomEvent<SchemaMessage>;
+    "bdbox:model_details": CustomEvent<ModelDetailsMessage>;
     "bdbox:param_overrides": CustomEvent<ParamOverridesMessage>;
     "bdbox:run_start": CustomEvent<RunStartMessage>;
     "bdbox:run_ok": CustomEvent<RunOKMessage>;

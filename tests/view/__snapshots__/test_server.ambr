@@ -47,7 +47,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_malformed_json_ignored[Params-param_overrides0]
@@ -98,7 +98,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_missing_message_fields_ignored[Model-param_overrides0]
@@ -149,7 +149,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_missing_message_fields_ignored[Params-param_overrides0]
@@ -200,7 +200,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_reset_params[Model-param_overrides]
@@ -251,7 +251,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_reset_params[Params-param_overrides]
@@ -302,7 +302,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_select_preset_no_model_class[param_overrides0-None]
@@ -362,7 +362,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_select_preset_replaces_overrides[Params-param_overrides]
@@ -413,7 +413,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_select_preset_unknown_ignored[Model-param_overrides0]
@@ -464,7 +464,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_select_preset_unknown_ignored[Params-param_overrides0]
@@ -515,7 +515,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_unknown_message_type_ignored[Model-param_overrides0]
@@ -566,7 +566,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_unknown_message_type_ignored[Params-param_overrides0]
@@ -617,7 +617,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_update_param_accumulates[Model-param_overrides0]
@@ -668,7 +668,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_update_param_accumulates[Params-param_overrides0]
@@ -719,7 +719,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-param_overrides]
@@ -770,7 +770,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-param_overrides].2
@@ -829,7 +829,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error].2
@@ -886,7 +886,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok].2
@@ -945,7 +945,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start].2
@@ -1004,7 +1004,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema].2
@@ -1015,7 +1015,7 @@
     'model_run_started': '1977-05-25T11:38:00+00:00',
     'model_running': True,
     'schema': None,
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-param_overrides]
@@ -1066,7 +1066,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-param_overrides].2
@@ -1125,7 +1125,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error].2
@@ -1182,7 +1182,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok].2
@@ -1241,7 +1241,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start].2
@@ -1300,7 +1300,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema].2
@@ -1311,7 +1311,7 @@
     'model_run_started': '1977-05-25T11:38:00+00:00',
     'model_running': True,
     'schema': None,
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0]
@@ -1362,7 +1362,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].2
@@ -1404,7 +1404,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].3
@@ -1462,7 +1462,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].2
@@ -1504,7 +1504,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].3
@@ -1571,7 +1571,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_reset_params[Params-param_overrides]
@@ -1622,7 +1622,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_select_preset[Model-param_overrides0]
@@ -1673,7 +1673,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_select_preset[Params-param_overrides0]
@@ -1724,7 +1724,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_update_param[Model-param_overrides0]
@@ -1775,7 +1775,7 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---
 # name: test_ws_update_param[Params-param_overrides0]
@@ -1826,6 +1826,6 @@
         }),
       ]),
     }),
-    'type': 'schema',
+    'type': 'model_details',
   })
 # ---

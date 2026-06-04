@@ -10,7 +10,7 @@ import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { connectWs, sendWs } from "./ws.js";
 import { BrowserMessage, formatElapsedMs } from "./protocol.js";
-import type { SchemaMessage } from "./protocol.js";
+import type { ModelDetailsMessage } from "./protocol.js";
 
 const LAYOUT_VERSION = 1;
 const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
@@ -88,10 +88,10 @@ let paramsFormEl: HTMLElement | null = null;
 let jedison: JedisonInstance | null = null;
 let currentValues: Record<string, unknown> = {};
 let paramOverrides: Record<string, unknown> = {};
-let latestSchema: SchemaMessage | null = null;
+let latestSchema: ModelDetailsMessage | null = null;
 let lastSessionId: string | null = null;
 
-function initJedison(detail: SchemaMessage): void {
+function initJedison(detail: ModelDetailsMessage): void {
   if (!(detail.schema && detail.schema.properties && detail.schema.required)) {
     return;
   }
@@ -323,7 +323,7 @@ function initWs(): void {
     }
   });
 
-  window.addEventListener("bdbox:schema", ({ detail }) => {
+  window.addEventListener("bdbox:model_details", ({ detail }) => {
     if (detail.model_running) {
       const store = Alpine.store("runStatus");
       store.state = "running";
