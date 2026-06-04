@@ -47,12 +47,6 @@ export const BrowserMessage = {
 
 // Server to browser message types
 
-export type ConsoleMessage = {
-  type: "console";
-  text: string;
-  stream: "stdout";
-};
-
 export type ModelDisplayInfo = {
   file: string | null;
   module: string | null;
@@ -68,6 +62,12 @@ export type JsonSchema = {
 
 interface ServerMessageWithSessionID {
   session_id: string;
+}
+
+export interface ConsoleMessage extends ServerMessageWithSessionID {
+  type: "console";
+  text: string;
+  stream: "stdout";
 }
 
 export interface SchemaMessage extends ServerMessageWithSessionID {
