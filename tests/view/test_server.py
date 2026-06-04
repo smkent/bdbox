@@ -7,6 +7,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
+from unittest.mock import patch
 from uuid import UUID
 
 import pytest
@@ -19,6 +20,7 @@ from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
 from bdbox.protocol import (
+    ConnectedMessage,
     Message,
     ParamOverridesMessage,
     ResetParamsMessage,
@@ -29,6 +31,7 @@ from bdbox.protocol import (
     SelectPresetMessage,
     ServerMessage,
     UpdateParamMessage,
+    VersionInfo,
 )
 from bdbox.runner.state import run_state
 from bdbox.view.app import App
@@ -66,6 +69,9 @@ class WSParamTest:
             self.client = client
             with self.wsconn() as ws:
                 self.ws = ws
+                # Connection established message
+                assert ws.receive_json() == self.snapshot
+                # Model message
                 if self.view_state.model_class:
                     assert ws.receive_json() == self.snapshot
                 yield self
@@ -111,10 +117,24 @@ class WSParamTest:
 
 
 @pytest.fixture(autouse=True)
+def mock_protocol_bdbox_version() -> Iterator[None]:
+    original = VersionInfo.__init__
+
+    def wrapper(self: VersionInfo, *args: Any, **kwargs: Any) -> None:
+        original(self, *args, **kwargs)
+        self.bdbox = "11.38.77"
+
+    with patch.object(VersionInfo, "__init__", new=wrapper):
+        yield
+
+
+@pytest.fixture(autouse=True)
 def wspt(
     snapshot: SnapshotAssertion, view_state: ViewState
 ) -> Iterator[WSParamTest]:
-    with WSParamTest(snapshot=snapshot, view_state=view_state)() as wspt:
+    with (
+        WSParamTest(snapshot=snapshot, view_state=view_state)() as wspt,
+    ):
         yield wspt
 
 
@@ -291,8 +311,6 @@ def test_ws_broadcast_reaches_client(
 ) -> None:
     wspt.view_state.enqueue(message)
     received_data = wspt.recv()
-    assert received_data.pop("session_id") == str(TEST_SESSION_ID)
-    received_data["session_id"] = None
     assert received_data == message.to_dict()
     assert Message.from_dict(received_data) == message
 
@@ -300,11 +318,14 @@ def test_ws_broadcast_reaches_client(
 def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
     message = RunStartMessage()
     with wspt.wsconn() as ws2:
+        connected_message_data = ws2.receive_json()
+        connected_message = Message.from_dict(connected_message_data)
         assert ws2.receive_json() == wspt.snapshot
         wspt.view_state.enqueue(message)
         wspt.recv()
+        assert connected_message == ConnectedMessage(
+            session_id=TEST_SESSION_ID
+        )
         received_data = ws2.receive_json()
-        assert received_data.pop("session_id") == str(TEST_SESSION_ID)
-        received_data["session_id"] = None
         assert received_data == message.to_dict()
         assert Message.from_dict(received_data) == message

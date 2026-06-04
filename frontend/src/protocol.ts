@@ -47,6 +47,10 @@ export const BrowserMessage = {
 
 // Server to browser message types
 
+export interface VersionInfo {
+  bdbox: string;
+}
+
 export interface ModelDisplayInfo {
   file: string | null;
   module: string | null;
@@ -60,16 +64,18 @@ export interface JsonSchema {
   "x-presets"?: Array<{ name: string; description?: string }>;
 }
 
-interface ServerMessageWithSessionID {
+export interface ConnectedMessage {
+  type: "hello";
   session_id: string;
+  version: VersionInfo;
 }
 
-export interface ConsoleMessage extends ServerMessageWithSessionID {
+export interface ConsoleMessage {
   type: "console";
   text: string;
 }
 
-export interface SchemaMessage extends ServerMessageWithSessionID {
+export interface SchemaMessage {
   type: "schema";
   schema: JsonSchema | null;
   current_values: Record<string, unknown>;
@@ -78,28 +84,29 @@ export interface SchemaMessage extends ServerMessageWithSessionID {
   model_info: ModelDisplayInfo | null;
 }
 
-export interface ParamOverridesMessage extends ServerMessageWithSessionID {
+export interface ParamOverridesMessage {
   type: "param_overrides";
   param_overrides: Record<string, unknown>;
 }
 
-export interface RunStartMessage extends ServerMessageWithSessionID {
+export interface RunStartMessage {
   type: "run_start";
   params: Record<string, unknown>;
 }
 
-export interface RunOKMessage extends ServerMessageWithSessionID {
+export interface RunOKMessage {
   type: "run_ok";
   elapsed_ms: string;
   current_values: Record<string, unknown>;
 }
 
-export interface RunErrorMessage extends ServerMessageWithSessionID {
+export interface RunErrorMessage {
   type: "run_error";
   elapsed_ms: string;
 }
 
 export type ServerMessage =
+  | ConnectedMessage
   | ConsoleMessage
   | SchemaMessage
   | ParamOverridesMessage

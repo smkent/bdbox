@@ -309,27 +309,32 @@ function initIframeDragFix(): void {
 }
 
 function initWs(): void {
-  window.addEventListener("bdbox:schema", ({ detail }) => {
+  window.addEventListener("bdbox:hello", ({ detail }) => {
     if (detail.session_id !== lastSessionId) {
-      window.dispatchEvent(new CustomEvent("bdbox:clear_console"));
       const store = Alpine.store("runStatus");
-      if (detail.model_running) {
-        store.state = "running";
-        if (tickInterval) clearInterval(tickInterval);
-        runStartedAt = detail.model_run_started
-          ? new Date(detail.model_run_started).getTime()
-          : Date.now();
-        store.runElapsedS = 0;
-        tickInterval = setInterval(() => {
-          store.runElapsedS = Math.round((Date.now() - runStartedAt!) / 1000);
-        }, 1000);
-      } else {
-        store.state = "idle";
-      }
+      store.state = "idle";
       store.elapsedMs = "";
+      if (tickInterval) {
+        clearInterval(tickInterval);
+        tickInterval = null;
+      }
+      window.dispatchEvent(new CustomEvent("bdbox:clear_console"));
       lastSessionId = detail.session_id;
-    } else if (detail.model_running) {
-      Alpine.store("runStatus").state = "running";
+    }
+  });
+
+  window.addEventListener("bdbox:schema", ({ detail }) => {
+    if (detail.model_running) {
+      const store = Alpine.store("runStatus");
+      store.state = "running";
+      if (tickInterval) clearInterval(tickInterval);
+      runStartedAt = detail.model_run_started
+        ? new Date(detail.model_run_started).getTime()
+        : Date.now();
+      store.runElapsedS = 0;
+      tickInterval = setInterval(() => {
+        store.runElapsedS = Math.round((Date.now() - runStartedAt!) / 1000);
+      }, 1000);
     }
     if (detail.model_info) {
       const info = Alpine.store("modelInfo");

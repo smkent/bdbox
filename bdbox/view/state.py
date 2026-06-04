@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 from queue import Queue
 from typing import TYPE_CHECKING, Any, TextIO, cast
 from uuid import UUID, uuid4
@@ -11,6 +11,7 @@ from bdbox.console import console, log
 from bdbox.dispatch import Event, dispatch
 from bdbox.errors import InternalError
 from bdbox.protocol import (
+    ConnectedMessage,
     ParamOverridesMessage,
     ResetParamsMessage,
     SchemaMessage,
@@ -47,17 +48,19 @@ class ViewState:
         dispatch.on_exit(self.stop_queue, name="Stop ViewState message queue")
 
     def enqueue(self, msg: ServerMessage) -> None:
-        self.msg_queue.put(replace(msg, session_id=self.session_id))
+        self.msg_queue.put(msg)
 
     def stop_queue(self) -> None:
         self.msg_queue.put(None)
 
     async def handle_client_connection(self, websocket: WebSocket) -> None:
         view_websocket = WebSocketConnection(websocket)
+        await view_websocket.send_message(
+            ConnectedMessage(session_id=self.session_id)
+        )
         if self.model_class:
             await view_websocket.send_message(
                 SchemaMessage(
-                    session_id=self.session_id,
                     schema=run_state.model_state.schema,
                     current_values=serializer.unstructure(self.current_values),
                     model_running=run_state.model_state.model_running,
@@ -74,8 +77,7 @@ class ViewState:
                 self.handle_client_message(view_websocket, message)
                 await view_websocket.send_message(
                     ParamOverridesMessage(
-                        session_id=self.session_id,
-                        param_overrides=dict(self.param_overrides),
+                        param_overrides=dict(self.param_overrides)
                     )
                 )
 
