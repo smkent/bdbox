@@ -1,4 +1,4 @@
-import type { ServerMessage, BrowserMessage } from "./protocol.js";
+import type { ServerMessage, BrowserMessage } from "./protocol";
 
 const BASE_DELAY_MS = 1000;
 const MAX_DELAY_MS = 30000;
