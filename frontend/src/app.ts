@@ -218,8 +218,8 @@ function registerComponents(layout: GoldenLayout): void {
           <span x-show="$store.runStatus.wsState === 'disconnected'" class="status-disconnected">Disconnected (retry in <span x-text="$store.runStatus.retryIn"></span>s)</span>
           <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'idle'" class="status-idle">Idle</span>
           <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'running'" class="status-running"><span class="status-spinner"></span>Running…<span x-show="$store.runStatus.runElapsedS >= 2"> (<span x-text="formatElapsed($store.runStatus.runElapsedS)"></span>)</span></span>
-          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'ok'" class="status-ok">Done (<span x-text="$store.runStatus.elapsedMs"></span>)</span>
-          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'error'" class="status-error">Error</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'done'" class="status-ok">Done (<span x-text="$store.runStatus.elapsedMs"></span>)</span>
+          <span x-show="$store.runStatus.wsState === 'connected' && $store.runStatus.state === 'error'" class="status-error">Error (<span x-text="$store.runStatus.elapsedMs"></span>)</span>
         </div>
       </div>
       <div class="console-terminal"></div>
@@ -258,7 +258,6 @@ function registerComponents(layout: GoldenLayout): void {
       container.on("resize", fit);
 
       window.addEventListener("bdbox:ws_open", sendSize);
-      window.addEventListener("bdbox:run_start", () => terminal.clear());
       window.addEventListener("bdbox:clear_console", () => terminal.clear());
       window.addEventListener("bdbox:console", ({ detail }) => {
         terminal.write(detail.text);
@@ -329,18 +328,6 @@ function initWs(): void {
   });
 
   window.addEventListener("bdbox:model_details", ({ detail }) => {
-    if (detail.model_running) {
-      const store = Alpine.store("runStatus");
-      store.state = "running";
-      if (tickInterval) clearInterval(tickInterval);
-      runStartedAt = detail.model_run_started
-        ? new Date(detail.model_run_started).getTime()
-        : Date.now();
-      store.runElapsedS = 0;
-      tickInterval = setInterval(() => {
-        store.runElapsedS = Math.round((Date.now() - runStartedAt!) / 1000);
-      }, 1000);
-    }
     if (detail.model_info) {
       const info = Alpine.store("modelInfo");
       info.file = detail.model_info.file ?? null;
@@ -358,51 +345,41 @@ function initWs(): void {
         initJedison(detail);
       }
     }
-  });
-
-  window.addEventListener("bdbox:param_overrides", ({ detail }) => {
-    paramOverrides = detail.param_overrides;
-    if (jedison) {
-      jedison.setValue({ ...currentValues, ...paramOverrides });
-    }
-  });
-
-  window.addEventListener("bdbox:run_start", () => {
-    const store = Alpine.store("runStatus");
-    store.state = "running";
-    store.elapsedMs = null;
-    if (tickInterval) clearInterval(tickInterval);
-    runStartedAt = Date.now();
-    store.runElapsedS = 0;
-    tickInterval = setInterval(() => {
-      store.runElapsedS = Math.round((Date.now() - runStartedAt!) / 1000);
-    }, 1000);
-  });
-
-  window.addEventListener("bdbox:run_ok", ({ detail }) => {
-    const store = Alpine.store("runStatus");
-    store.state = "ok";
-    store.elapsedMs = formatElapsedMs(detail.elapsed_ms);
-    store.runElapsedS = 0;
-    if (tickInterval) {
-      clearInterval(tickInterval);
-      tickInterval = null;
-    }
-    if (detail.current_values && Object.keys(paramOverrides).length === 0) {
+    if (detail.current_values) {
       currentValues = detail.current_values;
-      if (jedison) {
+      if (jedison && Object.keys(paramOverrides).length === 0) {
         jedison.setValue(currentValues);
+      }
+    }
+    if (detail.param_overrides) {
+      paramOverrides = detail.param_overrides;
+      if (jedison) {
+        jedison.setValue({ ...currentValues, ...paramOverrides });
       }
     }
   });
 
-  window.addEventListener("bdbox:run_error", () => {
+  window.addEventListener("bdbox:model_status", ({ detail }) => {
     const store = Alpine.store("runStatus");
-    store.state = "error";
+    store.state = detail.status;
     store.runElapsedS = 0;
     if (tickInterval) {
       clearInterval(tickInterval);
       tickInterval = null;
+    }
+    if (detail.status === "running") {
+      window.dispatchEvent(new CustomEvent("bdbox:clear_console"));
+      store.elapsedMs = null;
+      runStartedAt = detail.started_at
+        ? new Date(detail.started_at).getTime()
+        : Date.now();
+      tickInterval = setInterval(() => {
+        store.runElapsedS = Math.round((Date.now() - runStartedAt!) / 1000);
+      }, 1000);
+    } else if (detail.status === "done" || detail.status === "error") {
+      if (detail.elapsed_ms !== undefined) {
+        store.elapsedMs = formatElapsedMs(detail.elapsed_ms);
+      }
     }
   });
 

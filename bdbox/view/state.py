@@ -14,7 +14,7 @@ from bdbox.protocol import (
     ClientInfoMessage,
     ConnectedMessage,
     ModelDetailsMessage,
-    ParamOverridesMessage,
+    ModelRunStatusMessage,
     ResetParamsMessage,
     SelectPresetMessage,
     UpdateParamMessage,
@@ -63,20 +63,18 @@ class ViewState:
                 ModelDetailsMessage(
                     schema=run_state.model_state.schema,
                     current_values=serializer.unstructure(self.current_values),
-                    model_running=run_state.model_state.model_running,
-                    model_run_started=(
-                        run_state.model_state.timer.started_at
-                        if run_state.model_state.timer
-                        else None
-                    ),
                     model_info=run_state.model_state.model,
                 )
             )
+            if timer := run_state.model_state.timer:
+                await view_websocket.send_message(
+                    ModelRunStatusMessage.running(started_at=timer.started_at)
+                )
         while True:
             if message := await view_websocket.receive_message():
                 self.handle_client_message(view_websocket, message)
                 await view_websocket.send_message(
-                    ParamOverridesMessage(
+                    ModelDetailsMessage(
                         param_overrides=dict(self.param_overrides)
                     )
                 )

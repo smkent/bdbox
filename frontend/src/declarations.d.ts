@@ -1,10 +1,7 @@
 import type {
   ConnectedMessage,
   ConsoleMessage,
-  ParamOverridesMessage,
-  RunErrorMessage,
-  RunOKMessage,
-  RunStartMessage,
+  ModelRunStatusMessage,
   ModelDetailsMessage,
 } from "./protocol.js";
 
@@ -17,10 +14,7 @@ declare global {
     "bdbox:console": CustomEvent<ConsoleMessage>;
     "bdbox:hello": CustomEvent<ConnectedMessage>;
     "bdbox:model_details": CustomEvent<ModelDetailsMessage>;
-    "bdbox:param_overrides": CustomEvent<ParamOverridesMessage>;
-    "bdbox:run_start": CustomEvent<RunStartMessage>;
-    "bdbox:run_ok": CustomEvent<RunOKMessage>;
-    "bdbox:run_error": CustomEvent<RunErrorMessage>;
+    "bdbox:model_status": CustomEvent<ModelRunStatusMessage>;
   }
 }
 

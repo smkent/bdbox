@@ -4,7 +4,7 @@
 
 // Global store types (referenced by the alpinejs Stores interface below and by app.ts)
 type RunStatusStore = {
-  state: "idle" | "running" | "ok" | "error";
+  state: "idle" | "running" | "done" | "error";
   elapsedMs: string | null;
   wsState: "connecting" | "connected" | "disconnected";
   retryIn: number;

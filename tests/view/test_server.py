@@ -23,11 +23,9 @@ from bdbox.protocol import (
     ConnectedMessage,
     Message,
     ModelDetailsMessage,
-    ParamOverridesMessage,
+    ModelDisplayInfo,
+    ModelRunStatusMessage,
     ResetParamsMessage,
-    RunErrorMessage,
-    RunOKMessage,
-    RunStartMessage,
     SelectPresetMessage,
     ServerMessage,
     UpdateParamMessage,
@@ -290,20 +288,25 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
     [
         pytest.param(
             ModelDetailsMessage(
-                model_running=True,
-                model_run_started=(
-                    datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
-                ),
+                current_values={"a": 5.0, "b": "nope"},
+                param_overrides={"foo": "bar"},
+                model_info=ModelDisplayInfo(filename="some_model.py"),
             ),
             id="schema",
         ),
         pytest.param(
-            ParamOverridesMessage(param_overrides={"foor": "bar"}),
-            id="param_overrides",
+            ModelRunStatusMessage.running(
+                datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
+            ),
+            id="run_start",
         ),
-        pytest.param(RunStartMessage(params={"foo": "bar"}), id="run_start"),
-        pytest.param(RunOKMessage(elapsed_ms=123), id="run_ok"),
-        pytest.param(RunErrorMessage(elapsed_ms=234), id="run_error"),
+        pytest.param(
+            ModelRunStatusMessage.done(elapsed_ms=123),
+            id="run_ok",
+        ),
+        pytest.param(
+            ModelRunStatusMessage.error(elapsed_ms=234), id="run_error"
+        ),
     ],
 )
 def test_ws_broadcast_reaches_client(
@@ -316,7 +319,9 @@ def test_ws_broadcast_reaches_client(
 
 
 def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
-    message = RunStartMessage()
+    message = ModelRunStatusMessage.running(
+        datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
+    )
     with wspt.wsconn() as ws2:
         connected_message_data = ws2.receive_json()
         connected_message = Message.from_dict(connected_message_data)

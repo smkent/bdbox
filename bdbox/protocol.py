@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 from dataclasses import dataclass, field, fields, is_dataclass
 from datetime import datetime
+from enum import Enum
 from functools import partial
 from typing import (
     Annotated,
@@ -145,32 +146,44 @@ class ConsoleMessage(ServerModelMessage, type="console", log_ok=False):
 
 @dataclass
 class ModelDetailsMessage(ServerModelMessage, type="model_details"):
-    schema: dict[str, Any] | None = None
-    current_values: dict[str, Any] = field(default_factory=dict)
-    model_running: bool = False
-    model_run_started: datetime | None = None
-    model_info: ModelDisplayInfo | None = None
+    schema: Annotated[
+        dict[str, Any] | None, override(omit_if_default=True)
+    ] = None
+    current_values: Annotated[
+        dict[str, Any] | None, override(omit_if_default=True)
+    ] = None
+    model_info: Annotated[
+        ModelDisplayInfo | None, override(omit_if_default=True)
+    ] = None
+    param_overrides: Annotated[
+        dict[str, Any] | None, override(omit_if_default=True)
+    ] = None
 
 
 @dataclass
-class ParamOverridesMessage(ServerModelMessage, type="param_overrides"):
-    param_overrides: dict[str, Any] = field(default_factory=dict)
+class ModelRunStatusMessage(ServerModelMessage, type="model_status"):
+    class Status(Enum):
+        RUNNING = "running"
+        DONE = "done"
+        ERROR = "error"
 
+    status: ModelRunStatusMessage.Status = field(kw_only=True)
+    started_at: Annotated[datetime | None, override(omit_if_default=True)] = (
+        None
+    )
+    elapsed_ms: Annotated[int | None, override(omit_if_default=True)] = None
 
-@dataclass
-class RunStartMessage(ServerModelMessage, type="run_start"):
-    params: dict[str, Any] = field(default_factory=dict)
+    @classmethod
+    def running(cls, started_at: datetime, **kwargs: Any) -> Self:
+        return cls(status=cls.Status.RUNNING, started_at=started_at, **kwargs)
 
+    @classmethod
+    def done(cls, elapsed_ms: int, **kwargs: Any) -> Self:
+        return cls(status=cls.Status.DONE, elapsed_ms=elapsed_ms, **kwargs)
 
-@dataclass
-class RunOKMessage(ServerModelMessage, type="run_ok"):
-    elapsed_ms: int
-    current_values: dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class RunErrorMessage(ServerModelMessage, type="run_error"):
-    elapsed_ms: int
+    @classmethod
+    def error(cls, elapsed_ms: int, **kwargs: Any) -> Self:
+        return cls(status=cls.Status.ERROR, elapsed_ms=elapsed_ms, **kwargs)
 
 
 class ProtocolConverter(cattrs.Converter):
