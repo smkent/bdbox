@@ -119,33 +119,35 @@ class ConnectedMessage(ServerMessage, type="hello"):
 
 
 @dataclass
-class ClientInfoMessage(BrowserMessage, type="client_info"):
+class ClientInfoMessage(BrowserMessage, type="client.info"):
     terminal: TerminalInfo = field(default_factory=TerminalInfo)
 
 
 @dataclass
-class UpdateParamMessage(BrowserModelMessage, type="update_param"):
+class ModelResetParamsMessage(BrowserModelMessage, type="model.reset_params"):
+    pass
+
+
+@dataclass
+class ModelSetParamMessage(BrowserModelMessage, type="model.set_param"):
     field: str
     value: Any
 
 
 @dataclass
-class SelectPresetMessage(BrowserModelMessage, type="select_preset"):
+class ModelSetPresetMessage(BrowserModelMessage, type="model.set_preset"):
     preset: str
 
 
 @dataclass
-class ResetParamsMessage(BrowserModelMessage, type="reset_params"):
-    pass
-
-
-@dataclass
-class ConsoleMessage(ServerModelMessage, type="console", log_ok=False):
+class ModelConsoleMessage(
+    ServerModelMessage, type="model.console", log_ok=False
+):
     text: str
 
 
 @dataclass
-class ModelDetailsMessage(ServerModelMessage, type="model_details"):
+class ModelDetailsMessage(ServerModelMessage, type="model.details"):
     schema: Annotated[
         dict[str, Any] | None, override(omit_if_default=True)
     ] = None
@@ -161,7 +163,7 @@ class ModelDetailsMessage(ServerModelMessage, type="model_details"):
 
 
 @dataclass
-class ModelRunStatusMessage(ServerModelMessage, type="model_status"):
+class ModelRunStatusMessage(ServerModelMessage, type="model.status"):
     class Status(Enum):
         RUNNING = "running"
         DONE = "done"

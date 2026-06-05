@@ -45,7 +45,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_malformed_json_ignored[Params-param_overrides0]
@@ -94,7 +94,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_missing_message_fields_ignored[Model-param_overrides0]
@@ -143,7 +143,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_missing_message_fields_ignored[Params-param_overrides0]
@@ -192,7 +192,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_reset_params[Model-param_overrides]
@@ -241,7 +241,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_reset_params[Params-param_overrides]
@@ -290,7 +290,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_select_preset_no_model_class[param_overrides0-None]
@@ -348,7 +348,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_select_preset_replaces_overrides[Params-param_overrides]
@@ -397,7 +397,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_select_preset_unknown_ignored[Model-param_overrides0]
@@ -446,7 +446,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_select_preset_unknown_ignored[Params-param_overrides0]
@@ -495,7 +495,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_unknown_message_type_ignored[Model-param_overrides0]
@@ -544,7 +544,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_unknown_message_type_ignored[Params-param_overrides0]
@@ -593,7 +593,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_update_param_accumulates[Model-param_overrides0]
@@ -642,7 +642,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_update_param_accumulates[Params-param_overrides0]
@@ -691,7 +691,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error]
@@ -740,14 +740,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error].2
   dict({
     'elapsed_ms': 234,
     'status': 'error',
-    'type': 'model_status',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok]
@@ -796,14 +796,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok].2
   dict({
     'elapsed_ms': 123,
     'status': 'done',
-    'type': 'model_status',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start]
@@ -852,14 +852,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start].2
   dict({
     'started_at': '1977-05-25T11:38:00+00:00',
     'status': 'running',
-    'type': 'model_status',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema]
@@ -908,7 +908,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema].2
@@ -925,7 +925,7 @@
     'param_overrides': dict({
       'foo': 'bar',
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error]
@@ -974,14 +974,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error].2
   dict({
     'elapsed_ms': 234,
     'status': 'error',
-    'type': 'model_status',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok]
@@ -1030,14 +1030,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok].2
   dict({
     'elapsed_ms': 123,
     'status': 'done',
-    'type': 'model_status',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start]
@@ -1086,14 +1086,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start].2
   dict({
     'started_at': '1977-05-25T11:38:00+00:00',
     'status': 'running',
-    'type': 'model_status',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema]
@@ -1142,7 +1142,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema].2
@@ -1159,7 +1159,7 @@
     'param_overrides': dict({
       'foo': 'bar',
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0]
@@ -1208,7 +1208,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].2
@@ -1248,14 +1248,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].3
   dict({
     'started_at': '1977-05-25T11:38:00+00:00',
     'status': 'running',
-    'type': 'model_status',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0]
@@ -1304,7 +1304,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].2
@@ -1344,14 +1344,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].3
   dict({
     'started_at': '1977-05-25T11:38:00+00:00',
     'status': 'running',
-    'type': 'model_status',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_connect_no_model_sends_no_schema[param_overrides0-None]
@@ -1409,7 +1409,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_reset_params[Params-param_overrides]
@@ -1458,7 +1458,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_select_preset[Model-param_overrides0]
@@ -1507,7 +1507,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_select_preset[Params-param_overrides0]
@@ -1556,7 +1556,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_update_param[Model-param_overrides0]
@@ -1605,7 +1605,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_update_param[Params-param_overrides0]
@@ -1654,6 +1654,6 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---

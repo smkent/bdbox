@@ -14,10 +14,10 @@ from bdbox.protocol import (
     ClientInfoMessage,
     ConnectedMessage,
     ModelDetailsMessage,
+    ModelResetParamsMessage,
     ModelRunStatusMessage,
-    ResetParamsMessage,
-    SelectPresetMessage,
-    UpdateParamMessage,
+    ModelSetParamMessage,
+    ModelSetPresetMessage,
 )
 from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
@@ -88,11 +88,11 @@ class ViewState:
                 cast("TextIO", WebStream(self.msg_queue)),
                 msg.terminal.cols,
             )
-        elif isinstance(msg, UpdateParamMessage):
+        elif isinstance(msg, ModelSetParamMessage):
             self.param_overrides[msg.field] = msg.value
             self.rerender_event.set()
             log.debug(f"Parameter updated: {msg.field} = {msg.value}")
-        elif isinstance(msg, SelectPresetMessage):
+        elif isinstance(msg, ModelSetPresetMessage):
             if self.model_class:
                 for preset in self.model_class.presets:
                     if preset.name == msg.preset:
@@ -106,7 +106,7 @@ class ViewState:
                         self.rerender_event.set()
                         log.debug(f"Preset selected: {preset.name}")
                         break
-        elif isinstance(msg, ResetParamsMessage):
+        elif isinstance(msg, ModelResetParamsMessage):
             self.param_overrides.clear()
             self.rerender_event.set()
             log.debug("Parameters reset")

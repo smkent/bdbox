@@ -8,46 +8,48 @@ export interface TerminalInfo {
 }
 
 export interface ClientInfoMessage {
-  type: "client_info";
+  type: "client.info";
   terminal: TerminalInfo;
 }
 
-export interface UpdateParamMessage {
-  type: "update_param";
+export interface ModelResetParamsMessage {
+  type: "model.reset_params";
+}
+
+export interface ModelSetParamMessage {
+  type: "model.set_param";
   field: string;
   value: unknown;
 }
 
-export interface SelectPresetMessage {
-  type: "select_preset";
+export interface ModelSetPresetMessage {
+  type: "model.set_preset";
   preset: string;
-}
-
-export interface ResetParamsMessage {
-  type: "reset_params";
 }
 
 export type BrowserMessage =
   | ClientInfoMessage
-  | UpdateParamMessage
-  | SelectPresetMessage
-  | ResetParamsMessage;
+  | ModelResetParamsMessage
+  | ModelSetParamMessage
+  | ModelSetPresetMessage;
 
 export const BrowserMessage = {
   clientInfo: (terminalInfo: TerminalInfo): ClientInfoMessage => ({
-    type: "client_info",
+    type: "client.info",
     terminal: terminalInfo,
   }),
-  updateParam: (field: string, value: unknown): UpdateParamMessage => ({
-    type: "update_param",
+  modelResetParams: (): ModelResetParamsMessage => ({
+    type: "model.reset_params",
+  }),
+  modelSetParam: (field: string, value: unknown): ModelSetParamMessage => ({
+    type: "model.set_param",
     field,
     value,
   }),
-  selectPreset: (preset: string): SelectPresetMessage => ({
-    type: "select_preset",
+  modelSetPreset: (preset: string): ModelSetPresetMessage => ({
+    type: "model.set_preset",
     preset,
   }),
-  resetParams: (): ResetParamsMessage => ({ type: "reset_params" }),
 } as const;
 
 // Server to browser message types
@@ -68,13 +70,13 @@ export interface ConnectedMessage {
   version: VersionInfo;
 }
 
-export interface ConsoleMessage {
-  type: "console";
+export interface ModelConsoleMessage {
+  type: "model.console";
   text: string;
 }
 
 export interface ModelDetailsMessage {
-  type: "model_details";
+  type: "model.details";
   schema?: JsonSchema | null;
   current_values?: Record<string, unknown>;
   model_info?: ModelDisplayInfo | null;
@@ -82,7 +84,7 @@ export interface ModelDetailsMessage {
 }
 
 export interface ModelRunStatusMessage {
-  type: "model_status";
+  type: "model.status";
   status: "running" | "done" | "error";
   started_at?: string | null;
   elapsed_ms?: number;
@@ -109,6 +111,6 @@ export function formatElapsedMs(ms: number): string {
 
 export type ServerMessage =
   | ConnectedMessage
-  | ConsoleMessage
+  | ModelConsoleMessage
   | ModelDetailsMessage
   | ModelRunStatusMessage;

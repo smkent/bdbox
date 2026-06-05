@@ -24,11 +24,11 @@ from bdbox.protocol import (
     Message,
     ModelDetailsMessage,
     ModelDisplayInfo,
+    ModelResetParamsMessage,
     ModelRunStatusMessage,
-    ResetParamsMessage,
-    SelectPresetMessage,
+    ModelSetParamMessage,
+    ModelSetPresetMessage,
     ServerMessage,
-    UpdateParamMessage,
     VersionInfo,
 )
 from bdbox.runner.state import run_state
@@ -179,12 +179,12 @@ def view_state(
 def test_update_param_accumulates(wspt: WSParamTest) -> None:
     assert not wspt.view_state.rerender_event.is_set()
     wspt.send(
-        UpdateParamMessage(field="width", value=50.0),
+        ModelSetParamMessage(field="width", value=50.0),
         expect_overrides={"width": 50.0},
         expect_event=True,
     )
     wspt.send(
-        UpdateParamMessage(field="count", value=2),
+        ModelSetParamMessage(field="count", value=2),
         expect_overrides={"width": 50.0, "count": 2},
         expect_event=True,
     )
@@ -197,7 +197,7 @@ def test_update_param_accumulates(wspt: WSParamTest) -> None:
 )
 def test_select_preset_replaces_overrides(wspt: WSParamTest) -> None:
     wspt.send(
-        SelectPresetMessage(preset="small"),
+        ModelSetPresetMessage(preset="small"),
         expect_overrides={"width": 5.0, "count": 1},
         expect_event=True,
     )
@@ -205,7 +205,7 @@ def test_select_preset_replaces_overrides(wspt: WSParamTest) -> None:
 
 def test_select_preset_unknown_ignored(wspt: WSParamTest) -> None:
     wspt.send(
-        SelectPresetMessage(preset="does_not_exist"),
+        ModelSetPresetMessage(preset="does_not_exist"),
         expect_overrides={},
         expect_event=False,
     )
@@ -214,7 +214,7 @@ def test_select_preset_unknown_ignored(wspt: WSParamTest) -> None:
 @pytest.mark.parametrize("model_class", [None], indirect=True)
 def test_select_preset_no_model_class(wspt: WSParamTest) -> None:
     wspt.send(
-        SelectPresetMessage(preset="small"),
+        ModelSetPresetMessage(preset="small"),
         expect_overrides={},
         expect_event=False,
     )
@@ -226,7 +226,9 @@ def test_select_preset_no_model_class(wspt: WSParamTest) -> None:
     indirect=True,
 )
 def test_reset_params(wspt: WSParamTest) -> None:
-    wspt.send(ResetParamsMessage(), expect_overrides={}, expect_event=True)
+    wspt.send(
+        ModelResetParamsMessage(), expect_overrides={}, expect_event=True
+    )
 
 
 def test_unknown_message_type_ignored(wspt: WSParamTest) -> None:
@@ -241,7 +243,7 @@ def test_malformed_json_ignored(wspt: WSParamTest) -> None:
     assert wspt.ws
     wspt.ws.send_text("not valid json {{{")
     wspt.send(
-        UpdateParamMessage(field="width", value=50.0),
+        ModelSetParamMessage(field="width", value=50.0),
         expect_overrides={"width": 50.0},
         expect_event=True,
     )
@@ -249,26 +251,26 @@ def test_malformed_json_ignored(wspt: WSParamTest) -> None:
 
 def test_missing_message_fields_ignored(wspt: WSParamTest) -> None:
     wspt.send(
-        {"type": "update_param"}, expect_event=False, expect_response=False
+        {"type": "model.set_param"}, expect_event=False, expect_response=False
     )
 
 
 @pytest.mark.parametrize("model_class", [None], indirect=True)
 def test_ws_connect_no_model_sends_no_schema(wspt: WSParamTest) -> None:
     wspt.send(
-        UpdateParamMessage(field="width", value=5.0),
+        ModelSetParamMessage(field="width", value=5.0),
         expect_overrides={"width": 5.0},
         expect_event=True,
     )
 
 
 def test_ws_update_param(wspt: WSParamTest) -> None:
-    wspt.send(UpdateParamMessage(field="width", value=75.0))
+    wspt.send(ModelSetParamMessage(field="width", value=75.0))
 
 
 def test_ws_select_preset(wspt: WSParamTest) -> None:
     wspt.send(
-        SelectPresetMessage(preset="small"),
+        ModelSetPresetMessage(preset="small"),
         expect_overrides={"width": 5.0, "count": 1},
         expect_event=True,
     )
@@ -280,7 +282,9 @@ def test_ws_select_preset(wspt: WSParamTest) -> None:
     indirect=True,
 )
 def test_ws_reset_params(wspt: WSParamTest) -> None:
-    wspt.send(ResetParamsMessage(), expect_overrides={}, expect_event=True)
+    wspt.send(
+        ModelResetParamsMessage(), expect_overrides={}, expect_event=True
+    )
 
 
 @pytest.mark.parametrize(

@@ -131,7 +131,7 @@ function initJedison({ schemaChanged = true }: InitJedisonOptions = {}): void {
     btn.textContent = name;
     if (description) btn.title = description;
     btn.addEventListener("click", () =>
-      sendWs(BrowserMessage.selectPreset(name)),
+      sendWs(BrowserMessage.modelSetPreset(name)),
     );
     controls.appendChild(btn);
   });
@@ -139,7 +139,7 @@ function initJedison({ schemaChanged = true }: InitJedisonOptions = {}): void {
   resetBtn.className = "params-reset-btn";
   resetBtn.textContent = "Reset";
   resetBtn.addEventListener("click", () =>
-    sendWs(BrowserMessage.resetParams()),
+    sendWs(BrowserMessage.modelResetParams()),
   );
   controls.appendChild(resetBtn);
   paramsFormEl!.appendChild(controls);
@@ -173,7 +173,7 @@ function initJedison({ schemaChanged = true }: InitJedisonOptions = {}): void {
       ...jedisonData.paramOverrides,
       [topKey]: value,
     };
-    sendWs(BrowserMessage.updateParam(topKey, value));
+    sendWs(BrowserMessage.modelSetParam(topKey, value));
   });
 }
 
@@ -273,9 +273,11 @@ function registerComponents(layout: GoldenLayout): void {
       new ResizeObserver(fit).observe(terminalEl);
       container.on("resize", fit);
 
-      window.addEventListener("bdbox:ws_open", sendSize);
-      window.addEventListener("bdbox:clear_console", () => terminal.clear());
-      window.addEventListener("bdbox:console", ({ detail }) => {
+      window.addEventListener("bdbox:ws.open", sendSize);
+      window.addEventListener("bdbox:model.clear_console", () =>
+        terminal.clear(),
+      );
+      window.addEventListener("bdbox.server:model.console", ({ detail }) => {
         terminal.write(detail.text);
       });
       return undefined;
@@ -329,7 +331,7 @@ function initIframeDragFix(): void {
 }
 
 function initWs(): void {
-  window.addEventListener("bdbox:hello", ({ detail }) => {
+  window.addEventListener("bdbox.server:hello", ({ detail }) => {
     if (detail.session_id !== lastSessionId) {
       const store = Alpine.store("runStatus");
       store.state = "idle";
@@ -338,12 +340,12 @@ function initWs(): void {
         clearInterval(tickInterval);
         tickInterval = null;
       }
-      window.dispatchEvent(new CustomEvent("bdbox:clear_console"));
+      window.dispatchEvent(new CustomEvent("bdbox:model.clear_console"));
       lastSessionId = detail.session_id;
     }
   });
 
-  window.addEventListener("bdbox:model_details", ({ detail }) => {
+  window.addEventListener("bdbox.server:model.details", ({ detail }) => {
     if (detail.model_info) {
       const info = Alpine.store("modelInfo");
       info.file = detail.model_info.file ?? null;
@@ -370,7 +372,7 @@ function initWs(): void {
     }
   });
 
-  window.addEventListener("bdbox:model_status", ({ detail }) => {
+  window.addEventListener("bdbox.server:model.status", ({ detail }) => {
     const store = Alpine.store("runStatus");
     store.state = detail.status;
     store.runElapsedS = 0;
@@ -379,7 +381,7 @@ function initWs(): void {
       tickInterval = null;
     }
     if (detail.status === "running") {
-      window.dispatchEvent(new CustomEvent("bdbox:clear_console"));
+      window.dispatchEvent(new CustomEvent("bdbox:model.clear_console"));
       store.elapsedMs = null;
       runStartedAt = detail.started_at
         ? new Date(detail.started_at).getTime()
@@ -398,7 +400,7 @@ function initWs(): void {
   let retryAt: number | null = null;
   let runStartedAt: number | null = null;
 
-  window.addEventListener("bdbox:ws_connecting", () => {
+  window.addEventListener("bdbox:ws.connecting", () => {
     if (tickInterval) {
       clearInterval(tickInterval);
       tickInterval = null;
@@ -406,10 +408,10 @@ function initWs(): void {
     retryAt = null;
     Alpine.store("runStatus").wsState = "connecting";
   });
-  window.addEventListener("bdbox:ws_open", () => {
+  window.addEventListener("bdbox:ws.open", () => {
     Alpine.store("runStatus").wsState = "connected";
   });
-  window.addEventListener("bdbox:ws_close", ({ detail }) => {
+  window.addEventListener("bdbox:ws.close", ({ detail }) => {
     const store = Alpine.store("runStatus");
     store.wsState = "disconnected";
     retryAt = Date.now() + detail.retryInMs;
