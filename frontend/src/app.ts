@@ -8,9 +8,9 @@ import "golden-layout/dist/css/goldenlayout-base.css";
 import "golden-layout/dist/css/themes/goldenlayout-dark-theme.css";
 import "@xterm/xterm/css/xterm.css";
 import "./app.css";
-import { connectWs, sendWs } from "./ws.js";
-import { BrowserMessage, formatElapsedMs } from "./protocol.js";
-import type { ModelDetailsMessage } from "./protocol.js";
+import { connectWs, sendWs } from "./ws";
+import { BrowserMessage, formatElapsedMs } from "./protocol";
+import type { ModelDetailsMessage } from "./protocol";
 
 const LAYOUT_VERSION = 1;
 const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
