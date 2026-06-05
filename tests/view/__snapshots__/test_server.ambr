@@ -19,8 +19,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -47,7 +45,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_malformed_json_ignored[Params-param_overrides0]
@@ -70,8 +68,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -98,7 +94,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_missing_message_fields_ignored[Model-param_overrides0]
@@ -121,8 +117,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -149,7 +143,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_missing_message_fields_ignored[Params-param_overrides0]
@@ -172,8 +166,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -200,7 +192,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_reset_params[Model-param_overrides]
@@ -223,8 +215,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -251,7 +241,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_reset_params[Params-param_overrides]
@@ -274,8 +264,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -302,7 +290,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_select_preset_no_model_class[param_overrides0-None]
@@ -334,8 +322,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -362,7 +348,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_select_preset_replaces_overrides[Params-param_overrides]
@@ -385,8 +371,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -413,7 +397,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_select_preset_unknown_ignored[Model-param_overrides0]
@@ -436,8 +420,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -464,7 +446,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_select_preset_unknown_ignored[Params-param_overrides0]
@@ -487,8 +469,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -515,7 +495,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_unknown_message_type_ignored[Model-param_overrides0]
@@ -538,8 +518,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -566,7 +544,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_unknown_message_type_ignored[Params-param_overrides0]
@@ -589,8 +567,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -617,7 +593,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_update_param_accumulates[Model-param_overrides0]
@@ -640,8 +616,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -668,7 +642,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_update_param_accumulates[Params-param_overrides0]
@@ -691,8 +665,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -719,66 +691,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
-  })
-# ---
-# name: test_ws_broadcast_reaches_client[Model-param_overrides0-param_overrides]
-  dict({
-    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
-    'type': 'hello',
-    'version': dict({
-      'bdbox': '11.38.77',
-    }),
-  })
-# ---
-# name: test_ws_broadcast_reaches_client[Model-param_overrides0-param_overrides].1
-  dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
-    'model_info': dict({
-      'cls': None,
-      'file': None,
-      'module': None,
-    }),
-    'model_run_started': None,
-    'model_running': False,
-    'schema': dict({
-      'properties': dict({
-        'count': dict({
-          'default': 3,
-          'type': 'number',
-        }),
-        'width': dict({
-          'default': 10.0,
-          'type': 'number',
-        }),
-      }),
-      'required': list([
-        'count',
-        'width',
-      ]),
-      'type': 'object',
-      'x-presets': list([
-        dict({
-          'name': 'small',
-          'values': dict({
-            'count': 1,
-            'width': 5.0,
-          }),
-        }),
-      ]),
-    }),
-    'type': 'model_details',
-  })
-# ---
-# name: test_ws_broadcast_reaches_client[Model-param_overrides0-param_overrides].2
-  dict({
-    'param_overrides': dict({
-      'foor': 'bar',
-    }),
-    'type': 'param_overrides',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error]
@@ -801,8 +714,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -829,13 +740,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error].2
   dict({
     'elapsed_ms': 234,
-    'type': 'run_error',
+    'status': 'error',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok]
@@ -858,8 +770,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -886,15 +796,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok].2
   dict({
-    'current_values': dict({
-    }),
     'elapsed_ms': 123,
-    'type': 'run_ok',
+    'status': 'done',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start]
@@ -917,8 +826,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -945,15 +852,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start].2
   dict({
-    'params': dict({
-      'foo': 'bar',
-    }),
-    'type': 'run_start',
+    'started_at': '1977-05-25T11:38:00+00:00',
+    'status': 'running',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema]
@@ -976,8 +882,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1004,77 +908,24 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema].2
   dict({
     'current_values': dict({
-    }),
-    'model_info': None,
-    'model_run_started': '1977-05-25T11:38:00+00:00',
-    'model_running': True,
-    'schema': None,
-    'type': 'model_details',
-  })
-# ---
-# name: test_ws_broadcast_reaches_client[Params-param_overrides0-param_overrides]
-  dict({
-    'session_id': 'deadbeef-0327-1138-2187-c01dc0ffee77',
-    'type': 'hello',
-    'version': dict({
-      'bdbox': '11.38.77',
-    }),
-  })
-# ---
-# name: test_ws_broadcast_reaches_client[Params-param_overrides0-param_overrides].1
-  dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
+      'a': 5.0,
+      'b': 'nope',
     }),
     'model_info': dict({
       'cls': None,
-      'file': None,
+      'file': 'some_model.py',
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
-    'schema': dict({
-      'properties': dict({
-        'count': dict({
-          'default': 3,
-          'type': 'number',
-        }),
-        'width': dict({
-          'default': 10.0,
-          'type': 'number',
-        }),
-      }),
-      'required': list([
-        'count',
-        'width',
-      ]),
-      'type': 'object',
-      'x-presets': list([
-        dict({
-          'name': 'small',
-          'values': dict({
-            'count': 1,
-            'width': 5.0,
-          }),
-        }),
-      ]),
-    }),
-    'type': 'model_details',
-  })
-# ---
-# name: test_ws_broadcast_reaches_client[Params-param_overrides0-param_overrides].2
-  dict({
     'param_overrides': dict({
-      'foor': 'bar',
+      'foo': 'bar',
     }),
-    'type': 'param_overrides',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error]
@@ -1097,8 +948,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1125,13 +974,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error].2
   dict({
     'elapsed_ms': 234,
-    'type': 'run_error',
+    'status': 'error',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok]
@@ -1154,8 +1004,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1182,15 +1030,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok].2
   dict({
-    'current_values': dict({
-    }),
     'elapsed_ms': 123,
-    'type': 'run_ok',
+    'status': 'done',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start]
@@ -1213,8 +1060,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1241,15 +1086,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start].2
   dict({
-    'params': dict({
-      'foo': 'bar',
-    }),
-    'type': 'run_start',
+    'started_at': '1977-05-25T11:38:00+00:00',
+    'status': 'running',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema]
@@ -1272,8 +1116,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1300,18 +1142,24 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema].2
   dict({
     'current_values': dict({
+      'a': 5.0,
+      'b': 'nope',
     }),
-    'model_info': None,
-    'model_run_started': '1977-05-25T11:38:00+00:00',
-    'model_running': True,
-    'schema': None,
-    'type': 'model_details',
+    'model_info': dict({
+      'cls': None,
+      'file': 'some_model.py',
+      'module': None,
+    }),
+    'param_overrides': dict({
+      'foo': 'bar',
+    }),
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0]
@@ -1334,8 +1182,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1362,7 +1208,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].2
@@ -1376,8 +1222,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1404,14 +1248,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].3
   dict({
-    'params': dict({
-    }),
-    'type': 'run_start',
+    'started_at': '1977-05-25T11:38:00+00:00',
+    'status': 'running',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0]
@@ -1434,8 +1278,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1462,7 +1304,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].2
@@ -1476,8 +1318,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1504,14 +1344,14 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].3
   dict({
-    'params': dict({
-    }),
-    'type': 'run_start',
+    'started_at': '1977-05-25T11:38:00+00:00',
+    'status': 'running',
+    'type': 'model.status',
   })
 # ---
 # name: test_ws_connect_no_model_sends_no_schema[param_overrides0-None]
@@ -1543,8 +1383,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1571,7 +1409,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_reset_params[Params-param_overrides]
@@ -1594,8 +1432,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1622,7 +1458,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_select_preset[Model-param_overrides0]
@@ -1645,8 +1481,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1673,7 +1507,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_select_preset[Params-param_overrides0]
@@ -1696,8 +1530,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1724,7 +1556,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_update_param[Model-param_overrides0]
@@ -1747,8 +1579,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1775,7 +1605,7 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---
 # name: test_ws_update_param[Params-param_overrides0]
@@ -1798,8 +1628,6 @@
       'file': None,
       'module': None,
     }),
-    'model_run_started': None,
-    'model_running': False,
     'schema': dict({
       'properties': dict({
         'count': dict({
@@ -1826,6 +1654,6 @@
         }),
       ]),
     }),
-    'type': 'model_details',
+    'type': 'model.details',
   })
 # ---

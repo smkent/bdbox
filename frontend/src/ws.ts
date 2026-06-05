@@ -17,12 +17,12 @@ export function sendWs(msg: BrowserMessage): void {
 }
 
 export function connectWs(): void {
-  window.dispatchEvent(new CustomEvent("bdbox:ws_connecting"));
+  window.dispatchEvent(new CustomEvent("bdbox:ws.connecting"));
   _ws = new WebSocket(`ws://${window.location.host}/ws`);
 
   _ws.addEventListener("open", () => {
     retryCount = 0;
-    window.dispatchEvent(new CustomEvent("bdbox:ws_open"));
+    window.dispatchEvent(new CustomEvent("bdbox:ws.open"));
   });
 
   _ws.addEventListener("message", ({ data }) => {
@@ -32,7 +32,9 @@ export function connectWs(): void {
     } catch {
       return;
     }
-    window.dispatchEvent(new CustomEvent(`bdbox:${msg.type}`, { detail: msg }));
+    window.dispatchEvent(
+      new CustomEvent(`bdbox.server:${msg.type}`, { detail: msg }),
+    );
   });
 
   _ws.addEventListener("close", () => {
@@ -40,7 +42,7 @@ export function connectWs(): void {
     const delay = getRetryDelay();
     retryCount++;
     window.dispatchEvent(
-      new CustomEvent("bdbox:ws_close", { detail: { retryInMs: delay } }),
+      new CustomEvent("bdbox:ws.close", { detail: { retryInMs: delay } }),
     );
     setTimeout(connectWs, delay);
   });

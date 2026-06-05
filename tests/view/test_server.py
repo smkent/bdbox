@@ -23,14 +23,12 @@ from bdbox.protocol import (
     ConnectedMessage,
     Message,
     ModelDetailsMessage,
-    ParamOverridesMessage,
-    ResetParamsMessage,
-    RunErrorMessage,
-    RunOKMessage,
-    RunStartMessage,
-    SelectPresetMessage,
+    ModelDisplayInfo,
+    ModelResetParamsMessage,
+    ModelRunStatusMessage,
+    ModelSetParamMessage,
+    ModelSetPresetMessage,
     ServerMessage,
-    UpdateParamMessage,
     VersionInfo,
 )
 from bdbox.runner.state import run_state
@@ -181,12 +179,12 @@ def view_state(
 def test_update_param_accumulates(wspt: WSParamTest) -> None:
     assert not wspt.view_state.rerender_event.is_set()
     wspt.send(
-        UpdateParamMessage(field="width", value=50.0),
+        ModelSetParamMessage(field="width", value=50.0),
         expect_overrides={"width": 50.0},
         expect_event=True,
     )
     wspt.send(
-        UpdateParamMessage(field="count", value=2),
+        ModelSetParamMessage(field="count", value=2),
         expect_overrides={"width": 50.0, "count": 2},
         expect_event=True,
     )
@@ -199,7 +197,7 @@ def test_update_param_accumulates(wspt: WSParamTest) -> None:
 )
 def test_select_preset_replaces_overrides(wspt: WSParamTest) -> None:
     wspt.send(
-        SelectPresetMessage(preset="small"),
+        ModelSetPresetMessage(preset="small"),
         expect_overrides={"width": 5.0, "count": 1},
         expect_event=True,
     )
@@ -207,7 +205,7 @@ def test_select_preset_replaces_overrides(wspt: WSParamTest) -> None:
 
 def test_select_preset_unknown_ignored(wspt: WSParamTest) -> None:
     wspt.send(
-        SelectPresetMessage(preset="does_not_exist"),
+        ModelSetPresetMessage(preset="does_not_exist"),
         expect_overrides={},
         expect_event=False,
     )
@@ -216,7 +214,7 @@ def test_select_preset_unknown_ignored(wspt: WSParamTest) -> None:
 @pytest.mark.parametrize("model_class", [None], indirect=True)
 def test_select_preset_no_model_class(wspt: WSParamTest) -> None:
     wspt.send(
-        SelectPresetMessage(preset="small"),
+        ModelSetPresetMessage(preset="small"),
         expect_overrides={},
         expect_event=False,
     )
@@ -228,7 +226,9 @@ def test_select_preset_no_model_class(wspt: WSParamTest) -> None:
     indirect=True,
 )
 def test_reset_params(wspt: WSParamTest) -> None:
-    wspt.send(ResetParamsMessage(), expect_overrides={}, expect_event=True)
+    wspt.send(
+        ModelResetParamsMessage(), expect_overrides={}, expect_event=True
+    )
 
 
 def test_unknown_message_type_ignored(wspt: WSParamTest) -> None:
@@ -243,7 +243,7 @@ def test_malformed_json_ignored(wspt: WSParamTest) -> None:
     assert wspt.ws
     wspt.ws.send_text("not valid json {{{")
     wspt.send(
-        UpdateParamMessage(field="width", value=50.0),
+        ModelSetParamMessage(field="width", value=50.0),
         expect_overrides={"width": 50.0},
         expect_event=True,
     )
@@ -251,26 +251,26 @@ def test_malformed_json_ignored(wspt: WSParamTest) -> None:
 
 def test_missing_message_fields_ignored(wspt: WSParamTest) -> None:
     wspt.send(
-        {"type": "update_param"}, expect_event=False, expect_response=False
+        {"type": "model.set_param"}, expect_event=False, expect_response=False
     )
 
 
 @pytest.mark.parametrize("model_class", [None], indirect=True)
 def test_ws_connect_no_model_sends_no_schema(wspt: WSParamTest) -> None:
     wspt.send(
-        UpdateParamMessage(field="width", value=5.0),
+        ModelSetParamMessage(field="width", value=5.0),
         expect_overrides={"width": 5.0},
         expect_event=True,
     )
 
 
 def test_ws_update_param(wspt: WSParamTest) -> None:
-    wspt.send(UpdateParamMessage(field="width", value=75.0))
+    wspt.send(ModelSetParamMessage(field="width", value=75.0))
 
 
 def test_ws_select_preset(wspt: WSParamTest) -> None:
     wspt.send(
-        SelectPresetMessage(preset="small"),
+        ModelSetPresetMessage(preset="small"),
         expect_overrides={"width": 5.0, "count": 1},
         expect_event=True,
     )
@@ -282,7 +282,9 @@ def test_ws_select_preset(wspt: WSParamTest) -> None:
     indirect=True,
 )
 def test_ws_reset_params(wspt: WSParamTest) -> None:
-    wspt.send(ResetParamsMessage(), expect_overrides={}, expect_event=True)
+    wspt.send(
+        ModelResetParamsMessage(), expect_overrides={}, expect_event=True
+    )
 
 
 @pytest.mark.parametrize(
@@ -290,20 +292,25 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
     [
         pytest.param(
             ModelDetailsMessage(
-                model_running=True,
-                model_run_started=(
-                    datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
-                ),
+                current_values={"a": 5.0, "b": "nope"},
+                param_overrides={"foo": "bar"},
+                model_info=ModelDisplayInfo(filename="some_model.py"),
             ),
             id="schema",
         ),
         pytest.param(
-            ParamOverridesMessage(param_overrides={"foor": "bar"}),
-            id="param_overrides",
+            ModelRunStatusMessage.running(
+                datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
+            ),
+            id="run_start",
         ),
-        pytest.param(RunStartMessage(params={"foo": "bar"}), id="run_start"),
-        pytest.param(RunOKMessage(elapsed_ms=123), id="run_ok"),
-        pytest.param(RunErrorMessage(elapsed_ms=234), id="run_error"),
+        pytest.param(
+            ModelRunStatusMessage.done(elapsed_ms=123),
+            id="run_ok",
+        ),
+        pytest.param(
+            ModelRunStatusMessage.error(elapsed_ms=234), id="run_error"
+        ),
     ],
 )
 def test_ws_broadcast_reaches_client(
@@ -316,7 +323,9 @@ def test_ws_broadcast_reaches_client(
 
 
 def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
-    message = RunStartMessage()
+    message = ModelRunStatusMessage.running(
+        datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
+    )
     with wspt.wsconn() as ws2:
         connected_message_data = ws2.receive_json()
         connected_message = Message.from_dict(connected_message_data)

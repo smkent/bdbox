@@ -6,7 +6,7 @@ import queue
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from bdbox.protocol import ConsoleMessage
+from bdbox.protocol import ModelConsoleMessage
 
 if TYPE_CHECKING:
     from bdbox.protocol import ServerMessage
@@ -20,7 +20,7 @@ class WebStream:
 
     def write(self, text: str) -> int:
         if text.strip():
-            self.q.put(ConsoleMessage(text=text))
+            self.q.put(ModelConsoleMessage(text=text))
         return len(text)
 
     def flush(self) -> None:

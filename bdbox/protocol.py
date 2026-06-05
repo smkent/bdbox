@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 from dataclasses import dataclass, field, fields, is_dataclass
 from datetime import datetime
+from enum import Enum
 from functools import partial
 from typing import (
     Annotated,
@@ -118,59 +119,73 @@ class ConnectedMessage(ServerMessage, type="hello"):
 
 
 @dataclass
-class ClientInfoMessage(BrowserMessage, type="client_info"):
+class ClientInfoMessage(BrowserMessage, type="client.info"):
     terminal: TerminalInfo = field(default_factory=TerminalInfo)
 
 
 @dataclass
-class UpdateParamMessage(BrowserModelMessage, type="update_param"):
+class ModelResetParamsMessage(BrowserModelMessage, type="model.reset_params"):
+    pass
+
+
+@dataclass
+class ModelSetParamMessage(BrowserModelMessage, type="model.set_param"):
     field: str
     value: Any
 
 
 @dataclass
-class SelectPresetMessage(BrowserModelMessage, type="select_preset"):
+class ModelSetPresetMessage(BrowserModelMessage, type="model.set_preset"):
     preset: str
 
 
 @dataclass
-class ResetParamsMessage(BrowserModelMessage, type="reset_params"):
-    pass
-
-
-@dataclass
-class ConsoleMessage(ServerModelMessage, type="console", log_ok=False):
+class ModelConsoleMessage(
+    ServerModelMessage, type="model.console", log_ok=False
+):
     text: str
 
 
 @dataclass
-class ModelDetailsMessage(ServerModelMessage, type="model_details"):
-    schema: dict[str, Any] | None = None
-    current_values: dict[str, Any] = field(default_factory=dict)
-    model_running: bool = False
-    model_run_started: datetime | None = None
-    model_info: ModelDisplayInfo | None = None
+class ModelDetailsMessage(ServerModelMessage, type="model.details"):
+    schema: Annotated[
+        dict[str, Any] | None, override(omit_if_default=True)
+    ] = None
+    current_values: Annotated[
+        dict[str, Any] | None, override(omit_if_default=True)
+    ] = None
+    model_info: Annotated[
+        ModelDisplayInfo | None, override(omit_if_default=True)
+    ] = None
+    param_overrides: Annotated[
+        dict[str, Any] | None, override(omit_if_default=True)
+    ] = None
 
 
 @dataclass
-class ParamOverridesMessage(ServerModelMessage, type="param_overrides"):
-    param_overrides: dict[str, Any] = field(default_factory=dict)
+class ModelRunStatusMessage(ServerModelMessage, type="model.status"):
+    class Status(Enum):
+        RUNNING = "running"
+        DONE = "done"
+        ERROR = "error"
 
+    status: ModelRunStatusMessage.Status = field(kw_only=True)
+    started_at: Annotated[datetime | None, override(omit_if_default=True)] = (
+        None
+    )
+    elapsed_ms: Annotated[int | None, override(omit_if_default=True)] = None
 
-@dataclass
-class RunStartMessage(ServerModelMessage, type="run_start"):
-    params: dict[str, Any] = field(default_factory=dict)
+    @classmethod
+    def running(cls, started_at: datetime, **kwargs: Any) -> Self:
+        return cls(status=cls.Status.RUNNING, started_at=started_at, **kwargs)
 
+    @classmethod
+    def done(cls, elapsed_ms: int, **kwargs: Any) -> Self:
+        return cls(status=cls.Status.DONE, elapsed_ms=elapsed_ms, **kwargs)
 
-@dataclass
-class RunOKMessage(ServerModelMessage, type="run_ok"):
-    elapsed_ms: int
-    current_values: dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class RunErrorMessage(ServerModelMessage, type="run_error"):
-    elapsed_ms: int
+    @classmethod
+    def error(cls, elapsed_ms: int, **kwargs: Any) -> Self:
+        return cls(status=cls.Status.ERROR, elapsed_ms=elapsed_ms, **kwargs)
 
 
 class ProtocolConverter(cattrs.Converter):

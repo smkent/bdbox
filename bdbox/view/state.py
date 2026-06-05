@@ -14,10 +14,10 @@ from bdbox.protocol import (
     ClientInfoMessage,
     ConnectedMessage,
     ModelDetailsMessage,
-    ParamOverridesMessage,
-    ResetParamsMessage,
-    SelectPresetMessage,
-    UpdateParamMessage,
+    ModelResetParamsMessage,
+    ModelRunStatusMessage,
+    ModelSetParamMessage,
+    ModelSetPresetMessage,
 )
 from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
@@ -63,20 +63,18 @@ class ViewState:
                 ModelDetailsMessage(
                     schema=run_state.model_state.schema,
                     current_values=serializer.unstructure(self.current_values),
-                    model_running=run_state.model_state.model_running,
-                    model_run_started=(
-                        run_state.model_state.timer.started_at
-                        if run_state.model_state.timer
-                        else None
-                    ),
                     model_info=run_state.model_state.model,
                 )
             )
+            if timer := run_state.model_state.timer:
+                await view_websocket.send_message(
+                    ModelRunStatusMessage.running(started_at=timer.started_at)
+                )
         while True:
             if message := await view_websocket.receive_message():
                 self.handle_client_message(view_websocket, message)
                 await view_websocket.send_message(
-                    ParamOverridesMessage(
+                    ModelDetailsMessage(
                         param_overrides=dict(self.param_overrides)
                     )
                 )
@@ -90,11 +88,11 @@ class ViewState:
                 cast("TextIO", WebStream(self.msg_queue)),
                 msg.terminal.cols,
             )
-        elif isinstance(msg, UpdateParamMessage):
+        elif isinstance(msg, ModelSetParamMessage):
             self.param_overrides[msg.field] = msg.value
             self.rerender_event.set()
             log.debug(f"Parameter updated: {msg.field} = {msg.value}")
-        elif isinstance(msg, SelectPresetMessage):
+        elif isinstance(msg, ModelSetPresetMessage):
             if self.model_class:
                 for preset in self.model_class.presets:
                     if preset.name == msg.preset:
@@ -108,7 +106,7 @@ class ViewState:
                         self.rerender_event.set()
                         log.debug(f"Preset selected: {preset.name}")
                         break
-        elif isinstance(msg, ResetParamsMessage):
+        elif isinstance(msg, ModelResetParamsMessage):
             self.param_overrides.clear()
             self.rerender_event.set()
             log.debug("Parameters reset")

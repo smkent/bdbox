@@ -14,9 +14,7 @@ from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.protocol import (
     ModelDetailsMessage,
-    RunErrorMessage,
-    RunOKMessage,
-    RunStartMessage,
+    ModelRunStatusMessage,
 )
 from bdbox.runner.state import run_state
 from bdbox.serializer import serializer
@@ -126,6 +124,9 @@ class ViewAction(ModelAction):
             ModelDetailsMessage(
                 model_info=run_state.model_state.model,
                 schema=new_schema if new_schema != old_schema else None,
+                current_values=serializer.unstructure(
+                    run_state.model_state.resolved_values
+                ),
             )
         )
 
@@ -138,21 +139,18 @@ class ViewAction(ModelAction):
                 return
             ctx = self.server_manager.view_state
             run_state.model_state.param_overrides = dict(ctx.param_overrides)
-            ctx.enqueue(RunStartMessage(params=dict(ctx.param_overrides)))
+            ctx.enqueue(ModelRunStatusMessage.running(timer.started_at))
             try:
                 yield
             except (Exception, SystemExit):
                 timer.stop()
-                ctx.enqueue(RunErrorMessage(elapsed_ms=timer.elapsed_ms))
+                ctx.enqueue(
+                    ModelRunStatusMessage.error(elapsed_ms=timer.elapsed_ms)
+                )
                 raise
             else:
                 timer.stop()
-                self._update_schema(ctx)
                 ctx.enqueue(
-                    RunOKMessage(
-                        elapsed_ms=timer.elapsed_ms,
-                        current_values=serializer.unstructure(
-                            run_state.model_state.resolved_values
-                        ),
-                    )
+                    ModelRunStatusMessage.done(elapsed_ms=timer.elapsed_ms)
                 )
+                self._update_schema(ctx)

@@ -4,7 +4,7 @@
 
 // Global store types (referenced by the alpinejs Stores interface below and by app.ts)
 type RunStatusStore = {
-  state: "idle" | "running" | "ok" | "error";
+  state: "idle" | "running" | "done" | "error";
   elapsedMs: string | null;
   wsState: "connecting" | "connected" | "disconnected";
   retryIn: number;
@@ -21,6 +21,19 @@ type ModelInfoStore = {
 declare module "*.css" {
   const content: string;
   export default content;
+}
+
+export interface JsonSchema {
+  type: string;
+  properties?: Record<string, unknown>;
+  required?: string[];
+  "x-presets"?: Array<{ name: string; description?: string }>;
+}
+
+export interface JedisonData {
+  schema?: JsonSchema;
+  currentValues?: Record<string, unknown>;
+  paramOverrides?: Record<string, unknown>;
 }
 
 // Jedison — no published types
