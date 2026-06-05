@@ -10,7 +10,7 @@ import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { connectWs, sendWs } from "./ws";
 import { BrowserMessage, formatElapsedMs } from "./protocol";
-import type { ModelDetailsMessage } from "./protocol";
+import type { JedisonData, JedisonInstance } from "./shims";
 
 const LAYOUT_VERSION = 1;
 const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
@@ -86,13 +86,31 @@ function positionViewerIframe(): void {
 // Params panel state
 let paramsFormEl: HTMLElement | null = null;
 let jedison: JedisonInstance | null = null;
-let currentValues: Record<string, unknown> = {};
-let paramOverrides: Record<string, unknown> = {};
-let latestSchema: ModelDetailsMessage | null = null;
+const jedisonData: JedisonData = {};
 let lastSessionId: string | null = null;
 
-function initJedison(detail: ModelDetailsMessage): void {
-  if (!(detail.schema && detail.schema.properties && detail.schema.required)) {
+interface InitJedisonOptions {
+  schemaChanged?: boolean;
+}
+
+function initJedison({ schemaChanged = true }: InitJedisonOptions = {}): void {
+  if (
+    !(
+      paramsFormEl &&
+      jedisonData.schema?.properties &&
+      jedisonData.schema?.required
+    )
+  ) {
+    return;
+  }
+
+  if (!schemaChanged) {
+    if (jedison) {
+      jedison.setValue({
+        ...jedisonData.currentValues,
+        ...jedisonData.paramOverrides,
+      });
+    }
     return;
   }
 
@@ -101,15 +119,12 @@ function initJedison(detail: ModelDetailsMessage): void {
     jedison = null;
   }
 
-  const schemaData = detail.schema;
-  currentValues = detail.current_values;
-  paramOverrides = {};
   paramsFormEl!.innerHTML = "";
 
   // Controls bar: preset buttons + reset
   const controls = document.createElement("div");
   controls.className = "params-controls";
-  const presets = schemaData["x-presets"] ?? [];
+  const presets = jedisonData.schema["x-presets"] ?? [];
   presets.forEach(({ name, description }) => {
     const btn = document.createElement("button");
     btn.className = "params-preset-btn";
@@ -136,15 +151,15 @@ function initJedison(detail: ModelDetailsMessage): void {
   const schema = {
     type: "object",
     "x-titleHidden": true,
-    properties: schemaData.properties,
-    required: schemaData.required,
+    properties: jedisonData.schema.properties,
+    required: jedisonData.schema.required,
   };
 
   jedison = new Jedison.Create({
     container: jedContainer,
     theme: new Jedison.Theme(),
     schema,
-    data: { ...currentValues, ...paramOverrides },
+    data: { ...jedisonData.currentValues, ...jedisonData.paramOverrides },
     objectAdd: false,
   });
 
@@ -154,7 +169,10 @@ function initJedison(detail: ModelDetailsMessage): void {
     if (parts.length !== 2) return;
     const topKey = parts[1];
     const value = instance.getValue();
-    paramOverrides = { ...paramOverrides, [topKey]: value };
+    jedisonData.paramOverrides = {
+      ...jedisonData.paramOverrides,
+      [topKey]: value,
+    };
     sendWs(BrowserMessage.updateParam(topKey, value));
   });
 }
@@ -198,9 +216,7 @@ function registerComponents(layout: GoldenLayout): void {
       Alpine.initTree(div);
 
       paramsFormEl = div.querySelector(".params-form");
-      if (latestSchema) {
-        initJedison(latestSchema);
-      }
+      initJedison();
       return undefined;
     },
   );
@@ -334,28 +350,23 @@ function initWs(): void {
       info.module = detail.model_info.module ?? null;
       info.cls = detail.model_info.cls ?? null;
     }
-    if (
-      detail.schema !== undefined &&
-      detail.schema !== null &&
-      detail.schema.properties &&
-      detail.schema.required
-    ) {
-      latestSchema = detail;
-      if (paramsFormEl) {
-        initJedison(detail);
-      }
+    let schemaChanged = false;
+    if (detail.schema && detail.schema.properties && detail.schema.required) {
+      jedisonData.schema = detail.schema;
+      jedisonData.currentValues = {};
+      jedisonData.paramOverrides = {};
+      schemaChanged = true;
     }
     if (detail.current_values) {
-      currentValues = detail.current_values;
-      if (jedison && Object.keys(paramOverrides).length === 0) {
-        jedison.setValue(currentValues);
-      }
+      jedisonData.currentValues = detail.current_values;
     }
     if (detail.param_overrides) {
-      paramOverrides = detail.param_overrides;
-      if (jedison) {
-        jedison.setValue({ ...currentValues, ...paramOverrides });
-      }
+      jedisonData.paramOverrides = detail.param_overrides;
+    }
+    if (schemaChanged) {
+      initJedison();
+    } else if (jedison && (detail.current_values || detail.param_overrides)) {
+      initJedison({ schemaChanged: false });
     }
   });
 

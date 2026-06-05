@@ -1,3 +1,5 @@
+import { JsonSchema } from "./shims";
+
 // Browser to Server message types
 
 export interface TerminalInfo {
@@ -58,13 +60,6 @@ export interface ModelDisplayInfo {
   file: string | null;
   module: string | null;
   cls: string | null;
-}
-
-export interface JsonSchema {
-  type: string;
-  properties?: Record<string, unknown>;
-  required?: string[];
-  "x-presets"?: Array<{ name: string; description?: string }>;
 }
 
 export interface ConnectedMessage {
