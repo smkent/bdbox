@@ -44,6 +44,12 @@ def pytest_addoption(parser: pytest.Parser) -> None:
     )
 
 
+def pytest_configure(config: pytest.Config) -> None:
+    config.addinivalue_line(
+        "markers", "frontend: Playwright browser based web UI tests"
+    )
+
+
 @pytest.fixture(scope="session", autouse=True)
 def cache_build123d() -> None:
     """Import build123d at session scope for reuse across tests."""

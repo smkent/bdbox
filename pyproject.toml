@@ -53,11 +53,13 @@ Issues = "https://github.com/smkent/bdbox/issues"
 dev = [
     "bump-my-version>=1.3.0",
     "hatchling>=1.29.0",
+    "playwright>=1.60",
     "poethepoet>=0.42",
     "prek>=0.4",
     "pysentry-rs>=0.4",
     "pytest>=9",
     "pytest-cov>=7",
+    "pytest-playwright>=0.8",
     "pytest-sugar>=1",
     "pytest-xdist>=3",
     "ruff>=0.15",
@@ -158,16 +160,21 @@ sequence = [
     {cmd = "uv sync"},
     {cmd = "prek install"},
     {cmd = "npm install"},
+    {ref = "setup-playwright"},
     {ref = "static"},
 ]
 help = "Install project dependencies and git hooks"
+
+[tool.poe.tasks.setup-playwright]
+script = "utils.tasks:install_playwright_tools"
+help="Install playwright tools"
 
 [tool.poe.tasks.snapup]
 cmd = "pytest --snapshot-update --numprocesses 0"
 help = "Update test snapshots"
 
 [tool.poe.tasks.test]
-cmd = "pytest"
+cmd = "pytest -m \"not frontend\""
 help = "Run tests"
 
 [tool.poe.tasks.test-versions]
@@ -175,23 +182,27 @@ sequence = ["test-py310", "test-py311", "test-py312"]
 help = "Run tests across all Python versions"
 
 [tool.poe.tasks.test-py310]
-cmd = "pytest"
+cmd = "pytest -m \"not frontend\""
 executor = {isolated = true, python = "3.10"}
 help = "Run tests using Python 3.10"
 
 [tool.poe.tasks.test-py311]
-cmd = "pytest"
+cmd = "pytest -m \"not frontend\""
 executor = {isolated = true, python = "3.11"}
 help = "Run tests using Python 3.11"
 
 [tool.poe.tasks.test-py312]
-cmd = "pytest"
+cmd = "pytest -m \"not frontend\""
 executor = {isolated = true, python = "3.12"}
 help = "Run tests using Python 3.12"
 
 [tool.poe.tasks.ti]
-cmd = "pytest --numprocesses 0 --no-cov -vv"
+cmd = "pytest --numprocesses 0 --no-cov -vv -m \"not frontend\""
 help = "Run tests with debug friendly options"
+
+[tool.poe.tasks.webtest]
+cmd = "pytest --numprocesses 0 --no-cov -m frontend"
+help = "Run frontend (web) tests"
 
 [tool.pysentry.ignore]
 ids = [
