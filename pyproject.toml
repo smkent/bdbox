@@ -174,7 +174,7 @@ cmd = "pytest --snapshot-update --numprocesses 0"
 help = "Update test snapshots"
 
 [tool.poe.tasks.test]
-cmd = "pytest"
+cmd = "pytest -m \"not frontend\""
 help = "Run tests"
 
 [tool.poe.tasks.test-versions]
@@ -182,22 +182,22 @@ sequence = ["test-py310", "test-py311", "test-py312"]
 help = "Run tests across all Python versions"
 
 [tool.poe.tasks.test-py310]
-cmd = "pytest"
+cmd = "pytest -m \"not frontend\""
 executor = {isolated = true, python = "3.10"}
 help = "Run tests using Python 3.10"
 
 [tool.poe.tasks.test-py311]
-cmd = "pytest"
+cmd = "pytest -m \"not frontend\""
 executor = {isolated = true, python = "3.11"}
 help = "Run tests using Python 3.11"
 
 [tool.poe.tasks.test-py312]
-cmd = "pytest"
+cmd = "pytest -m \"not frontend\""
 executor = {isolated = true, python = "3.12"}
 help = "Run tests using Python 3.12"
 
 [tool.poe.tasks.ti]
-cmd = "pytest --numprocesses 0 --no-cov -vv"
+cmd = "pytest --numprocesses 0 --no-cov -vv -m \"not frontend\""
 help = "Run tests with debug friendly options"
 
 [tool.poe.tasks.webtest]
@@ -220,8 +220,6 @@ addopts = [
     "--strict-markers",
     "--numprocesses",
     "auto",
-    "-m",
-    "not frontend"
 ]
 testpaths = ["tests"]
 filterwarnings = [
