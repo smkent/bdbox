@@ -47,9 +47,9 @@ class VersionInfo:
 
 @dataclass
 class ModelDisplayInfo:
-    filename: Annotated[str | None, override(rename="file")] = None
-    module_name: Annotated[str | None, override(rename="module")] = None
-    class_name: Annotated[str | None, override(rename="cls")] = None
+    filename: str | None = None
+    module_name: str | None = None
+    class_name: str | None = None
 
 
 @dataclass

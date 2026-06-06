@@ -10,7 +10,7 @@ import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { connectWs, sendWs } from "./ws";
 import { BrowserMessage, formatElapsedMs } from "./protocol";
-import type { JedisonData, JedisonInstance } from "./shims";
+import type { JedisonData, JedisonInstance, RunStatusStore } from "./shims";
 
 const LAYOUT_VERSION = 1;
 const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
@@ -348,9 +348,9 @@ function initWs(): void {
   window.addEventListener("bdbox.server:model.details", ({ detail }) => {
     if (detail.model_info) {
       const info = Alpine.store("modelInfo");
-      info.file = detail.model_info.file ?? null;
-      info.module = detail.model_info.module ?? null;
-      info.cls = detail.model_info.cls ?? null;
+      info.file = detail.model_info.filename ?? null;
+      info.module = detail.model_info.module_name ?? null;
+      info.cls = detail.model_info.class_name ?? null;
     }
     let schemaChanged = false;
     if (detail.schema && detail.schema.properties && detail.schema.required) {

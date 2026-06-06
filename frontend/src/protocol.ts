@@ -59,9 +59,9 @@ export interface VersionInfo {
 }
 
 export interface ModelDisplayInfo {
-  file: string | null;
-  module: string | null;
-  cls: string | null;
+  filename: string | null;
+  module_name: string | null;
+  class_name: string | null;
 }
 
 export interface ConnectedMessage {
