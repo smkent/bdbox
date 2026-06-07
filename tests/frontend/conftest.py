@@ -1,30 +1,32 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+import json
+import sys
+from contextlib import contextmanager
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
+from uuid import uuid4
 
 import pytest
-from playwright.sync_api import Page, WebSocketRoute
 
-ORIGIN = "http://bdbox.test"
-STATIC = Path("bdbox/view/static")
+from bdbox.console import console, log
+from bdbox.dispatch import Event
+from bdbox.protocol import ConnectedMessage
+from bdbox.view.server import ServerManager
+from bdbox.view.state import ViewState
 
-APP_HTML = """<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="/static/app.css">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { overflow: hidden; background: #111; }
-  </style>
-  <script>window.__BDBOX__ = {"viewerPort": 9999};</script>
-  <script src="/static/app.js" defer></script>
-</head>
-<body>
-  <div id="layout" style="width: 100%; height: 100vh;"></div>
-</body>
-</html>"""
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+    from playwright.sync_api import Page, WebSocketRoute
+
+    from bdbox.protocol import ServerMessage
 
 
 def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
@@ -35,32 +37,84 @@ def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
             item.add_marker(pytest.mark.frontend)
 
 
-LoadApp = Callable[[Callable[[WebSocketRoute], None]], Page]
+@pytest.fixture(autouse=True)
+def console_verbosity_configure(console_verbosity: None) -> None:
+    console.configure()
+
+
+VIEWER_PORT = 65000
+
+
+@dataclass
+class BackendServer:
+    view_state: ViewState = field(
+        default_factory=lambda: ViewState(viewer_port=VIEWER_PORT)
+    )
+
+    class ServerManagerWithoutAutoOnExit(ServerManager):
+        def __post_init__(self) -> None:
+            self.start()
+
+    server: ServerManagerWithoutAutoOnExit = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.server = self.ServerManagerWithoutAutoOnExit(
+            view_state=self.view_state, port=0, open_browser=False
+        )
+
+    @contextmanager
+    def __call__(self) -> Iterator[Self]:
+        try:
+            yield self
+        finally:
+            self.server.stop()
+
+
+@dataclass
+class BackendTestApp:
+    backend_server: ServerManager = field(init=False)
+    page: Page
+    websocket: WebSocketRoute | None = None
+    websocket_connected: Event = field(
+        default_factory=lambda: Event(name="websocket_connected")
+    )
+
+    def __post_init__(self) -> None:
+        self.backend_server = ServerManager(
+            view_state=ViewState(viewer_port=VIEWER_PORT)
+        )
+        self.page.route(
+            f"http*://localhost:{VIEWER_PORT}/viewer**",
+            lambda r: r.fulfill(status=200, body=""),
+        )
+        self.page.route_web_socket(
+            f"ws://{self.url.removeprefix('http://')}/ws",
+            self.handle_websocket_connect,
+        )
+        self.page.goto(f"{self.url}/")
+        if not self.websocket_connected.wait(timeout=3.0):
+            raise Exception("Websocket did not connect within timeout")  # noqa: TRY002
+
+    @property
+    def url(self) -> str:
+        return self.backend_server.url
+
+    def send(self, message: ServerMessage) -> None:
+        if not self.websocket:
+            raise Exception("No websocket connected")  # noqa: TRY002
+        msg_dict = message.to_dict()
+        if message.log_ok:
+            log.debug("Send: %s", json.dumps(msg_dict, indent=4))
+        self.websocket.send(json.dumps(msg_dict))
+
+    def handle_websocket_connect(self, ws: WebSocketRoute) -> None:
+        if self.websocket:
+            raise Exception("Websocket already connected")  # noqa: TRY002
+        self.websocket = ws
+        self.websocket_connected.set()
+        self.send(ConnectedMessage(session_id=uuid4()))
 
 
 @pytest.fixture
-def load_app(page: Page) -> LoadApp:
-    page.route(
-        f"{ORIGIN}/",
-        lambda r: r.fulfill(content_type="text/html", body=APP_HTML),
-    )
-    page.route(
-        f"{ORIGIN}/static/app.js",
-        lambda r: r.fulfill(
-            content_type="application/javascript", path=str(STATIC / "app.js")
-        ),
-    )
-    page.route(
-        f"{ORIGIN}/static/app.css",
-        lambda r: r.fulfill(
-            content_type="text/css", path=str(STATIC / "app.css")
-        ),
-    )
-    page.route(f"{ORIGIN}/viewer**", lambda r: r.fulfill(status=200, body=""))
-
-    def _load(ws_setup: Callable[[WebSocketRoute], None]) -> Page:
-        page.route_web_socket("ws://bdbox.test/ws", ws_setup)
-        page.goto(f"{ORIGIN}/")
-        return page
-
-    return _load
+def app(page: Page) -> BackendTestApp:
+    return BackendTestApp(page=page)

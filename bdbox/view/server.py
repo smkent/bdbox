@@ -68,6 +68,8 @@ class ServerManager(Service):
                 "The view server failed to start."
                 " Is another `view` instance already running?"
             )
+        if self.port == 0:
+            self.port = self.server.servers[0].sockets[0].getsockname()[1]
         log.info(f"Server running: {self.url}")
         if self.open_browser:
             webbrowser.open_new_tab(self.url)
