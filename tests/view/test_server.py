@@ -24,6 +24,7 @@ from bdbox.protocol import (
     Message,
     ModelDetailsMessage,
     ModelDisplayInfo,
+    ModelParamsState,
     ModelResetParamsMessage,
     ModelRunStatusMessage,
     ModelSetParamMessage,
@@ -98,8 +99,8 @@ class WSParamTest:
         if expect_response:
             ack = self.ws.receive_json()
             if expect_overrides is not None:
-                assert ack["param_overrides"] == expect_overrides
-                assert self.view_state.param_overrides == expect_overrides
+                assert ack["params"]["overrides"] == expect_overrides
+                assert self.view_state.params.overrides == expect_overrides
         if expect_event:
             assert self.view_state.rerender_event.is_set()
         else:
@@ -170,8 +171,10 @@ def view_state(
     return ViewState(
         rerender_event=Event(name="test_rerender_event"),
         model_class=model_class,
-        current_values=({"width": 10.0, "count": 3} if model_class else {}),
-        param_overrides=param_overrides,
+        params=ModelParamsState(
+            values=({"width": 10.0, "count": 3} if model_class else {}),
+            overrides=param_overrides,
+        ),
         session_id=TEST_SESSION_ID,
     )
 
@@ -292,8 +295,10 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
     [
         pytest.param(
             ModelDetailsMessage(
-                current_values={"a": 5.0, "b": "nope"},
-                param_overrides={"foo": "bar"},
+                params=ModelParamsState(
+                    values={"a": 5.0, "b": "nope"},
+                    overrides={"foo": "bar"},
+                ),
                 model_info=ModelDisplayInfo(filename="some_model.py"),
             ),
             id="schema",

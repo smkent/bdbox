@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from bdbox.errors import InternalError, MultipleModelsError, ParamsError
+from bdbox.protocol import ModelParamsState
 from bdbox.serializer import serializer
 from bdbox.timer import Timer
 
@@ -26,8 +27,7 @@ class ModelState:
     model_cli: Params | None = None
     timer: Timer | None = field(default=None)
 
-    param_overrides: dict[str, Any] = field(default_factory=dict)
-    resolved_values: dict[str, Any] = field(default_factory=dict)
+    params: ModelParamsState = field(default_factory=ModelParamsState)
     cached_schema: dict[str, Any] = field(
         default_factory=dict, repr=False, init=False
     )
@@ -35,7 +35,7 @@ class ModelState:
     def apply_overrides(self, target: Params) -> None:
         hints = serializer.get_type_hints(type(target))
 
-        for name, raw_value in self.param_overrides.items():
+        for name, raw_value in self.params.overrides.items():
             if not hasattr(target, name):
                 continue
             hint = hints.get(name)

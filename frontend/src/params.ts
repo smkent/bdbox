@@ -1,6 +1,6 @@
 import Alpine from "alpinejs";
 import Jedison from "jedison";
-import { JsonSchema } from "./types";
+import { JedisonData, ModelParamsState } from "./classes";
 import { WebSocketManager } from "./websocket";
 import {
   ModelDetailsMessage,
@@ -9,18 +9,12 @@ import {
   ModelSetPresetMessage,
 } from "./protocol";
 
-interface JedisonData {
-  schema?: JsonSchema;
-  currentValues?: Record<string, unknown>;
-  paramOverrides?: Record<string, unknown>;
-}
-
 export class Params {
   private webSocketManager: WebSocketManager;
   private div: HTMLElement;
   private paramsFormEl: HTMLElement;
   private jedison: JedisonInstance | null = null;
-  private jedisonData: JedisonData = {};
+  private jedisonData: JedisonData = new JedisonData();
 
   constructor(webSocketManager: WebSocketManager) {
     this.webSocketManager = webSocketManager;
@@ -50,22 +44,15 @@ export class Params {
     let schemaChanged = false;
     if (detail.schema && detail.schema.properties && detail.schema.required) {
       this.jedisonData.schema = detail.schema;
-      this.jedisonData.currentValues = {};
-      this.jedisonData.paramOverrides = {};
+      this.jedisonData.params = new ModelParamsState();
       schemaChanged = true;
     }
-    if (detail.current_values) {
-      this.jedisonData.currentValues = detail.current_values;
-    }
-    if (detail.param_overrides) {
-      this.jedisonData.paramOverrides = detail.param_overrides;
+    if (detail.params) {
+      this.jedisonData.params = detail.params;
     }
     if (schemaChanged) {
       this.display();
-    } else if (
-      this.jedison &&
-      (detail.current_values || detail.param_overrides)
-    ) {
+    } else if (this.jedison && detail.params) {
       this.display({ schemaChanged: false });
     }
   }
@@ -83,12 +70,13 @@ export class Params {
       return;
     }
 
+    if (!this.jedisonData.params) {
+      return;
+    }
+
     if (!schemaChanged) {
       if (this.jedison) {
-        this.jedison.setValue({
-          ...this.jedisonData.currentValues,
-          ...this.jedisonData.paramOverrides,
-        });
+        this.jedison.setValue(this.jedisonData.params.activeValues);
       }
       return;
     }
@@ -138,10 +126,7 @@ export class Params {
       container: jedContainer,
       theme: new Jedison.Theme(),
       schema,
-      data: {
-        ...this.jedisonData.currentValues,
-        ...this.jedisonData.paramOverrides,
-      },
+      data: this.jedisonData.params.activeValues,
       objectAdd: false,
     });
 
@@ -151,8 +136,8 @@ export class Params {
       if (parts.length !== 2) return;
       const topKey = parts[1];
       const value = instance.getValue();
-      this.jedisonData.paramOverrides = {
-        ...this.jedisonData.paramOverrides,
+      this.jedisonData.params.overrides = {
+        ...this.jedisonData.params.overrides,
         [topKey]: value,
       };
       this.webSocketManager.send(new ModelSetParamMessage(topKey, value));

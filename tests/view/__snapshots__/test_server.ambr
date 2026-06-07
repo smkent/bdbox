@@ -10,14 +10,18 @@
 # ---
 # name: test_malformed_json_ignored[Model-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -59,14 +63,18 @@
 # ---
 # name: test_malformed_json_ignored[Params-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -108,14 +116,18 @@
 # ---
 # name: test_missing_message_fields_ignored[Model-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -157,14 +169,18 @@
 # ---
 # name: test_missing_message_fields_ignored[Params-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -206,14 +222,19 @@
 # ---
 # name: test_reset_params[Model-param_overrides].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+        'width': 99.0,
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -255,14 +276,19 @@
 # ---
 # name: test_reset_params[Params-param_overrides].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+        'width': 99.0,
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -313,14 +339,19 @@
 # ---
 # name: test_select_preset_replaces_overrides[Model-param_overrides].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+        'width': 99.0,
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -362,14 +393,19 @@
 # ---
 # name: test_select_preset_replaces_overrides[Params-param_overrides].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+        'width': 99.0,
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -411,14 +447,18 @@
 # ---
 # name: test_select_preset_unknown_ignored[Model-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -460,14 +500,18 @@
 # ---
 # name: test_select_preset_unknown_ignored[Params-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -509,14 +553,18 @@
 # ---
 # name: test_unknown_message_type_ignored[Model-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -558,14 +606,18 @@
 # ---
 # name: test_unknown_message_type_ignored[Params-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -607,14 +659,18 @@
 # ---
 # name: test_update_param_accumulates[Model-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -656,14 +712,18 @@
 # ---
 # name: test_update_param_accumulates[Params-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -705,14 +765,18 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -761,14 +825,18 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -817,14 +885,18 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -873,14 +945,18 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -913,17 +989,19 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema].2
   dict({
-    'current_values': dict({
-      'a': 5.0,
-      'b': 'nope',
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': 'some_model.py',
       'module_name': None,
     }),
-    'param_overrides': dict({
-      'foo': 'bar',
+    'params': dict({
+      'overrides': dict({
+        'foo': 'bar',
+      }),
+      'values': dict({
+        'a': 5.0,
+        'b': 'nope',
+      }),
     }),
     'type': 'model.details',
   })
@@ -939,14 +1017,18 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -995,14 +1077,18 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1051,14 +1137,18 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1107,14 +1197,18 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1147,17 +1241,19 @@
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema].2
   dict({
-    'current_values': dict({
-      'a': 5.0,
-      'b': 'nope',
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': 'some_model.py',
       'module_name': None,
     }),
-    'param_overrides': dict({
-      'foo': 'bar',
+    'params': dict({
+      'overrides': dict({
+        'foo': 'bar',
+      }),
+      'values': dict({
+        'a': 5.0,
+        'b': 'nope',
+      }),
     }),
     'type': 'model.details',
   })
@@ -1173,14 +1269,18 @@
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1213,14 +1313,18 @@
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].2
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1269,14 +1373,18 @@
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1309,14 +1417,18 @@
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].2
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1374,14 +1486,19 @@
 # ---
 # name: test_ws_reset_params[Model-param_overrides].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+        'width': 99.0,
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1423,14 +1540,19 @@
 # ---
 # name: test_ws_reset_params[Params-param_overrides].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+        'width': 99.0,
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1472,14 +1594,18 @@
 # ---
 # name: test_ws_select_preset[Model-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1521,14 +1647,18 @@
 # ---
 # name: test_ws_select_preset[Params-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1570,14 +1700,18 @@
 # ---
 # name: test_ws_update_param[Model-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({
@@ -1619,14 +1753,18 @@
 # ---
 # name: test_ws_update_param[Params-param_overrides0].1
   dict({
-    'current_values': dict({
-      'count': 3,
-      'width': 10.0,
-    }),
     'model_info': dict({
       'class_name': None,
       'filename': None,
       'module_name': None,
+    }),
+    'params': dict({
+      'overrides': dict({
+      }),
+      'values': dict({
+        'count': 3,
+        'width': 10.0,
+      }),
     }),
     'schema': dict({
       'properties': dict({

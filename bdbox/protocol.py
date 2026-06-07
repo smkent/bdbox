@@ -147,18 +147,21 @@ class ModelConsoleMessage(
 
 
 @dataclass
+class ModelParamsState:
+    values: dict[str, Any] = field(default_factory=dict)
+    overrides: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class ModelDetailsMessage(ServerModelMessage, type="model.details"):
     schema: Annotated[
-        dict[str, Any] | None, override(omit_if_default=True)
-    ] = None
-    current_values: Annotated[
         dict[str, Any] | None, override(omit_if_default=True)
     ] = None
     model_info: Annotated[
         ModelDisplayInfo | None, override(omit_if_default=True)
     ] = None
-    param_overrides: Annotated[
-        dict[str, Any] | None, override(omit_if_default=True)
+    params: Annotated[
+        ModelParamsState | None, override(omit_if_default=True)
     ] = None
 
 

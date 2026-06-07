@@ -10,6 +10,7 @@ from bdbox.model.preset import Preset
 from bdbox.protocol import (
     ModelDetailsMessage,
     ModelDisplayInfo,
+    ModelParamsState,
     ModelRunStatusMessage,
     ModelSetParamMessage,
 )
@@ -33,7 +34,7 @@ def test_model_form_renders(app: BackendTestApp) -> None:
             model_info=ModelDisplayInfo(
                 filename="box.py", class_name=Box.__name__
             ),
-            current_values={"width": 10, "height": 5},
+            params=ModelParamsState(values={"width": 10, "height": 5}),
         )
     )
     expect(app.page.locator(".status-model-name")).to_contain_text("Box")
@@ -66,7 +67,7 @@ def test_param_change_sends_message(app: BackendTestApp) -> None:
             model_info=ModelDisplayInfo(
                 filename="box.py", class_name=Box.__name__
             ),
-            current_values={"width": 10, "height": 5},
+            params=ModelParamsState(values={"width": 10, "height": 5}),
         )
     )
 
