@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import json
-import sys
-from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 from queue import Queue
@@ -17,14 +15,7 @@ from bdbox.protocol import BrowserMessage, ConnectedMessage
 from bdbox.view.server import ServerManager
 from bdbox.view.state import ViewState
 
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
-
 if TYPE_CHECKING:
-    from collections.abc import Iterator
-
     from playwright.sync_api import Page, WebSocketRoute
 
     from bdbox.protocol import ServerMessage
@@ -44,31 +35,6 @@ def console_verbosity_configure(console_verbosity: None) -> None:
 
 
 VIEWER_PORT = 65000
-
-
-@dataclass
-class BackendServer:
-    view_state: ViewState = field(
-        default_factory=lambda: ViewState(viewer_port=VIEWER_PORT)
-    )
-
-    class ServerManagerWithoutAutoOnExit(ServerManager):
-        def __post_init__(self) -> None:
-            self.start()
-
-    server: ServerManagerWithoutAutoOnExit = field(init=False)
-
-    def __post_init__(self) -> None:
-        self.server = self.ServerManagerWithoutAutoOnExit(
-            view_state=self.view_state, port=0, open_browser=False
-        )
-
-    @contextmanager
-    def __call__(self) -> Iterator[Self]:
-        try:
-            yield self
-        finally:
-            self.server.stop()
 
 
 @dataclass
