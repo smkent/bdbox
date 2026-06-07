@@ -55,7 +55,11 @@ class ServerManager(Service):
         app = App(self.view_state)
         self.server = UIServer(
             Config(
-                app=app, host="localhost", port=self.port, log_level="error"
+                app=app,
+                host="localhost",
+                port=self.port,
+                log_level="error",
+                ws="websockets-sansio",
             )
         )
         self.thread = Thread(
