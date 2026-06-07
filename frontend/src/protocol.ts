@@ -1,4 +1,4 @@
-import { JsonSchema } from "./shims";
+import type { JsonSchema } from "./types";
 
 // Browser to Server message types
 

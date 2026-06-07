@@ -10,7 +10,7 @@ import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { connectWs, sendWs } from "./ws";
 import { BrowserMessage, formatElapsedMs } from "./protocol";
-import type { JedisonData, JedisonInstance, RunStatusStore } from "./shims";
+import type { JedisonData } from "./types";
 
 const LAYOUT_VERSION = 1;
 const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
@@ -119,7 +119,7 @@ function initJedison({ schemaChanged = true }: InitJedisonOptions = {}): void {
     jedison = null;
   }
 
-  paramsFormEl!.innerHTML = "";
+  paramsFormEl.innerHTML = "";
 
   // Controls bar: preset buttons + reset
   const controls = document.createElement("div");
@@ -142,11 +142,11 @@ function initJedison({ schemaChanged = true }: InitJedisonOptions = {}): void {
     sendWs(BrowserMessage.modelResetParams()),
   );
   controls.appendChild(resetBtn);
-  paramsFormEl!.appendChild(controls);
+  paramsFormEl.appendChild(controls);
 
   // Jedison form
   const jedContainer = document.createElement("div");
-  paramsFormEl!.appendChild(jedContainer);
+  paramsFormEl.appendChild(jedContainer);
 
   const schema = {
     type: "object",
@@ -429,9 +429,9 @@ function initWs(): void {
 }
 
 Alpine.store("runStatus", {
-  state: "idle" as RunStatusStore["state"],
+  state: "idle",
   elapsedMs: null,
-  wsState: "connecting" as RunStatusStore["wsState"],
+  wsState: "connecting",
   retryIn: 0,
   runElapsedS: 0,
 });

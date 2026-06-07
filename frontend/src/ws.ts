@@ -28,7 +28,7 @@ export function connectWs(): void {
   _ws.addEventListener("message", ({ data }) => {
     let msg: ServerMessage;
     try {
-      msg = JSON.parse(data) as ServerMessage;
+      msg = JSON.parse(data as string) as ServerMessage;
     } catch {
       return;
     }
