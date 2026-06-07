@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from queue import Queue
 from typing import TYPE_CHECKING
-from uuid import uuid4
 
 import pytest
 
@@ -92,7 +91,11 @@ class BackendTestApp:
         self.websocket = ws
         self.websocket.on_message(self.handle_websocket_message)
         self.websocket_connected.set()
-        self.send(ConnectedMessage(session_id=uuid4()))
+        self.send(
+            ConnectedMessage(
+                session_id=self.backend_server.view_state.session_id
+            )
+        )
 
     def handle_websocket_message(self, data: str | bytes) -> None:
         msg_dict = json.loads(data)

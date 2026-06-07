@@ -42,7 +42,10 @@ def _bdbox_version() -> str:
 
 @dataclass
 class VersionInfo:
+    PROTOCOL_REVISION: ClassVar[int] = 1
+
     bdbox: str = field(default_factory=_bdbox_version)
+    protocol: int = field(default=PROTOCOL_REVISION)
 
 
 @dataclass

@@ -40,6 +40,7 @@ export class ModelSetPresetMessage implements BrowserMessage {
 
 export interface VersionInfo {
   bdbox: string;
+  protocol: number;
 }
 
 export interface ModelDisplayInfo {
