@@ -1,56 +1,39 @@
-import { JsonSchema } from "./shims";
+import type { JsonSchema } from "./types";
 
 // Browser to Server message types
 
-export interface TerminalInfo {
-  rows?: number;
-  cols: number;
+export interface BrowserMessage {
+  readonly type: string;
 }
 
-export interface ClientInfoMessage {
-  type: "client.info";
-  terminal: TerminalInfo;
+export class TerminalInfo {
+  constructor(
+    public rows?: number,
+    public cols: number = 80,
+  ) {}
 }
 
-export interface ModelResetParamsMessage {
-  type: "model.reset_params";
+export class ClientInfoMessage implements BrowserMessage {
+  public readonly type = "client.info";
+  constructor(public terminal: TerminalInfo) {}
 }
 
-export interface ModelSetParamMessage {
-  type: "model.set_param";
-  field: string;
-  value: unknown;
+export class ModelResetParamsMessage implements BrowserMessage {
+  public readonly type = "model.reset_params";
 }
 
-export interface ModelSetPresetMessage {
-  type: "model.set_preset";
-  preset: string;
+export class ModelSetParamMessage implements BrowserMessage {
+  public readonly type = "model.set_param";
+  constructor(
+    public field: string,
+    public value: unknown,
+  ) {}
 }
 
-export type BrowserMessage =
-  | ClientInfoMessage
-  | ModelResetParamsMessage
-  | ModelSetParamMessage
-  | ModelSetPresetMessage;
-
-export const BrowserMessage = {
-  clientInfo: (terminalInfo: TerminalInfo): ClientInfoMessage => ({
-    type: "client.info",
-    terminal: terminalInfo,
-  }),
-  modelResetParams: (): ModelResetParamsMessage => ({
-    type: "model.reset_params",
-  }),
-  modelSetParam: (field: string, value: unknown): ModelSetParamMessage => ({
-    type: "model.set_param",
-    field,
-    value,
-  }),
-  modelSetPreset: (preset: string): ModelSetPresetMessage => ({
-    type: "model.set_preset",
-    preset,
-  }),
-} as const;
+export class ModelSetPresetMessage implements BrowserMessage {
+  public readonly type = "model.set_preset";
+  constructor(public preset: string) {}
+}
 
 // Server to browser message types
 

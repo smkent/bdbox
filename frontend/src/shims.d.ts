@@ -23,19 +23,6 @@ declare module "*.css" {
   export default content;
 }
 
-export interface JsonSchema {
-  type: string;
-  properties?: Record<string, unknown>;
-  required?: string[];
-  "x-presets"?: Array<{ name: string; description?: string }>;
-}
-
-export interface JedisonData {
-  schema?: JsonSchema;
-  currentValues?: Record<string, unknown>;
-  paramOverrides?: Record<string, unknown>;
-}
-
 // Jedison — no published types
 type JedisonInstance = {
   destroy(): void;
@@ -85,4 +72,5 @@ declare module "alpinejs" {
 interface Window {
   __BDBOX__: { viewerPort: number };
   Alpine: unknown;
+  App: unknown;
 }
