@@ -118,15 +118,15 @@ class ViewAction(ModelAction):
             new_class = None
         new_schema = serializer.json_schema(new_class)
         old_schema = serializer.json_schema(ctx.model_class)
-        ctx.current_values = dict(run_state.model_state.resolved_values)
+        ctx.params.values = serializer.unstructure(
+            run_state.model_state.params.values
+        )
         ctx.model_class = new_class
         ctx.enqueue(
             ModelDetailsMessage(
                 model_info=run_state.model_state.model,
                 schema=new_schema if new_schema != old_schema else None,
-                current_values=serializer.unstructure(
-                    run_state.model_state.resolved_values
-                ),
+                params=ctx.params,
             )
         )
 
@@ -138,7 +138,7 @@ class ViewAction(ModelAction):
                 yield
                 return
             ctx = self.server_manager.view_state
-            run_state.model_state.param_overrides = dict(ctx.param_overrides)
+            run_state.model_state.params.overrides = dict(ctx.params.overrides)
             ctx.enqueue(ModelRunStatusMessage.running(timer.started_at))
             try:
                 yield

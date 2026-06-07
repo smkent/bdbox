@@ -112,7 +112,7 @@ class Model(Params):
             run_state.model_state.model.class_name = cls.__name__
         with run_state.action_state.on_model_render():
             run_state.model_state.apply_overrides(cli_result.params)
-            run_state.model_state.resolved_values = {
+            run_state.model_state.params.values = {
                 f.name: getattr(cli_result.params, f.name)
                 for f in fields(cli_result.params)
                 if f.name != "preset"

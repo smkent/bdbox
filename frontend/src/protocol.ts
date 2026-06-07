@@ -1,4 +1,5 @@
 import type { JsonSchema } from "./types";
+import { ModelParamsState } from "./classes";
 
 // Browser to Server message types
 
@@ -61,9 +62,8 @@ export interface ModelConsoleMessage {
 export interface ModelDetailsMessage {
   type: "model.details";
   schema?: JsonSchema | null;
-  current_values?: Record<string, unknown>;
   model_info?: ModelDisplayInfo | null;
-  param_overrides?: Record<string, unknown>;
+  params?: ModelParamsState | null;
 }
 
 export interface ModelRunStatusMessage {
