@@ -5,6 +5,7 @@ import sys
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
+from queue import Queue
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
@@ -12,7 +13,7 @@ import pytest
 
 from bdbox.console import console, log
 from bdbox.dispatch import Event
-from bdbox.protocol import ConnectedMessage
+from bdbox.protocol import BrowserMessage, ConnectedMessage
 from bdbox.view.server import ServerManager
 from bdbox.view.state import ViewState
 
@@ -74,14 +75,20 @@ class BackendServer:
 class BackendTestApp:
     backend_server: ServerManager = field(init=False)
     page: Page
-    websocket: WebSocketRoute | None = None
+    websocket: WebSocketRoute | None = field(default=None, init=False)
     websocket_connected: Event = field(
-        default_factory=lambda: Event(name="websocket_connected")
+        default_factory=lambda: Event(name="websocket_connected"), init=False
     )
+    websocket_received: list[BrowserMessage] = field(
+        default_factory=list, init=False
+    )
+    messages: Queue[BrowserMessage] = field(default_factory=Queue, init=False)
 
     def __post_init__(self) -> None:
         self.backend_server = ServerManager(
-            view_state=ViewState(viewer_port=VIEWER_PORT)
+            view_state=ViewState(viewer_port=VIEWER_PORT),
+            port=0,
+            open_browser=False,
         )
         self.page.route(
             f"http*://localhost:{VIEWER_PORT}/viewer**",
@@ -111,8 +118,14 @@ class BackendTestApp:
         if self.websocket:
             raise Exception("Websocket already connected")  # noqa: TRY002
         self.websocket = ws
+        self.websocket.on_message(self.handle_websocket_message)
         self.websocket_connected.set()
         self.send(ConnectedMessage(session_id=uuid4()))
+
+    def handle_websocket_message(self, data: str | bytes) -> None:
+        msg_dict = json.loads(data)
+        log.debug("Received: %s", msg_dict)
+        self.messages.put(BrowserMessage.from_dict(msg_dict))
 
 
 @pytest.fixture

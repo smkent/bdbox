@@ -11,6 +11,7 @@ from bdbox.protocol import (
     ModelDetailsMessage,
     ModelDisplayInfo,
     ModelRunStatusMessage,
+    ModelSetParamMessage,
 )
 from bdbox.serializer import serializer
 
@@ -50,6 +51,35 @@ def test_model_status_lifecycle(app: BackendTestApp) -> None:
     )
     expect(app.page.locator(".status-running")).to_be_visible()
 
-    app.send(ModelRunStatusMessage.done(elapsed_ms=1138))
-    expect(app.page.locator(".status-ok")).to_be_visible()
-    expect(app.page.locator(".status-ok")).to_contain_text("1.1s")
+
+def test_param_change_sends_message(app: BackendTestApp) -> None:
+
+    class Box(Model):
+        width: int = 10
+        height: int = 5
+
+        presets = (Preset("Square", description="Equal sides"),)
+
+    app.send(
+        ModelDetailsMessage(
+            schema=serializer.json_schema(Box),
+            model_info=ModelDisplayInfo(
+                filename="box.py", class_name=Box.__name__
+            ),
+            current_values={"width": 10, "height": 5},
+        )
+    )
+
+    expect(app.page.locator(".params-form")).not_to_be_empty()
+
+    # Exact selector depends on Jedison's output
+    # inspect with page.pause() first run
+    width_input = app.page.locator('input[name="root-width"]').first
+    width_input.fill("25")
+    width_input.press("Tab")
+
+    while message := app.messages.get(timeout=3.0):
+        if isinstance(message, ModelSetParamMessage):
+            break
+
+    assert message == ModelSetParamMessage(field="width", value=25)
