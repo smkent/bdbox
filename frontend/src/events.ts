@@ -1,11 +1,12 @@
 import Alpine from "alpinejs";
-import { formatElapsedMs } from "./protocol";
+import { VersionInfo, formatElapsedMs } from "./protocol";
 
 export class EventManager {
   private lastSessionId: string | null = null;
   private tickInterval: ReturnType<typeof setInterval> | null = null;
   private retryAt: number | null = null;
   private runStartedAt: number | null = null;
+  private lastVersion: VersionInfo | null = null;
 
   constructor() {
     document.addEventListener("DOMContentLoaded", () => this.init());
@@ -13,6 +14,21 @@ export class EventManager {
 
   public init(): void {
     window.addEventListener("bdbox.server:hello", ({ detail }) => {
+      if (this.lastVersion) {
+        if (detail.version.bdbox !== this.lastVersion.bdbox) {
+          console.log(
+            `bdbox version changed from ${this.lastVersion.bdbox}` +
+              ` to ${detail.version.bdbox}`,
+          );
+        }
+        if (detail.version.protocol !== this.lastVersion.protocol) {
+          console.log(
+            `protocol version changed from ${this.lastVersion.protocol}` +
+              ` to ${detail.version.protocol}`,
+          );
+        }
+      }
+      this.lastVersion = detail.version;
       if (detail.session_id !== this.lastSessionId) {
         const store = Alpine.store("runStatus");
         store.state = "idle";
