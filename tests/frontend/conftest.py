@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from queue import Queue
@@ -35,6 +36,11 @@ def console_verbosity_configure(console_verbosity: None) -> None:
 
 
 VIEWER_PORT = 65000
+
+
+@pytest.fixture(scope="session", autouse=True)
+def build_frontend_assets() -> None:
+    subprocess.run(["npm", "run", "build"], check=True)
 
 
 @dataclass
