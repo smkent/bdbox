@@ -72,4 +72,5 @@ declare module "alpinejs" {
 interface Window {
   __BDBOX__: { viewerPort: number };
   Alpine: unknown;
+  App: unknown;
 }
