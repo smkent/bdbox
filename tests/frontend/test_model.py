@@ -22,6 +22,10 @@ if TYPE_CHECKING:
 
 def test_model_form_renders(app: BackendTestApp) -> None:
 
+    def _expect_no_jedison_errors() -> None:
+        expect(app.page.locator(".jedi-error-message")).to_have_count(0)
+        expect(app.page.locator(".jedi-error-message")).not_to_be_visible()
+
     class Box(Model):
         width: int = 10
         height: int = 5
@@ -41,6 +45,15 @@ def test_model_form_renders(app: BackendTestApp) -> None:
     expect(app.page.locator(".params-preset-btn")).to_have_text("Square")
     expect(app.page.locator(".params-reset-btn")).to_be_visible()
     expect(app.page.locator(".params-form")).not_to_be_empty()
+    _expect_no_jedison_errors()
+
+    # Change a parameter value
+    app.send(
+        ModelDetailsMessage(
+            params=ModelParamsState(values={"width": 5, "height": 5}),
+        )
+    )
+    _expect_no_jedison_errors()
 
 
 def test_model_status_lifecycle(app: BackendTestApp) -> None:

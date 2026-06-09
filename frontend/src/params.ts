@@ -48,7 +48,10 @@ export class Params {
       schemaChanged = true;
     }
     if (detail.params) {
-      this.jedisonData.params = detail.params;
+      this.jedisonData.params = Object.assign(
+        new ModelParamsState(),
+        detail.params,
+      );
     }
     if (schemaChanged) {
       this.display();
