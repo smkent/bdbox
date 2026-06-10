@@ -23,8 +23,8 @@ class DisplayColor:
     color: str = Choice("default", ("lime", "default"))
 
 
-class DemoModel(Model):
-    width: float = 40.0
+class BoxDemo(Model):
+    width: float = 30.0
     length: float = 30.0
     height: float = 10.0
     chamfer: bool = True

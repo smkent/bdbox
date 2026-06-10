@@ -36,7 +36,7 @@ class ExecMain:
 class Examples:
     DIR = Path(examples.__file__).parent
 
-    DEMO = DIR / "demo.py"
+    BOX_DEMO = DIR / "demo.py"
 
 
 class Models:
