@@ -9,13 +9,16 @@ import time
 import webbrowser
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 from urllib.error import URLError
 from urllib.request import urlopen
 
 import psutil
 
 from bdbox.console import log
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 @dataclass
@@ -28,6 +31,11 @@ class _ViewerStub:
 @dataclass
 class ViewerManager:
     """Manages the OCP CAD Viewer subprocess."""
+
+    ocp_vscode_args: ClassVar[Sequence[str]] = (
+        "--theme=dark",
+        "--reset_camera=keep",
+    )
 
     restart: bool = False
     open_browser: bool = True
@@ -97,7 +105,10 @@ class ViewerManager:
             popen_kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
         else:
             popen_kwargs["start_new_session"] = True
-        subprocess.Popen([sys.executable, "-m", "ocp_vscode"], **popen_kwargs)
+            subprocess.Popen(  # noqa: S603
+                [sys.executable, "-m", "ocp_vscode", *self.ocp_vscode_args],
+                **popen_kwargs,
+            )
         for _ in range(self._POLL_ATTEMPTS):
             try:
                 urlopen(self.url).read()  # noqa: S310

@@ -190,7 +190,13 @@ class PSMock:
 
     def assert_launched(self) -> None:
         self.mock_popen.assert_called_once_with(
-            [sys.executable, "-m", "ocp_vscode"],
+            [
+                sys.executable,
+                "-m",
+                "ocp_vscode",
+                "--theme=dark",
+                "--reset_camera=keep",
+            ],
             start_new_session=True,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
