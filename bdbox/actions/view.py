@@ -71,6 +71,14 @@ class ViewAction(ModelAction):
         Literal["step", "stl"],
         tyro.conf.arg(aliases=["-f"], help="Output format."),
     ] = "step"
+    server_port: Annotated[
+        int,
+        tyro.conf.arg(
+            aliases=("-p",),
+            metavar="port",
+            help="Port for UI server to listen on",
+        ),
+    ] = 4040
 
     server_manager: tyro.conf.Suppress[ServerManager | None] = None
 
@@ -103,6 +111,7 @@ class ViewAction(ModelAction):
         viewer.start()
         if self.watch:
             self.server_manager = ServerManager(
+                port=self.server_port,
                 view_state=ViewState(
                     rerender_event=args.rerender_event,
                     viewer_port=viewer.port,
