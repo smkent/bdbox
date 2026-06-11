@@ -5,20 +5,18 @@ from __future__ import annotations
 import subprocess
 import sys
 from contextlib import contextmanager
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
-
-import tyro  # noqa: TC002
 
 from bdbox.console import console, log
 from bdbox.errors import RunError
+from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
     from pathlib import Path
 
-    from bdbox.dispatch import Event
     from bdbox.model.parameters import Params
     from bdbox.timer import Timer
 
@@ -27,28 +25,19 @@ if TYPE_CHECKING:
 class Action:
     """Base class for bdbox actions."""
 
-    watch: tyro.conf.Fixed[bool] = field(default=False, kw_only=True)
-
     class ModelHarnessProtocol(Protocol):
+        argv: list[str]
         model_arg: Path | str
         params_argv: Sequence[str]
         model_params_cls: type[Params] | None
-        rerender_event: Event
-
-    @dataclass
-    class HarnessResult:
-        runs: Sequence[tuple[Sequence[str | Path], Action]]
-
-    BeforeHarnessResult = HarnessResult | None
 
     def __call__(self) -> None:
         """Execute this action with the given geometry."""
         raise NotImplementedError
 
-    def before_harness(
-        self, args: Action.ModelHarnessProtocol
-    ) -> Action.BeforeHarnessResult:
-        """Executed prior to running the harness."""
+    def on_harness(self, args: Action.ModelHarnessProtocol) -> None:
+        """Executed when run from the harness."""
+        raise NotImplementedError
 
     @contextmanager
     def on_model_render(self) -> Iterator[Timer]:
@@ -69,6 +58,11 @@ class Action:
 
 @dataclass
 class ModelAction(Action):
+    def on_harness(self, args: Action.ModelHarnessProtocol) -> None:
+        ModelRunner(
+            [args.model_arg, *args.argv], action=self, preserve_exceptions=True
+        ).run_or_exit()
+
     def _ensure_runner(self) -> None:
         if run_state.mode != run_state.Mode.HARNESS:
             try:
@@ -84,10 +78,10 @@ class ModelAction(Action):
 
 @dataclass
 class CommandAction(Action):
-    def before_harness(
+    def on_harness(
         self,
         args: Action.ModelHarnessProtocol,  # noqa: ARG002
-    ) -> Action.BeforeHarnessResult:
+    ) -> None:
         self()
 
     @contextmanager

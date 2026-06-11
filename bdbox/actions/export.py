@@ -14,6 +14,7 @@ import tyro
 
 from bdbox.console import log
 from bdbox.errors import InternalError, UsageError
+from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
 
 from .action import ModelAction
@@ -168,33 +169,34 @@ class ExportAction(ModelAction):
             log.info(f"Exporting model geometry to {part_file}")
             self._exporter(solid, str(part_file))
 
-    def before_harness(
-        self, args: ModelAction.ModelHarnessProtocol
-    ) -> ModelAction.BeforeHarnessResult:
+    def on_harness(self, args: ModelAction.ModelHarnessProtocol) -> None:
         if self.all_presets:
-            runs = [
-                (
-                    [
-                        str(args.model_arg),
-                        "export",
-                        str(self.output),
-                        *(("--preset", preset.name) if preset else ()),
-                        *args.params_argv,
-                    ],
-                    ExportAction(
-                        all_presets=False,
-                        output=self.output,
-                        single=self.single,
-                        format=self.format,
-                    ),
-                )
-                for preset in (
-                    *((None,) if self.default else ()),
-                    *getattr(args.model_params_cls, "presets", ()),
-                )
-            ]
-            return ModelAction.HarnessResult(runs=runs)
-        return None
+            return self.export_all(args)
+        return super().on_harness(args)
+
+    def export_all(self, args: ModelAction.ModelHarnessProtocol) -> None:
+        for argv, action in [
+            (
+                [
+                    str(args.model_arg),
+                    "export",
+                    str(self.output),
+                    *(("--preset", preset.name) if preset else ()),
+                    *args.params_argv,
+                ],
+                ExportAction(
+                    all_presets=False,
+                    output=self.output,
+                    single=self.single,
+                    format=self.format,
+                ),
+            )
+            for preset in (
+                *((None,) if self.default else ()),
+                *getattr(args.model_params_cls, "presets", ()),
+            )
+        ]:
+            ModelRunner(argv, action, preserve_exceptions=True).run_or_exit()
 
     @contextmanager
     def on_model_render(self) -> Iterator[None]:

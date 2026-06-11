@@ -4,19 +4,22 @@ from __future__ import annotations
 
 import io
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path  # noqa: TC003
 from typing import TYPE_CHECKING, Annotated, Literal
 
 import tyro
 
 from bdbox.console import log
+from bdbox.dispatch import Event
 from bdbox.errors import MultipleModelsError, ParamsError
 from bdbox.protocol import (
     ModelDetailsMessage,
     ModelRunStatusMessage,
 )
+from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
+from bdbox.runner.watcher import ModelWatcher
 from bdbox.serializer import serializer
 from bdbox.view.server import ServerManager
 from bdbox.view.state import ViewState
@@ -81,6 +84,11 @@ class ViewAction(ModelAction):
     ] = 4040
 
     server_manager: tyro.conf.Suppress[ServerManager | None] = None
+    rerender_event: tyro.conf.Suppress[Event] = field(
+        default_factory=lambda: Event(name="rerender_event"),
+        init=False,
+        repr=False,
+    )
 
     def __call__(self) -> None:
         """Send collected geometry to the viewer."""
@@ -104,21 +112,25 @@ class ViewAction(ModelAction):
             if ocp_vscode_output := buf.getvalue().strip():
                 log.debug(ocp_vscode_output)
 
-    def before_harness(
-        self, args: ModelAction.ModelHarnessProtocol
-    ) -> ModelAction.BeforeHarnessResult:
+    def on_harness(self, args: ModelAction.ModelHarnessProtocol) -> None:
         viewer = ViewerManager(restart=self.restart_viewer, open_browser=False)
         viewer.start()
         if self.watch:
             self.server_manager = ServerManager(
                 port=self.server_port,
                 view_state=ViewState(
-                    rerender_event=args.rerender_event,
+                    rerender_event=self.rerender_event,
                     viewer_port=viewer.port,
                     model_class=args.model_params_cls,
                 ),
                 open_browser=self.open_browser,
             )
+        runner = ModelRunner([args.model_arg, *args.argv], self)
+        if self.watch:
+            ModelWatcher(runner=runner, change_event=self.rerender_event).run()
+            return
+        runner.preserve_exceptions = True
+        runner.run_or_exit()
 
     def _update_schema(self, ctx: ViewState) -> None:
         try:

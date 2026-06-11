@@ -4,7 +4,7 @@ import operator
 import os
 import sys
 from contextlib import suppress
-from dataclasses import dataclass, field, make_dataclass
+from dataclasses import dataclass, make_dataclass
 from functools import cached_property, reduce
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any, ClassVar, cast, get_args
@@ -15,7 +15,7 @@ import tyro
 from bdbox.actions.action import ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI, CLIOptions
-from bdbox.dispatch import Event, dispatch
+from bdbox.dispatch import dispatch
 from bdbox.errors import InternalError, RunError
 from bdbox.runner.state import run_state
 
@@ -24,7 +24,6 @@ from .locator import ModelLocator
 from .runner import ModelRunner
 from .shims import MainModule
 from .utils import Build123dStub, PatchModule
-from .watcher import ModelWatcher
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -69,11 +68,6 @@ class ModelHarness(ModelLocator):
     env_search: ClassVar[bool] = True
     clean_modules: ClassVar[bool] = True
     package: ClassVar[str] = (__package__ or "bdbox").split(".", 1)[0]
-    rerender_event: Event = field(
-        default_factory=lambda: Event(name="rerender_event"),
-        init=False,
-        repr=False,
-    )
 
     @dataclass
     class HarnessCLI(CLI, CLIOptions):
@@ -101,23 +95,7 @@ class ModelHarness(ModelLocator):
             cli_result = cli_cls.instance_from_cli(
                 prog=self.prog, args=self.argv
             )
-        hook_result = cli_result.action.before_harness(self)
-        if not self.maybe_model:
-            return
-        if hook_result and hook_result.runs:
-            for argv, action in hook_result.runs:
-                ModelRunner(
-                    argv, action, preserve_exceptions=True
-                ).run_or_exit()
-            return
-        runner = ModelRunner([self.model_arg, *self.argv], cli_result.action)
-        if cli_result.action.watch:
-            ModelWatcher(runner=runner, change_event=self.rerender_event).run()
-            dispatch.exit.set()
-            dispatch.exit_join()
-            return
-        runner.preserve_exceptions = True
-        runner.run_or_exit()
+        cli_result.action.on_harness(self)
         dispatch.exit.set()
         dispatch.exit_join()
 
