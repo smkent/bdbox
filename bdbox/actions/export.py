@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from contextlib import contextmanager
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, make_dataclass
 from functools import cached_property
 from itertools import count
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Literal
+from typing import TYPE_CHECKING, Annotated, Literal, cast
 
 import tyro
 
@@ -20,9 +20,11 @@ from bdbox.runner.state import run_state
 from .action import ModelAction
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator
+    from collections.abc import Callable, Iterator, Sequence
 
     from build123d import Shape
+
+    from bdbox.model.info import ModelInfo
 
 
 @dataclass
@@ -169,20 +171,42 @@ class ExportAction(ModelAction):
             log.info(f"Exporting model geometry to {part_file}")
             self._exporter(solid, str(part_file))
 
-    def on_harness(self, args: ModelAction.ModelHarnessProtocol) -> None:
+    def on_harness(self, model: ModelInfo) -> None:
         if self.all_presets:
-            return self.export_all(args)
-        return super().on_harness(args)
+            return self.export_all(model)
+        return super().on_harness(model)
 
-    def export_all(self, args: ModelAction.ModelHarnessProtocol) -> None:
+    def params_argv(self, model: ModelInfo) -> Sequence[str]:
+        from bdbox.cli import CLI  # noqa: PLC0415
+
+        inst, params_argv = (
+            cast(
+                "CLI",
+                make_dataclass(
+                    CLI.__name__,
+                    [("preset", "str | None", None)],
+                    bases=(CLI,),
+                ),
+            )
+            .cli_config()
+            .instance_from_cli(
+                args=model.argv, return_unknown_args=True, add_help=False
+            )
+        )
+        return [*params_argv, *inst.to_args()]
+
+    def export_all(self, model: ModelInfo) -> None:
+        if not (model_arg := model.arg):
+            raise UsageError("No model specified")
+        params_argv = self.params_argv(model)
         for argv, action in [
             (
                 [
-                    str(args.model_arg),
+                    str(model_arg),
                     "export",
                     str(self.output),
                     *(("--preset", preset.name) if preset else ()),
-                    *args.params_argv,
+                    *params_argv,
                 ],
                 ExportAction(
                     all_presets=False,
@@ -193,7 +217,7 @@ class ExportAction(ModelAction):
             )
             for preset in (
                 *((None,) if self.default else ()),
-                *getattr(args.model_params_cls, "presets", ()),
+                *getattr(model.params_class, "presets", ()),
             )
         ]:
             ModelRunner(argv, action, preserve_exceptions=True).run_or_exit()

@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import sys
 from dataclasses import MISSING, dataclass, field, make_dataclass
+from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     Annotated,
     Any,
+    ClassVar,
     Generic,
     Literal,
     Protocol,
@@ -81,6 +83,14 @@ class CLIOptions:
 
 @dataclass
 class CLI:
+    package: ClassVar[str] = (__package__ or "bdbox").split(".", 1)[0]
+
+    @classmethod
+    def prog(cls) -> str:
+        if (argv0 := Path(sys.argv[0])).stem == "__main__":
+            return cls.package
+        return argv0.name
+
     @classmethod
     def cli_config(cls) -> type[CLIConfig[T]]:
         return cast(
@@ -127,6 +137,7 @@ class CLI:
     def instance_from_cli(
         cls, prog: str | None = None, *args: Any, **kwargs: Any
     ) -> Self | tuple[Self, Sequence[str]]:
+        prog = prog or cls.prog()
         result = tyro.cli(
             cls, *args, prog=prog, config=TYRO_CLI_CONFIG, **kwargs
         )

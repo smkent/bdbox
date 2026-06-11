@@ -12,7 +12,7 @@ import tyro
 
 from bdbox.console import log
 from bdbox.dispatch import Event
-from bdbox.errors import MultipleModelsError, ParamsError
+from bdbox.errors import MultipleModelsError, ParamsError, UsageError
 from bdbox.protocol import (
     ModelDetailsMessage,
     ModelRunStatusMessage,
@@ -32,6 +32,8 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from build123d import Compound, Shape
+
+    from bdbox.model.info import ModelInfo
 
 
 @dataclass
@@ -112,7 +114,7 @@ class ViewAction(ModelAction):
             if ocp_vscode_output := buf.getvalue().strip():
                 log.debug(ocp_vscode_output)
 
-    def on_harness(self, args: ModelAction.ModelHarnessProtocol) -> None:
+    def on_harness(self, model: ModelInfo) -> None:
         viewer = ViewerManager(restart=self.restart_viewer, open_browser=False)
         viewer.start()
         if self.watch:
@@ -121,11 +123,13 @@ class ViewAction(ModelAction):
                 view_state=ViewState(
                     rerender_event=self.rerender_event,
                     viewer_port=viewer.port,
-                    model_class=args.model_params_cls,
+                    model_class=model.params_class,
                 ),
                 open_browser=self.open_browser,
             )
-        runner = ModelRunner([args.model_arg, *args.argv], self)
+        if not (model_arg := model.arg):
+            raise UsageError("No model specified")
+        runner = ModelRunner([model_arg, *model.argv], self)
         if self.watch:
             ModelWatcher(runner=runner, change_event=self.rerender_event).run()
             return

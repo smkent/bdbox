@@ -6,18 +6,17 @@ import subprocess
 import sys
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING
 
 from bdbox.console import console, log
-from bdbox.errors import RunError
+from bdbox.errors import RunError, UsageError
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator, Sequence
-    from pathlib import Path
+    from collections.abc import Iterator
 
-    from bdbox.model.parameters import Params
+    from bdbox.model.info import ModelInfo
     from bdbox.timer import Timer
 
 
@@ -25,17 +24,11 @@ if TYPE_CHECKING:
 class Action:
     """Base class for bdbox actions."""
 
-    class ModelHarnessProtocol(Protocol):
-        argv: list[str]
-        model_arg: Path | str
-        params_argv: Sequence[str]
-        model_params_cls: type[Params] | None
-
     def __call__(self) -> None:
         """Execute this action with the given geometry."""
         raise NotImplementedError
 
-    def on_harness(self, args: Action.ModelHarnessProtocol) -> None:
+    def on_harness(self, model: ModelInfo) -> None:
         """Executed when run from the harness."""
         raise NotImplementedError
 
@@ -58,9 +51,13 @@ class Action:
 
 @dataclass
 class ModelAction(Action):
-    def on_harness(self, args: Action.ModelHarnessProtocol) -> None:
+    def on_harness(self, model: ModelInfo) -> None:
+        if not (model_arg := model.arg):
+            raise UsageError("No model specified")
         ModelRunner(
-            [args.model_arg, *args.argv], action=self, preserve_exceptions=True
+            [model_arg, *model.argv],
+            action=self,
+            preserve_exceptions=True,
         ).run_or_exit()
 
     def _ensure_runner(self) -> None:
@@ -80,7 +77,7 @@ class ModelAction(Action):
 class CommandAction(Action):
     def on_harness(
         self,
-        args: Action.ModelHarnessProtocol,  # noqa: ARG002
+        model: ModelInfo,  # noqa: ARG002
     ) -> None:
         self()
 
