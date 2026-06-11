@@ -6,7 +6,6 @@ import sys
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
-from bdbox.actions.action import Action
 from bdbox.console import log
 from bdbox.errors import MultipleModelsError
 from bdbox.geometry.show import show
@@ -106,7 +105,7 @@ class Model(Params):
             run_state.model_state.module_dict = sys.modules[
                 "__main__"
             ].__dict__
-        if Action.mode != Action.Mode.HARNESS:
+        if run_state.mode != run_state.Mode.HARNESS:
             run_state.action_state.action = cli_result.action
         if not run_state.model_state.model.class_name:
             run_state.model_state.model.class_name = cls.__name__

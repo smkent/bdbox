@@ -12,7 +12,7 @@ from unittest.mock import MagicMock, patch
 
 import tyro
 
-from bdbox.actions.action import Action, ModelAction
+from bdbox.actions.action import ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLI, CLIOptions
 from bdbox.dispatch import Event, dispatch
@@ -82,7 +82,7 @@ class ModelHarness(ModelLocator):
     def __post_init__(
         self, model_argv: Sequence[Path | str] | Path | str
     ) -> None:
-        Action.mode = Action.Mode.HARNESS
+        run_state.mode = run_state.Mode.HARNESS
         argv = self._setup_argv(model_argv or sys.argv[1:])
         CLIOptions.configure_from_cli(args=argv)
         super().__post_init__(argv)

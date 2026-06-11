@@ -10,12 +10,11 @@ from unittest.mock import patch
 
 import pytest
 
-from bdbox.actions.action import Action
 from bdbox.console import console
 from bdbox.dispatch import dispatch
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
-from bdbox.runner.state import run_state
+from bdbox.runner.state import RunState, run_state
 
 pytest.register_assert_rewrite("tests.utils")
 
@@ -66,10 +65,22 @@ def reset_all() -> Iterator[None]:
     """Reset all bdbox state before each test."""
     run_state.reset()
     dispatch.reset()
-    Action.mode = Action.Mode.EMBEDDED
     yield
     dispatch.exit.set()
     dispatch.exit_join()
+
+
+@pytest.fixture
+def embedded_mode(reset_all: None) -> Iterator[None]:
+    run_state.mode = run_state.Mode.EMBEDDED
+
+    def _mock(self: RunState, name: str, value: Any) -> None:
+        if name == "mode":
+            value = run_state.Mode.EMBEDDED
+        return super(RunState, self).__setattr__(name, value)
+
+    with patch.object(RunState, "__setattr__", _mock):
+        yield
 
 
 @pytest.fixture

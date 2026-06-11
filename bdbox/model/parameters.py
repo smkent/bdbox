@@ -5,7 +5,6 @@ from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import Any, ClassVar
 
-from bdbox.actions.action import Action
 from bdbox.cli import CLI
 from bdbox.errors import ParamsError
 from bdbox.runner.state import run_state
@@ -130,7 +129,7 @@ class Params(CLI, metaclass=ParamsType):
                 run_state.model_state.module_dict = sys.modules[
                     "__main__"
                 ].__dict__
-            if Action.mode != Action.Mode.HARNESS:
+            if run_state.mode != run_state.Mode.HARNESS:
                 run_state.action_state.action = cli_result.action
             run_state.action_state.on_model_render().__enter__()
             run_state.model_state.apply_overrides(cli_result.params)
