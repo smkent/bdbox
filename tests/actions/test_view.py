@@ -12,7 +12,6 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 import bdbox.view.server as server_module
-from bdbox.actions.action import Action
 from bdbox.actions.view import ViewAction
 from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
@@ -68,12 +67,10 @@ def harness(monkeypatch: pytest.MonkeyPatch) -> HarnessWrapper:
     return wrapper
 
 
+@pytest.mark.usefixtures("embedded_mode")
 def test_embedded_mode_execs_harness(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "argv", [str(Models.MODEL_EXPORT), "view"])
-    with (
-        patch.object(subprocess, "run") as mock_run,
-        pytest.raises(RunError),
-    ):
+    with patch.object(subprocess, "run") as mock_run, pytest.raises(RunError):
         ModelRunner([Models.MODEL_EXPORT, "view"])()
     mock_run.assert_called_once_with(
         [sys.executable, "-m", "bdbox", str(Models.MODEL_EXPORT), "view"]
@@ -107,10 +104,7 @@ def test_view_no_watch_skips_watcher(
 
 
 def test_send_geometry_to_viewer(mock_ocp_vscode: MockOcpVscode) -> None:
-    with (
-        patch.object(Action, "mode", Action.Mode.HARNESS),
-        patch.object(mock_ocp_vscode, "show") as mock_show,
-    ):
+    with patch.object(mock_ocp_vscode, "show") as mock_show:
         ModelRunner([Models.PARAMS_EXPORT, "view"], ViewAction())()
     mock_show.assert_called_once()
     assert len(mock_show.call_args[0][0]) == 2

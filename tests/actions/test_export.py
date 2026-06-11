@@ -157,6 +157,7 @@ def test_model_export(
     )
 
 
+@pytest.mark.usefixtures("embedded_mode")
 def test_export_with_parameters_after(
     run_class: type[Runner],
     model_with_params: Path,
@@ -170,6 +171,7 @@ def test_export_with_parameters_after(
     )
 
 
+@pytest.mark.usefixtures("embedded_mode")
 def test_export_with_parameters_before(
     run_class: type[Runner],
     model_with_params: Path,
@@ -222,6 +224,7 @@ def test_main_export_no_model(model_runner: ExportModelRunner) -> None:
         model_runner(MAIN_STUB, ["export"])
 
 
+@pytest.mark.usefixtures("embedded_mode")
 def test_export_all_embedded_execs_harness(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
@@ -251,6 +254,7 @@ def test_export_all_embedded_execs_harness(
     mock_run.assert_called_once_with([sys.executable, "-m", "bdbox", *argv])
 
 
+@pytest.mark.usefixtures("embedded_mode")
 def test_export_single_embedded_does_not_exec_harness(
     tmp_path: Path, model_runner: ExportModelRunner
 ) -> None:

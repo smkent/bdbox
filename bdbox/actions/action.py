@@ -6,8 +6,7 @@ import subprocess
 import sys
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from enum import Enum, auto
-from typing import TYPE_CHECKING, ClassVar, Protocol
+from typing import TYPE_CHECKING, Protocol
 
 import tyro  # noqa: TC002
 
@@ -28,11 +27,6 @@ if TYPE_CHECKING:
 class Action:
     """Base class for bdbox actions."""
 
-    class Mode(Enum):
-        EMBEDDED = auto()
-        HARNESS = auto()
-
-    mode: ClassVar[Action.Mode] = Mode.EMBEDDED
     watch: tyro.conf.Fixed[bool] = field(default=False, kw_only=True)
 
     class ModelHarnessProtocol(Protocol):
@@ -76,7 +70,7 @@ class Action:
 @dataclass
 class ModelAction(Action):
     def _ensure_runner(self) -> None:
-        if self.mode != self.Mode.HARNESS:
+        if run_state.mode != run_state.Mode.HARNESS:
             try:
                 cmd = [sys.executable, "-m", "bdbox", *sys.argv]
                 log.debug(f"Exec: {' '.join(cmd)}")

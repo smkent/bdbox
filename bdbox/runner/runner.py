@@ -31,6 +31,7 @@ class ModelRunner(ModelLocator):
         if not self.model.filename:
             raise InternalError("Model not found in arguments")
         run_state.reset()
+        run_state.mode = run_state.Mode.HARNESS
         if self.action:
             run_state.action_state.action = self.action
         main_module = MainModule(
