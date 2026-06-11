@@ -4,7 +4,7 @@ import runpy
 import sys
 from contextlib import contextmanager
 from copy import deepcopy
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
@@ -24,8 +24,8 @@ if TYPE_CHECKING:
 @dataclass
 class ModelRunner(ModelLocator):
     action: Action | None = None
-    preserve_exceptions: bool = False
-    discovery_mode: bool = False
+    preserve_exceptions: bool = field(default=False, kw_only=True)
+    discovery_mode: bool = field(default=False, kw_only=True)
 
     def __call__(self) -> None:
         if not self.model.filename:
