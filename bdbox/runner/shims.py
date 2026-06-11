@@ -2,13 +2,12 @@ from __future__ import annotations
 
 import sys
 from collections.abc import Callable, Iterator
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from types import ModuleType
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
-from bdbox.model.model import Model
-from bdbox.model.parameters import Params
+from .utils import PatchModule
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -22,17 +21,27 @@ AtExitHook = Callable[..., Any]
 
 
 class AtExit(ModuleType):
+    SEARCH_MODULES = ("bdbox.model.model", "bdbox.model.parameters")
+
     hooks: list[tuple[AtExitHook, tuple[Any, dict[str, Any]]]]
 
     @classmethod
     @contextmanager
     def mock(cls) -> Iterator[Self]:
-        mock_atexit = AtExit()
-        with (
-            patch(f"{Model.__module__}.atexit", mock_atexit),
-            patch(f"{Params.__module__}.atexit", mock_atexit),
-        ):
-            yield mock_atexit  # ty: ignore[invalid-yield]
+        builtin_atexit = sys.modules.get("atexit")
+        mock_atexit = cls()
+        with ExitStack() as mock_stack, PatchModule("atexit", mock_atexit):
+            for module, attr_name in [
+                (mod, attr_name)
+                for mod_name in cls.SEARCH_MODULES
+                if isinstance((mod := sys.modules.get(mod_name)), ModuleType)
+                for attr_name, attr_val in list(vars(mod).items())
+                if attr_val is builtin_atexit
+            ]:
+                mock_stack.enter_context(
+                    patch.object(module, attr_name, mock_atexit)
+                )
+            yield mock_atexit
             mock_atexit.run_hooks()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
