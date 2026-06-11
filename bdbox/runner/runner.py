@@ -41,7 +41,9 @@ class ModelRunner(ModelLocator):
             with (
                 self.action_on_model_render(),
                 PatchModule("__main__", main_module, auto=False) as mock_main,
-                patch.object(sys, "argv", [self.model.filename, *self.argv]),
+                patch.object(
+                    sys, "argv", [self.model.filename, *self.model.argv]
+                ),
                 exit_mock(),
                 AtExit.mock() as atexit_mock,
             ):

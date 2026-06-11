@@ -24,12 +24,11 @@ class ModelLocator:
     env_search: ClassVar[bool] = False
     clean_modules: ClassVar[bool] = False
     model_argv: InitVar[Sequence[Path | str] | Path | str] = ()
-    argv: list[str] = field(default_factory=list, init=False)
 
     def __post_init__(
         self, model_argv: Sequence[Path | str] | Path | str
     ) -> None:
-        self.argv = self._setup_argv(model_argv)
+        self.model.argv = self._setup_argv(model_argv)
         model_file = self._model_path_from_argv()
         if model_file:
             self.model.path = Path(model_file).resolve()
@@ -87,16 +86,16 @@ class ModelLocator:
         return None
 
     def _model_path_from_argv(self) -> str | None:
-        for arg in self.argv:
+        for arg in self.model.argv:
             if not arg.startswith("-") and Path(arg).suffix == ".py":
-                self.argv.pop(self.argv.index(arg))
+                self.model.argv.pop(self.model.argv.index(arg))
                 if self.env_search:
                     EnvLocator(arg).ensure_env()
                 return arg
-        for arg in self.argv:
+        for arg in self.model.argv:
             if not re.match(r"^[A-Za-z0-9_.:]+$", arg) or Path(arg).is_file():
                 continue
             if arg_file := self._file_from_module(arg):
-                self.argv.pop(self.argv.index(arg))
+                self.model.argv.pop(self.model.argv.index(arg))
                 return arg_file
         return None

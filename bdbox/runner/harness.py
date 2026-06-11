@@ -6,8 +6,7 @@ import sys
 from contextlib import suppress
 from dataclasses import dataclass, make_dataclass
 from functools import cached_property, reduce
-from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any, ClassVar, cast, get_args
+from typing import TYPE_CHECKING, Annotated, Any, ClassVar, get_args
 from unittest.mock import MagicMock, patch
 
 import tyro
@@ -27,6 +26,7 @@ from .utils import Build123dStub, PatchModule
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+    from pathlib import Path
 
     from bdbox.model.parameters import Params
 
@@ -67,7 +67,6 @@ HarnessAction = HarnessCLIFactory.make()
 class ModelHarness(ModelLocator):
     env_search: ClassVar[bool] = True
     clean_modules: ClassVar[bool] = True
-    package: ClassVar[str] = (__package__ or "bdbox").split(".", 1)[0]
 
     @dataclass
     class HarnessCLI(CLI, CLIOptions):
@@ -81,77 +80,37 @@ class ModelHarness(ModelLocator):
         CLIOptions.configure_from_cli(args=argv)
         super().__post_init__(argv)
         if len(sys.argv) == 1:
-            self.argv.append("--help")
+            self.model.argv.append("--help")
 
     def __call__(self) -> None:
+        self.model.params_class = self.model_params_cls
         cli_cls = (
-            ((self.model_params_cls or CLI).cli_config())
-            if self.maybe_model
+            ((self.model.params_class or CLI).cli_config())
+            if self.model.arg
             else self.HarnessCLI
         )
         main_module = MainModule()
         main_module.__dict__.update(run_state.model_state.module_dict)
         with PatchModule("__main__", main_module, auto=True):
-            cli_result = cli_cls.instance_from_cli(
-                prog=self.prog, args=self.argv
-            )
-        cli_result.action.on_harness(self)
+            cli_result = cli_cls.instance_from_cli(args=self.model.argv)
+        cli_result.action.on_harness(self.model)
         dispatch.exit.set()
         dispatch.exit_join()
 
-    @cached_property
-    def params_argv(self) -> Sequence[str]:
-        inst, params_argv = (
-            cast(
-                "CLI",
-                make_dataclass(
-                    CLI.__name__,
-                    [("preset", "str | None", None)],
-                    bases=(CLI,),
-                ),
-            )
-            .cli_config()
-            .instance_from_cli(
-                prog=self.prog,
-                args=self.argv,
-                return_unknown_args=True,
-                add_help=False,
-            )
-        )
-        return [*params_argv, *inst.to_args()]
-
-    @cached_property
-    def maybe_model(self) -> Path | str | None:
-        with suppress(InternalError):
-            return self.model_arg
-
-    @cached_property
-    def model_arg(self) -> Path | str:
-        if self.model.module_name and self.model.class_name:
-            return f"{self.model.module_name}:{self.model.class_name}"
-        if result := (self.model.module_name or self.model.path):
-            return result
-        raise InternalError("No model found")
-
-    @cached_property
-    def prog(self) -> str:
-        if (argv0 := Path(sys.argv[0])).stem == "__main__":
-            return self.package
-        return argv0.name
-
     def get_model(self) -> type[Params] | None:
-        with (
-            patch.dict(
-                sys.modules,
-                {"build123d": Build123dStub(), "ocp_vscode": MagicMock()},
-            ),
-            patch.object(
-                CLI, "instance_from_cli", MagicMock(side_effect=SystemExit)
-            ),
-            self.module_cleanup(),
-            suppress(RunError, InternalError),
-        ):
-            ModelRunner([self.model_arg, "--help"], discovery_mode=True)()
+        if model_arg := self.model.arg:
+            with (
+                patch.dict(
+                    sys.modules,
+                    {"build123d": Build123dStub(), "ocp_vscode": MagicMock()},
+                ),
+                patch.object(
+                    CLI, "instance_from_cli", MagicMock(side_effect=SystemExit)
+                ),
+                self.module_cleanup(),
+                suppress(RunError, InternalError),
+            ):
+                ModelRunner([model_arg, "--help"], discovery_mode=True)()
         return run_state.model_state.get_model()
 
     @cached_property
@@ -161,8 +120,6 @@ class ModelHarness(ModelLocator):
         Returns a list of (name, annotation, field) tuples for user-defined
         parameters, or None if no bdbox Params/Model class was found.
         """
-        if not self.maybe_model:
-            return None
         if not (model_class := self.get_model()):
             if not self.model.module_name and self.model.path:
                 with suppress(ValueError):
@@ -173,11 +130,9 @@ class ModelHarness(ModelLocator):
                         str(relative).removesuffix(".py").replace(os.sep, ".")
                     )
                     self.model.module_name = mod_name
-                    del self.model_arg
                     if model_class := self.get_model():
                         return model_class
                     self.model.module_name = None
-                    del self.model_arg
             return None
         if getattr(model_class, "__module__", None) != "__main__":
             model_class.__module__ = "__main__"

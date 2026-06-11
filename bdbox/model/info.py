@@ -10,10 +10,14 @@ from bdbox.protocol import ModelDisplayInfo
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from bdbox.model.parameters import Params
+
 
 @dataclass
 class ModelInfo(ModelDisplayInfo):
     path: Path | None = field(default=None, init=False)
+    argv: list[str] = field(default_factory=list, init=False)
+    params_class: type[Params] | None = field(default=None, init=False)
 
     class Mode(Enum):
         PARAMS_CLASS = auto()
@@ -31,3 +35,11 @@ class ModelInfo(ModelDisplayInfo):
             "__main__",
             self.module_name or "__main__",
         ) or cls.__module__.startswith(f"{self.module_name}.")
+
+    @property
+    def arg(self) -> Path | str | None:
+        if self.module_name and self.class_name:
+            return f"{self.module_name}:{self.class_name}"
+        if result := (self.module_name or self.path):
+            return result
+        return None
