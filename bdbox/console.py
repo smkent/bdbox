@@ -188,10 +188,6 @@ class WebConsoleOutput(ConsoleOutput):
     stream: TextIO
     width: int = 80
 
-    def set_width(self, value: int) -> None:
-        self.width = value
-        self.console.width = self.width
-
     @cached_property
     def console(self) -> RichConsole:
         return RichConsole(
@@ -349,7 +345,6 @@ class Console:
         )
         bdbox_log = logging.getLogger("bdbox")
         bdbox_log.setLevel(bdbox_level)
-        self.log_level = bdbox_log.getEffectiveLevel()
 
     def add_web_output(self, ws_id: int, stream: TextIO, width: int) -> None:
         if ws_id in self.web_outputs:

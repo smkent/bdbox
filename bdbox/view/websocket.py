@@ -51,16 +51,3 @@ class WebSocketConnectionManager:
     def disconnect(self, ws: WebSocket) -> None:
         if ws in self.connections:
             self.connections.remove(ws)
-
-    async def send(self, message: ServerMessage) -> None:
-        msg_json = message.to_dict()
-        if message.log_ok:
-            log.debug(
-                "Sent %s (%d clients)", message.type, len(self.connections)
-            )
-            log.trace(json.dumps(msg_json, indent=4))
-        for ws in list(self.connections):
-            try:
-                await ws.send_json(msg_json)
-            except Exception:  # noqa: BLE001, PERF203
-                self.disconnect(ws)

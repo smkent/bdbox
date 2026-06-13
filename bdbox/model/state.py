@@ -92,10 +92,6 @@ class ModelState:
             return serializer.json_schema(model_class)
         return {}
 
-    @property
-    def model_running(self) -> bool:
-        return self.timer is not None
-
     @contextmanager
     def set_running(self) -> Iterator[Timer]:
         if not self.cached_schema:
