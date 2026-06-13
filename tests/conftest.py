@@ -6,7 +6,7 @@ import random
 import subprocess
 import sys
 from typing import TYPE_CHECKING, Any
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -15,6 +15,8 @@ from bdbox.dispatch import dispatch
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.state import RunState, run_state
+from bdbox.view.server import ServerManager
+from bdbox.viewer import ViewerManager
 
 pytest.register_assert_rewrite("tests.utils")
 
@@ -176,3 +178,15 @@ def thread_exceptions() -> Iterator[ThreadExceptions]:
     instance = ThreadExceptions()
     with instance.catch():
         yield instance
+
+
+@pytest.fixture
+def mock_viewer_start() -> Iterator[MagicMock]:
+    with patch.object(ViewerManager, "start", autospec=True) as mocked:
+        yield mocked
+
+
+@pytest.fixture
+def mock_server_start() -> Iterator[MagicMock]:
+    with patch.object(ServerManager, "start", autospec=True) as mocked:
+        yield mocked

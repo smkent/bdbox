@@ -11,35 +11,24 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import bdbox.view.server as server_module
 from bdbox.actions.view import ViewAction
 from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
-from bdbox.viewer import ViewerManager
 from tests.utils import MockOcpVscode, Models
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator, Sequence
+    from collections.abc import Sequence
     from pathlib import Path
 
 
-pytestmark = pytest.mark.usefixtures("ensure_sys_modules", "mock_ocp_vscode")
-
-
-@pytest.fixture(autouse=True)
-def mock_viewer_start() -> Iterator[MagicMock]:
-    with patch.object(ViewerManager, "start") as mocked:
-        yield mocked
-
-
-@pytest.fixture(autouse=True)
-def mock_server_start() -> Iterator[MagicMock]:
-    with patch.object(
-        server_module.ServerManager, "start", autospec=True
-    ) as mocked:
-        yield mocked
+pytestmark = pytest.mark.usefixtures(
+    "ensure_sys_modules",
+    "mock_ocp_vscode",
+    "mock_server_start",
+    "mock_viewer_start",
+)
 
 
 @pytest.fixture(
