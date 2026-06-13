@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
@@ -147,4 +147,5 @@ class App(FastAPI):
                     )
         finally:
             webstream.q.put(None)
-            await send_task
+            with suppress(asyncio.CancelledError):
+                await send_task
