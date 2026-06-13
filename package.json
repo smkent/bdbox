@@ -13,17 +13,17 @@
   "dependencies": {
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
-    "alpinejs": "^3.14.0",
+    "alpinejs": "^3.15.12",
     "golden-layout": "^2.6.0",
-    "jedison": "^1.11.2"
+    "jedison": "^1.12.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "esbuild": "^0.25.0",
-    "eslint": "^10.2.1",
-    "globals": "^17.5.0",
-    "prettier": "^3.8.3",
-    "typescript": "^5.8.0",
-    "typescript-eslint": "^8.0.0"
+    "esbuild": "^0.28.1",
+    "eslint": "^10.5.0",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0"
   }
 }
