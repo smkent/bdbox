@@ -13,8 +13,7 @@ from typing import TYPE_CHECKING
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
-from bdbox.console import log
-from bdbox.dispatch import Event, dispatch
+from bdbox.dispatch import Event, Service, dispatch
 from bdbox.errors import InternalError, RunError
 
 if TYPE_CHECKING:
@@ -26,7 +25,7 @@ _DEBOUNCE_SECS = 0.15
 
 
 @dataclass
-class ModelWatcher:
+class ModelWatcher(Service):
     """Tracks local module dependencies and signals on file changes."""
 
     runner: ModelRunner
@@ -35,11 +34,6 @@ class ModelWatcher:
     )
     local_modules: dict[str, str] = field(default_factory=dict, init=False)
     started: bool = field(default=False, init=False)
-
-    def __post_init__(self) -> None:
-        dispatch.on_exit(
-            self.change_event.set, name="Set ModelWatcher change_event"
-        )
 
     @property
     @contextmanager
@@ -77,15 +71,14 @@ class ModelWatcher:
             {self.model_path} | {Path(f) for f in self.local_modules.values()}
         )
 
-    def run(self) -> None:
-        with self.observer:
-            try:
-                while self.wait_for_change():
-                    with self.handle_modules, suppress(RunError):
-                        self.runner()
-            except KeyboardInterrupt:
-                print(file=sys.stderr)  # noqa: T201
-                log.info("Quitting")
+    def start(self) -> None:
+        with dispatch.handle_exit(), self.observer:
+            while self.wait_for_change():
+                with self.handle_modules, suppress(RunError):
+                    self.runner()
+
+    def stop(self) -> None:
+        self.change_event.set()
 
     @property
     @contextmanager

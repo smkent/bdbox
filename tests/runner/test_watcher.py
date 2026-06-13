@@ -15,7 +15,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from bdbox.dispatch import Event
+from bdbox.dispatch import Event, dispatch
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
 
@@ -127,7 +127,12 @@ def runner(
 
 @pytest.fixture
 def watcher(modules: Modules, runner: ModelRunner) -> Iterator[ModelWatcher]:
-    watcher = ModelWatcher(runner)
+
+    class ManualStartModelWatcher(ModelWatcher):
+        def __post_init__(self) -> None:
+            dispatch.on_exit(self.stop)
+
+    watcher = ManualStartModelWatcher(runner)
     with modules(watcher):
         yield watcher
 
@@ -190,7 +195,9 @@ def test_runloop_with_rerun(
     mock_runner_call.side_effect = _call
     watcher.change_event = SignalingEvent()
 
-    t = threading.Thread(target=watcher.run, daemon=True)
+    t = threading.Thread(
+        name="test-model-watcher", target=watcher.start, daemon=True
+    )
     t.start()
 
     assert first_run_done.wait(timeout=1.0), "first run should have completed"

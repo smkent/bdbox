@@ -243,7 +243,7 @@ def ps_mock(
 def mock_watch_run() -> Iterator[MagicMock]:
     with patch.object(
         ModelWatcher,
-        "run",
+        "start",
         autospec=True,
         side_effect=lambda self: self.runner(),
     ) as mocked:
