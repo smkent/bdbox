@@ -3,11 +3,10 @@
 from __future__ import annotations
 
 import asyncio
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
-from queue import Queue
 from typing import TYPE_CHECKING, Any, TextIO, cast
 from uuid import UUID, uuid4
 
@@ -22,16 +21,19 @@ from bdbox.protocol import (
     ConnectedMessage,
     ModelDetailsMessage,
     ModelRunStatusMessage,
-    ServerMessage,
 )
 from bdbox.runner.state import run_state
+from bdbox.view.console import WebStream
+from bdbox.view.websocket import WebSocketConnection
 
-from .console import WebStream
 from .templates import INDEX_TEMPLATE
-from .websocket import WebSocketConnection, WebSocketConnectionManager
+from .websocket import WebSocketConnectionManager
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
+    from queue import Queue
+
+    from bdbox.protocol import ServerMessage
 
     from .state import ViewState
 
@@ -42,7 +44,9 @@ class App(FastAPI):
 
     view_state: ViewState
     session_id: UUID = field(default_factory=uuid4)
-    msg_queue: Queue[ServerMessage | None] = field(default_factory=Queue)
+    msg_queues: dict[int, Queue[ServerMessage | None]] = field(
+        default_factory=dict
+    )
     viewer_port: int = 3939
     websocket_connections: WebSocketConnectionManager = field(
         default_factory=WebSocketConnectionManager, init=False
@@ -50,30 +54,26 @@ class App(FastAPI):
 
     def __post_init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, lifespan=type(self).lifespan, **kwargs)
-        dispatch.on_exit(self.stop_queue, name="Stop view App message queue")
+        dispatch.on_exit(self.stop_queues, name="Stop view App message queues")
         self.mount(
             "/static", StaticFiles(directory=self.STATIC_DIR), name="static"
         )
         self.include_router(self.endpoint_router)
 
     def enqueue(self, msg: ServerMessage) -> None:
-        self.msg_queue.put(msg)
+        for msg_queue in self.msg_queues.values():
+            msg_queue.put(msg)
 
-    def stop_queue(self) -> None:
-        self.msg_queue.put(None)
+    def stop_queues(self) -> None:
+        for msg_queue in self.msg_queues.values():
+            msg_queue.put(None)
 
     @asynccontextmanager
     async def lifespan(self) -> AsyncIterator[None]:
-        async def send_from_queue() -> None:
-            while msg := await asyncio.to_thread(self.msg_queue.get):
-                await self.websocket_connections.send(msg)
-
-        task = asyncio.create_task(send_from_queue())
         try:
             yield
         finally:
-            self.stop_queue()
-            await task
+            self.stop_queues()
 
     @cached_property
     def endpoint_router(self) -> APIRouter:
@@ -94,34 +94,58 @@ class App(FastAPI):
         except WebSocketDisconnect:
             console.remove_web_output(id(websocket))
             self.websocket_connections.disconnect(websocket)
+            self.msg_queues.pop(id(websocket), None)
+
+    async def _drain_queue(self, websocket: WebSocket, qq: Queue) -> None:
+        while msg := await asyncio.to_thread(qq.get):
+            try:
+                await websocket.send_json(msg.to_dict())
+            except Exception:  # noqa: BLE001, PERF203
+                break
 
     async def handle_client_connection(self, websocket: WebSocket) -> None:
         view_websocket = WebSocketConnection(websocket)
-        await view_websocket.send_message(
-            ConnectedMessage(session_id=self.session_id)
+        ws_id = id(websocket)
+        webstream = WebStream()
+        self.msg_queues[ws_id] = webstream.q
+        send_task = asyncio.create_task(
+            self._drain_queue(websocket, webstream.q)
         )
-        if self.view_state.model_class:
+        try:
             await view_websocket.send_message(
-                ModelDetailsMessage(
-                    schema=run_state.model_state.schema,
-                    params=self.view_state.params,
-                    model_info=run_state.model_state.model,
-                )
+                ConnectedMessage(session_id=self.session_id)
             )
-            if timer := run_state.model_state.timer:
+            if self.view_state.model_class:
                 await view_websocket.send_message(
-                    ModelRunStatusMessage.running(started_at=timer.started_at)
-                )
-        while True:
-            if message := await view_websocket.receive_message():
-                if isinstance(message, ClientInfoMessage):
-                    console.add_web_output(
-                        id(view_websocket.websocket),
-                        cast("TextIO", WebStream(self.msg_queue)),
-                        message.terminal.cols,
+                    ModelDetailsMessage(
+                        schema=run_state.model_state.schema,
+                        params=self.view_state.params,
+                        model_info=run_state.model_state.model,
                     )
-                else:
-                    self.view_state.handle_model_message(message)
-                await view_websocket.send_message(
-                    ModelDetailsMessage(params=self.view_state.params)
                 )
+                if timer := run_state.model_state.timer:
+                    await view_websocket.send_message(
+                        ModelRunStatusMessage.running(
+                            started_at=timer.started_at
+                        )
+                    )
+            while True:
+                if message := await view_websocket.receive_message():
+                    if isinstance(message, ClientInfoMessage):
+                        console.add_web_output(
+                            ws_id,
+                            cast("TextIO", webstream),
+                            message.terminal.cols,
+                        )
+                        webstream.q.put(
+                            ModelDetailsMessage(params=self.view_state.params)
+                        )
+                        continue
+                    self.view_state.handle_model_message(message)
+                    webstream.q.put(
+                        ModelDetailsMessage(params=self.view_state.params)
+                    )
+        finally:
+            webstream.q.put(None)
+            with suppress(asyncio.CancelledError):
+                await send_task
