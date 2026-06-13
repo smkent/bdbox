@@ -6,16 +6,16 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import bdbox.view.server as server_module
 from bdbox.console import LogLevel
 from bdbox.dispatch import Event, Thread, dispatch
 from bdbox.view.state import ViewState
-from bdbox.viewer import ViewerManager
 from tests.utils import ExecMain, Models, ThreadExceptions
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
     from pathlib import Path
+
+pytestmark = pytest.mark.usefixtures("mock_server_start", "mock_viewer_start")
 
 
 @dataclass
@@ -35,20 +35,6 @@ def mock_watcher_event() -> Iterator[None]:
 
     with patch.object(ViewState, "__init__", _mock):
         yield
-
-
-@pytest.fixture(autouse=True)
-def mock_viewer_start() -> Iterator[MagicMock]:
-    with patch.object(ViewerManager, "start") as mocked:
-        yield mocked
-
-
-@pytest.fixture(autouse=True)
-def mock_server_start() -> Iterator[MagicMock]:
-    with patch.object(
-        server_module.ServerManager, "start", autospec=True
-    ) as mocked:
-        yield mocked
 
 
 @pytest.fixture(

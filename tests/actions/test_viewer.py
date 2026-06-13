@@ -16,7 +16,6 @@ from urllib.error import URLError
 import psutil
 import pytest
 
-import bdbox.view.server as server_module
 import bdbox.viewer as viewer_module
 from bdbox.actions.view import ViewAction
 from bdbox.runner.watcher import ModelWatcher
@@ -26,6 +25,9 @@ from tests.utils import ExecMain, MockOcpVscode, Models
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
     from pathlib import Path
+
+
+pytestmark = pytest.mark.usefixtures("mock_server_start")
 
 
 @pytest.fixture(
@@ -83,14 +85,6 @@ def mock_send_command(mock_ocp_vscode: MockOcpVscode) -> Iterator[MagicMock]:
 @pytest.fixture(autouse=True)
 def mock_browser_open() -> Iterator[MagicMock]:
     with patch.object(webbrowser, "open_new_tab") as mocked:
-        yield mocked
-
-
-@pytest.fixture(autouse=True)
-def mock_server_start() -> Iterator[MagicMock]:
-    with patch.object(
-        server_module.ServerManager, "start", autospec=True
-    ) as mocked:
         yield mocked
 
 
