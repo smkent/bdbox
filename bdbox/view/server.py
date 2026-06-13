@@ -42,7 +42,6 @@ class ServerManager(Service):
     open_browser: bool = True
 
     _STARTUP_TIMEOUT: ClassVar[float] = 10.0
-    _STOP_TIMEOUT: ClassVar[float] = 5.0
 
     server: UIServer | None = field(default=None, init=False, repr=False)
     thread: Thread | None = field(default=None, init=False, repr=False)
