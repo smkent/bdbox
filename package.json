@@ -7,8 +7,8 @@
     "build": "esbuild frontend/src/app.ts --bundle --minify --outdir=bdbox/view/static/ --loader:.png=dataurl",
     "dev": "esbuild frontend/src/app.ts --bundle --watch --outdir=bdbox/view/static/ --loader:.png=dataurl",
     "typecheck": "tsc --noEmit",
-    "lint:fix": "eslint --fix --cache frontend/",
-    "format": "prettier --write frontend/ package.json eslint.config.js tsconfig.json"
+    "lint:fix": "eslint --fix --cache frontend/ utils/assets/",
+    "format": "prettier --write frontend/ utils/assets/ package.json eslint.config.js tsconfig.json"
   },
   "dependencies": {
     "@xterm/addon-fit": "^0.11.0",

@@ -144,6 +144,10 @@ help = "Run all formatters and static checks"
 sequence = [{ref = "lint"}, {ref = "test"}, {ref = "webtest"}]
 help = "Run all formatters, static checks and tests"
 
+[tool.poe.tasks.recorddemo]
+script = "utils.demo"
+help = "Record UI demo for documentation"
+
 [tool.poe.tasks.release]
 cmd = "bump-my-version bump -v"
 help = "Create and push a release tag (patch/minor/major)"

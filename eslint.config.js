@@ -3,9 +3,9 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  js.configs.recommended,
-  tseslint.configs.recommendedTypeChecked,
   {
+    extends: [js.configs.recommended, tseslint.configs.recommendedTypeChecked],
+    files: ["frontend/src/**/*.{ts,js}"],
     languageOptions: {
       globals: globals.browser,
       parserOptions: {
@@ -13,6 +13,12 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
-    files: ["frontend/src/**/*.{ts,js}"],
+  },
+  {
+    extends: [js.configs.recommended],
+    files: ["utils/**/*.js"],
+    languageOptions: {
+      globals: globals.browser,
+    },
   },
 );
