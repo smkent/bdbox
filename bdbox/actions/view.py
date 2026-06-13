@@ -131,7 +131,7 @@ class ViewAction(ModelAction):
             raise UsageError("No model specified")
         runner = ModelRunner([model_arg, *model.argv], self)
         if self.watch:
-            ModelWatcher(runner=runner, change_event=self.rerender_event).run()
+            ModelWatcher(runner=runner, change_event=self.rerender_event)
             return
         runner.preserve_exceptions = True
         runner.run_or_exit()

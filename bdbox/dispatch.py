@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 from abc import ABC, abstractmethod
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from functools import cached_property
 from threading import Event as StdlibEvent
@@ -11,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 from bdbox.console import excepthook, log
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping, Sequence
+    from collections.abc import Callable, Iterator, Mapping, Sequence
 
 
 @dataclass
@@ -143,6 +144,14 @@ class Dispatch:
             self.exit_callbacks_thread.start()
         self.exit_callbacks.append(ec)
         log.trace("Registered exit callback: %s", ec.display_name)
+
+    @contextmanager
+    def handle_exit(self) -> Iterator[None]:
+        try:
+            yield
+        except KeyboardInterrupt:
+            print(file=sys.stderr)  # noqa: T201
+            log.info("Quitting")
 
     def exit_join(self) -> None:
         count = len(self.threads)

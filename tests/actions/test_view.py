@@ -70,7 +70,10 @@ def harness(monkeypatch: pytest.MonkeyPatch) -> HarnessWrapper:
 @pytest.mark.usefixtures("embedded_mode")
 def test_embedded_mode_execs_harness(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "argv", [str(Models.MODEL_EXPORT), "view"])
-    with patch.object(subprocess, "run") as mock_run, pytest.raises(RunError):
+    with (
+        patch.object(subprocess, "run") as mock_run,
+        pytest.raises(RunError),
+    ):
         ModelRunner([Models.MODEL_EXPORT, "view"])()
     mock_run.assert_called_once_with(
         [sys.executable, "-m", "bdbox", str(Models.MODEL_EXPORT), "view"]
@@ -81,7 +84,7 @@ def test_view_without_model_does_not_start_watcher(
     harness: HarnessWrapper,
 ) -> None:
     with (
-        patch.object(ModelWatcher, "run") as mock_run,
+        patch.object(ModelWatcher, "start") as mock_run,
         pytest.raises(SystemExit),
     ):
         harness(["view"])()
@@ -89,7 +92,7 @@ def test_view_without_model_does_not_start_watcher(
 
 
 def test_view_starts_watcher(model: Path, harness: HarnessWrapper) -> None:
-    with patch.object(ModelWatcher, "run") as mock_run:
+    with patch.object(ModelWatcher, "start") as mock_run:
         harness([str(model), "view"])()
     mock_run.assert_called_once_with()
 
@@ -97,7 +100,7 @@ def test_view_starts_watcher(model: Path, harness: HarnessWrapper) -> None:
 def test_view_no_watch_skips_watcher(
     mock_viewer_start: MagicMock, model: Path, harness: HarnessWrapper
 ) -> None:
-    with patch.object(ModelWatcher, "run") as mock_run:
+    with patch.object(ModelWatcher, "start") as mock_run:
         harness([str(model), "view", "--no-watch"])()
     mock_run.assert_not_called()
     mock_viewer_start.assert_called_once()
@@ -142,7 +145,7 @@ def test_send_to_viewer_warns_on_empty_geometry(
     model.write_text('print("nope")')
     with patch.object(
         ModelWatcher,
-        "run",
+        "start",
         autospec=True,
         side_effect=lambda self: self.runner(),
     ):
