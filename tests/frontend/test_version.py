@@ -35,7 +35,7 @@ def test_version_change_logged(
     version_changes: dict[str, object],
     expected_console: str,
 ) -> None:
-    session_id = app.backend_server.view_state.session_id
+    session_id = app.backend_server.app.session_id
     start_version = VersionInfo(bdbox="11.38.77", protocol=1138)
     app.send(ConnectedMessage(session_id=session_id, version=start_version))
 

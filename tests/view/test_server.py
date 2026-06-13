@@ -13,7 +13,6 @@ from uuid import UUID
 import pytest
 from starlette.testclient import TestClient
 
-from bdbox.dispatch import Event
 from bdbox.errors import InternalError
 from bdbox.model.field_factories import Float, Int
 from bdbox.model.model import Model
@@ -53,18 +52,18 @@ TEST_SESSION_ID = UUID("deadbeef-0327-1138-2187-c01dc0ffee77")
 
 @dataclass
 class WSParamTest:
+    app: App = field(init=False)
     snapshot: SnapshotAssertion | None = None
-    view_state: ViewState = field(
-        default_factory=lambda: ViewState(session_id=TEST_SESSION_ID)
-    )
+    view_state: ViewState = field(default_factory=ViewState)
     ws: WebSocketTestSession | None = field(default=None, init=False)
     client: TestClient | None = field(default=None, init=False)
 
+    def __post_init__(self) -> None:
+        self.app = App(view_state=self.view_state, session_id=TEST_SESSION_ID)
+
     @contextmanager
     def __call__(self) -> Iterator[Self]:
-        with (
-            TestClient(App(self.view_state)) as client,
-        ):
+        with TestClient(self.app) as client:
             self.client = client
             with self.wsconn() as ws:
                 self.ws = ws
@@ -169,13 +168,11 @@ def view_state(
 ) -> ViewState:
     run_state.model_state.model_subclasses = [model_class]
     return ViewState(
-        rerender_event=Event(name="test_rerender_event"),
         model_class=model_class,
         params=ModelParamsState(
             values=({"width": 10.0, "count": 3} if model_class else {}),
             overrides=param_overrides,
         ),
-        session_id=TEST_SESSION_ID,
     )
 
 
@@ -321,7 +318,7 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
 def test_ws_broadcast_reaches_client(
     wspt: WSParamTest, message: ServerMessage
 ) -> None:
-    wspt.view_state.enqueue(message)
+    wspt.app.enqueue(message)
     received_data = wspt.recv()
     assert received_data == message.to_dict()
     assert Message.from_dict(received_data) == message
@@ -335,7 +332,7 @@ def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
         connected_message_data = ws2.receive_json()
         connected_message = Message.from_dict(connected_message_data)
         assert ws2.receive_json() == wspt.snapshot
-        wspt.view_state.enqueue(message)
+        wspt.app.enqueue(message)
         wspt.recv()
         assert connected_message == ConnectedMessage(
             session_id=TEST_SESSION_ID
