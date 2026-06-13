@@ -182,11 +182,17 @@ def thread_exceptions() -> Iterator[ThreadExceptions]:
 
 @pytest.fixture
 def mock_viewer_start() -> Iterator[MagicMock]:
-    with patch.object(ViewerManager, "start", autospec=True) as mocked:
+    with (
+        patch.object(ViewerManager, "start", autospec=True) as mocked,
+        patch.object(ViewerManager, "ready_wait"),
+    ):
         yield mocked
 
 
 @pytest.fixture
 def mock_server_start() -> Iterator[MagicMock]:
-    with patch.object(ServerManager, "start", autospec=True) as mocked:
+    with (
+        patch.object(ServerManager, "start", autospec=True) as mocked,
+        patch.object(ServerManager, "ready_wait"),
+    ):
         yield mocked

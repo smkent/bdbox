@@ -21,7 +21,6 @@ from bdbox.runner.state import run_state
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.serializer import serializer
 from bdbox.view.view import ViewManager
-from bdbox.viewer import ViewerManager
 
 from .action import ModelAction
 from .export import ExportAction
@@ -38,15 +37,6 @@ if TYPE_CHECKING:
 class ViewAction(ModelAction):
     """View model geometry in OCP CAD Viewer."""
 
-    restart_viewer: Annotated[
-        bool,
-        tyro.conf.arg(
-            aliases=("-r",),
-            help="Restart OCP CAD Viewer if already running",
-            help_behavior_hint="(default: no)",
-        ),
-        tyro.conf.FlagCreatePairsOff,
-    ] = False
     open_browser: Annotated[
         bool,
         tyro.conf.arg(
@@ -102,11 +92,8 @@ class ViewAction(ModelAction):
     def on_harness(self, model: ModelInfo) -> None:
         if not (model_arg := model.arg):
             raise UsageError("No model specified")
-        viewer = ViewerManager(restart=self.restart_viewer, open_browser=False)
-        viewer.start()
         self.view_manager = ViewManager(
             server_port=self.server_port,
-            viewer_port=viewer.port,
             model_class=model.params_class,
             open_browser=self.open_browser,
         )

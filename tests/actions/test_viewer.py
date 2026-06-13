@@ -5,7 +5,6 @@ from __future__ import annotations
 import random
 import subprocess
 import sys
-import time
 import webbrowser
 from contextlib import contextmanager
 from dataclasses import dataclass, field
@@ -179,7 +178,7 @@ class PSMock:
         return conn
 
     def add_process(self, pid: int) -> MagicMock:
-        self.processes[pid] = (proc := MagicMock(pid=pid))
+        self.processes[pid] = (proc := MagicMock(pid=pid, name="pid_mock"))
         return proc
 
     def assert_launched(self) -> None:
@@ -201,10 +200,13 @@ class PSMock:
 
     def assert_terminated(self, pid: int | None = None) -> None:
         if not pid:
-            self.mock_terminate.assert_called_once()
+            for pid in self.processes:
+                self.mock_terminate.assert_called_with(
+                    [self.processes[pid]], timeout=2
+                )
             return
         assert pid in self.processes
-        self.mock_terminate.assert_called_once_with(
+        self.mock_terminate.assert_called_with(
             [self.processes[pid]], timeout=2
         )
 
@@ -252,9 +254,10 @@ def test_start_running_process_url_fallback_on_access_denied(
     exec_main: ExecMain,
 ) -> None:
     """When net_connections raises AccessDenied, falls back to URL probe."""
-    with ps_mock():
+    with ps_mock(launches=True):
         exec_main(str(model), "view")
-    mock_urlopen.assert_called_once_with(ps_mock.viewer_url)
+    assert mock_urlopen.call_count == 3
+    mock_urlopen.assert_called_with(ps_mock.viewer_url)
 
 
 @pytest.mark.usefixtures("mock_net_connections_denied")
@@ -273,10 +276,6 @@ def test_start_running_process_returns_none_when_all_attempts_fail(
     mock_urlopen.assert_called_with(ps_mock.viewer_url)
 
 
-@pytest.mark.parametrize(
-    "restart",
-    [pytest.param(True, id="restart"), pytest.param(False, id="no_restart")],
-)
 @pytest.mark.usefixtures("mock_net_connections_denied")
 def test_start_running_without_pid(
     ps_mock: PSMock,
@@ -284,211 +283,29 @@ def test_start_running_without_pid(
     mock_ocp_vscode: MockOcpVscode,
     model: Path,
     exec_main: ExecMain,
-    *,
-    restart: bool,
 ) -> None:
-    """start() prints already-running (no PID) and skips relaunch."""
-    with (
-        ps_mock(),
-        patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
-    ):
-        exec_main(str(model), "view", "--restart-viewer")
-
-    mock_set_port.assert_called_once_with(ps_mock.ocp_port)
-    assert "Running but PID unknown" in log.text
-
-
-@pytest.mark.usefixtures("mock_net_connections_denied")
-def test_stop_running_without_pid(
-    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
-) -> None:
-    """stop() prints a message and skips termination without a PID."""
-    with ps_mock(), pytest.raises(SystemExit):
-        exec_main("viewer", "stop")
-    assert "cannot" in log.text
-
-
-@pytest.mark.usefixtures("mock_net_connections_denied")
-def test_status_running_without_pid(
-    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
-) -> None:
-    """status() shows URL but omits PID when process info is unavailable."""
-    with ps_mock(), pytest.raises(SystemExit):
-        exec_main("viewer", "status")
-    assert "localhost" in log.text
-    assert "None" not in log.text
-
-
-def test_start_launches(ps_mock: PSMock, exec_main: ExecMain) -> None:
-    ps_mock.add_connection(pid=1138, port=8)
-    with ps_mock(launches=True), pytest.raises(SystemExit):
-        exec_main("viewer", "start")
-
-
-def test_start_already_running_skips_subprocess(
-    ps_mock: PSMock, exec_main: ExecMain
-) -> None:
-    ps_mock.add_connection(pid=1138)
-    ps_mock.add_connection(port=ps_mock.ocp_port - 1, pid=4002)
-    with ps_mock(launches=False), pytest.raises(SystemExit):
-        exec_main("viewer", "start")
-
-
-def test_start_restart_terminates_old_process_and_relaunches(
-    ps_mock: PSMock, exec_main: ExecMain
-) -> None:
-    conn = ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=True, terminates=True), pytest.raises(SystemExit):
-        exec_main("viewer", "start", "--restart")
-    ps_mock.assert_terminated(conn.pid)
-
-
-def test_start_opens_browser(ps_mock: PSMock, exec_main: ExecMain) -> None:
-    class TempError(Exception):
-        pass
-
-    ps_mock.mock_browser_open.side_effect = TempError
-    with ps_mock(launches=True, opens_browser=True), pytest.raises(TempError):
-        exec_main("viewer", "start", "--open-browser")
-
-
-def test_start_skips_browser_when_disabled(
-    ps_mock: PSMock, exec_main: ExecMain
-) -> None:
-    class TempError(Exception):
-        pass
-
-    ps_mock.mock_browser_open.side_effect = TempError
-    with ps_mock(launches=True), pytest.raises(SystemExit):
-        exec_main("viewer", "start")
-
-
-def test_start_initializes_port_when_freshly_launched(
-    ps_mock: PSMock, mock_ocp_vscode: MockOcpVscode, exec_main: ExecMain
-) -> None:
+    """start() warns if already running but PID can't be determined."""
     with (
         ps_mock(launches=True),
         patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
-        pytest.raises(SystemExit),
     ):
-        exec_main("viewer", "start")
+        exec_main(str(model), "view")
+
     mock_set_port.assert_called_once_with(ps_mock.ocp_port)
+    assert "but PID unknown" in log.text
 
 
-def test_start_initializes_port_when_already_running(
-    ps_mock: PSMock, mock_ocp_vscode: MockOcpVscode, exec_main: ExecMain
-) -> None:
-    ps_mock.add_connection(pid=1138)
-    with (
-        ps_mock(launches=False),
-        patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
-        pytest.raises(SystemExit),
-    ):
-        exec_main("viewer", "start")
-    mock_set_port.assert_called_once_with(ps_mock.ocp_port)
-
-
-def test_start_skips_wait_when_not_opening_browser(
-    ps_mock: PSMock, exec_main: ExecMain
-) -> None:
-    with (
-        ps_mock(launches=True),
-        patch.object(time, "sleep") as mock_sleep,
-        pytest.raises(SystemExit),
-    ):
-        exec_main("viewer", "start")
-    mock_sleep.assert_not_called()
-
-
-def test_start_open_browser(ps_mock: PSMock, exec_main: ExecMain) -> None:
-    with (
-        ps_mock(launches=True, opens_browser=True),
-        patch.object(time, "sleep") as mock_sleep,
-        pytest.raises(SystemExit),
-    ):
-        exec_main("viewer", "start", "--open-browser")
-    mock_sleep.assert_not_called()
-
-
-def test_start_open_browser_wait(ps_mock: PSMock, exec_main: ExecMain) -> None:
-    responses = [{}, {}, {"up": True}]
-    ps_mock.mock_send_command.side_effect = lambda cmd: responses.pop(0)
-    with (
-        ps_mock(launches=True, opens_browser=True),
-        patch.object(time, "sleep") as mock_sleep,
-        pytest.raises(SystemExit),
-    ):
-        exec_main("viewer", "start", "--open-browser")
-    assert mock_sleep.call_count == 2
-
-
-def test_start_open_browser_wait_timeout(
-    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
-) -> None:
-    ps_mock.mock_send_command.side_effect = lambda cmd: {}
-    with (
-        ps_mock(launches=True, opens_browser=True),
-        patch.object(time, "sleep") as mock_sleep,
-        pytest.raises(SystemExit),
-    ):
-        exec_main("viewer", "start", "--open-browser")
-    assert mock_sleep.call_count == 120
-    assert "Browser did not connect" in log.text
-
-
-def test_start_viewer_timeout(
-    ps_mock: PSMock, mock_urlopen: MagicMock, exec_main: ExecMain
-) -> None:
-    mock_urlopen.side_effect = URLError("refused")
-    ps_mock.mock_send_command.side_effect = lambda cmd: {}
-    with (
-        ps_mock(launches=True, opens_browser=False),
-        patch.object(time, "sleep") as mock_sleep,
-        pytest.raises(RuntimeError, match="failed to start"),
-    ):
-        exec_main("viewer", "start")
-    assert mock_sleep.call_count == 100
-
-
-def test_stop_terminates_running_process(
-    ps_mock: PSMock, exec_main: ExecMain
+def test_model_view_restarts_already_running_viewer(
+    ps_mock: PSMock, exec_main: ExecMain, model: Path
 ) -> None:
     conn = ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=False, terminates=True), pytest.raises(SystemExit):
-        exec_main("viewer", "stop")
+    with ps_mock(terminates=True, launches=True):
+        exec_main(str(model), "view")
     ps_mock.assert_terminated(conn.pid)
-
-
-def test_stop_when_not_running(
-    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
-) -> None:
-    with ps_mock(launches=False), pytest.raises(SystemExit):
-        exec_main("viewer", "stop")
-    assert "Not running" in log.text
-
-
-def test_status_running_shows_url_and_pid(
-    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
-) -> None:
-    conn = ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=False), pytest.raises(SystemExit):
-        exec_main("viewer", "status")
-    assert str(conn.pid) in log.text
-    assert "localhost" in log.text
-
-
-def test_status_not_running(
-    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
-) -> None:
-    with ps_mock(launches=False), pytest.raises(SystemExit):
-        exec_main("viewer", "status")
-    assert "Not running" in log.text
 
 
 def test_model_view_starts_viewer(
-    model: Path,
-    exec_main: ExecMain,
-    mock_server_start: MagicMock,
+    model: Path, exec_main: ExecMain, mock_server_start: MagicMock
 ) -> None:
     with patch.object(ViewerManager, "start") as mock_viewer_start:
         exec_main(str(model), "view")
@@ -508,22 +325,6 @@ def test_model_view_without_model_does_not_start_viewer(
     mock_server_start.assert_not_called()
 
 
-def test_model_view_passes_flags_to_viewer(
-    model: Path, exec_main: ExecMain
-) -> None:
-    def check_args(self: ViewerManager) -> None:
-        assert self.restart is True
-        assert (
-            self.open_browser is False
-        )  # always False; ServerManager opens browser
-
-    with patch.object(
-        ViewerManager, "start", autospec=True, side_effect=check_args
-    ) as mock_viewer_start:
-        exec_main(str(model), "view", "--restart-viewer")
-    mock_viewer_start.assert_called_once()
-
-
 def test_model_view_passes_flags_to_server(
     model: Path,
     exec_main: ExecMain,
@@ -534,41 +335,3 @@ def test_model_view_passes_flags_to_server(
     mock_server_start.assert_called_once()
     server_instance = mock_server_start.call_args[0][0]
     assert server_instance.open_browser is False
-
-
-def test_viewer_start_open_browser(
-    ps_mock: PSMock, exec_main: ExecMain
-) -> None:
-    with (
-        ps_mock(launches=True, opens_browser=True),
-        patch.object(time, "sleep") as mock_sleep,
-        pytest.raises(SystemExit),
-    ):
-        exec_main("viewer", "start", "--open-browser")
-    mock_sleep.assert_not_called()
-
-
-def test_viewer_start_no_browser(ps_mock: PSMock, exec_main: ExecMain) -> None:
-    with (
-        ps_mock(launches=True),
-        patch.object(time, "sleep") as mock_sleep,
-        pytest.raises(SystemExit),
-    ):
-        exec_main("viewer", "start")
-    mock_sleep.assert_not_called()
-
-
-def test_viewer_stop(ps_mock: PSMock, exec_main: ExecMain) -> None:
-    conn = ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=False, terminates=True), pytest.raises(SystemExit):
-        exec_main("viewer", "stop")
-    ps_mock.assert_terminated(conn.pid)
-
-
-def test_viewer_status(
-    ps_mock: PSMock, log: pytest.LogCaptureFixture, exec_main: ExecMain
-) -> None:
-    ps_mock.add_connection(pid=1138)
-    with ps_mock(launches=False), pytest.raises(SystemExit):
-        exec_main("viewer", "status")
-    assert "Running" in log.text

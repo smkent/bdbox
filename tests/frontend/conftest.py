@@ -61,6 +61,7 @@ class BackendTestApp:
             port=0,
             open_browser=False,
         )
+        self.backend_server.ready_wait()
         self.page.route(
             f"http*://localhost:{VIEWER_PORT}/viewer**",
             lambda r: r.fulfill(status=200, body=""),

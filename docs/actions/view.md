@@ -100,42 +100,4 @@ select presets in the panel. The model re-renders automatically.
 
 See the [Parameter Panel](../parameters/panel.md) documentation for details.
 
-## Viewer process management
-
-The `view` action starts OCP CAD Viewer automatically. The viewer may also be
-managed directly with the `viewer` subcommand:
-
-```sh
-bdbox viewer start           # Start OCP CAD Viewer
-bdbox viewer start --restart # Restart even if already running
-bdbox viewer stop            # Stop OCP CAD Viewer
-bdbox viewer status          # Show viewer URL and PID
-```
-
-See all options with `--help`:
-
-=== "`bdbox` with **file**"
-
-    ```sh
-    bdbox viewer --help  # Model not required for --help
-    ```
-
-=== "`bdbox` with **module**"
-
-    ```sh
-    bdbox viewer --help  # Model not required for --help
-    ```
-
-=== "Direct with **file**"
-
-    ```sh
-    python model.py viewer --help
-    ```
-
-=== "Direct with **module**"
-
-    ```sh
-    python -m mypackage.mymodule viewer --help
-    ```
-
 [ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer
