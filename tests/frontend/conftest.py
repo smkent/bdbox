@@ -57,7 +57,7 @@ class BackendTestApp:
 
     def __post_init__(self) -> None:
         self.backend_server = ServerManager(
-            view_state=ViewState(viewer_port=VIEWER_PORT),
+            view_state=ViewState(),
             port=0,
             open_browser=False,
         )
@@ -92,9 +92,7 @@ class BackendTestApp:
         self.websocket.on_message(self.handle_websocket_message)
         self.websocket_connected.set()
         self.send(
-            ConnectedMessage(
-                session_id=self.backend_server.view_state.session_id
-            )
+            ConnectedMessage(session_id=self.backend_server.app.session_id)
         )
 
     def handle_websocket_message(self, data: str | bytes) -> None:

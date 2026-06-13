@@ -7,9 +7,9 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 import bdbox.view.server as server_module
-from bdbox.actions.view import ViewAction
 from bdbox.console import LogLevel
 from bdbox.dispatch import Event, Thread, dispatch
+from bdbox.view.state import ViewState
 from bdbox.viewer import ViewerManager
 from tests.utils import ExecMain, Models, ThreadExceptions
 
@@ -27,13 +27,13 @@ class ExitOnWaitEvent(Event):
 
 @pytest.fixture(autouse=True)
 def mock_watcher_event() -> Iterator[None]:
-    original = ViewAction.__init__
+    original = ViewState.__init__
 
-    def _mock(self: ViewAction, *args: Any, **kwargs: Any) -> None:
+    def _mock(self: ViewState, *args: Any, **kwargs: Any) -> None:
         original(self, *args, **kwargs)
         self.rerender_event = ExitOnWaitEvent(name="mock_rerender_exit")
 
-    with patch.object(ViewAction, "__init__", _mock):
+    with patch.object(ViewState, "__init__", _mock):
         yield
 
 

@@ -37,8 +37,10 @@ class UIServer(Server):
 
 @dataclass
 class ServerManager(Service):
+    app: App = field(init=False)
     view_state: ViewState
     port: int = 4040
+    viewer_port: int = 3939
     open_browser: bool = True
 
     _STARTUP_TIMEOUT: ClassVar[float] = 10.0
@@ -50,11 +52,16 @@ class ServerManager(Service):
     def url(self) -> str:
         return f"http://localhost:{self.port}"
 
+    def __post_init__(self) -> None:
+        self.app = App(
+            view_state=self.view_state, viewer_port=self.viewer_port
+        )
+        super().__post_init__()
+
     def start(self) -> None:
-        app = App(self.view_state)
         self.server = UIServer(
             Config(
-                app=app,
+                app=self.app,
                 host="localhost",
                 port=self.port,
                 log_level="error",

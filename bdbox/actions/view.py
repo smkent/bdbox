@@ -4,14 +4,13 @@ from __future__ import annotations
 
 import io
 from contextlib import contextmanager, redirect_stderr, redirect_stdout
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path  # noqa: TC003
 from typing import TYPE_CHECKING, Annotated, Literal
 
 import tyro
 
 from bdbox.console import log
-from bdbox.dispatch import Event
 from bdbox.errors import MultipleModelsError, ParamsError, UsageError
 from bdbox.protocol import (
     ModelDetailsMessage,
@@ -21,8 +20,7 @@ from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.serializer import serializer
-from bdbox.view.server import ServerManager
-from bdbox.view.state import ViewState
+from bdbox.view.view import ViewManager
 from bdbox.viewer import ViewerManager
 
 from .action import ModelAction
@@ -85,12 +83,7 @@ class ViewAction(ModelAction):
         ),
     ] = 4040
 
-    server_manager: tyro.conf.Suppress[ServerManager | None] = None
-    rerender_event: tyro.conf.Suppress[Event] = field(
-        default_factory=lambda: Event(name="rerender_event"),
-        init=False,
-        repr=False,
-    )
+    view_manager: tyro.conf.Suppress[ViewManager | None] = None
 
     def __call__(self) -> None:
         """Send collected geometry to the viewer."""
@@ -115,43 +108,45 @@ class ViewAction(ModelAction):
                 log.debug(ocp_vscode_output)
 
     def on_harness(self, model: ModelInfo) -> None:
-        viewer = ViewerManager(restart=self.restart_viewer, open_browser=False)
-        viewer.start()
-        if self.watch:
-            self.server_manager = ServerManager(
-                port=self.server_port,
-                view_state=ViewState(
-                    rerender_event=self.rerender_event,
-                    viewer_port=viewer.port,
-                    model_class=model.params_class,
-                ),
-                open_browser=self.open_browser,
-            )
         if not (model_arg := model.arg):
             raise UsageError("No model specified")
+        viewer = ViewerManager(restart=self.restart_viewer, open_browser=False)
+        viewer.start()
         runner = ModelRunner([model_arg, *model.argv], self)
         if self.watch:
-            ModelWatcher(runner=runner, change_event=self.rerender_event)
+            self.view_manager = ViewManager(
+                server_port=self.server_port,
+                viewer_port=viewer.port,
+                model_class=model.params_class,
+                open_browser=self.open_browser,
+            )
+            ModelWatcher(
+                runner=runner,
+                change_event=self.view_manager.view_state.rerender_event,
+            )
             return
         runner.preserve_exceptions = True
         runner.run_or_exit()
 
-    def _update_schema(self, ctx: ViewState) -> None:
+    def _update_schema(self) -> None:
+        if not self.view_manager:
+            return
+        view_state = self.view_manager.view_state
         try:
             new_class = run_state.model_state.get_model()
         except (ParamsError, MultipleModelsError):
             new_class = None
         new_schema = serializer.json_schema(new_class)
-        old_schema = serializer.json_schema(ctx.model_class)
-        ctx.params.values = serializer.unstructure(
+        old_schema = serializer.json_schema(view_state.model_class)
+        view_state.params.values = serializer.unstructure(
             run_state.model_state.params.values
         )
-        ctx.model_class = new_class
-        ctx.enqueue(
+        view_state.model_class = new_class
+        self.view_manager.enqueue(
             ModelDetailsMessage(
                 model_info=run_state.model_state.model,
                 schema=new_schema if new_schema != old_schema else None,
-                params=ctx.params,
+                params=view_state.params,
             )
         )
 
@@ -159,23 +154,27 @@ class ViewAction(ModelAction):
     def on_model_render(self) -> Iterator[None]:
         self._ensure_runner()
         with super().on_model_render() as timer:
-            if not self.server_manager:
+            if not self.view_manager:
                 yield
                 return
-            ctx = self.server_manager.view_state
-            run_state.model_state.params.overrides = dict(ctx.params.overrides)
-            ctx.enqueue(ModelRunStatusMessage.running(timer.started_at))
+            view_state = self.view_manager.view_state
+            run_state.model_state.params.overrides = dict(
+                view_state.params.overrides
+            )
+            self.view_manager.enqueue(
+                ModelRunStatusMessage.running(timer.started_at)
+            )
             try:
                 yield
             except (Exception, SystemExit):
                 timer.stop()
-                ctx.enqueue(
+                self.view_manager.enqueue(
                     ModelRunStatusMessage.error(elapsed_ms=timer.elapsed_ms)
                 )
                 raise
             else:
                 timer.stop()
-                ctx.enqueue(
+                self.view_manager.enqueue(
                     ModelRunStatusMessage.done(elapsed_ms=timer.elapsed_ms)
                 )
-                self._update_schema(ctx)
+                self._update_schema()
