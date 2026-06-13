@@ -141,7 +141,7 @@ cmd = "prek run --all-files"
 help = "Run all formatters and static checks"
 
 [tool.poe.tasks.lt]
-sequence = [{ref = "lint"}, {ref = "test"}]
+sequence = [{ref = "lint"}, {ref = "test"}, {ref = "webtest"}]
 help = "Run all formatters, static checks and tests"
 
 [tool.poe.tasks.release]
