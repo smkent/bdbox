@@ -6,7 +6,6 @@ import os
 import subprocess
 import sys
 import time
-import webbrowser
 from contextlib import suppress
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, ClassVar
@@ -16,6 +15,7 @@ from urllib.request import urlopen
 import psutil
 
 from bdbox.console import log
+from bdbox.dispatch import Service
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -29,16 +29,13 @@ class _ViewerStub:
 
 
 @dataclass
-class ViewerManager:
+class ViewerManager(Service):
     """Manages the OCP CAD Viewer subprocess."""
 
     ocp_vscode_args: ClassVar[Sequence[str]] = (
         "--theme=dark",
         "--reset_camera=keep",
     )
-
-    restart: bool = False
-    open_browser: bool = True
 
     _POLL_INTERVAL: ClassVar[float] = 0.25
     _POLL_ATTEMPTS: ClassVar[int] = 100
@@ -85,18 +82,14 @@ class ViewerManager:
 
     def start(self) -> None:
         if proc := self.running_process():
-            if not self.restart:
-                pid_str = f" (PID {proc.pid})" if proc.pid else ""
-                log.info(f"Already running on port {self._port}{pid_str}")
-                self._init_port()
-                return
             if proc.pid is None:
-                log.warning("Running but PID unknown; skipping restart")
-                self._init_port()
-                return
-            log.info(f"Stopping (PID {proc.pid})")
-            self._terminate(proc)
-        log.info("Starting OCP CAD Viewer")
+                log.warning(
+                    "OCP CAD Viewer is already running, but PID unknown"
+                )
+            else:
+                log.debug(f"Stopping (PID {proc.pid})")
+                self._terminate(proc)
+        log.debug("Starting OCP CAD Viewer")
         popen_kwargs: dict[str, Any] = {
             "stdout": subprocess.DEVNULL,
             "stderr": subprocess.DEVNULL,
@@ -109,6 +102,8 @@ class ViewerManager:
                 [sys.executable, "-m", "ocp_vscode", *self.ocp_vscode_args],
                 **popen_kwargs,
             )
+
+    def ready_wait(self) -> None:
         for _ in range(self._POLL_ATTEMPTS):
             try:
                 urlopen(self.url).read()  # noqa: S310
@@ -116,29 +111,21 @@ class ViewerManager:
             except URLError:
                 time.sleep(self._POLL_INTERVAL)
         else:
-            raise RuntimeError("OCP viewer failed to start")
-        log.info(f"Running on port {self._port}")
+            raise RuntimeError("OCP CAD Viewer failed to start")
+        log.debug(f"OCP CAD Viewer running on port {self._port}")
         self._init_port()
-        if self.open_browser:
-            webbrowser.open_new_tab(self.url)
-            self._wait_for_browser()
 
     def stop(self) -> None:
         if proc := self.running_process():
             if proc.pid is None:
-                log.warning("Running but PID unknown; cannot stop")
+                log.warning(
+                    "OCP CAD Viewer running but PID unknown; cannot stop"
+                )
                 return
-            log.info(f"Stopping (PID {proc.pid})")
+            log.debug(f"Stopping OCP CAD Viewer (PID {proc.pid})")
             self._terminate(proc)
         else:
-            log.info("Not running")
-
-    def status(self) -> None:
-        if proc := self.running_process():
-            pid_str = f" (PID {proc.pid})" if proc.pid else ""
-            log.info(f"Running: {self.url}{pid_str}")
-        else:
-            log.info("Not running")
+            log.debug("OCP CAD Viewer not running")
 
     def _terminate(self, proc: Any) -> None:
         proc.terminate()
@@ -149,17 +136,3 @@ class ViewerManager:
         from ocp_vscode.comms import set_port  # noqa: PLC0415
 
         set_port(self._port)
-
-    def _send_command(self, cmd: str) -> str:
-        from ocp_vscode.comms import send_command  # noqa: PLC0415
-
-        return send_command(cmd)
-
-    def _wait_for_browser(self) -> None:
-        """Poll until the browser WebSocket has registered with the viewer."""
-        for _ in range(self._BROWSER_POLL_ATTEMPTS):
-            with suppress(Exception):
-                if self._send_command("status"):
-                    return
-            time.sleep(self._POLL_INTERVAL)
-        log.warning("Browser did not connect within timeout")

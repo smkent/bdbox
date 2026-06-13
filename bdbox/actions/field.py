@@ -8,7 +8,6 @@ from bdbox.actions.export import ExportAction
 from bdbox.actions.run import RunAction
 from bdbox.actions.version import VersionAction
 from bdbox.actions.view import ViewAction
-from bdbox.actions.viewer import Start, Status, Stop
 
 _Run = Annotated[
     RunAction,
@@ -25,13 +24,9 @@ _View = Annotated[
     tyro.conf.subcommand("view", description="View model geometry."),
 ]
 _ModelCommands = _Run | _Export | _View
-_Viewer = Annotated[
-    Start | Stop | Status,
-    tyro.conf.subcommand("viewer", description="Viewer control"),
-]
 _Version = Annotated[
     VersionAction,
     tyro.conf.subcommand("version", description="Show bdbox version and exit"),
 ]
 
-ActionField = _ModelCommands | _Viewer | _Version
+ActionField = _ModelCommands | _Version

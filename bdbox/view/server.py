@@ -45,8 +45,8 @@ class ServerManager(Service):
 
     _STARTUP_TIMEOUT: ClassVar[float] = 10.0
 
-    server: UIServer | None = field(default=None, init=False, repr=False)
-    thread: Thread | None = field(default=None, init=False, repr=False)
+    server: UIServer = field(init=False, repr=False)
+    thread: Thread = field(init=False, repr=False)
 
     @property
     def url(self) -> str:
@@ -56,9 +56,6 @@ class ServerManager(Service):
         self.app = App(
             view_state=self.view_state, viewer_port=self.viewer_port
         )
-        super().__post_init__()
-
-    def start(self) -> None:
         self.server = UIServer(
             Config(
                 app=self.app,
@@ -71,7 +68,12 @@ class ServerManager(Service):
         self.thread = Thread(
             target=self.server.run, name="ui-server", daemon=True
         )
+        super().__post_init__()
+
+    def start(self) -> None:
         self.thread.start()
+
+    def ready_wait(self) -> None:
         self.server.startup_complete.wait(timeout=self._STARTUP_TIMEOUT)
         if not self.server.started:
             raise UsageError(

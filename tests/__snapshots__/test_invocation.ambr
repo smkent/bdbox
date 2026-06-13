@@ -1,7 +1,7 @@
 # serializer version: 1
 # name: test_model[normal-help]
   '''
-  usage: MyModel [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: MyModel [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ────────────────────────────────────────────────╮
   │ -h, --help      show this help message and exit          │
@@ -53,7 +53,6 @@
   │   • run         Run the model.                           │
   │   • export      Export geometry to a STEP or STL file.   │
   │   • view        View model geometry.                     │
-  │   • viewer      Viewer control                           │
   │   • version     Show bdbox version and exit              │
   ╰──────────────────────────────────────────────────────────╯
   '''
@@ -72,7 +71,7 @@
 # ---
 # name: test_model[run-help]
   '''
-  usage: MyModel [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: MyModel [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ────────────────────────────────────────────────╮
   │ -h, --help      show this help message and exit          │
@@ -124,7 +123,6 @@
   │   • run         Run the model.                           │
   │   • export      Export geometry to a STEP or STL file.   │
   │   • view        View model geometry.                     │
-  │   • viewer      Viewer control                           │
   │   • version     Show bdbox version and exit              │
   ╰──────────────────────────────────────────────────────────╯
   '''
@@ -143,7 +141,7 @@
 # ---
 # name: test_model_blank[normal-help]
   '''
-  usage: MyModel [-h] [-v] [{run,export,view,viewer,version}]
+  usage: MyModel [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -154,7 +152,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -173,7 +170,7 @@
 # ---
 # name: test_model_blank[run-help]
   '''
-  usage: MyModel [-h] [-v] [{run,export,view,viewer,version}]
+  usage: MyModel [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -184,7 +181,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -239,7 +235,7 @@
 # ---
 # name: test_model_multiple[run-class-help]
   '''
-  usage: FirstModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,viewer,version}]
+  usage: FirstModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
   ╭─ options ─────────────────────────────────────────────╮
   │ -h, --help   show this help message and exit          │
@@ -253,7 +249,6 @@
   │   • run      Run the model.                           │
   │   • export   Export geometry to a STEP or STL file.   │
   │   • view     View model geometry.                     │
-  │   • viewer   Viewer control                           │
   │   • version  Show bdbox version and exit              │
   ╰───────────────────────────────────────────────────────╯
   '''
@@ -272,7 +267,7 @@
 # ---
 # name: test_model_multiple[run-file-help]
   '''
-  usage: FirstModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,viewer,version}]
+  usage: FirstModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
   ╭─ options ─────────────────────────────────────────────╮
   │ -h, --help   show this help message and exit          │
@@ -286,7 +281,6 @@
   │   • run      Run the model.                           │
   │   • export   Export geometry to a STEP or STL file.   │
   │   • view     View model geometry.                     │
-  │   • viewer   Viewer control                           │
   │   • version  Show bdbox version and exit              │
   ╰───────────────────────────────────────────────────────╯
   '''
@@ -305,7 +299,7 @@
 # ---
 # name: test_model_multiple_harness[normal-class_multi_first-help]
   '''
-  usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
   ╭─ options ─────────────────────────────────────────────╮
   │ -h, --help   show this help message and exit          │
@@ -319,7 +313,6 @@
   │   • run      Run the model.                           │
   │   • export   Export geometry to a STEP or STL file.   │
   │   • view     View model geometry.                     │
-  │   • viewer   Viewer control                           │
   │   • version  Show bdbox version and exit              │
   ╰───────────────────────────────────────────────────────╯
   '''
@@ -338,7 +331,7 @@
 # ---
 # name: test_model_multiple_harness[normal-class_multi_second-help]
   '''
-  usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -350,7 +343,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -369,7 +361,7 @@
 # ---
 # name: test_model_multiple_harness[run-class_multi_first-help]
   '''
-  usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
   ╭─ options ─────────────────────────────────────────────╮
   │ -h, --help   show this help message and exit          │
@@ -383,7 +375,6 @@
   │   • run      Run the model.                           │
   │   • export   Export geometry to a STEP or STL file.   │
   │   • view     View model geometry.                     │
-  │   • viewer   Viewer control                           │
   │   • version  Show bdbox version and exit              │
   ╰───────────────────────────────────────────────────────╯
   '''
@@ -402,7 +393,7 @@
 # ---
 # name: test_model_multiple_harness[run-class_multi_second-help]
   '''
-  usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -414,7 +405,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -433,7 +423,7 @@
 # ---
 # name: test_model_plain[help]
   '''
-  usage: bdbox [-h] [-v] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -444,7 +434,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -460,7 +449,7 @@
 # ---
 # name: test_model_plain_not_importable[help]
   '''
-  usage: bdbox [-h] [-v] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -471,7 +460,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -505,7 +493,7 @@
 # ---
 # name: test_model_subclass[run-help]
   '''
-  usage: ChildModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [--height 1 <= INT <= 100] [{run,export,view,viewer,version}]
+  usage: ChildModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -520,7 +508,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -539,7 +526,7 @@
 # ---
 # name: test_module_class_model[mod_model-help]
   '''
-  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -554,7 +541,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -574,7 +560,7 @@
 # ---
 # name: test_module_class_model[mod_params-help]
   '''
-  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -589,7 +575,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -609,7 +594,7 @@
 # ---
 # name: test_module_class_model[mono_model-help]
   '''
-  usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -628,7 +613,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -648,7 +632,7 @@
 # ---
 # name: test_module_class_model[mono_params-help]
   '''
-  usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -667,7 +651,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -688,7 +671,7 @@
 # name: test_module_models[tests.models.mod_model-help-embedded]
   '''
   Model main
-  usage: SomeModel [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: SomeModel [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -703,7 +686,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -714,7 +696,7 @@
 # name: test_module_models[tests.models.mod_model-help-harness]
   '''
   Model main
-  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -729,7 +711,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -760,7 +741,7 @@
 # ---
 # name: test_module_models[tests.models.mod_model.model-help-embedded]
   '''
-  usage: SomeModel [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: SomeModel [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -775,7 +756,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -785,7 +765,7 @@
 # ---
 # name: test_module_models[tests.models.mod_model.model-help-harness]
   '''
-  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -800,7 +780,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -840,7 +819,7 @@
 # ---
 # name: test_module_models[tests.models.mod_params-help-harness]
   '''
-  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -855,7 +834,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -886,7 +864,7 @@
 # ---
 # name: test_module_models[tests.models.mod_params.model-help-embedded]
   '''
-  usage: model.py [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: model.py [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -901,7 +879,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -911,7 +888,7 @@
 # ---
 # name: test_module_models[tests.models.mod_params.model-help-harness]
   '''
-  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
   ╭─ options ──────────────────────────────────────────────────────────╮
   │ -h, --help                show this help message and exit          │
@@ -926,7 +903,6 @@
   │   • run                   Run the model.                           │
   │   • export                Export geometry to a STEP or STL file.   │
   │   • view                  View model geometry.                     │
-  │   • viewer                Viewer control                           │
   │   • version               Show bdbox version and exit              │
   ╰────────────────────────────────────────────────────────────────────╯
   '''
@@ -956,7 +932,7 @@
 # ---
 # name: test_module_models[tests.models.mono_model.models.model-help-embedded]
   '''
-  usage: MyModel [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: MyModel [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -975,7 +951,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -985,7 +960,7 @@
 # ---
 # name: test_module_models[tests.models.mono_model.models.model-help-harness]
   '''
-  usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -1004,7 +979,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -1034,7 +1008,7 @@
 # ---
 # name: test_module_models[tests.models.mono_params.models.model-help-embedded]
   '''
-  usage: model.py [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: model.py [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -1053,7 +1027,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -1063,7 +1036,7 @@
 # ---
 # name: test_module_models[tests.models.mono_params.models.model-help-harness]
   '''
-  usage: bdbox [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -1082,7 +1055,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -1119,7 +1091,7 @@
 # name: test_module_models[tests.models.mono_plain.models.model-help-harness]
   '''
   Box count: 2
-  usage: bdbox [-h] [-v] [{run,export,view,viewer,version}]
+  usage: bdbox [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -1130,7 +1102,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -1167,7 +1138,7 @@
 # ---
 # name: test_params_class[normal-help]
   '''
-  usage: params_class.py [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: params_class.py [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ────────────────────────────────────────────────╮
   │ -h, --help      show this help message and exit          │
@@ -1219,7 +1190,6 @@
   │   • run         Run the model.                           │
   │   • export      Export geometry to a STEP or STL file.   │
   │   • view        View model geometry.                     │
-  │   • viewer      Viewer control                           │
   │   • version     Show bdbox version and exit              │
   ╰──────────────────────────────────────────────────────────╯
   '''
@@ -1238,7 +1208,7 @@
 # ---
 # name: test_params_class[show-help]
   '''
-  usage: params_class.py [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: params_class.py [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ────────────────────────────────────────────────╮
   │ -h, --help      show this help message and exit          │
@@ -1290,7 +1260,6 @@
   │   • run         Run the model.                           │
   │   • export      Export geometry to a STEP or STL file.   │
   │   • view        View model geometry.                     │
-  │   • viewer      Viewer control                           │
   │   • version     Show bdbox version and exit              │
   ╰──────────────────────────────────────────────────────────╯
   '''
@@ -1309,7 +1278,7 @@
 # ---
 # name: test_params_class_blank[noparams-help]
   '''
-  usage: params_class_blank.py [-h] [-v] [{run,export,view,viewer,version}]
+  usage: params_class_blank.py [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -1320,7 +1289,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -1339,7 +1307,7 @@
 # ---
 # name: test_params_class_blank[normal-help]
   '''
-  usage: params_class_blank.py [-h] [-v] [{run,export,view,viewer,version}]
+  usage: params_class_blank.py [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -1350,7 +1318,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -1369,7 +1336,7 @@
 # ---
 # name: test_params_class_blank[show-help]
   '''
-  usage: params_class_blank.py [-h] [-v] [{run,export,view,viewer,version}]
+  usage: params_class_blank.py [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -1380,7 +1347,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''
@@ -1399,7 +1365,7 @@
 # ---
 # name: test_params_class_instance[help]
   '''
-  usage: params_class_instance.py [-h] [OPTIONS] [{run,export,view,viewer,version}]
+  usage: params_class_instance.py [-h] [OPTIONS] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
   │ -h, --help     show this help message and exit          │
@@ -1421,7 +1387,6 @@
   │   • run        Run the model.                           │
   │   • export     Export geometry to a STEP or STL file.   │
   │   • view       View model geometry.                     │
-  │   • viewer     Viewer control                           │
   │   • version    Show bdbox version and exit              │
   ╰─────────────────────────────────────────────────────────╯
   '''

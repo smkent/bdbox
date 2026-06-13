@@ -141,7 +141,6 @@ usage: MyBox [-h] [OPTIONS] [{run,view,export}]
 │   • run      Run the model.                            │
 │   • export   Export geometry to a STEP or STL file.    │
 │   • view     View model geometry.                      │
-│   • viewer   Viewer control                            │
 │   • version  Show bdbox version and exit               │
 ╰────────────────────────────────────────────────────────╯
 ```
