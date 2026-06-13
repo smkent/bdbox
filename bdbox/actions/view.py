@@ -38,14 +38,6 @@ if TYPE_CHECKING:
 class ViewAction(ModelAction):
     """View model geometry in OCP CAD Viewer."""
 
-    watch: Annotated[
-        bool,
-        tyro.conf.arg(
-            help="Watch and rerender model on changes",
-            help_behavior_hint="(default: yes)",
-        ),
-        tyro.conf.FlagCreatePairsOff,
-    ] = True
     restart_viewer: Annotated[
         bool,
         tyro.conf.arg(
@@ -112,21 +104,17 @@ class ViewAction(ModelAction):
             raise UsageError("No model specified")
         viewer = ViewerManager(restart=self.restart_viewer, open_browser=False)
         viewer.start()
+        self.view_manager = ViewManager(
+            server_port=self.server_port,
+            viewer_port=viewer.port,
+            model_class=model.params_class,
+            open_browser=self.open_browser,
+        )
         runner = ModelRunner([model_arg, *model.argv], self)
-        if self.watch:
-            self.view_manager = ViewManager(
-                server_port=self.server_port,
-                viewer_port=viewer.port,
-                model_class=model.params_class,
-                open_browser=self.open_browser,
-            )
-            ModelWatcher(
-                runner=runner,
-                change_event=self.view_manager.view_state.rerender_event,
-            )
-            return
-        runner.preserve_exceptions = True
-        runner.run_or_exit()
+        ModelWatcher(
+            runner=runner,
+            change_event=self.view_manager.view_state.rerender_event,
+        )
 
     def _update_schema(self) -> None:
         if not self.view_manager:

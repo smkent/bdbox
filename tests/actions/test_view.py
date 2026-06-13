@@ -7,7 +7,7 @@ import sys
 from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -86,15 +86,6 @@ def test_view_starts_watcher(model: Path, harness: HarnessWrapper) -> None:
     mock_run.assert_called_once_with()
 
 
-def test_view_no_watch_skips_watcher(
-    mock_viewer_start: MagicMock, model: Path, harness: HarnessWrapper
-) -> None:
-    with patch.object(ModelWatcher, "start") as mock_run:
-        harness([str(model), "view", "--no-watch"])()
-    mock_run.assert_not_called()
-    mock_viewer_start.assert_called_once()
-
-
 def test_send_geometry_to_viewer(mock_ocp_vscode: MockOcpVscode) -> None:
     with patch.object(mock_ocp_vscode, "show") as mock_show:
         ModelRunner([Models.PARAMS_EXPORT, "view"], ViewAction())()
@@ -107,17 +98,22 @@ def test_view_with_export_creates_file(
     tmp_path: Path, model: Path, harness: HarnessWrapper, file_format: str
 ) -> None:
     output_file = tmp_path / "out"
-    harness(
-        [
-            str(model),
-            "view",
-            "--no-watch",
-            "--export",
-            str(output_file),
-            "--format",
-            file_format,
-        ]
-    )()
+    with patch.object(
+        ModelWatcher,
+        "start",
+        autospec=True,
+        side_effect=lambda self: self.runner(),
+    ):
+        harness(
+            [
+                str(model),
+                "view",
+                "--export",
+                str(output_file),
+                "--format",
+                file_format,
+            ]
+        )()
     assert output_file.is_dir()
     exported_files = list(output_file.iterdir())
     assert len(exported_files) == 3

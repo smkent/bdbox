@@ -244,39 +244,16 @@ def mock_watch_run() -> Iterator[MagicMock]:
         yield mocked
 
 
-@pytest.fixture(
-    params=(
-        pytest.param(True, id="watch"),
-        pytest.param(False, id="no_watch"),
-    )
-)
-def watch(request: pytest.FixtureRequest) -> bool:
-    return request.param
-
-
-@pytest.fixture
-def watch_args(
-    *, watch: bool, mock_watch_run: MagicMock
-) -> Iterator[Sequence[str]]:
-    watch_enabled = watch
-    yield [] if watch_enabled else ["--no-watch"]
-    if watch_enabled:
-        mock_watch_run.assert_called_once()
-    else:
-        mock_watch_run.assert_not_called()
-
-
 @pytest.mark.usefixtures("mock_net_connections_denied")
 def test_start_running_process_url_fallback_on_access_denied(
     ps_mock: PSMock,
     mock_urlopen: MagicMock,
     model: Path,
-    watch_args: Sequence[str],
     exec_main: ExecMain,
 ) -> None:
     """When net_connections raises AccessDenied, falls back to URL probe."""
     with ps_mock():
-        exec_main(str(model), "view", *watch_args)
+        exec_main(str(model), "view")
     mock_urlopen.assert_called_once_with(ps_mock.viewer_url)
 
 
@@ -291,7 +268,7 @@ def test_start_running_process_returns_none_when_all_attempts_fail(
 
     mock_urlopen.side_effect = [URLError("refused"), TempError]
     with ps_mock(launches=True), pytest.raises((TempError, SystemExit)):
-        exec_main(str(model), "view", "--no-watch", "--open-browser")
+        exec_main(str(model), "view", "--open-browser")
     assert mock_urlopen.call_count == 2
     mock_urlopen.assert_called_with(ps_mock.viewer_url)
 
@@ -306,7 +283,6 @@ def test_start_running_without_pid(
     log: pytest.LogCaptureFixture,
     mock_ocp_vscode: MockOcpVscode,
     model: Path,
-    watch_args: Sequence[str],
     exec_main: ExecMain,
     *,
     restart: bool,
@@ -316,7 +292,7 @@ def test_start_running_without_pid(
         ps_mock(),
         patch.object(mock_ocp_vscode.comms, "set_port") as mock_set_port,
     ):
-        exec_main(str(model), "view", "--restart-viewer", *watch_args)
+        exec_main(str(model), "view", "--restart-viewer")
 
     mock_set_port.assert_called_once_with(ps_mock.ocp_port)
     assert "Running but PID unknown" in log.text
@@ -511,35 +487,29 @@ def test_status_not_running(
 
 def test_model_view_starts_viewer(
     model: Path,
-    watch_args: Sequence[str],
     exec_main: ExecMain,
     mock_server_start: MagicMock,
-    *,
-    watch: bool,
 ) -> None:
     with patch.object(ViewerManager, "start") as mock_viewer_start:
-        exec_main(str(model), "view", *watch_args)
+        exec_main(str(model), "view")
     mock_viewer_start.assert_called_once()
-    if watch:
-        mock_server_start.assert_called_once()
-    else:
-        mock_server_start.assert_not_called()
+    mock_server_start.assert_called_once()
 
 
 def test_model_view_without_model_does_not_start_viewer(
-    exec_main: ExecMain, mock_server_start: MagicMock, *, watch: bool
+    exec_main: ExecMain, mock_server_start: MagicMock
 ) -> None:
     with (
         patch.object(ViewerManager, "start") as mock_viewer_start,
         pytest.raises(SystemExit),
     ):
-        exec_main("view", *([] if watch else ["--no-watch"]))
+        exec_main("view")
     mock_viewer_start.assert_not_called()
     mock_server_start.assert_not_called()
 
 
 def test_model_view_passes_flags_to_viewer(
-    model: Path, watch_args: Sequence[str], exec_main: ExecMain
+    model: Path, exec_main: ExecMain
 ) -> None:
     def check_args(self: ViewerManager) -> None:
         assert self.restart is True
@@ -550,26 +520,20 @@ def test_model_view_passes_flags_to_viewer(
     with patch.object(
         ViewerManager, "start", autospec=True, side_effect=check_args
     ) as mock_viewer_start:
-        exec_main(str(model), "view", "--restart-viewer", *watch_args)
+        exec_main(str(model), "view", "--restart-viewer")
     mock_viewer_start.assert_called_once()
 
 
 def test_model_view_passes_flags_to_server(
     model: Path,
-    watch_args: Sequence[str],
     exec_main: ExecMain,
     mock_server_start: MagicMock,
-    *,
-    watch: bool,
 ) -> None:
     with patch.object(ViewerManager, "start"):
-        exec_main(str(model), "view", *watch_args)
-    if watch:
-        mock_server_start.assert_called_once()
-        server_instance = mock_server_start.call_args[0][0]
-        assert server_instance.open_browser is False
-    else:
-        mock_server_start.assert_not_called()
+        exec_main(str(model), "view")
+    mock_server_start.assert_called_once()
+    server_instance = mock_server_start.call_args[0][0]
+    assert server_instance.open_browser is False
 
 
 def test_viewer_start_open_browser(

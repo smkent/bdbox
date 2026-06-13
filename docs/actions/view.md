@@ -57,7 +57,6 @@ model's own module, such as in monorepositories with shared parts or components.
 Optional arguments to `view` include:
 
 * `--no-open-browser`: Don't open a browser tab when starting the viewer
-* `--no-watch`: Render model once, don't watch for changes
 * `--export FILE`: Save rendered model to `FILE` on each render
 
 !!! Note
