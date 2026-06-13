@@ -184,7 +184,7 @@ This project is generated and maintained with [copier-python][copier-python].
 [docs-background]: https://smkent.github.io/bdbox/background/
 [docs-panel]: https://smkent.github.io/bdbox/parameters/panel/
 [docs-parameters]: https://smkent.github.io/bdbox/parameters/
-[docs-screenshot-ui]: https://smkent.github.io/bdbox/bdbox-ui.png
+[docs-screenshot-ui]: https://smkent.github.io/bdbox/bdbox-ui.webp
 [docs]: https://smkent.github.io/bdbox/
 [ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer
 [openscad-csg]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/CSG_Modelling
