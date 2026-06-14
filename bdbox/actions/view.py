@@ -20,7 +20,7 @@ from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.serializer import serializer
-from bdbox.view.view import ViewManager
+from bdbox.view.app import ViewApp
 
 from .action import ModelAction
 from .export import ExportAction
@@ -65,7 +65,7 @@ class ViewAction(ModelAction):
         ),
     ] = 4040
 
-    view_manager: tyro.conf.Suppress[ViewManager | None] = None
+    view_app: tyro.conf.Suppress[ViewApp | None] = None
 
     def __call__(self) -> None:
         """Send collected geometry to the viewer."""
@@ -92,7 +92,7 @@ class ViewAction(ModelAction):
     def on_harness(self, model: ModelInfo) -> None:
         if not (model_arg := model.arg):
             raise UsageError("No model specified")
-        self.view_manager = ViewManager(
+        self.view_app = ViewApp(
             server_port=self.server_port,
             model_class=model.params_class,
             open_browser=self.open_browser,
@@ -100,13 +100,13 @@ class ViewAction(ModelAction):
         runner = ModelRunner([model_arg, *model.argv], self)
         ModelWatcher(
             runner=runner,
-            change_event=self.view_manager.view_state.rerender_event,
+            change_event=self.view_app.view_state.rerender_event,
         )
 
     def _update_schema(self) -> None:
-        if not self.view_manager:
+        if not self.view_app:
             return
-        view_state = self.view_manager.view_state
+        view_state = self.view_app.view_state
         try:
             new_class = run_state.model_state.get_model()
         except (ParamsError, MultipleModelsError):
@@ -117,7 +117,7 @@ class ViewAction(ModelAction):
             run_state.model_state.params.values
         )
         view_state.model_class = new_class
-        self.view_manager.enqueue(
+        self.view_app.enqueue(
             ModelDetailsMessage(
                 model_info=run_state.model_state.model,
                 schema=new_schema if new_schema != old_schema else None,
@@ -129,27 +129,27 @@ class ViewAction(ModelAction):
     def on_model_render(self) -> Iterator[None]:
         self._ensure_runner()
         with super().on_model_render() as timer:
-            if not self.view_manager:
+            if not self.view_app:
                 yield
                 return
-            view_state = self.view_manager.view_state
+            view_state = self.view_app.view_state
             run_state.model_state.params.overrides = dict(
                 view_state.params.overrides
             )
-            self.view_manager.enqueue(
+            self.view_app.enqueue(
                 ModelRunStatusMessage.running(timer.started_at)
             )
             try:
                 yield
             except (Exception, SystemExit):
                 timer.stop()
-                self.view_manager.enqueue(
+                self.view_app.enqueue(
                     ModelRunStatusMessage.error(elapsed_ms=timer.elapsed_ms)
                 )
                 raise
             else:
                 timer.stop()
-                self.view_manager.enqueue(
+                self.view_app.enqueue(
                     ModelRunStatusMessage.done(elapsed_ms=timer.elapsed_ms)
                 )
                 self._update_schema()

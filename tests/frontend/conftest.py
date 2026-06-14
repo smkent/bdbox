@@ -12,7 +12,7 @@ import pytest
 from bdbox.console import console, log
 from bdbox.dispatch import Event
 from bdbox.protocol import BrowserMessage, ConnectedMessage
-from bdbox.view.server import ServerManager
+from bdbox.view.server.server import ViewServer
 from bdbox.view.state import ViewState
 
 if TYPE_CHECKING:
@@ -44,7 +44,7 @@ def build_frontend_assets() -> None:
 
 @dataclass
 class BackendTestApp:
-    backend_server: ServerManager = field(init=False)
+    backend_server: ViewServer = field(init=False)
     page: Page
     websocket: WebSocketRoute | None = field(default=None, init=False)
     websocket_connected: Event = field(
@@ -56,7 +56,7 @@ class BackendTestApp:
     messages: Queue[BrowserMessage] = field(default_factory=Queue, init=False)
 
     def __post_init__(self) -> None:
-        self.backend_server = ServerManager(
+        self.backend_server = ViewServer(
             view_state=ViewState(),
             port=0,
             open_browser=False,
