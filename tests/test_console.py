@@ -16,7 +16,7 @@ import pytest
 
 from bdbox.console import LoggingStream, LogLevel, console
 from bdbox.protocol import ModelConsoleMessage
-from bdbox.view.websocket import WebSocketStream
+from bdbox.view.server.websocket import WebSocketStream
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence

@@ -1,130 +1,46 @@
-"""bdbox parameter panel FastAPI app."""
+"""View application."""
 
 from __future__ import annotations
 
-import asyncio
-from contextlib import asynccontextmanager, suppress
-from dataclasses import dataclass, field
-from functools import cached_property
-from pathlib import Path
-from typing import TYPE_CHECKING, Any
-from uuid import UUID, uuid4
+from dataclasses import InitVar, dataclass, field
+from typing import TYPE_CHECKING
 
-from fastapi import APIRouter, FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-
-from bdbox.console import console
-from bdbox.dispatch import dispatch
-from bdbox.protocol import (
-    ClientInfoMessage,
-    ConnectedMessage,
-    ModelDetailsMessage,
-    ModelRunStatusMessage,
-)
-from bdbox.runner.state import run_state
-from bdbox.view.websocket import WebSocketConnection
-
-from .templates import INDEX_TEMPLATE
+from bdbox.view.server.server import ViewServer
+from bdbox.view.state import ViewState
+from bdbox.viewer import ViewerManager
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator
-
+    from bdbox.model.parameters import Params
     from bdbox.protocol import ServerMessage
-
-    from .state import ViewState
 
 
 @dataclass
-class App(FastAPI):
-    STATIC_DIR = Path(__file__).parent / "static"
+class ViewApp:
+    """View model geometry in OCP CAD Viewer."""
 
-    view_state: ViewState
-    session_id: UUID = field(default_factory=uuid4)
-    connections: dict[int, WebSocketConnection] = field(default_factory=dict)
-    viewer_port: int = 3939
+    server_port: InitVar[int]
+    model_class: InitVar[type[Params] | None] = None
+    open_browser: InitVar[bool] = False
 
-    def __post_init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, lifespan=type(self).lifespan, **kwargs)
-        dispatch.on_exit(self.stop, name="Stop view App message queues")
-        self.mount(
-            "/static", StaticFiles(directory=self.STATIC_DIR), name="static"
+    view_state: ViewState = field(init=False)
+    viewer: ViewerManager = field(default_factory=ViewerManager)
+    view_server: ViewServer = field(init=False)
+
+    def __post_init__(
+        self,
+        server_port: int,
+        model_class: type[Params] | None,
+        open_browser: bool,
+    ) -> None:
+        self.view_state = ViewState(model_class=model_class)
+        self.view_server = ViewServer(
+            port=server_port,
+            view_state=self.view_state,
+            viewer_port=self.viewer.port,
+            open_browser=open_browser,
         )
-        self.include_router(self.endpoint_router)
+        self.viewer.ready_wait()
+        self.view_server.ready_wait()
 
     def enqueue(self, msg: ServerMessage) -> None:
-        for connection in self.connections.values():
-            connection.msg_queue.put(msg)
-
-    def stop(self) -> None:
-        for connection in self.connections.values():
-            connection.stop()
-
-    @asynccontextmanager
-    async def lifespan(self) -> AsyncIterator[None]:
-        try:
-            yield
-        finally:
-            self.stop()
-
-    @cached_property
-    def endpoint_router(self) -> APIRouter:
-        routes_router = APIRouter()
-        routes_router.get("/", response_class=HTMLResponse)(
-            self.index_endpoint
-        )
-        routes_router.websocket("/ws")(self.websocket_endpoint)
-        return routes_router
-
-    async def index_endpoint(self) -> str:
-        return INDEX_TEMPLATE.format(viewer_port=self.viewer_port)
-
-    async def websocket_endpoint(self, websocket: WebSocket) -> None:
-        await websocket.accept()
-        try:
-            await self.handle_client_connection(websocket)
-        except WebSocketDisconnect:
-            console.remove_web_output(id(websocket))
-            self.connections.pop(id(websocket), None)
-
-    async def handle_client_connection(self, websocket: WebSocket) -> None:
-        connection = WebSocketConnection(websocket)
-        ws_id = id(websocket)
-        self.connections[ws_id] = connection
-        send_task = asyncio.create_task(connection.drain_queue())
-        try:
-            await connection.send_message(
-                ConnectedMessage(session_id=self.session_id)
-            )
-            if self.view_state.model_class:
-                await connection.send_message(
-                    ModelDetailsMessage(
-                        schema=run_state.model_state.schema,
-                        params=self.view_state.params,
-                        model_info=run_state.model_state.model,
-                    )
-                )
-                if timer := run_state.model_state.timer:
-                    await connection.send_message(
-                        ModelRunStatusMessage.running(
-                            started_at=timer.started_at
-                        )
-                    )
-            while True:
-                if message := await connection.receive_message():
-                    if isinstance(message, ClientInfoMessage):
-                        console.add_web_output(
-                            ws_id, connection.stream, message.terminal.cols
-                        )
-                        connection.msg_queue.put(
-                            ModelDetailsMessage(params=self.view_state.params)
-                        )
-                        continue
-                    self.view_state.handle_model_message(message)
-                    connection.msg_queue.put(
-                        ModelDetailsMessage(params=self.view_state.params)
-                    )
-        finally:
-            connection.stop()
-            with suppress(asyncio.CancelledError):
-                await send_task
+        self.view_server.app.enqueue(msg)

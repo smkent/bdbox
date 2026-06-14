@@ -15,7 +15,7 @@ from bdbox.dispatch import dispatch
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.state import RunState, run_state
-from bdbox.view.server import ServerManager
+from bdbox.view.server.server import ViewServer
 from bdbox.viewer import ViewerManager
 
 pytest.register_assert_rewrite("tests.utils")
@@ -192,7 +192,7 @@ def mock_viewer_start() -> Iterator[MagicMock]:
 @pytest.fixture
 def mock_server_start() -> Iterator[MagicMock]:
     with (
-        patch.object(ServerManager, "start", autospec=True) as mocked,
-        patch.object(ServerManager, "ready_wait"),
+        patch.object(ViewServer, "start", autospec=True) as mocked,
+        patch.object(ViewServer, "ready_wait"),
     ):
         yield mocked

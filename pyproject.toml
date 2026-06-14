@@ -84,10 +84,10 @@ path = "utils/hatch_build.py"
 
 [tool.hatch.build.targets.sdist]
 include = ["/bdbox", "/tests", "*.md", "LICENSE", "/frontend", "package.json", "package-lock.json", "/utils"]
-artifacts = ["bdbox/view/static/*"]
+artifacts = ["bdbox/view/server/static/*"]
 
 [tool.hatch.build.targets.wheel]
-artifacts = ["bdbox/view/static/*"]
+artifacts = ["bdbox/view/server/static/*"]
 
 [tool.hatch.version]
 source = "uv-dynamic-versioning"
