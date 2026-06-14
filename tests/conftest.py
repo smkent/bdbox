@@ -15,6 +15,7 @@ from bdbox.dispatch import dispatch
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.state import RunState, run_state
+from bdbox.runner.watcher import ModelWatcher
 from bdbox.view.server.server import ViewServer
 from bdbox.viewer import ViewerManager
 
@@ -195,4 +196,15 @@ def mock_server_start() -> Iterator[MagicMock]:
         patch.object(ViewServer, "start", autospec=True) as mocked,
         patch.object(ViewServer, "ready_wait"),
     ):
+        yield mocked
+
+
+@pytest.fixture
+def mock_watch_run_once() -> Iterator[MagicMock]:
+    with patch.object(
+        ModelWatcher,
+        "start",
+        autospec=True,
+        side_effect=lambda self: self.runner(),
+    ) as mocked:
         yield mocked
