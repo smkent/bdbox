@@ -7,7 +7,7 @@ import sys
 from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -28,6 +28,7 @@ pytestmark = pytest.mark.usefixtures(
     "mock_ocp_vscode",
     "mock_server_start",
     "mock_viewer_start",
+    "mock_watch_run_once",
 )
 
 
@@ -73,17 +74,30 @@ def test_view_without_model_does_not_start_watcher(
     harness: HarnessWrapper,
 ) -> None:
     with (
-        patch.object(ModelWatcher, "start") as mock_run,
+        patch.object(ModelWatcher, "start") as mock_watcher,
         pytest.raises(SystemExit),
     ):
         harness(["view"])()
-    mock_run.assert_not_called()
+    mock_watcher.assert_not_called()
 
 
 def test_view_starts_watcher(model: Path, harness: HarnessWrapper) -> None:
-    with patch.object(ModelWatcher, "start") as mock_run:
+    with patch.object(ModelWatcher, "start") as mock_watcher:
         harness([str(model), "view"])()
-    mock_run.assert_called_once_with()
+    mock_watcher.assert_called_once_with()
+
+
+def test_model_view_passes_flags_to_server(
+    model: Path,
+    harness: HarnessWrapper,
+    mock_server_start: MagicMock,
+    mock_viewer_start: MagicMock,
+) -> None:
+    harness([str(model), "view"])()
+    mock_server_start.assert_called_once()
+    mock_viewer_start.assert_called_once()
+    server_instance = mock_server_start.call_args[0][0]
+    assert server_instance.open_browser is False
 
 
 def test_send_geometry_to_viewer(mock_ocp_vscode: MockOcpVscode) -> None:
@@ -98,22 +112,16 @@ def test_view_with_export_creates_file(
     tmp_path: Path, model: Path, harness: HarnessWrapper, file_format: str
 ) -> None:
     output_file = tmp_path / "out"
-    with patch.object(
-        ModelWatcher,
-        "start",
-        autospec=True,
-        side_effect=lambda self: self.runner(),
-    ):
-        harness(
-            [
-                str(model),
-                "view",
-                "--export",
-                str(output_file),
-                "--format",
-                file_format,
-            ]
-        )()
+    harness(
+        [
+            str(model),
+            "view",
+            "--export",
+            str(output_file),
+            "--format",
+            file_format,
+        ]
+    )()
     assert output_file.is_dir()
     exported_files = list(output_file.iterdir())
     assert len(exported_files) == 3
@@ -128,12 +136,6 @@ def test_send_to_viewer_warns_on_empty_geometry(
 ) -> None:
     model = tmp_path / "model.py"
     model.write_text('print("nope")')
-    with patch.object(
-        ModelWatcher,
-        "start",
-        autospec=True,
-        side_effect=lambda self: self.runner(),
-    ):
-        harness([str(model), "view"])()
+    harness([str(model), "view"])()
     assert "No geometry collected" in log.messages
     assert "Sending geometry to viewer" not in log.messages
