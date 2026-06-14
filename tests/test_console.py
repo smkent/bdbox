@@ -8,6 +8,7 @@ import sys
 from contextlib import suppress
 from dataclasses import dataclass
 from functools import cached_property
+from queue import Queue
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
@@ -15,7 +16,7 @@ import pytest
 
 from bdbox.console import LoggingStream, LogLevel, console
 from bdbox.protocol import ModelConsoleMessage
-from bdbox.view.console import WebStream
+from bdbox.view.websocket import WebSocketStream
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
@@ -158,9 +159,10 @@ def test_logging_stream_isatty_false(log_stream: LogStreamTest) -> None:
 
 def test_web_stream_write() -> None:
     value = "I can't see a thing in this helmet"
-    s = WebStream()
+    queue = Queue()
+    s = WebSocketStream(msg_queue=queue)
     assert s.write(value) == len(value)
-    assert s.q.get_nowait() == ModelConsoleMessage(text=value)
+    assert s.msg_queue.get_nowait() == ModelConsoleMessage(text=value)
 
 
 @pytest.mark.parametrize(
@@ -171,9 +173,10 @@ def test_web_stream_write() -> None:
     ],
 )
 def test_web_stream_write_whitespace_only_not_queued(value: str) -> None:
-    s = WebStream()
+    queue = Queue()
+    s = WebSocketStream(msg_queue=queue)
     s.write(value)
-    assert s.q.empty()
+    assert s.msg_queue.empty()
 
 
 def _bdbox_records(
