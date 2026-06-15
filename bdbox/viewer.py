@@ -78,7 +78,9 @@ class ViewerManager(Service):
                     log.debug("OCP CAD Viewer browser client connected")
                     self.client_registered()
 
-        Thread(target=_watch, name=_watch.__qualname__, daemon=True).start()
+        Thread(
+            target=_watch, name="viewer client connect", daemon=True
+        ).start()
 
     def ready_wait(self) -> None:
         for _ in range(self._POLL_ATTEMPTS):
