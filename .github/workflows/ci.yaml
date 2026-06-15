@@ -44,7 +44,7 @@ jobs:
         run: uv run poe lint
 
       - name: 🔥 Test
-        run: uv run poe test -m "not frontend"
+        run: uv run poe test
 
       - name: 🔍 Collect coverage results
         run: uv run coverage xml
