@@ -13,16 +13,17 @@ from urllib.error import URLError
 from urllib.request import urlopen
 
 from bdbox.console import log
-from bdbox.dispatch import Service
+from bdbox.dispatch import Service, Thread
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping, Sequence
+    from collections.abc import Callable, Mapping, Sequence
 
 
 @dataclass
 class ViewerManager(Service):
     """Manages the OCP CAD Viewer subprocess."""
 
+    client_registered: Callable[[], None] = field(repr=False)
     process: subprocess.Popen[str] | None = field(default=None, init=False)
     ocp_vscode_args: ClassVar[Sequence[str]] = (
         "--theme=dark",
@@ -36,7 +37,7 @@ class ViewerManager(Service):
     def popen_kwargs(self) -> Mapping[str, Any]:
         popen_kwargs: dict[str, Any] = {
             "text": True,
-            "stdout": subprocess.DEVNULL,
+            "stdout": subprocess.PIPE,
             "stderr": subprocess.DEVNULL,
         }
         if os.name == "nt":
@@ -65,9 +66,21 @@ class ViewerManager(Service):
     def start(self) -> None:
         log.debug("Starting OCP CAD Viewer")
         self.process = subprocess.Popen(  # noqa: S603
-            [sys.executable, "-m", "ocp_vscode", *self.ocp_vscode_args],
+            [sys.executable, "-u", "-m", "ocp_vscode", *self.ocp_vscode_args],
             **self.popen_kwargs,
         )
+
+        def _watch() -> None:
+            if not self.process or not self.process.stdout:
+                return
+            for line in self.process.stdout:
+                if "Browser as viewer client registered" in line:
+                    log.debug("OCP CAD Viewer browser client connected")
+                    self.client_registered()
+
+        Thread(
+            target=_watch, name="viewer client connect", daemon=True
+        ).start()
 
     def ready_wait(self) -> None:
         for _ in range(self._POLL_ATTEMPTS):

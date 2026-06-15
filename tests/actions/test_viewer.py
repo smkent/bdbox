@@ -84,13 +84,14 @@ def test_model_view_starts_viewer(
     mock_popen.assert_called_once_with(
         [
             sys.executable,
+            "-u",
             "-m",
             "ocp_vscode",
             "--theme=dark",
             "--reset_camera=keep",
         ],
         text=True,
-        stdout=subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
         **popen_kwargs,
     )
