@@ -23,7 +23,7 @@ class ViewApp:
     open_browser: InitVar[bool] = False
 
     view_state: ViewState = field(init=False)
-    viewer: ViewerManager = field(default_factory=ViewerManager)
+    viewer: ViewerManager = field(init=False)
     view_server: ViewServer = field(init=False)
 
     def __post_init__(
@@ -33,6 +33,7 @@ class ViewApp:
         open_browser: bool,
     ) -> None:
         self.view_state = ViewState(model_class=model_class)
+        self.viewer = ViewerManager(self.view_state.show)
         self.view_server = ViewServer(
             port=server_port,
             view_state=self.view_state,
