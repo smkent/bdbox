@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
-import io
-from contextlib import contextmanager, redirect_stderr, redirect_stdout
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path  # noqa: TC003
 from typing import TYPE_CHECKING, Annotated, Literal
 
 import tyro
 
-from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError, UsageError
 from bdbox.protocol import (
     ModelDetailsMessage,
@@ -27,8 +25,6 @@ from .export import ExportAction
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
-
-    from build123d import Compound, Shape
 
     from bdbox.model.info import ModelInfo
 
@@ -68,26 +64,12 @@ class ViewAction(ModelAction):
     view_app: tyro.conf.Suppress[ViewApp | None] = None
 
     def __call__(self) -> None:
-        """Send collected geometry to the viewer."""
-        geometry = run_state.geometry.resolve()
-        if not geometry:
-            log.warning("No geometry collected")
-            return
-        self.show(geometry)
+        """Collect geometry for viewer."""
+        if self.view_app and (view_state := self.view_app.view_state):
+            view_state.geometry = run_state.geometry
+            view_state.show()
         if self.export:
             ExportAction(output=self.export, format=self.format)()
-
-    def show(self, geometry: Compound | Shape) -> None:
-        from ocp_vscode import show  # noqa: PLC0415
-
-        log.debug("Sending geometry to viewer")
-        buf = io.StringIO()
-        try:
-            with redirect_stdout(buf), redirect_stderr(buf):
-                show(geometry)
-        finally:
-            if ocp_vscode_output := buf.getvalue().strip():
-                log.debug(ocp_vscode_output)
 
     def on_harness(self, model: ModelInfo) -> None:
         if not (model_arg := model.arg):

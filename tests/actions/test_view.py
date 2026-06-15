@@ -11,7 +11,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from bdbox.actions.view import ViewAction
 from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
@@ -100,9 +99,11 @@ def test_model_view_passes_flags_to_server(
     assert server_instance.open_browser is False
 
 
-def test_send_geometry_to_viewer(mock_ocp_vscode: MockOcpVscode) -> None:
+def test_send_geometry_to_viewer(
+    mock_ocp_vscode: MockOcpVscode, harness: HarnessWrapper
+) -> None:
     with patch.object(mock_ocp_vscode, "show") as mock_show:
-        ModelRunner([Models.PARAMS_EXPORT, "view"], ViewAction())()
+        harness([Models.PARAMS_EXPORT, "view"])()
     mock_show.assert_called_once()
     assert len(mock_show.call_args[0][0]) == 2
 

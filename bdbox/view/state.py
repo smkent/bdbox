@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import io
+from contextlib import redirect_stderr, redirect_stdout
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
@@ -17,12 +19,14 @@ from bdbox.protocol import (
 from bdbox.serializer import serializer
 
 if TYPE_CHECKING:
+    from bdbox.geometry.geometry import Geometry
     from bdbox.model.parameters import Params
     from bdbox.protocol import BrowserMessage
 
 
 @dataclass
 class ViewState:
+    geometry: Geometry | None = None
     rerender_event: Event = field(
         default_factory=lambda: Event(name="rerender_event"),
         init=False,
@@ -56,3 +60,23 @@ class ViewState:
             log.debug("Parameters reset")
         else:
             raise InternalError(f"Unable to handle message {msg}")
+
+    def show(self) -> None:
+        if not self.geometry:
+            log.trace("No geometry cached")
+            return
+        geometry = self.geometry.resolve()
+        if not geometry:
+            log.warning("No geometry collected")
+            return
+
+        from ocp_vscode import show  # noqa: PLC0415
+
+        log.debug("Sending geometry to viewer")
+        buf = io.StringIO()
+        try:
+            with redirect_stdout(buf), redirect_stderr(buf):
+                show(geometry)
+        finally:
+            if ocp_vscode_output := buf.getvalue().strip():
+                log.debug(ocp_vscode_output)
