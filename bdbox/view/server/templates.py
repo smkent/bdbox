@@ -12,7 +12,7 @@ INDEX_TEMPLATE = """\
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     body {{ overflow: hidden; background: #111; }}
   </style>
-  <script>window.__BDBOX__ = {{"viewerPort": {viewer_port}}};</script>
+  <script>window.__BDBOX__ = {{"viewerPort": {ocp_cad_viewer_port}}};</script>
   <script src="/static/app.js" defer></script>
 </head>
 <body>

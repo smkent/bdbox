@@ -15,7 +15,9 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
     from pathlib import Path
 
-pytestmark = pytest.mark.usefixtures("mock_server_start", "mock_viewer_start")
+pytestmark = pytest.mark.usefixtures(
+    "mock_server_start", "mock_ocp_cad_viewer_start"
+)
 
 
 @dataclass
@@ -49,33 +51,33 @@ def model(request: pytest.FixtureRequest) -> Path:
 
 def test_dispatch(
     exec_main: ExecMain,
-    mock_viewer_start: MagicMock,
+    mock_ocp_cad_viewer_start: MagicMock,
     mock_server_start: MagicMock,
     model: Path,
 ) -> None:
     exec_main(str(model), "view")
-    mock_viewer_start.assert_called_once()
+    mock_ocp_cad_viewer_start.assert_called_once()
     mock_server_start.assert_called_once()
 
 
 def test_dispatch_prints_trace_logs(
     caplog: pytest.LogCaptureFixture,
     exec_main: ExecMain,
-    mock_viewer_start: MagicMock,
+    mock_ocp_cad_viewer_start: MagicMock,
     mock_server_start: MagicMock,
     model: Path,
 ) -> None:
     with caplog.at_level(LogLevel.TRACE, logger="bdbox"):
         exec_main(str(model), "view", "-vv")
     assert any(r.levelno == LogLevel.TRACE for r in caplog.records)
-    mock_viewer_start.assert_called_once()
+    mock_ocp_cad_viewer_start.assert_called_once()
     mock_server_start.assert_called_once()
 
 
 def test_dispatch_thread(
     thread_exceptions: ThreadExceptions,
     exec_main: ExecMain,
-    mock_viewer_start: MagicMock,
+    mock_ocp_cad_viewer_start: MagicMock,
     mock_server_start: MagicMock,
     model: Path,
 ) -> None:
@@ -88,5 +90,5 @@ def test_dispatch_thread(
     with thread_exceptions.raises(TestError):
         Thread(target=_run).start()
         exec_main(str(model), "view")
-    mock_viewer_start.assert_called_once()
+    mock_ocp_cad_viewer_start.assert_called_once()
     mock_server_start.assert_called_once()

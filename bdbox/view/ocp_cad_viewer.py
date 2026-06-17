@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class ViewerManager(Service):
+class OCPCADViewer(Service):
     """Manages the OCP CAD Viewer subprocess."""
 
     client_registered: Callable[[], None] = field(repr=False)
@@ -64,11 +64,10 @@ class ViewerManager(Service):
         return f"http://localhost:{self._port}/viewer"
 
     def start(self) -> None:
+        cmd = [sys.executable, "-u", "-m", "ocp_vscode", *self.ocp_vscode_args]
         log.debug("Starting OCP CAD Viewer")
-        self.process = subprocess.Popen(  # noqa: S603
-            [sys.executable, "-u", "-m", "ocp_vscode", *self.ocp_vscode_args],
-            **self.popen_kwargs,
-        )
+        log.trace("Running: %s", " ".join(cmd))
+        self.process = subprocess.Popen(cmd, **self.popen_kwargs)  # noqa: S603
 
         def _watch() -> None:
             if not self.process or not self.process.stdout:

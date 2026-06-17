@@ -16,8 +16,8 @@ from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.state import RunState, run_state
 from bdbox.runner.watcher import ModelWatcher
+from bdbox.view.ocp_cad_viewer import OCPCADViewer
 from bdbox.view.server.server import ViewServer
-from bdbox.viewer import ViewerManager
 
 pytest.register_assert_rewrite("tests.utils")
 
@@ -182,10 +182,10 @@ def thread_exceptions() -> Iterator[ThreadExceptions]:
 
 
 @pytest.fixture
-def mock_viewer_start() -> Iterator[MagicMock]:
+def mock_ocp_cad_viewer_start() -> Iterator[MagicMock]:
     with (
-        patch.object(ViewerManager, "start", autospec=True) as mocked,
-        patch.object(ViewerManager, "ready_wait"),
+        patch.object(OCPCADViewer, "start", autospec=True) as mocked,
+        patch.object(OCPCADViewer, "ready_wait"),
     ):
         yield mocked
 
