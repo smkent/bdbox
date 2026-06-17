@@ -26,7 +26,7 @@ pytestmark = pytest.mark.usefixtures(
     "ensure_sys_modules",
     "mock_ocp_vscode",
     "mock_server_start",
-    "mock_viewer_start",
+    "mock_ocp_cad_viewer_start",
     "mock_watch_run_once",
 )
 
@@ -90,11 +90,11 @@ def test_model_view_passes_flags_to_server(
     model: Path,
     harness: HarnessWrapper,
     mock_server_start: MagicMock,
-    mock_viewer_start: MagicMock,
+    mock_ocp_cad_viewer_start: MagicMock,
 ) -> None:
     harness([str(model), "view"])()
     mock_server_start.assert_called_once()
-    mock_viewer_start.assert_called_once()
+    mock_ocp_cad_viewer_start.assert_called_once()
     server_instance = mock_server_start.call_args[0][0]
     assert server_instance.open_browser is False
 

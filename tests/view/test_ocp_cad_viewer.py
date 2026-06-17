@@ -12,8 +12,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import bdbox.viewer as viewer_module
 from bdbox.actions.view import ViewAction
+from bdbox.view import ocp_cad_viewer
 from tests.utils import ExecMain, Models
 
 if TYPE_CHECKING:
@@ -38,7 +38,7 @@ def model(request: pytest.FixtureRequest) -> Path:
 
 @pytest.fixture(autouse=True)
 def mock_urlopen() -> Iterator[MagicMock]:
-    with patch.object(viewer_module, "urlopen") as mocked:
+    with patch.object(ocp_cad_viewer, "urlopen") as mocked:
         yield mocked
 
 
@@ -73,7 +73,7 @@ def popen_kwargs() -> Mapping[str, Any]:
     return {"start_new_session": True}
 
 
-def test_model_view_starts_viewer(
+def test_model_view_starts_ocp_cad_viewer(
     model: Path,
     exec_main: ExecMain,
     mock_popen: MagicMock,
@@ -98,7 +98,7 @@ def test_model_view_starts_viewer(
     mock_server_start.assert_called_once()
 
 
-def test_model_view_without_model_does_not_start_viewer(
+def test_model_view_without_model_does_not_start_ocp_cad_viewer(
     exec_main: ExecMain, mock_popen: MagicMock, mock_server_start: MagicMock
 ) -> None:
     with pytest.raises(SystemExit):
