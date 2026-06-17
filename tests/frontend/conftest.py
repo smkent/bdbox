@@ -12,8 +12,8 @@ import pytest
 from bdbox.console import console, log
 from bdbox.dispatch import Event
 from bdbox.protocol import BrowserMessage, ConnectedMessage
-from bdbox.view.server.server import ViewServer
 from bdbox.view.state import ViewState
+from bdbox.view.ui.server import UIServer
 
 if TYPE_CHECKING:
     from playwright.sync_api import Page, WebSocketRoute
@@ -44,7 +44,7 @@ def build_frontend_assets() -> None:
 
 @dataclass
 class BackendTestApp:
-    backend_server: ViewServer = field(init=False)
+    backend_server: UIServer = field(init=False)
     page: Page
     websocket: WebSocketRoute | None = field(default=None, init=False)
     websocket_connected: Event = field(
@@ -56,7 +56,7 @@ class BackendTestApp:
     messages: Queue[BrowserMessage] = field(default_factory=Queue, init=False)
 
     def __post_init__(self) -> None:
-        self.backend_server = ViewServer(
+        self.backend_server = UIServer(
             view_state=ViewState(),
             port=0,
             open_browser=False,

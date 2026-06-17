@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class ViewServerApp(FastAPI):
+class UIApp(FastAPI):
     STATIC_DIR = Path(__file__).parent / "static"
 
     view_state: ViewState
