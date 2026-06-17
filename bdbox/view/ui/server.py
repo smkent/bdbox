@@ -12,7 +12,7 @@ from bdbox.console import log
 from bdbox.dispatch import Event, Service, Thread
 from bdbox.errors import UsageError
 
-from .app import ViewServerApp
+from .app import UIApp
 
 if TYPE_CHECKING:
     from bdbox.view.state import ViewState
@@ -36,8 +36,8 @@ class UvicornServer(Server):
 
 
 @dataclass
-class ViewServer(Service):
-    app: ViewServerApp = field(init=False)
+class UIServer(Service):
+    app: UIApp = field(init=False)
     view_state: ViewState
     port: int = 4040
     ocp_cad_viewer_port: int = 3939
@@ -53,7 +53,7 @@ class ViewServer(Service):
         return f"http://localhost:{self.port}"
 
     def __post_init__(self) -> None:
-        self.app = ViewServerApp(
+        self.app = UIApp(
             view_state=self.view_state,
             ocp_cad_viewer_port=self.ocp_cad_viewer_port,
         )

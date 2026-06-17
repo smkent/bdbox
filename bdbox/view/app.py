@@ -6,8 +6,8 @@ from dataclasses import InitVar, dataclass, field
 from typing import TYPE_CHECKING
 
 from bdbox.view.ocp_cad_viewer import OCPCADViewer
-from bdbox.view.server.server import ViewServer
 from bdbox.view.state import ViewState
+from bdbox.view.ui.server import UIServer
 
 if TYPE_CHECKING:
     from bdbox.model.parameters import Params
@@ -24,7 +24,7 @@ class ViewApp:
 
     ocp_cad_viewer: OCPCADViewer = field(init=False)
     view_state: ViewState = field(init=False)
-    view_server: ViewServer = field(init=False)
+    ui_server: UIServer = field(init=False)
 
     def __post_init__(
         self,
@@ -34,14 +34,14 @@ class ViewApp:
     ) -> None:
         self.view_state = ViewState(model_class=model_class)
         self.ocp_cad_viewer = OCPCADViewer(self.view_state.show)
-        self.view_server = ViewServer(
+        self.ui_server = UIServer(
             port=server_port,
             view_state=self.view_state,
             ocp_cad_viewer_port=self.ocp_cad_viewer.port,
             open_browser=open_browser,
         )
         self.ocp_cad_viewer.ready_wait()
-        self.view_server.ready_wait()
+        self.ui_server.ready_wait()
 
     def enqueue(self, msg: ServerMessage) -> None:
-        self.view_server.app.enqueue(msg)
+        self.ui_server.app.enqueue(msg)

@@ -17,7 +17,7 @@ from bdbox.model.parameters import Params
 from bdbox.runner.state import RunState, run_state
 from bdbox.runner.watcher import ModelWatcher
 from bdbox.view.ocp_cad_viewer import OCPCADViewer
-from bdbox.view.server.server import ViewServer
+from bdbox.view.ui.server import UIServer
 
 pytest.register_assert_rewrite("tests.utils")
 
@@ -193,8 +193,8 @@ def mock_ocp_cad_viewer_start() -> Iterator[MagicMock]:
 @pytest.fixture
 def mock_server_start() -> Iterator[MagicMock]:
     with (
-        patch.object(ViewServer, "start", autospec=True) as mocked,
-        patch.object(ViewServer, "ready_wait"),
+        patch.object(UIServer, "start", autospec=True) as mocked,
+        patch.object(UIServer, "ready_wait"),
     ):
         yield mocked
 

@@ -32,8 +32,8 @@ from bdbox.protocol import (
     VersionInfo,
 )
 from bdbox.runner.state import run_state
-from bdbox.view.server.app import ViewServerApp
 from bdbox.view.state import ViewState
+from bdbox.view.ui.app import UIApp
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -52,14 +52,14 @@ TEST_SESSION_ID = UUID("deadbeef-0327-1138-2187-c01dc0ffee77")
 
 @dataclass
 class WSParamTest:
-    app: ViewServerApp = field(init=False)
+    app: UIApp = field(init=False)
     snapshot: SnapshotAssertion | None = None
     view_state: ViewState = field(default_factory=ViewState)
     ws: WebSocketTestSession | None = field(default=None, init=False)
     client: TestClient | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
-        self.app = ViewServerApp(
+        self.app = UIApp(
             view_state=self.view_state, session_id=TEST_SESSION_ID
         )
 
