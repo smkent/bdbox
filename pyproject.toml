@@ -55,7 +55,7 @@ dev = [
     "hatchling>=1.29.0",
     "httpx2>=0.28",
     "playwright>=1.60",
-    "poethepoet>=0.42",
+    "poethepoet>=0.46",
     "prek>=0.4",
     "pysentry-rs>=0.4",
     "pytest>=9",
@@ -65,11 +65,11 @@ dev = [
     "pytest-xdist>=3",
     "ruff>=0.15",
     "syrupy>=5",
-    "ty>=0.0.38",
+    "ty>=0.0.49",
 ]
 docs = [
     "mkdocstrings[python]>=1",
-    "zensical>=0.0.43",
+    "zensical>=0.0.45",
 ]
 
 [tool.bumpversion]
