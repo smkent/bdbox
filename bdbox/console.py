@@ -164,6 +164,10 @@ class LoggingStream:
     def isatty(self) -> bool:
         return False
 
+    @property
+    def encoding(self) -> str:
+        return (sys.__stderr__ or sys.stderr).encoding
+
 
 @dataclass
 class ConsoleOutput(ABC):
