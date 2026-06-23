@@ -24,8 +24,9 @@ class Geometry:
         self,
         *shapes: Compound
         | Shape
-        | Sequence[Compound | Shape]
-        | Mapping[str, Compound | Shape],
+        | Sequence[Compound | Shape | None]
+        | Mapping[str, Compound | Shape | None]
+        | None,
     ) -> None:
         self.geometry.extend(
             [shape for s in shapes if (shape := self.filter_geometry(s))]
