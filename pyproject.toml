@@ -9,7 +9,7 @@ description = "build123d development with live preview and interactive parameter
 readme = "README.md"
 license = "LGPL-3.0"
 license-files = ["LICENSE"]
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10"
 authors = [
     { name = "Stephen Kent", email = "smkent@smkent.net" },
 ]
@@ -21,6 +21,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Documentation",
     "Topic :: Software Development",
     "Topic :: Utilities",
@@ -183,7 +185,7 @@ cmd = "pytest -m \"not frontend\""
 help = "Run tests"
 
 [tool.poe.tasks.test-versions]
-sequence = ["test-py310", "test-py311", "test-py312"]
+sequence = ["test-py310", "test-py311", "test-py312", "test-py313", "test-py314"]
 help = "Run tests across all Python versions"
 
 [tool.poe.tasks.test-py310]
@@ -200,6 +202,16 @@ help = "Run tests using Python 3.11"
 cmd = "pytest -m \"not frontend\""
 executor = {isolated = true, python = "3.12"}
 help = "Run tests using Python 3.12"
+
+[tool.poe.tasks.test-py313]
+cmd = "pytest -m \"not frontend\""
+executor = {isolated = true, python = "3.13"}
+help = "Run tests using Python 3.13"
+
+[tool.poe.tasks.test-py314]
+cmd = "pytest -m \"not frontend\""
+executor = {isolated = true, python = "3.14"}
+help = "Run tests using Python 3.14"
 
 [tool.poe.tasks.ti]
 cmd = "pytest --numprocesses 0 --no-cov -vv -m \"not frontend\""
@@ -229,7 +241,8 @@ addopts = [
 testpaths = ["tests"]
 filterwarnings = [
     "ignore::pyparsing.warnings.PyparsingDeprecationWarning:ezdxf.*",
-    "ignore:.*ArcTangent.*:DeprecationWarning:build123d.objects_curve"
+    "ignore:.*ArcTangent.*:DeprecationWarning:build123d.objects_curve",
+    "ignore:.*_pack_.*:DeprecationWarning:lib3mf.*",
 ]
 
 [tool.coverage.run]
