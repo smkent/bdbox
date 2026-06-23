@@ -13,8 +13,9 @@ if TYPE_CHECKING:
 def show(
     *geometry: Compound
     | Shape
-    | Sequence[Compound | Shape]
-    | Mapping[str, Compound | Shape],
+    | Sequence[Compound | Shape | None]
+    | Mapping[str, Compound | Shape | None]
+    | None,
 ) -> None:
     """Provide built model geometry for display or use.
 

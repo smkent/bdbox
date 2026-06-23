@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
 from build123d import (
     Axis,
@@ -50,7 +49,7 @@ class BoxDemo(Model):
         ),
     )
 
-    def build(self) -> Any:
+    def build(self) -> Model.Build:
         with BuildPart() as p:
             Box(self.width, self.length, self.height)
             if self.fillet:
@@ -64,5 +63,6 @@ class BoxDemo(Model):
                     min(min(self.width, self.length) / 8, self.height / 4),
                 )
         color = 0xB0EB00 if (self.display_color.color == "lime") else 0xE8B024
-        p.part.color = Color(color, alpha=self.display_color.opacity)
+        if p.part:
+            p.part.color = Color(color, alpha=self.display_color.opacity)
         return p.part

@@ -64,7 +64,9 @@ class Model(Params):
     """
 
     if TYPE_CHECKING:
-        Build: TypeAlias = "Shape | Sequence[Shape] | Mapping[str, Shape]"
+        Build: TypeAlias = (
+            "Shape | Sequence[Shape] | Mapping[str, Shape] | None"
+        )
 
     def build(self) -> Model.Build:
         """Build and return model geometry.
