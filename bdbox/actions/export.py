@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from contextlib import contextmanager
+from copy import deepcopy
 from dataclasses import dataclass, field, make_dataclass
 from functools import cached_property
 from itertools import count
@@ -33,8 +34,22 @@ class Exports:
     model_name: str
     single: bool = False
 
+    def __iter__(self) -> Iterator[tuple[str, Shape]]:
+        def _copy_shape(shape: Shape) -> Shape:
+            return deepcopy(
+                shape,
+                memo=(
+                    {id(parent): None}
+                    if (parent := getattr(shape, "parent", None)) is not None
+                    else {}
+                ),
+            )
+
+        for name, part in self._parts.items():
+            yield name, _copy_shape(part)
+
     @cached_property
-    def parts(self) -> dict[str, Shape]:
+    def _parts(self) -> dict[str, Shape]:
         export_parts = {self.model_name: self.geometry}
         if self.single or len(self.geometry.leaves) == 1:
             return export_parts
@@ -43,7 +58,7 @@ class Exports:
                 [
                     self.model_name,
                     *[
-                        self.labels.get(id(c), self._shape_label(c))
+                        self._labels.get(id(c), self._shape_label(c))
                         for c in part.path[1:]
                     ],
                 ]
@@ -54,7 +69,7 @@ class Exports:
         return export_parts
 
     @cached_property
-    def labels(self) -> dict[int, str]:
+    def _labels(self) -> dict[int, str]:
         """Map node IDs to deduplicated label names."""
         labels = {}
 
@@ -166,7 +181,7 @@ class ExportAction(ModelAction):
             model_name += f"-{preset}"
         exports = Exports(geometry, model_name=model_name, single=self.single)
         self.output.mkdir(exist_ok=True, parents=True)
-        for name, solid in exports.parts.items():
+        for name, solid in exports:
             part_file = self.output / f"{name}.{self.format}"
             log.info(f"Exporting model geometry to {part_file}")
             self._exporter(solid, str(part_file))
