@@ -295,7 +295,7 @@ known-first-party = ["bdbox"]
 convention = "google"
 
 [tool.ty.src]
-include = ["bdbox/", "tests/"]
+include = ["bdbox/", "utils/", "tests/"]
 
 [tool.ty.terminal]
 error-on-warning = true
