@@ -294,6 +294,9 @@ known-first-party = ["bdbox"]
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ty.src]
+include = ["bdbox/", "tests/"]
+
 [tool.ty.terminal]
 error-on-warning = true
 output-format = "concise"
