@@ -14,6 +14,7 @@ import pytest
 
 from bdbox.actions.view import ViewAction
 from bdbox.view import ocp_cad_viewer
+from bdbox.view.ocp_cad_viewer import OCPCADViewer
 from tests.utils import ExecMain, Models
 
 if TYPE_CHECKING:
@@ -73,16 +74,39 @@ def popen_kwargs() -> Mapping[str, Any]:
     return {"start_new_session": True}
 
 
+@pytest.mark.parametrize(
+    ("port", "expected_port"),
+    [
+        pytest.param(0, 3939, id="default"),
+        pytest.param(1138, 1138, id="1138"),
+    ],
+)
 def test_model_view_starts_ocp_cad_viewer(
     model: Path,
     exec_main: ExecMain,
     mock_popen: MagicMock,
     mock_server_start: MagicMock,
     popen_kwargs: Mapping[str, Any],
+    port: int,
+    expected_port: int,
 ) -> None:
-    exec_main(str(model), "view")
+    original = OCPCADViewer.__post_init__
+
+    def wrapper(self: OCPCADViewer) -> None:
+        self.port = port
+        original(self)
+
+    with patch.object(OCPCADViewer, "__post_init__", new=wrapper):
+        exec_main(str(model), "view")
     mock_popen.assert_called_once_with(
-        [sys.executable, "-u", "-m", "ocp_vscode", "--theme=dark"],
+        [
+            sys.executable,
+            "-u",
+            "-m",
+            "ocp_vscode",
+            f"--port={expected_port}",
+            "--theme=dark",
+        ],
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,

@@ -26,9 +26,15 @@ class OCPCADViewer(Service):
     client_registered: Callable[[], None] = field(repr=False)
     process: subprocess.Popen[str] | None = field(default=None, init=False)
     ocp_vscode_args: ClassVar[Sequence[str]] = ("--theme=dark",)
+    port: int = 0
 
     _POLL_INTERVAL: ClassVar[float] = 0.25
     _POLL_ATTEMPTS: ClassVar[int] = 100
+
+    def __post_init__(self) -> None:
+        if self.port == 0:
+            self._set_port()
+        super().__post_init__()
 
     @cached_property
     def popen_kwargs(self) -> Mapping[str, Any]:
@@ -43,25 +49,15 @@ class OCPCADViewer(Service):
             popen_kwargs["start_new_session"] = True
         return popen_kwargs
 
-    @property
-    def port(self) -> int:
-        return self._port
-
-    @property
-    def _port(self) -> int:
-        try:
-            from ocp_vscode.comms import CMD_PORT  # noqa: PLC0415
-
-            return int(CMD_PORT)
-        except ImportError:
-            return 3939
-
-    @property
-    def url(self) -> str:
-        return f"http://localhost:{self._port}/viewer"
-
     def start(self) -> None:
-        cmd = [sys.executable, "-u", "-m", "ocp_vscode", *self.ocp_vscode_args]
+        cmd = [
+            sys.executable,
+            "-u",
+            "-m",
+            "ocp_vscode",
+            f"--port={self.port}",
+            *self.ocp_vscode_args,
+        ]
         log.debug("Starting OCP CAD Viewer")
         log.trace("Running: %s", " ".join(cmd))
         self.process = subprocess.Popen(cmd, **self.popen_kwargs)  # noqa: S603
@@ -79,8 +75,6 @@ class OCPCADViewer(Service):
         ).start()
 
     def _configure(self) -> None:
-        # Set port to skip find_and_set_port() on first show().
-        from ocp_vscode.comms import set_port  # noqa: PLC0415
         from ocp_vscode.config import (  # noqa: PLC0415
             Camera,
             reset_defaults,
@@ -89,7 +83,21 @@ class OCPCADViewer(Service):
 
         reset_defaults()
         set_defaults(reset_camera=Camera.KEEP)
-        set_port(self._port)
+
+    def _set_port(self) -> None:
+        try:
+            from ocp_vscode.comms import CMD_PORT  # noqa: PLC0415
+
+            self.port = int(CMD_PORT)
+        except ImportError:
+            self.port = 3939
+        from ocp_vscode.comms import set_port  # noqa: PLC0415
+
+        set_port(self.port)
+
+    @property
+    def url(self) -> str:
+        return f"http://localhost:{self.port}/viewer"
 
     def ready_wait(self) -> None:
         for _ in range(self._POLL_ATTEMPTS):
@@ -100,7 +108,7 @@ class OCPCADViewer(Service):
                 time.sleep(self._POLL_INTERVAL)
         else:
             raise RuntimeError("OCP CAD Viewer failed to start")
-        log.debug(f"OCP CAD Viewer running on port {self._port}")
+        log.debug(f"OCP CAD Viewer running on port {self.port}")
         self._configure()
 
     def stop(self) -> None:
