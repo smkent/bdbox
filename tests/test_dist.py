@@ -22,7 +22,14 @@ def dist_wheel(
     dist_dir = tmp_path / "dist"
     with disallow_subprocess.pause():
         subprocess.check_call(  # noqa: S603
-            ["uv", "build", "--wheel", "--out-dir", str(dist_dir)],
+            [
+                "uv",
+                "--offline",
+                "build",
+                "--wheel",
+                "--out-dir",
+                str(dist_dir),
+            ],
             cwd=repo_copy,
         )
     wheels = list(dist_dir.glob("*.whl"))
