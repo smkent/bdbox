@@ -138,6 +138,7 @@ def mock_ocp_vscode(monkeypatch: pytest.MonkeyPatch) -> MockOcpVscode:
     module = MockOcpVscode()
     monkeypatch.setitem(sys.modules, "ocp_vscode", module)
     monkeypatch.setitem(sys.modules, "ocp_vscode.comms", module.comms)
+    monkeypatch.setitem(sys.modules, "ocp_vscode.config", module.config)
     return module
 
 

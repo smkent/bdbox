@@ -4,6 +4,7 @@ import sys
 import threading
 from contextlib import contextmanager
 from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Any
@@ -142,6 +143,19 @@ class MockOcpVscode(ModuleType):
 
         CMD_PORT = 3939
 
+    class Config(ModuleType):
+        class Camera(Enum):
+            KEEP = "keep"
+
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            super().__init__("config", *args, **kwargs)
+
+        def reset_defaults(self, *args: Any, **kwargs: Any) -> None:
+            pass
+
+        def set_defaults(self, *args: Any, **kwargs: Any) -> None:
+            pass
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__("ocp_vscode", *args, **kwargs)
 
@@ -149,6 +163,7 @@ class MockOcpVscode(ModuleType):
         pass
 
     comms = Comms()
+    config = Config()
 
 
 @dataclass

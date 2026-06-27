@@ -82,14 +82,7 @@ def test_model_view_starts_ocp_cad_viewer(
 ) -> None:
     exec_main(str(model), "view")
     mock_popen.assert_called_once_with(
-        [
-            sys.executable,
-            "-u",
-            "-m",
-            "ocp_vscode",
-            "--theme=dark",
-            "--reset_camera=keep",
-        ],
+        [sys.executable, "-u", "-m", "ocp_vscode", "--theme=dark"],
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
