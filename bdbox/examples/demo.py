@@ -49,7 +49,7 @@ class BoxDemo(Model):
         ),
     )
 
-    def build(self) -> Model.Build:
+    def build(self) -> Model.Geometry | None:
         with BuildPart() as p:
             Box(self.width, self.length, self.height)
             if self.fillet:

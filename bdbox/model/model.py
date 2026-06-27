@@ -64,11 +64,10 @@ class Model(Params):
     """
 
     if TYPE_CHECKING:
-        Build: TypeAlias = (
-            "Shape | Sequence[Shape] | Mapping[str, Shape] | None"
-        )
+        Geometry: TypeAlias = "Shape | Sequence[Shape] | Mapping[str, Shape]"
+        """Geometry return type annotation for [``build``][bdbox.model.model.Model.build]."""  # noqa: E501
 
-    def build(self) -> Model.Build:
+    def build(self) -> Model.Geometry | None:
         """Build and return model geometry.
 
         Info:
