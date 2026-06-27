@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
 
-pytestmark = pytest.mark.usefixtures("ensure_sys_modules")
+pytestmark = pytest.mark.usefixtures("cache_build123d", "ensure_sys_modules")
 
 
 @dataclass

@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 pytestmark = pytest.mark.usefixtures(
-    "mock_server_start", "mock_watch_run_once"
+    "cache_build123d", "mock_server_start", "mock_watch_run_once"
 )
 
 
