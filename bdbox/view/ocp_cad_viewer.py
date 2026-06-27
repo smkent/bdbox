@@ -25,10 +25,7 @@ class OCPCADViewer(Service):
 
     client_registered: Callable[[], None] = field(repr=False)
     process: subprocess.Popen[str] | None = field(default=None, init=False)
-    ocp_vscode_args: ClassVar[Sequence[str]] = (
-        "--theme=dark",
-        "--reset_camera=keep",
-    )
+    ocp_vscode_args: ClassVar[Sequence[str]] = ("--theme=dark",)
 
     _POLL_INTERVAL: ClassVar[float] = 0.25
     _POLL_ATTEMPTS: ClassVar[int] = 100
@@ -81,6 +78,19 @@ class OCPCADViewer(Service):
             target=_watch, name="viewer client connect", daemon=True
         ).start()
 
+    def _configure(self) -> None:
+        # Set port to skip find_and_set_port() on first show().
+        from ocp_vscode.comms import set_port  # noqa: PLC0415
+        from ocp_vscode.config import (  # noqa: PLC0415
+            Camera,
+            reset_defaults,
+            set_defaults,
+        )
+
+        reset_defaults()
+        set_defaults(reset_camera=Camera.KEEP)
+        set_port(self._port)
+
     def ready_wait(self) -> None:
         for _ in range(self._POLL_ATTEMPTS):
             try:
@@ -91,11 +101,7 @@ class OCPCADViewer(Service):
         else:
             raise RuntimeError("OCP CAD Viewer failed to start")
         log.debug(f"OCP CAD Viewer running on port {self._port}")
-
-        # Set port to skip find_and_set_port() on first show().
-        from ocp_vscode.comms import set_port  # noqa: PLC0415
-
-        set_port(self._port)
+        self._configure()
 
     def stop(self) -> None:
         if not self.process:
