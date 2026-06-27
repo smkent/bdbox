@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
 
-pytestmark = pytest.mark.usefixtures("mock_sys_modules")
+pytestmark = pytest.mark.usefixtures("cache_build123d", "mock_sys_modules")
 
 
 MAIN_STUB = Models.DIR / "main_stub.py"

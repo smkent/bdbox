@@ -26,6 +26,8 @@ if TYPE_CHECKING:
 
     from syrupy import SnapshotAssertion
 
+pytestmark = pytest.mark.usefixtures("cache_build123d")
+
 
 class Runner(Protocol):
     def __init__(

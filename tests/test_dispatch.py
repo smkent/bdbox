@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 pytestmark = pytest.mark.usefixtures(
-    "mock_server_start", "mock_ocp_cad_viewer_start"
+    "cache_build123d", "mock_server_start", "mock_ocp_cad_viewer_start"
 )
 
 
