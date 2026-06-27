@@ -5,7 +5,7 @@ icon: lucide/pyramid
 
 # Geometry
 
-::: bdbox.geometry.geometry
+::: bdbox.geometry.show
     options:
       members: [show]
       show_root_heading: false

@@ -87,7 +87,7 @@ class Model(Params):
 
         Calls [``build``][bdbox.model.model.Model.build] with the resolved
         parameter values and passes the result to
-        [``show``][bdbox.geometry.geometry.show].
+        [``show``][bdbox.geometry.show.show].
 
         Info:
             Call this to build and use your model geometry.

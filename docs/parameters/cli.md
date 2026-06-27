@@ -185,7 +185,7 @@ warning is printed and `run` must be manually called on the desired class.
 
 ## Geometry collection
 
-**Params:** One or more calls to [``show``][bdbox.geometry.geometry.show] accumulate
+**Params:** One or more calls to [``show``][bdbox.geometry.show.show] accumulate
 geometry in call order. If `show` is never called (and
 [``Params``][bdbox.model.parameters.Params] is subclassed within the
 [invoked script][__main__]), bdbox scans the program's global variables for
