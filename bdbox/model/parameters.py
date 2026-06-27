@@ -67,7 +67,7 @@ class Params(CLI, metaclass=ParamsType):
     When run directly as a script, CLI arguments are parsed automatically at
     class definition time, and resolved parameter values are accessible as
     class attributes. A handler is registered to retrieve the rendered model
-    using [``show``][bdbox.geometry.geometry.show] when the script completes,
+    using [``show``][bdbox.geometry.show.show] when the script completes,
     if not manually called.
 
     A ``presets`` class attribute may declare a selection of
