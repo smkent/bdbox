@@ -15,7 +15,7 @@ from bdbox.actions.export import ExportAction
 from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
-from tests.utils import Examples, Models
+from tests.utils import Examples, Models, RaisesRunError
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -220,7 +220,7 @@ def test_main_export_with_parameters(
 
 
 def test_main_export_no_model(model_runner: ExportModelRunner) -> None:
-    with pytest.raises(RunError):
+    with RaisesRunError(SystemExit):
         model_runner(MAIN_STUB, ["export"])
 
 
@@ -239,7 +239,7 @@ def test_export_all_embedded_execs_harness(
     monkeypatch.setattr(sys, "argv", argv)
     with (
         patch.object(subprocess, "run") as mock_run,
-        pytest.raises(RunError),
+        RaisesRunError(SystemExit),
     ):
         ModelRunner(
             [

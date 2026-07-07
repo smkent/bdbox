@@ -54,6 +54,8 @@ class ModelRunner(ModelLocator):
         except (SystemExit, Exception) as e:
             if self.preserve_exceptions:
                 raise
+            if isinstance(e, RunError):
+                raise
             raise RunError(e) from e
 
     def run_or_exit(self) -> None:

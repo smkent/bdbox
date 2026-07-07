@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 import threading
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -10,8 +10,11 @@ from types import ModuleType
 from typing import TYPE_CHECKING, Any
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from bdbox import examples
 from bdbox.__main__ import main
+from bdbox.errors import RunError
 
 if sys.version_info >= (3, 11):
     from typing import Self
@@ -21,8 +24,6 @@ else:
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator, Sequence
     from types import TracebackType
-
-    import pytest
 
 
 @dataclass
@@ -204,3 +205,31 @@ class ThreadExceptions:
         for _, exception, _ in context_exceptions:
             if not isinstance(exception, exc_type):
                 raise exception
+
+
+@dataclass
+class RaisesRunError:
+    expected_exception: type[BaseException]
+    match: str | None = field(default=None, kw_only=True)
+
+    stack: ExitStack = field(default_factory=ExitStack, init=False, repr=False)
+    exc_info: pytest.ExceptionInfo | None = field(default=None, init=False)
+
+    def __enter__(self) -> Self:
+        self.exc_info = self.stack.enter_context(
+            pytest.raises(RunError, match=self.match)
+        )
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> bool | None:
+        result = self.stack.__exit__(exc_type, exc_val, exc_tb)
+        assert self.exc_info
+        assert (
+            type(self.exc_info.value.exception) is self.expected_exception
+        ), f"Raised RunError did not contain {self.expected_exception}"
+        return result
