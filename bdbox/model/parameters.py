@@ -135,11 +135,6 @@ class Params(CLI, metaclass=ParamsType):
             run_state.model_state.apply_overrides(cli_result.params)
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))
-            run_state.model_state.params.values = {
-                f.name: getattr(cls, f.name)
-                for f in fields(cls)
-                if f.name != "preset"
-            }
             atexit.register(Params._atexit_handler)
 
     @classmethod

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 from contextlib import contextmanager, suppress
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -43,6 +43,12 @@ class ModelState:
                 current = getattr(target, name)
                 hint = type(current) if current is not None else None
             setattr(target, name, serializer.structure(raw_value, hint))
+
+        self.params.values = {
+            f.name: getattr(target, f.name)
+            for f in fields(target)
+            if f.name != "preset"
+        }
 
     def get_model(self) -> type[Params] | None:
         if not self.model_subclasses:
