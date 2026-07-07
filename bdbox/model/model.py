@@ -18,7 +18,7 @@ from .parameters import Params
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
 
-    from build123d import Shape
+    from build123d import Builder, Shape
 
 
 @dataclass(init=False)
@@ -64,7 +64,7 @@ class Model(Params):
     """
 
     if TYPE_CHECKING:
-        Geometry: TypeAlias = "Shape | Sequence[Shape] | Mapping[str, Shape]"
+        Geometry: TypeAlias = "Shape | Builder | Sequence[Shape | Builder] | Mapping[str, Shape | Builder]"  # noqa: E501
         """Geometry return type annotation for [``build``][bdbox.model.model.Model.build]."""  # noqa: E501
 
     def build(self) -> Model.Geometry | None:

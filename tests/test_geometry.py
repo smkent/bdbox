@@ -35,18 +35,23 @@ def test_show_multiple_args(mock_b123d: MockBuild123d) -> None:
 
 
 def test_geometry_resolve_returns_shown(mock_b123d: MockBuild123d) -> None:
-    obj1, obj2, obj3, obj4 = (
+    obj1, obj2, obj3, obj4, obj5, obj6 = (
         mock_b123d.Shape(),
         object(),
         mock_b123d.Shape(),
         object(),
+        mock_b123d.Builder(shape=mock_b123d.Shape()),
+        mock_b123d.Builder(),
     )
     show(obj1)  # ty: ignore [invalid-argument-type]
     show(obj2)  # ty: ignore [invalid-argument-type]
     show(obj3)  # ty: ignore [invalid-argument-type]
     show(obj4)  # ty: ignore [invalid-argument-type]
+    show(obj5)  # ty: ignore [invalid-argument-type]
+    show(obj6)  # ty: ignore [invalid-argument-type]
+    assert obj5.shape
     assert run_state.geometry.resolve() == mock_b123d.Compound(
-        children=[obj1, obj3], label="bdbox collected geometry"
+        children=[obj1, obj3, obj5.shape], label="bdbox collected geometry"
     )
 
 

@@ -7,14 +7,15 @@ from bdbox.runner.state import run_state
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
 
-    from build123d import Compound, Shape
+    from build123d import Builder, Compound, Shape
 
 
 def show(
     *geometry: Compound
     | Shape
-    | Sequence[Compound | Shape | None]
-    | Mapping[str, Compound | Shape | None]
+    | Builder
+    | Sequence[Compound | Shape | Builder | None]
+    | Mapping[str, Compound | Shape | Builder | None]
     | None,
 ) -> None:
     """Provide built model geometry for display or use.

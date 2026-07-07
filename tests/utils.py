@@ -116,6 +116,14 @@ class MockBuild123d(ModuleType):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__("build123d", *args, **kwargs)
 
+    @dataclass
+    class Builder:
+        shape: MockBuild123d.Shape | None = None
+
+        @property
+        def _obj_name(self) -> str:
+            return "shape"
+
     class Shape:
         pass
 
