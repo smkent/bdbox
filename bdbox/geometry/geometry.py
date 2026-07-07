@@ -12,7 +12,7 @@ from bdbox.console import log
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
 
-    from build123d import Compound, Shape
+    from build123d import Builder, Compound, Shape
 
 
 @dataclass
@@ -24,8 +24,9 @@ class Geometry:
         self,
         *shapes: Compound
         | Shape
-        | Sequence[Compound | Shape | None]
-        | Mapping[str, Compound | Shape | None]
+        | Builder
+        | Sequence[Compound | Shape | Builder | None]
+        | Mapping[str, Compound | Shape | Builder | None]
         | None,
     ) -> None:
         self.geometry.extend(
@@ -37,12 +38,15 @@ class Geometry:
     ) -> Compound | Shape | None:
         if "build123d" not in sys.modules:
             return None
-        from build123d import Compound, Shape  # noqa: PLC0415
+        from build123d import Builder, Compound, Shape  # noqa: PLC0415
 
         geometry = None
         with suppress(TypeError):
             if isinstance(data, Shape):
                 return data
+            if isinstance(data, Builder):
+                obj = getattr(data, data._obj_name, None)  # noqa: SLF001
+                return obj if isinstance(obj, Shape) else None
             if isinstance(data, (list, tuple)):
                 geometry = [c for s in data if (c := self.filter_geometry(s))]
             elif isinstance(data, dict):
