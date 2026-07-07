@@ -11,11 +11,10 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from bdbox.errors import RunError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
-from tests.utils import MockOcpVscode, Models
+from tests.utils import MockOcpVscode, Models, RaisesRunError
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -62,7 +61,7 @@ def test_embedded_mode_execs_harness(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "argv", [str(Models.MODEL_EXPORT), "view"])
     with (
         patch.object(subprocess, "run") as mock_run,
-        pytest.raises(RunError),
+        RaisesRunError(SystemExit),
     ):
         ModelRunner([Models.MODEL_EXPORT, "view"])()
     mock_run.assert_called_once_with(

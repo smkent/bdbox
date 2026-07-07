@@ -44,6 +44,8 @@ class Action:
                 yield timer
             except (Exception, SystemExit) as e:
                 log.exception("Run failed (%s)", timer.elapsed_str)
+                if isinstance(e, RunError):
+                    raise
                 raise RunError(e) from e
             else:
                 log.info("Run complete (%s)", timer.elapsed_str)
