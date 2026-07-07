@@ -3,7 +3,7 @@ from __future__ import annotations
 import atexit
 import os
 import sys
-from dataclasses import dataclass, fields
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
 from bdbox.console import log
@@ -112,11 +112,6 @@ class Model(Params):
             run_state.model_state.model.class_name = cls.__name__
         with run_state.action_state.on_model_render():
             run_state.model_state.apply_overrides(cli_result.params)
-            run_state.model_state.params.values = {
-                f.name: getattr(cli_result.params, f.name)
-                for f in fields(cli_result.params)
-                if f.name != "preset"
-            }
             show(cli_result.params.build())
             run_state.action_state.act_once()
 
