@@ -58,7 +58,7 @@ class BackendTestApp:
     def __post_init__(self) -> None:
         self.backend_server = UIServer(
             view_state=ViewState(),
-            port=0,
+            listen_port=40404,
             open_browser=False,
         )
         self.backend_server.ready_wait()
@@ -76,7 +76,7 @@ class BackendTestApp:
 
     @property
     def url(self) -> str:
-        return self.backend_server.url
+        return self.backend_server.base_url
 
     def send(self, message: ServerMessage) -> None:
         if not self.websocket:

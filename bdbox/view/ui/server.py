@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, ClassVar
 from uvicorn import Config, Server
 
 from bdbox.console import log
-from bdbox.dispatch import Event, Service, Thread
+from bdbox.dispatch import Event, ListenService, Thread
 from bdbox.errors import UsageError
 
 from .app import UIApp
@@ -36,10 +36,9 @@ class UvicornServer(Server):
 
 
 @dataclass
-class UIServer(Service):
+class UIServer(ListenService):
     app: UIApp = field(init=False)
     view_state: ViewState
-    port: int = 4040
     ocp_cad_viewer_port: int = 3939
     open_browser: bool = True
 
@@ -47,10 +46,6 @@ class UIServer(Service):
 
     uvicorn_server: UvicornServer = field(init=False, repr=False)
     thread: Thread = field(init=False, repr=False)
-
-    @property
-    def url(self) -> str:
-        return f"http://localhost:{self.port}"
 
     def __post_init__(self) -> None:
         self.app = UIApp(
@@ -81,13 +76,9 @@ class UIServer(Service):
                 "The view server failed to start."
                 " Is another `view` instance already running?"
             )
-        if self.port == 0:
-            self.port = (
-                self.uvicorn_server.servers[0].sockets[0].getsockname()[1]
-            )
-        log.info(f"Server running: {self.url}")
+        log.info(f"Server running: {self.base_url}")
         if self.open_browser:
-            webbrowser.open_new_tab(self.url)
+            webbrowser.open_new_tab(self.base_url)
 
     def stop(self) -> None:
         if self.uvicorn_server:

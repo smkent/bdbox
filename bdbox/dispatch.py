@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import socket
 import sys
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
@@ -28,6 +29,28 @@ class Service(ABC):
     @abstractmethod
     def stop(self) -> None:
         pass
+
+
+@dataclass
+class ListenService(Service):
+    listen_port: int = field(default=0, kw_only=True)
+
+    @property
+    def base_url(self) -> str:
+        return f"http://localhost:{self.port}"
+
+    @property
+    def port(self) -> int:
+        if self.listen_port == 0:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                # Allocate an unused ephemeral port
+                s.bind(("", 0))
+                self.listen_port = s.getsockname()[1]
+        return self.listen_port
+
+    @port.setter
+    def port(self, new_port: int) -> None:
+        self.listen_port = new_port
 
 
 @dataclass

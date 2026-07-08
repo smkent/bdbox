@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import socket
 import subprocess
 import sys
 import webbrowser
@@ -77,7 +78,7 @@ def popen_kwargs() -> Mapping[str, Any]:
 @pytest.mark.parametrize(
     ("port", "expected_port"),
     [
-        pytest.param(0, 3939, id="default"),
+        pytest.param(0, 2187, id="default"),
         pytest.param(1138, 1138, id="1138"),
     ],
 )
@@ -96,7 +97,10 @@ def test_model_view_starts_ocp_cad_viewer(
         self.port = port
         original(self)
 
-    with patch.object(OCPCADViewer, "__post_init__", new=wrapper):
+    with (
+        patch.object(OCPCADViewer, "__post_init__", new=wrapper),
+        patch.object(socket.socket, "getsockname", return_value=(None, 2187)),
+    ):
         exec_main(str(model), "view")
     mock_popen.assert_called_once_with(
         [
