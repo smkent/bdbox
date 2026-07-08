@@ -57,7 +57,7 @@ class ViewAction(ModelAction):
         tyro.conf.arg(
             aliases=("-p",),
             metavar="port",
-            help="Port for UI server to listen on",
+            help="Port for UI server to listen on (0 for automatic selection)",
         ),
     ] = 4040
 

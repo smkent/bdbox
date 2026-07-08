@@ -35,7 +35,7 @@ class ViewApp:
         self.view_state = ViewState(model_class=model_class)
         self.ocp_cad_viewer = OCPCADViewer(self.view_state.show)
         self.ui_server = UIServer(
-            port=server_port,
+            listen_port=server_port,
             view_state=self.view_state,
             ocp_cad_viewer_port=self.ocp_cad_viewer.port,
             open_browser=open_browser,
