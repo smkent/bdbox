@@ -22,6 +22,7 @@ from .fields import (
     FloatField,
     IntField,
     StrField,
+    Unit,
 )
 
 if TYPE_CHECKING:
@@ -37,6 +38,7 @@ def Float(  # noqa: N802
     min: float | None = None,  # noqa: A002
     max: float | None = None,  # noqa: A002
     step: float | None = None,
+    unit: Unit | str | None = None,
     description: str | None = None,
 ) -> FloatField:
     """Declare a floating-point parameter.
@@ -46,10 +48,47 @@ def Float(  # noqa: N802
         min: Minimum allowed value (inclusive).
         max: Maximum allowed value (inclusive).
         step: Suggested increment for UI controls.
+        unit: Numeric unit (Only current option is "in" for inches)
         description: Human-readable description.
     """
     return FloatField(
-        default, min=min, max=max, step=step, description=description
+        default,
+        min=min,
+        max=max,
+        step=step,
+        unit=Unit.get(unit),
+        description=description,
+    )
+
+
+@Field.as_dataclass_field
+def Inches(  # noqa: N802
+    default: float,
+    *,
+    min: float | None = None,  # noqa: A002
+    max: float | None = None,  # noqa: A002
+    step: float | None = None,
+    description: str | None = None,
+) -> FloatField:
+    """Declare a floating-point parameter in inches.
+
+    Input parameter values are automatically converted to millimeters at model
+    run time.
+
+    Args:
+        default: Default value.
+        min: Minimum allowed value (inclusive).
+        max: Maximum allowed value (inclusive).
+        step: Suggested increment for UI controls.
+        description: Human-readable description.
+    """
+    return FloatField(
+        default,
+        min=min,
+        max=max,
+        step=step,
+        unit=Unit.Inches,
+        description=description,
     )
 
 
@@ -60,6 +99,7 @@ def Int(  # noqa: N802
     min: int | None = None,  # noqa: A002
     max: int | None = None,  # noqa: A002
     step: int | None = None,
+    unit: Unit | str | None = None,
     description: str | None = None,
 ) -> IntField:
     """Declare an integer parameter.
@@ -69,10 +109,16 @@ def Int(  # noqa: N802
         min: Minimum allowed value (inclusive).
         max: Maximum allowed value (inclusive).
         step: Suggested increment for UI controls.
+        unit: Numeric unit ("in" or "mm")
         description: Human-readable description.
     """
     return IntField(
-        default, min=min, max=max, step=step, description=description
+        default,
+        min=min,
+        max=max,
+        step=step,
+        unit=Unit.get(unit),
+        description=description,
     )
 
 

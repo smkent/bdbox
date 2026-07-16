@@ -11,6 +11,7 @@ from bdbox.model.serializer import serializer
 from bdbox.protocol import ModelParamsState
 from bdbox.timer import Timer
 
+from .fields import Field
 from .info import ModelInfo
 
 if TYPE_CHECKING:
@@ -44,11 +45,20 @@ class ModelState:
                 hint = type(current) if current is not None else None
             setattr(target, name, serializer.structure(raw_value, hint))
 
+        dc_fields = fields(target)
         self.params.values = {
             f.name: getattr(target, f.name)
-            for f in fields(target)
+            for f in dc_fields
             if f.name != "preset"
         }
+
+        for f in dc_fields:
+            if bdfield := Field.from_dataclass_field(f):
+                setattr(
+                    target,
+                    f.name,
+                    bdfield.convert_value(getattr(target, f.name)),
+                )
 
     def get_model(self) -> type[Params] | None:
         if not self.model_subclasses:

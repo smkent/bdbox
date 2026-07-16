@@ -14,7 +14,7 @@ from bdbox.errors import (
     RunError,
 )
 from bdbox.geometry.show import show
-from bdbox.model.field_factories import Bool, Choice, Float, Int, Str
+from bdbox.model.field_factories import Bool, Choice, Float, Inches, Int, Str
 from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
@@ -30,6 +30,7 @@ __all__ = [
     "Choice",
     "Error",
     "Float",
+    "Inches",
     "Int",
     "InternalError",
     "Model",
