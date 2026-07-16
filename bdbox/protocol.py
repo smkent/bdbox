@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from dataclasses import dataclass, field, fields, is_dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from functools import partial
@@ -10,22 +10,14 @@ from typing import (
     Any,
     ClassVar,
     TypeVar,
-    get_args,
-    get_origin,
-    get_type_hints,
     overload,
 )
 from uuid import UUID
 
-import cattrs
 import cattrs.strategies
-from cattrs.gen import (
-    AttributeOverride,
-    make_dict_structure_fn,
-    make_dict_unstructure_fn,
-    override,
-)
+from cattrs.gen import override
 
+from bdbox.converter import Converter
 from bdbox.errors import InternalError
 
 if sys.version_info >= (3, 11):
@@ -194,11 +186,7 @@ class ModelRunStatusMessage(ServerModelMessage, type="model.status"):
         return cls(status=cls.Status.ERROR, elapsed_ms=elapsed_ms, **kwargs)
 
 
-class ProtocolConverter(cattrs.Converter):
-    def __init__(self) -> None:
-        super().__init__()
-        self.register_hooks()
-
+class ProtocolConverter(Converter):
     def to_dict(self, obj: Message) -> dict[str, object]:
         return self.unstructure(obj=obj, unstructure_as=Message)
 
@@ -214,25 +202,10 @@ class ProtocolConverter(cattrs.Converter):
         return self.structure(obj=obj, cl=cl)
 
     def register_hooks(self) -> None:
-        self.register_structure_hook_factory(
-            is_dataclass,
-            lambda target: make_dict_structure_fn(
-                target,
-                self,
-                **self.get_type_hints(target),  # ty: ignore[invalid-argument-type]
-            ),
-        )
+        super().register_hooks()
         self.register_structure_hook(UUID, lambda val, _: UUID(val))
         self.register_structure_hook(
             datetime, lambda val, _: datetime.fromisoformat(val)
-        )
-        self.register_unstructure_hook_factory(
-            is_dataclass,
-            lambda target: make_dict_unstructure_fn(
-                target,
-                self,
-                **self.get_type_hints(target),  # ty: ignore[invalid-argument-type]
-            ),
         )
         self.register_unstructure_hook(UUID, str)
         self.register_unstructure_hook(datetime, lambda val: val.isoformat())
@@ -245,22 +218,6 @@ class ProtocolConverter(cattrs.Converter):
                 tag_generator=lambda target: target.type,
             ),
         )
-
-    def get_type_hints(self, target: type) -> dict[str, AttributeOverride]:
-        try:
-            hints = get_type_hints(target, include_extras=True)
-        except NameError:
-            return {}
-        overrides = {}
-        for f in fields(target):
-            hint = hints.get(f.name)
-            if get_origin(hint) is not Annotated:
-                continue
-            for extra in get_args(hint)[1:]:
-                if isinstance(extra, AttributeOverride):
-                    overrides[f.name] = extra
-                    break
-        return overrides
 
 
 protocol_serializer = ProtocolConverter()
