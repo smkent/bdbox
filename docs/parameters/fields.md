@@ -92,8 +92,9 @@ Fields can be created with constraints using these factory functions.
 
 | Factory | Value type | Required | Optional |
 |---|---|---|---|
-| [``Int``][bdbox.model.field_factories.Int] | `int` | `default` | `min`, `max`, `step`, `description` |
-| [``Float``][bdbox.model.field_factories.Float] | `float` | `default` | `min`, `max`, `step`, `description` |
+| [``Int``][bdbox.model.field_factories.Int] | `int` | `default` | `min`, `max`, `step`, `unit`, `description` |
+| [``Float``][bdbox.model.field_factories.Float] | `float` | `default` | `min`, `max`, `step`, `unit`, `description` |
+| [``Inches``][bdbox.model.field_factories.Inches] | `float` | `default` | `min`, `max`, `step`, `description` |
 | [``Bool``][bdbox.model.field_factories.Bool] | `bool` | `default` | `description` |
 | [``Str``][bdbox.model.field_factories.Str] | `str` | `default` | `min_length`, `max_length`, `description` |
 | [``Choice``][bdbox.model.field_factories.Choice] | `T` | `default`, `choices` | `description` |
@@ -179,6 +180,44 @@ Numeric fields which accept `min`, `max`, and `step` constraints:
 
 `step` is a hint for any external controls. If provided on field creation, it
 must be a positive number. It is not used for runtime validation.
+
+`unit` accepts `"in"` to declare the parameter as a value in inches, which will
+be converted to millimeters automatically when the model is run. See also the
+[Inches](#inches) factory function.
+
+#### Inches
+
+[``Inches``][bdbox.model.field_factories.Inches] is an alias for
+`Float(..., unit="in")`. The parameter value will be converted from inches to
+millimeters when the model is run.
+
+=== "Params class"
+
+    ```python
+    from bdbox import Inches, Params
+
+    class P(Params):
+        width = Inches(2.0)
+        depth = Inches(1.5, min=0.5, max=6.0)
+    ```
+
+    # P.width is 50.8 (millimeters)
+    # P.depth is 38.1 (millimeters)
+
+=== "Model class"
+
+    ```python
+    from bdbox import Inches, Model
+
+    class MyModel(Model):
+        width = Inches(2.0)
+        depth = Inches(1.5, min=0.5, max=6.0)
+
+        def build(self):
+            # self.width is 50.8 (millimeters)
+            # self.depth is 38.1 (millimeters)
+            pass
+    ```
 
 #### Bool
 

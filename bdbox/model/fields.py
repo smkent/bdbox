@@ -6,8 +6,10 @@ import sys
 from collections.abc import Callable, Sequence  # noqa: TC003
 from dataclasses import Field as DCField
 from dataclasses import dataclass, field
+from enum import Enum
 from functools import wraps
 from typing import (
+    TYPE_CHECKING,
     Annotated,
     Any,
     ClassVar,
@@ -24,6 +26,9 @@ from cattrs.gen import override
 from bdbox.converter import Converter
 from bdbox.errors import ParamsError, ParamValidationError
 
+if TYPE_CHECKING:
+    from collections.abc import Set as AbstractSet
+
 if sys.version_info >= (3, 11):
     from typing import Self
 else:
@@ -34,6 +39,28 @@ P = ParamSpec("P")
 T = TypeVar("T")
 
 converter = Converter()
+
+
+@dataclass
+class UnitInfo:
+    scale: float
+    names: AbstractSet[str] = field(default_factory=set)
+
+
+class Unit(Enum):
+    Inches = UnitInfo(scale=25.4, names={"in", "inch", "inches"})
+    Millimeters = UnitInfo(scale=1, names={"mm", "millimeter", "millimeters"})
+
+    @classmethod
+    def get(cls, obj: Self | str | None) -> Self | Unit:
+        if obj:
+            if not isinstance(obj, str):
+                return obj
+            for val in cls:
+                if obj.lower() in val.value.names:
+                    return val
+            raise ParamsError(f'Unknown unit "{obj}"')
+        return cls.Millimeters
 
 
 class Field:
@@ -78,6 +105,9 @@ class Field:
 
     def validate(self, value: Any) -> None:
         """Validate a value against this field's constraints."""
+
+    def convert_value(self, value: Any) -> Any:
+        return value
 
     def to_schema(
         self,
@@ -149,6 +179,7 @@ class NumberField(Field):
     step: Annotated[
         int | None, override(rename="multipleOf", omit_if_default=True)
     ] = None
+    unit: Annotated[Unit, override(omit=True)] = Unit.Millimeters
     description: Annotated[str | None, override(omit_if_default=True)] = None
 
     def __post_init__(self) -> None:
@@ -177,6 +208,9 @@ class NumberField(Field):
     def validate(self, value: Any) -> None:
         self._validate_number(float, value, self.min, self.max, None)
 
+    def convert_value(self, value: float) -> float:
+        return value * self.unit.value.scale
+
     def to_schema(
         self,
         hint_to_schema: Callable[..., dict[str, Any]] | None = None,
@@ -202,6 +236,7 @@ class FloatField(NumberField):
     step: Annotated[
         float | None, override(rename="multipleOf", omit_if_default=True)
     ] = None
+    unit: Annotated[Unit, override(omit=True)] = Unit.Millimeters
     description: Annotated[str | None, override(omit_if_default=True)] = None
 
 
@@ -220,6 +255,7 @@ class IntField(NumberField):
     step: Annotated[
         int | None, override(rename="multipleOf", omit_if_default=True)
     ] = None
+    unit: Annotated[Unit, override(omit=True)] = Unit.Millimeters
     description: Annotated[str | None, override(omit_if_default=True)] = None
 
 
