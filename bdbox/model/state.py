@@ -7,8 +7,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from bdbox.errors import InternalError, MultipleModelsError, ParamsError
+from bdbox.model.serializer import serializer
 from bdbox.protocol import ModelParamsState
-from bdbox.serializer import serializer
 from bdbox.timer import Timer
 
 from .info import ModelInfo

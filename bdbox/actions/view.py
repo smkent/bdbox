@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Annotated, Literal
 import tyro
 
 from bdbox.errors import MultipleModelsError, ParamsError, UsageError
+from bdbox.model.serializer import serializer
 from bdbox.protocol import (
     ModelDetailsMessage,
     ModelRunStatusMessage,
@@ -17,7 +18,6 @@ from bdbox.protocol import (
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
 from bdbox.runner.watcher import ModelWatcher
-from bdbox.serializer import serializer
 from bdbox.view.app import ViewApp
 
 from .action import ModelAction

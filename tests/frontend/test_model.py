@@ -7,6 +7,7 @@ from playwright.sync_api import expect
 
 from bdbox.model.model import Model
 from bdbox.model.preset import Preset
+from bdbox.model.serializer import serializer
 from bdbox.protocol import (
     ModelDetailsMessage,
     ModelDisplayInfo,
@@ -14,7 +15,6 @@ from bdbox.protocol import (
     ModelRunStatusMessage,
     ModelSetParamMessage,
 )
-from bdbox.serializer import serializer
 
 if TYPE_CHECKING:
     from .conftest import BackendTestApp
