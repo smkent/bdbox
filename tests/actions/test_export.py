@@ -134,7 +134,9 @@ def model_with_params(request: pytest.FixtureRequest) -> Path:
 @pytest.fixture(
     params=[
         pytest.param(Models.MODEL_EXPORT, id="Model"),
+        pytest.param(Models.MODEL_SUBMODULE_EXPORT, id="model_submodule"),
         pytest.param(Models.PARAMS_EXPORT, id="Params"),
+        pytest.param(Models.PARAMS_SUBMODULE_EXPORT, id="params_submodule"),
         pytest.param(Models.MONO_MODEL, id="mono_model"),
         pytest.param(Models.MONO_PARAMS, id="mono_params"),
         pytest.param(Models.MONO_PLAIN, id="mono_plain"),

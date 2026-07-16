@@ -68,7 +68,13 @@ def module(request: pytest.FixtureRequest) -> str:
         pytest.param(Models.MODEL_CLASS, id="model_class"),
         pytest.param(Models.PARAMS_CLASS, id="params_class"),
         pytest.param(Models.MODEL_EXPORT, id="model_export"),
+        pytest.param(
+            Models.MODEL_SUBMODULE_EXPORT, id="model_submodule_export"
+        ),
         pytest.param(Models.PARAMS_EXPORT, id="params_export"),
+        pytest.param(
+            Models.PARAMS_SUBMODULE_EXPORT, id="params_submodule_export"
+        ),
         pytest.param(Models.PLAIN_EXPORT, id="plain_export"),
     ]
 )

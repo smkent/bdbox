@@ -100,10 +100,8 @@ class ModelHarness(ModelLocator):
     def get_model(self) -> type[Params] | None:
         if model_arg := self.model.arg:
             with (
-                patch.dict(
-                    sys.modules,
-                    {"build123d": Build123dStub(), "ocp_vscode": MagicMock()},
-                ),
+                PatchModule("build123d", Build123dStub(), recursive=True),
+                PatchModule("ocp_vscode"),
                 patch.object(
                     CLI, "instance_from_cli", MagicMock(side_effect=SystemExit)
                 ),
