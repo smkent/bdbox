@@ -17,9 +17,9 @@ from typing import (
 
 import tyro
 from annotated_types import Ge, Le, MaxLen, MinLen
-from cattrs import Converter
 from cattrs.gen import override
 
+from bdbox.converter import Converter
 from bdbox.errors import ParamsError, ParamValidationError
 
 if sys.version_info >= (3, 11):
