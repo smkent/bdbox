@@ -1,7 +1,9 @@
 """Parameter system field utilities."""
 
+from __future__ import annotations
+
 import sys
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Sequence  # noqa: TC003
 from dataclasses import Field as DCField
 from dataclasses import dataclass, field
 from functools import wraps
@@ -44,7 +46,7 @@ class Field:
     description: Annotated[str | None, override(omit_if_default=True)] = None
 
     @staticmethod
-    def as_dataclass_field(func: Callable[P, "Field"]) -> Callable[P, T]:
+    def as_dataclass_field(func: Callable[P, Field]) -> Callable[P, T]:
         """Decorator for creating `Field` instances as `dataclasses.Field`."""
 
         @wraps(func)
