@@ -14,10 +14,10 @@ import pytest
 from bdbox.model.field_factories import Float, Int
 from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
+from bdbox.model.serializer import serializer
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
-from bdbox.serializer import serializer
 from tests.utils import Models
 
 if TYPE_CHECKING:

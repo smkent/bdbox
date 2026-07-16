@@ -18,7 +18,7 @@ from bdbox.model.fields import (
 )
 from bdbox.model.model import Model
 from bdbox.model.preset import Preset
-from bdbox.serializer import serializer
+from bdbox.model.serializer import serializer
 
 if TYPE_CHECKING:
     from collections.abc import Callable

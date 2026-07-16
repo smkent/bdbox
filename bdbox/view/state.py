@@ -10,13 +10,13 @@ from typing import TYPE_CHECKING
 from bdbox.console import log
 from bdbox.dispatch import Event
 from bdbox.errors import InternalError
+from bdbox.model.serializer import serializer
 from bdbox.protocol import (
     ModelParamsState,
     ModelResetParamsMessage,
     ModelSetParamMessage,
     ModelSetPresetMessage,
 )
-from bdbox.serializer import serializer
 
 if TYPE_CHECKING:
     from bdbox.geometry.geometry import Geometry
