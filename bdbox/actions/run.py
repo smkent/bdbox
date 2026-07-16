@@ -1,5 +1,7 @@
 """Run action."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 from .action import ModelAction

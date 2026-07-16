@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import atexit
 import sys
-from collections.abc import Sequence
+from collections.abc import Sequence  # noqa: TC003
 from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import Any, ClassVar
@@ -13,7 +15,7 @@ from .annotations import Annotater
 from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .info import ModelInfo
-from .preset import Preset
+from .preset import Preset  # noqa: TC001
 
 if sys.version_info >= (3, 11):
     from typing import Self

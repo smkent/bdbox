@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import Field as DCField
 from dataclasses import dataclass, field, fields, is_dataclass
 from functools import cached_property
