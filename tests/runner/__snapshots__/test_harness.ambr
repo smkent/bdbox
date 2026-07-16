@@ -289,6 +289,33 @@
 # name: test_harness_usage_file[model_export].1
   ''
 # ---
+# name: test_harness_usage_file[model_submodule_export]
+  '''
+  usage: bdbox [-h] [-v] [--preset {None,small}] [--size 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
+  
+   options                                                   
+   --------------------------------------------------------- 
+    -h, --help     show this help message and exit           
+    -v, --verbose  Increase logging verbosity. (repeatable)  
+    --preset {None,small}                                    
+                   (default: None)                           
+    --size 1.0 <= FLOAT <= 100.0                             
+                   (default: 10.0)                           
+                                                             
+   subcommands                                               
+   --------------------------------------------------------- 
+    (default: run)                                           
+      • run        Run the model.                            
+      • export     Export geometry to a STEP or STL file.    
+      • view       View model geometry.                      
+      • version    Show bdbox version and exit               
+                                                             
+  
+  '''
+# ---
+# name: test_harness_usage_file[model_submodule_export].1
+  ''
+# ---
 # name: test_harness_usage_file[params_class]
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
@@ -390,6 +417,33 @@
   '''
 # ---
 # name: test_harness_usage_file[params_export].1
+  ''
+# ---
+# name: test_harness_usage_file[params_submodule_export]
+  '''
+  usage: bdbox [-h] [-v] [--preset {None,small}] [--size 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
+  
+   options                                                   
+   --------------------------------------------------------- 
+    -h, --help     show this help message and exit           
+    -v, --verbose  Increase logging verbosity. (repeatable)  
+    --preset {None,small}                                    
+                   (default: None)                           
+    --size 1.0 <= FLOAT <= 100.0                             
+                   (default: 10.0)                           
+                                                             
+   subcommands                                               
+   --------------------------------------------------------- 
+    (default: run)                                           
+      • run        Run the model.                            
+      • export     Export geometry to a STEP or STL file.    
+      • view       View model geometry.                      
+      • version    Show bdbox version and exit               
+                                                             
+  
+  '''
+# ---
+# name: test_harness_usage_file[params_submodule_export].1
   ''
 # ---
 # name: test_harness_usage_file[plain_export]

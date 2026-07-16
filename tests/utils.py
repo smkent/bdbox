@@ -56,7 +56,9 @@ class Models:
     PARAMS_CLASS_INSTANCE = DIR / "params_class_instance.py"
 
     MODEL_EXPORT = DIR / "model_export.py"
+    MODEL_SUBMODULE_EXPORT = DIR / "model_submodule_export.py"
     PARAMS_EXPORT = DIR / "params_export.py"
+    PARAMS_SUBMODULE_EXPORT = DIR / "params_submodule_export.py"
     PLAIN_EXPORT = DIR / "plain_export.py"
     MOD_MODEL = "tests.models.mod_model"
     MOD_PARAMS = "tests.models.mod_params"
