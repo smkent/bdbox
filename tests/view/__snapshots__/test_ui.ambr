@@ -5,8 +5,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_malformed_json_ignored[Model-param_overrides0].1
@@ -59,8 +60,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_malformed_json_ignored[Params-param_overrides0].1
@@ -113,8 +115,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_missing_message_fields_ignored[Model-param_overrides0].1
@@ -167,8 +170,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_missing_message_fields_ignored[Params-param_overrides0].1
@@ -221,8 +225,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_reset_params[Model-param_overrides].1
@@ -276,8 +281,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_reset_params[Params-param_overrides].1
@@ -331,8 +337,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_select_preset_replaces_overrides[Model-param_overrides]
@@ -341,8 +348,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_select_preset_replaces_overrides[Model-param_overrides].1
@@ -396,8 +404,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_select_preset_replaces_overrides[Params-param_overrides].1
@@ -451,8 +460,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_select_preset_unknown_ignored[Model-param_overrides0].1
@@ -505,8 +515,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_select_preset_unknown_ignored[Params-param_overrides0].1
@@ -559,8 +570,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_unknown_message_type_ignored[Model-param_overrides0].1
@@ -613,8 +625,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_unknown_message_type_ignored[Params-param_overrides0].1
@@ -667,8 +680,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_update_param_accumulates[Model-param_overrides0].1
@@ -721,8 +735,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_update_param_accumulates[Params-param_overrides0].1
@@ -775,8 +790,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_error].1
@@ -836,8 +852,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_ok].1
@@ -897,8 +914,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-run_start].1
@@ -958,8 +976,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Model-param_overrides0-schema].1
@@ -1031,8 +1050,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_error].1
@@ -1092,8 +1112,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_ok].1
@@ -1153,8 +1174,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-run_start].1
@@ -1214,8 +1236,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_client[Params-param_overrides0-schema].1
@@ -1287,8 +1310,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Model-param_overrides0].1
@@ -1392,8 +1416,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_broadcast_reaches_multiple_clients[Params-param_overrides0].1
@@ -1497,8 +1522,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_reset_params[Model-param_overrides]
@@ -1507,8 +1533,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_reset_params[Model-param_overrides].1
@@ -1562,8 +1589,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_reset_params[Params-param_overrides].1
@@ -1617,8 +1645,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_select_preset[Model-param_overrides0].1
@@ -1671,8 +1700,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_select_preset[Params-param_overrides0].1
@@ -1725,8 +1755,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_update_param[Model-param_overrides0].1
@@ -1779,8 +1810,9 @@
     'type': 'hello',
     'version': dict({
       'bdbox': '11.38.77',
-      'protocol': 1,
+      'protocol': 2,
     }),
+    'viewer_port': 3939,
   })
 # ---
 # name: test_ws_update_param[Params-param_overrides0].1

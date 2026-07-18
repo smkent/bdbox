@@ -337,7 +337,7 @@ def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
         wspt.app.enqueue(message)
         wspt.recv()
         assert connected_message == ConnectedMessage(
-            session_id=TEST_SESSION_ID
+            session_id=TEST_SESSION_ID, viewer_port=3939
         )
         received_data = ws2.receive_json()
         assert received_data == message.to_dict()

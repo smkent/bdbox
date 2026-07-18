@@ -53,6 +53,7 @@ export interface ConnectedMessage {
   type: "hello";
   session_id: string;
   version: VersionInfo;
+  viewer_port?: number;
 }
 
 export interface ModelConsoleMessage {
