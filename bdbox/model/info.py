@@ -40,6 +40,6 @@ class ModelInfo(ModelDisplayInfo):
     def arg(self) -> Path | str | None:
         if self.module_name and self.class_name:
             return f"{self.module_name}:{self.class_name}"
-        if result := (self.module_name or self.path):
+        if result := (self.module_name or self.filename or self.path):
             return result
         return None
