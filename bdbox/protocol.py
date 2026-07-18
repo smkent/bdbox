@@ -34,7 +34,7 @@ def _bdbox_version() -> str:
 
 @dataclass
 class VersionInfo:
-    PROTOCOL_REVISION: ClassVar[int] = 1
+    PROTOCOL_REVISION: ClassVar[int] = 2
 
     bdbox: str = field(default_factory=_bdbox_version)
     protocol: int = field(default=PROTOCOL_REVISION)
@@ -111,6 +111,9 @@ class ServerModelMessage(ServerMessage, ModelMessage):
 class ConnectedMessage(ServerMessage, type="hello"):
     session_id: UUID | None = field(default=None, kw_only=True)
     version: VersionInfo = field(default_factory=VersionInfo)
+    viewer_port: Annotated[int | None, override(omit_if_default=True)] = field(
+        default=None, kw_only=True
+    )
 
 
 @dataclass

@@ -22,12 +22,24 @@ export class OCPCADViewer {
       iframe.style.pointerEvents = "";
     });
     document.body.appendChild(iframe);
+    window.addEventListener("bdbox.server:hello", ({ detail }) => {
+      if (detail.viewer_port) {
+        this.setPort(detail.viewer_port);
+      }
+    });
     return iframe;
   }
 
   register(container: HTMLElement): void {
     this.containerEl = container;
     this.reposition();
+  }
+
+  setPort(port: number): void {
+    if (port !== this.port) {
+      this.iframe.src = `http://localhost:${port}/viewer`;
+    }
+    this.port = port;
   }
 
   reposition(): void {

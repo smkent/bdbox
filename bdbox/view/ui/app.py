@@ -95,7 +95,10 @@ class UIApp(FastAPI):
         send_task = asyncio.create_task(connection.drain_queue())
         try:
             await connection.send_message(
-                ConnectedMessage(session_id=self.session_id)
+                ConnectedMessage(
+                    session_id=self.session_id,
+                    viewer_port=self.ocp_cad_viewer_port,
+                )
             )
             if self.view_state.model_class:
                 await connection.send_message(
