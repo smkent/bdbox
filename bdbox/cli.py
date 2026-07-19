@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from dataclasses import MISSING, dataclass, field, make_dataclass
+from dataclasses import dataclass, field, make_dataclass
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
@@ -10,7 +10,6 @@ from typing import (
     ClassVar,
     Generic,
     Literal,
-    Protocol,
     TypeVar,
     cast,
     overload,
@@ -18,7 +17,7 @@ from typing import (
 
 import tyro
 
-from bdbox.actions.field import ActionField
+from bdbox.actions.field import ActionField  # noqa: TC001
 from bdbox.actions.run import RunAction
 from bdbox.console import console
 
@@ -38,11 +37,6 @@ TYRO_CLI_CONFIG = (
     tyro.conf.OmitSubcommandPrefixes,
     tyro.conf.SuppressFixed,
 )
-
-
-class CLIActions(Protocol[T]):
-    params: T
-    action: ActionField
 
 
 @dataclass
@@ -95,22 +89,7 @@ class CLI:
     def cli_config(cls) -> type[CLIConfig[T]]:
         return cast(
             "type[CLIConfig]",
-            make_dataclass(
-                cls.__name__,
-                [
-                    (
-                        "params",
-                        Annotated[cls, tyro.conf.arg(name="")],  # ty: ignore[invalid-type-form]
-                        field(default=MISSING),
-                    ),
-                    (
-                        "action",
-                        ActionField,
-                        field(default_factory=RunAction, kw_only=True),
-                    ),
-                ],
-                bases=(CLI, CLIOptions),
-            ),
+            make_dataclass(cls.__name__, [], bases=(CLIConfig[cls],)),  # ty: ignore[invalid-type-form]
         )
 
     @overload
@@ -147,5 +126,6 @@ class CLI:
 
 
 @dataclass
-class CLIConfig(CLIActions, CLI, CLIOptions, Generic[T]):
-    pass
+class CLIConfig(CLI, CLIOptions, Generic[T]):
+    params: Annotated[T, tyro.conf.arg(name="")]
+    action: ActionField = field(default_factory=RunAction, kw_only=True)
