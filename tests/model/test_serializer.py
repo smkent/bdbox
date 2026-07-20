@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -199,13 +198,8 @@ def test_unstructure_complex(
 
 
 def test_model_schema_cached_at_runtime(
-    runner: type[Runner],
-    model: Path,
-    json_snapshot: JsonSnapshot,
-    monkeypatch: pytest.MonkeyPatch,
+    runner: type[Runner], model: Path, json_snapshot: JsonSnapshot
 ) -> None:
-    if runner is ModelHarness:
-        monkeypatch.setattr(sys, "argv", ["bdbox", str(model)])
     assert run_state.model_state.schema == {}
     runner(model)()
     json_snapshot(run_state.model_state.schema)
