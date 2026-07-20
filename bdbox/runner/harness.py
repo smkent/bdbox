@@ -79,7 +79,7 @@ class ModelHarness(ModelLocator):
         argv = self._setup_argv(model_argv or sys.argv[1:])
         CLIOptions.configure_from_cli(args=argv)
         super().__post_init__(argv)
-        if len(sys.argv) == 1:
+        if not argv:
             self.model.argv.append("--help")
 
     def __call__(self) -> None:
