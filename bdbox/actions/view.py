@@ -5,7 +5,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path  # noqa: TC003
-from typing import TYPE_CHECKING, Annotated, Literal
+from typing import TYPE_CHECKING, Annotated, Any, Literal
 
 import tyro
 
@@ -85,6 +85,15 @@ class ViewAction(ModelAction):
             change_event=self.view_app.view_state.rerender_event,
         )
 
+    def _sync_overrides(
+        self, values: dict[str, Any], overrides: dict[str, Any]
+    ) -> None:
+        for key in set(overrides) - set(values):
+            del overrides[key]
+        for key, override in overrides.items():
+            if isinstance(override, dict):
+                self._sync_overrides(values[key], override)
+
     def _update_schema(self) -> None:
         if not self.view_app:
             return
@@ -97,6 +106,9 @@ class ViewAction(ModelAction):
         old_schema = serializer.json_schema(view_state.model_class)
         view_state.params.values = serializer.unstructure(
             run_state.model_state.params.values
+        )
+        self._sync_overrides(
+            view_state.params.values, view_state.params.overrides
         )
         view_state.model_class = new_class
         self.view_app.enqueue(
