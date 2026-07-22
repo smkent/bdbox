@@ -13,7 +13,7 @@ import tyro
 
 from bdbox.actions.action import ModelAction
 from bdbox.actions.field import ActionField
-from bdbox.cli import CLI, CLIOptions
+from bdbox.cli import CLIAction, CLIOptions, cli_parser
 from bdbox.dispatch import dispatch
 from bdbox.errors import InternalError, RunError
 from bdbox.runner.state import run_state
@@ -46,7 +46,9 @@ class HarnessCLIFactory:
         if not (type(base_cls) is type and issubclass(base_cls, ModelAction)):
             return action_cls
         new_cls = make_dataclass(
-            base_cls.__name__, [], bases=(base_cls, cls.ModelArgument)
+            base_cls.__name__,
+            [],
+            bases=(base_cls, cls.ModelArgument),
         )
         return Annotated[(new_cls, *original_annotations)]  # ty: ignore[invalid-type-form]
 
@@ -60,17 +62,20 @@ class HarnessCLIFactory:
         )
 
 
-HarnessAction = HarnessCLIFactory.make()
-
-
 @dataclass
 class ModelHarness(ModelLocator):
     env_search: ClassVar[bool] = True
     clean_modules: ClassVar[bool] = True
 
-    @dataclass
-    class HarnessCLI(CLI, CLIOptions):
-        action: HarnessAction
+    @cached_property
+    def harness_cli(self) -> type[CLIAction[None]]:
+        @dataclass
+        class HarnessCLI(CLIAction[None]):
+            HarnessAction = HarnessCLIFactory.make()
+
+            action: HarnessAction
+
+        return HarnessCLI
 
     def __post_init__(
         self, model_argv: Sequence[Path | str] | Path | str
@@ -85,14 +90,12 @@ class ModelHarness(ModelLocator):
     def __call__(self) -> None:
         self.model.params_class = self.model_params_cls
         cli_cls = (
-            ((self.model.params_class or CLI).cli_config())
-            if self.model.arg
-            else self.HarnessCLI
+            self.model.params_class if self.model.arg else self.harness_cli
         )
         main_module = MainModule()
         main_module.__dict__.update(run_state.model_state.module_dict)
         with PatchModule("__main__", main_module, auto=True):
-            cli_result = cli_cls.instance_from_cli(args=self.model.argv)
+            cli_result = cli_parser.parse(cli_cls, args=self.model.argv)
         cli_result.action.on_harness(self.model)
         dispatch.exit.set()
         dispatch.exit_join()
@@ -103,7 +106,7 @@ class ModelHarness(ModelLocator):
                 PatchModule("build123d", Build123dStub(), recursive=True),
                 PatchModule("ocp_vscode"),
                 patch.object(
-                    CLI, "instance_from_cli", MagicMock(side_effect=SystemExit)
+                    cli_parser, "parse", MagicMock(side_effect=SystemExit)
                 ),
                 self.module_cleanup(),
                 suppress(RunError, InternalError),

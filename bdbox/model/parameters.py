@@ -7,8 +7,8 @@ from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import Any, ClassVar
 
-from bdbox.cli import CLI
-from bdbox.errors import ParamsError
+from bdbox.cli import cli_parser
+from bdbox.errors import InternalError, ParamsError
 from bdbox.runner.state import run_state
 
 from .annotations import Annotater
@@ -53,7 +53,7 @@ class ParamsType(type):
 
 @dataclass_transform(field_specifiers=(Float, Int, Bool, Str, Choice))
 @dataclass
-class Params(CLI, metaclass=ParamsType):
+class Params(metaclass=ParamsType):
     """Base class for script-style single models with parameters.
 
     Declare parameters as class attributes in the same form as
@@ -123,9 +123,7 @@ class Params(CLI, metaclass=ParamsType):
                 )
             run_state.model_state.model_subclasses.append(cls)
             try:
-                cli_result = cls.cli_config().instance_from_cli(
-                    prog=Path(sys.argv[0]).name
-                )
+                cli_result = cli_parser.parse(cls, prog=Path(sys.argv[0]).name)
                 run_state.model_state.model_cli = cli_result.params
             finally:
                 run_state.model_state.module_dict = sys.modules[
@@ -134,6 +132,8 @@ class Params(CLI, metaclass=ParamsType):
             if run_state.mode != run_state.Mode.HARNESS:
                 run_state.action_state.action = cli_result.action
             run_state.action_state.on_model_render().__enter__()
+            if not cli_result.params:
+                raise InternalError("CLI parameters class missing")
             run_state.model_state.apply_overrides(cli_result.params)
             for f in fields(cls):
                 setattr(cls, f.name, getattr(cli_result.params, f.name))

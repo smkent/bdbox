@@ -5,11 +5,11 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from contextlib import contextmanager
 from copy import deepcopy
-from dataclasses import dataclass, field, make_dataclass
+from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import count
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Literal, cast
+from typing import TYPE_CHECKING, Annotated, Literal
 
 import tyro
 
@@ -192,22 +192,13 @@ class ExportAction(ModelAction):
         return super().on_harness(model)
 
     def params_argv(self, model: ModelInfo) -> Sequence[str]:
-        from bdbox.cli import CLI  # noqa: PLC0415
+        from bdbox.cli import cli_parser  # noqa: PLC0415
 
-        inst, params_argv = (
-            cast(
-                "CLI",
-                make_dataclass(
-                    CLI.__name__,
-                    [("preset", "str | None", None)],
-                    bases=(CLI,),
-                ),
-            )
-            .cli_config()
-            .instance_from_cli(
-                args=model.argv, return_unknown_args=True, add_help=False
-            )
-        )
+        @dataclass
+        class CLIStub:
+            preset: str | None = None
+
+        inst, params_argv = cli_parser.preparse(CLIStub, args=model.argv)
         return [*params_argv, *inst.to_args()]
 
     def export_all(self, model: ModelInfo) -> None:
