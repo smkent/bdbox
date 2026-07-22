@@ -6,8 +6,9 @@ import sys
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
+from bdbox.cli import cli_parser
 from bdbox.console import log
-from bdbox.errors import MultipleModelsError
+from bdbox.errors import InternalError, MultipleModelsError
 from bdbox.geometry.show import show
 from bdbox.runner.state import run_state
 
@@ -100,7 +101,7 @@ class Model(Params):
         atexit.unregister(Model._atexit_handler)
         run_state.model_state.ensure_module_filename(cls)
         try:
-            cli_result = cls.cli_config().instance_from_cli(prog=cls.__name__)
+            cli_result = cli_parser.parse(cls, prog=cls.__name__)
             run_state.model_state.model_cli = cli_result.params
         finally:
             run_state.model_state.module_dict = sys.modules[
@@ -111,6 +112,8 @@ class Model(Params):
         if not run_state.model_state.model.class_name:
             run_state.model_state.model.class_name = cls.__name__
         with run_state.action_state.on_model_render():
+            if not cli_result.params:
+                raise InternalError("CLI parameters class missing")
             run_state.model_state.apply_overrides(cli_result.params)
             show(cli_result.params.build())
             run_state.action_state.act_once()
