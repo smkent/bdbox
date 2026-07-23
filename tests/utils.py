@@ -66,6 +66,7 @@ class Models:
     MONO_MODEL = "tests.models.mono_model.models.model"
     MONO_PARAMS = "tests.models.mono_params.models.model"
     MONO_PLAIN = "tests.models.mono_plain.models.model"
+    MONO_SUBCLASS = "tests.models.mono_subclass.models.model"
 
 
 @dataclass

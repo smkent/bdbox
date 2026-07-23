@@ -332,6 +332,22 @@ def test_export_all_creates_preset_files(
         assert (out_dir / f"{stem}.{file_format}").exists()
 
 
+def test_harness_discovery_cleans_sibling_build123d_subclass(
+    model_runner: ExportModelRunner,
+) -> None:
+    """Regression test for mock-poisoned sibling modules after discovery.
+
+    A build123d subclass in a sibling module, outside the model's own
+    module path but under the same root package, must be purged after
+    harness discovery instead of left mock-poisoned for the real run.
+    """
+    model_runner(
+        Models.MONO_SUBCLASS,
+        ["export", model_runner.output_dir],
+        run_class=ModelHarness,
+    )
+
+
 def test_export_all_creates_output_dir(tmp_path: Path) -> None:
     out_dir = tmp_path / "a" / "b" / "renders"
     assert not out_dir.exists()
