@@ -128,7 +128,7 @@ class PatchModule:
             return
         if self.recursive:
             for submodule in self.submodules:
-                del sys.modules[submodule]
+                sys.modules.pop(submodule, None)
             sys.meta_path.pop(0)
         if self.original:
             sys.modules[self.name] = self.original

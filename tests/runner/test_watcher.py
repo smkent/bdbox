@@ -5,9 +5,10 @@ from __future__ import annotations
 import sys
 import threading
 import time
+from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from functools import cached_property
+from functools import cached_property, partial
 from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING
@@ -20,30 +21,27 @@ from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Callable, Iterator
 
     from bdbox.actions.action import Action
 
 
 @dataclass
-class Modules:
+class Modules(ABC):
     monkeypatch: pytest.MonkeyPatch
     tmp_path: Path
-    ref_type: str
     model_ref: str | Path = field(init=False)
     mods_kept: dict[str, ModuleType] = field(default_factory=dict, init=False)
     mods_removed: dict[str, ModuleType] = field(
         default_factory=dict, init=False
     )
 
-    def __post_init__(self) -> None:
-        (self.local_dir / "model.py").write_text("")
-        if self.ref_type == "file":
-            self.model_ref = self.local_dir / "model.py"
-        elif self.ref_type == "module":
-            self.model_ref = "module_dir.local_dir.model"
-        else:
-            raise ValueError(self.ref_type)
+    @abstractmethod
+    def __post_init__(self) -> None: ...
+
+    @abstractmethod
+    def import_all(self) -> None:
+        """After a run, add fake local/nonlocal modules to sys.modules."""
 
     @contextmanager
     def __call__(self, watcher: ModelWatcher) -> Iterator[None]:
@@ -54,12 +52,43 @@ class Modules:
             if (m in self.mods_kept or m in self.mods_removed)
         }
         assert set(self.mods_kept.keys()).issubset(sys_filter)
-        assert {
+        removed_files = {
             Path(f).resolve()
             for p in self.mods_removed
             if (f := (self.mods_removed[p].__file__))
-        }.issubset(watcher.watched_files)
+        }
+        assert removed_files.issubset(watcher.watched_files)
         assert not set(self.mods_removed.keys()) & sys_filter
+
+    def _add(self, name: str, path: str | Path, *, kept: bool = False) -> None:
+        mod = ModuleType(name)
+        mod.__file__ = str(Path(path).resolve())
+        self.monkeypatch.setitem(sys.modules, name, mod)
+        (self.mods_kept if kept else self.mods_removed)[name] = mod
+
+    def _mkmodule(self, newdir: Path) -> Path:
+        newdir.mkdir()
+        (newdir / "__init__.py").touch(exist_ok=True)
+        return newdir
+
+
+@dataclass
+class BasicModules(Modules):
+    """Model + a sibling local dir, a nonlocal dir, and an unrelated module."""
+
+    ref_type: str = field(kw_only=True)
+
+    def __post_init__(self) -> None:
+        self.model_ref = self._model_ref()
+        (self.local_dir / "model.py").write_text("")
+        (self.other_module_dir / "irrelevant.py").write_text("")
+
+    def _model_ref(self) -> str | Path:
+        if self.ref_type == "file":
+            return self.local_dir / "model.py"
+        if self.ref_type == "module":
+            return "module_dir.local_dir.model"
+        raise ValueError(self.ref_type)
 
     def import_all(self) -> None:
         self._add("_local_mod", self.local_dir / "local_mod.py", kept=False)
@@ -72,16 +101,17 @@ class Modules:
             kept=(self.ref_type == "file"),
         )
         self._add(
+            "_other_mod", self.other_module_dir / "irrelevant.py", kept=True
+        )
+        self._add(
             "_site_mod",
             "/usr/lib/python3/site-packages/_test_sitemod/__init__.py",
             kept=True,
         )
 
-    def _add(self, name: str, path: str | Path, *, kept: bool = False) -> None:
-        mod = ModuleType(name)
-        mod.__file__ = str(Path(path).resolve())
-        self.monkeypatch.setitem(sys.modules, name, mod)
-        (self.mods_kept if kept else self.mods_removed)[name] = mod
+    @cached_property
+    def other_module_dir(self) -> Path:
+        return self._mkmodule(self.tmp_path / "other_module_dir")
 
     @cached_property
     def module_dir(self) -> Path:
@@ -95,13 +125,45 @@ class Modules:
     def nonlocal_dir(self) -> Path:
         return self._mkmodule(self.module_dir / "nonlocal_dir")
 
-    def _mkmodule(self, newdir: Path) -> Path:
-        newdir.mkdir()
-        (newdir / "__init__.py").touch(exist_ok=True)
-        return newdir
+
+@dataclass
+class NestedPackageModules(Modules):
+    """Model nested inside its own package, under a non-package parent dir.
+
+    Regression coverage for model_base_dir needing to walk up through
+    intermediate package roots rather than only checking the first
+    dotted component of the module name.
+    """
+
+    model_ref: str | Path = "outer.pkg.nested.model"
+
+    def __post_init__(self) -> None:
+        (self.nested_dir / "model.py").write_text("")
+
+    def import_all(self) -> None:
+        self._add("_sibling_mod", self.pkg_dir / "sibling.py", kept=False)
+
+    @cached_property
+    def outer_dir(self) -> Path:
+        (newdir := self.tmp_path / "outer").mkdir()
+        return newdir  # deliberately no __init__.py
+
+    @cached_property
+    def pkg_dir(self) -> Path:
+        return self._mkmodule(self.outer_dir / "pkg")
+
+    @cached_property
+    def nested_dir(self) -> Path:
+        return self._mkmodule(self.pkg_dir / "nested")
 
 
-@pytest.fixture(params=("file", "module"))
+@pytest.fixture(
+    params=(
+        pytest.param(partial(BasicModules, ref_type="file"), id="file"),
+        pytest.param(partial(BasicModules, ref_type="module"), id="module"),
+        pytest.param(NestedPackageModules, id="nested_module"),
+    )
+)
 def modules(
     request: pytest.FixtureRequest,
     ensure_sys_modules: None,
@@ -109,7 +171,8 @@ def modules(
     tmp_path: Path,
 ) -> Modules:
     monkeypatch.syspath_prepend(tmp_path)
-    return Modules(monkeypatch, tmp_path, ref_type=request.param)
+    factory: Callable[[pytest.MonkeyPatch, Path], Modules] = request.param
+    return factory(monkeypatch, tmp_path)
 
 
 @pytest.fixture(autouse=True)
@@ -157,7 +220,7 @@ def debounce(
 ) -> Iterator[int]:
     count = request.param
 
-    def _sleep(secs: float) -> None:
+    def _sleep(_secs: float) -> None:
         if count and mock_sleep.call_count <= count:
             watcher.change_event.set()
 
@@ -186,7 +249,7 @@ def test_runloop_with_rerun(
             self.waiting.set()
             return super().wait(timeout)
 
-    def _call(action: Action | None = None) -> None:
+    def _call(_action: Action | None = None) -> None:
         if mock_runner_call.call_count != 1:
             raise KeyboardInterrupt
         modules.import_all()

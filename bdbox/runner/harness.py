@@ -65,7 +65,6 @@ class HarnessCLIFactory:
 @dataclass
 class ModelHarness(ModelLocator):
     env_search: ClassVar[bool] = True
-    clean_modules: ClassVar[bool] = True
 
     @cached_property
     def harness_cli(self) -> type[CLIAction[None]]:

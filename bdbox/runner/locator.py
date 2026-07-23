@@ -22,7 +22,6 @@ if TYPE_CHECKING:
 class ModelLocator:
     model: ModelInfo = field(default_factory=ModelInfo, init=False)
     env_search: ClassVar[bool] = False
-    clean_modules: ClassVar[bool] = False
     model_argv: InitVar[Sequence[Path | str] | Path | str] = ()
 
     def __post_init__(
@@ -45,32 +44,32 @@ class ModelLocator:
 
     @cached_property
     def model_base_dir(self) -> Path:
-        if self.model.module_name:
-            base_module = self.model.module_name.split(".", 1)[0]
-            if file := getattr(sys.modules.get(base_module), "__file__", None):
-                return Path(file).parent
         if not self.model.path:
             raise InternalError("Model path missing")
-        return self.model.path.parent
+        base_dir = self.model.path.parent
+        if self.model.module_name:
+            for _ in range(self.model.module_name.count(".")):
+                if not ((parent := base_dir.parent) / "__init__.py").exists():
+                    break
+                base_dir = parent
+        return base_dir
 
     @contextmanager
     def module_cleanup(self, name: str | None = None) -> Iterator[None]:
-        name = name or self.model.module_name
-        if not self.clean_modules or not name:
-            yield
-            if (
-                self.model.module_name
-                and self.model.module_name in sys.modules
-            ):
-                sys.modules.pop(self.model.module_name)
-            return
         before_keys = set(sys.modules.keys())
         yield
-        after_keys = set(sys.modules.keys()) - before_keys
-        base_name = name.split(".", maxsplit=1)[0]
-        for ak in sorted(after_keys):
-            if ak == base_name or ak.startswith(f"{base_name}."):
-                sys.modules.pop(ak)
+        after_keys = sorted(set(sys.modules.keys()) - before_keys)
+        if not after_keys:
+            return
+        if name := (name or self.model.module_name):
+            base_name = name.split(".", maxsplit=1)[0]
+            after_keys = [
+                ak
+                for ak in after_keys
+                if ak == base_name or ak.startswith(f"{base_name}.")
+            ]
+        for ak in after_keys:
+            sys.modules.pop(ak, None)
 
     def _file_from_module(self, name: str) -> str | None:
         with self.module_cleanup(name), suppress(ModuleNotFoundError):
