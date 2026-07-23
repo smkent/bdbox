@@ -3,7 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import fields, is_dataclass
-from typing import Annotated, get_args, get_origin, get_type_hints
+from typing import (
+    TYPE_CHECKING,
+    Annotated,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
 
 import cattrs
 from cattrs.gen import (
@@ -11,6 +17,9 @@ from cattrs.gen import (
     make_dict_structure_fn,
     make_dict_unstructure_fn,
 )
+
+if TYPE_CHECKING:
+    from _typeshed import DataclassInstance
 
 
 class Converter(cattrs.Converter):
@@ -44,7 +53,9 @@ class Converter(cattrs.Converter):
         )
 
     @staticmethod
-    def get_type_hints(target: type) -> dict[str, AttributeOverride]:
+    def get_type_hints(
+        target: type[DataclassInstance],
+    ) -> dict[str, AttributeOverride]:
         try:
             hints = get_type_hints(target, include_extras=True)
         except NameError:
