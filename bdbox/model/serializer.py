@@ -9,6 +9,7 @@ from dataclasses import MISSING, dataclass, field, fields, is_dataclass
 from dataclasses import Field as DCField
 from enum import Enum
 from typing import (
+    TYPE_CHECKING,
     Annotated,
     Any,
     Literal,
@@ -22,6 +23,9 @@ from typing import (
 from cattrs import Converter
 
 from bdbox.model.fields import Field
+
+if TYPE_CHECKING:
+    from _typeshed import DataclassInstance
 
 _UNION_ORIGINS: frozenset[Any] = frozenset({Union, _types.UnionType})
 
@@ -99,7 +103,7 @@ class Serializer:
     def _register_fallback_hook(self, cls: type) -> None:
         hints = self.get_type_hints(cls)
 
-        def _hook(obj: Any, t: type) -> Any:
+        def _hook(obj: Any, t: type[DataclassInstance]) -> Any:
             if not isinstance(obj, dict):
                 return obj
             return t(
@@ -247,7 +251,9 @@ class Serializer:
             return schema | {"type": _primitives[hint]}
         raise TypeError(hint)
 
-    def _dataclass_to_schema(self, cls: type) -> dict[str, Any]:
+    def _dataclass_to_schema(
+        self, cls: type[DataclassInstance]
+    ) -> dict[str, Any]:
         hints = self.get_type_hints(cls)
         field_schemas = {}
         for f in fields(cls):

@@ -3,17 +3,20 @@ from __future__ import annotations
 from dataclasses import Field as DCField
 from dataclasses import dataclass, field, fields, is_dataclass
 from functools import cached_property
-from typing import ClassVar, Literal
+from typing import TYPE_CHECKING, ClassVar, Literal
 
 from bdbox.errors import ParamsError
 
 from .fields import Field
 from .preset import Preset
 
+if TYPE_CHECKING:
+    from _typeshed import DataclassInstance
+
 
 @dataclass
 class Annotater:
-    params_class: type
+    params_class: type[DataclassInstance]
     seen: set = field(default_factory=set, init=False)
 
     def __call__(self) -> None:

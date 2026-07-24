@@ -46,7 +46,7 @@ class ParamsType(type):
             return super().__repr__()
         kvlist = [
             f"{f.name}={getattr(cls, f.name, '(required)')!r}"
-            for f in fields(cls)
+            for f in fields(cls)  # ty: ignore[invalid-argument-type]
         ]
         return f"{cls.__qualname__}({pkgname})({', '.join(kvlist)})"
 

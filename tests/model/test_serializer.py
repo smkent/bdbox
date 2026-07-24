@@ -32,6 +32,7 @@ class Runner(Protocol):
     def __init__(
         self, model_argv: Sequence[Path | str] | Path | str = ()
     ) -> None: ...
+    def __call__(self) -> None: ...
 
 
 class SchemaModels:
