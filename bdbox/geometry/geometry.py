@@ -57,6 +57,7 @@ class Geometry:
                 ]
         if not geometry:
             return None
+        geometry = list({id(g): g for g in geometry}.values())
         if len(geometry) == 1:
             return geometry[0]
         return Compound(label=label, children=geometry)
