@@ -21,6 +21,9 @@ export class OCPCADViewer {
     document.addEventListener("mouseup", () => {
       iframe.style.pointerEvents = "";
     });
+    window.addEventListener("blur", () => {
+      iframe.style.pointerEvents = "";
+    });
     document.body.appendChild(iframe);
     window.addEventListener("bdbox.server:hello", ({ detail }) => {
       if (detail.viewer_port) {
