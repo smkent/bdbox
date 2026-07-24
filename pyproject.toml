@@ -222,12 +222,7 @@ cmd = "pytest --numprocesses 0 --no-cov -m frontend"
 help = "Run frontend (web) tests"
 
 [tool.pysentry.ignore]
-ids = [
-    # VTK <= 9.5.0, dependency of cadquery-ocp via build123d
-    "PYSEC-2025-224",
-    "PYSEC-2025-225",
-    "PYSEC-2025-226",
-]
+ids = []
 
 [tool.pytest]
 addopts = [
