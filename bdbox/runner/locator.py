@@ -29,10 +29,7 @@ class ModelLocator:
         self, model_argv: Sequence[Path | str] | Path | str
     ) -> None:
         self.model.argv = self._setup_argv(model_argv)
-        model_file = self._model_path_from_argv()
-        if model_file:
-            self.model.path = Path(model_file).resolve()
-            self.model.filename = str(model_file)
+        self._model_path_from_argv()
 
     def _setup_argv(
         self, model_argv: Sequence[Path | str] | Path | str
@@ -88,11 +85,15 @@ class ModelLocator:
         for ak in after_keys:
             sys.modules.pop(ak, None)
 
+    def _model_arg_and_attr(self, name: str) -> tuple[str, str | None]:
+        if ":" not in name:
+            return name, None
+        name, attr = name.split(":", maxsplit=1)
+        return name, attr
+
     def _file_from_module(self, name: str) -> str | None:
         with self.module_cleanup(name), suppress(ModuleNotFoundError):
-            if ":" not in name:
-                name += ":"
-            mod_name, mod_attr = name.split(":", maxsplit=1)
+            mod_name, mod_attr = self._model_arg_and_attr(name)
             if self.env_search:
                 EnvLocator(target_module=mod_name).ensure_env()
             if (spec := find_spec(mod_name)) and spec.origin:
@@ -101,17 +102,21 @@ class ModelLocator:
                 return spec.origin
         return None
 
-    def _model_path_from_argv(self) -> str | None:
+    def _model_path_from_argv(self) -> None:
         for arg in self.model.argv:
-            if not arg.startswith("-") and Path(arg).suffix == ".py":
+            if not arg.startswith("-"):
+                file_name, file_attr = self._model_arg_and_attr(arg)
+                if Path(file_name).suffix != ".py":
+                    continue
                 self.model.argv.pop(self.model.argv.index(arg))
                 if self.env_search:
-                    EnvLocator(arg).ensure_env()
-                return arg
+                    EnvLocator(file_name).ensure_env()
+                self.model.class_name = file_attr or None
+                self.model.arg = file_name
+                return
         for arg in self.model.argv:
             if not re.match(r"^[A-Za-z0-9_.:]+$", arg) or Path(arg).is_file():
                 continue
             if arg_file := self._file_from_module(arg):
                 self.model.argv.pop(self.model.argv.index(arg))
-                return arg_file
-        return None
+                self.model.arg = arg_file
