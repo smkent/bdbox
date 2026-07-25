@@ -294,15 +294,12 @@ def test_module_class_model(
     runner.match_snapshot(["-m", "bdbox", module, *args])
 
 
-def test_nonexistent_module(runner: Runner) -> None:
+@pytest.mark.parametrize(
+    "module_name", ["who.is.this.whats.your.operating.number", ".nope", "."]
+)
+def test_nonexistent_module(runner: Runner, module_name: str) -> None:
     runner.raises(
-        [
-            "-m",
-            "bdbox",
-            "who.is.this.whats.your.operating.number",
-            "export",
-            "out.step",
-        ],
+        ["-m", "bdbox", module_name, "export", "out.step"],
         "Unrecognized options",
     )
 
