@@ -115,7 +115,11 @@ class ModelLocator:
                 self.model.arg = file_name
                 return
         for arg in self.model.argv:
-            if not re.match(r"^[A-Za-z0-9_.:]+$", arg) or Path(arg).is_file():
+            if (
+                arg.startswith(".")
+                or not re.match(r"^[A-Za-z0-9_.:]+$", arg)
+                or Path(arg).is_file()
+            ):
                 continue
             if arg_file := self._file_from_module(arg):
                 self.model.argv.pop(self.model.argv.index(arg))
