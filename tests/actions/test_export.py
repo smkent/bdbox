@@ -188,6 +188,8 @@ def test_model_export_with_mixed_solids_edges(
         model_file,
         ["export", model_runner.output_dir, "--select", "both"],
         run_class=run_class,
+        single=False,
+        num_outputs=3,
     )
 
 

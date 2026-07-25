@@ -22,9 +22,10 @@ class P(Params):
 
 
 b1 = Box(10, 20, 30)
+b2 = Box(5, 10, 15)
 if P.select == ExportTypes.edges:
     show(b1.edges())
 elif P.select == ExportTypes.both:
-    show(b1, b1.edges())
+    show(b1, b2, b1.edges())
 else:
-    show(b1)
+    show(b1, b2)
