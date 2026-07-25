@@ -32,7 +32,6 @@ else:
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
-    from types import TracebackType
     from unittest.mock import MagicMock
 
     from starlette.testclient import WebSocketTestSession
@@ -51,25 +50,19 @@ class SchemaModels:
 
 
 @dataclass
-class UIServerClient:
+class UIServerClient(ExitStack):
     ui_server: UIServer
-    stack: ExitStack = field(default_factory=ExitStack, init=False)
     ws: WebSocketTestSession = field(init=False)
     queue: Queue[dict[str, Any] | BaseException] = field(default_factory=Queue)
 
-    def __enter__(self) -> Self:
-        client = self.stack.enter_context(TestClient(self.ui_server.app))
-        self.ws = self.stack.enter_context(client.websocket_connect("/ws"))
-        self.run_receive_queue()
-        return self
+    def __post_init__(self) -> None:
+        super().__init__()
 
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> bool | None:
-        return self.stack.__exit__(exc_type, exc_val, exc_tb)
+    def __enter__(self) -> Self:
+        client = self.enter_context(TestClient(self.ui_server.app))
+        self.ws = self.enter_context(client.websocket_connect("/ws"))
+        self.run_receive_queue()
+        return super().__enter__()
 
     def run_receive_queue(self) -> None:
         def _receive() -> None:
@@ -138,14 +131,13 @@ class UIServerManager:
 
 
 @dataclass
-class ViewSession:
+class ViewSession(ExitStack):
     tmp_path: Path = field(kw_only=True)
     ui_server: UIServerManager = field(kw_only=True)
 
     start_model: Path
     model_argv: Sequence[Path | str] = field(default_factory=list)
 
-    stack: ExitStack = field(default_factory=ExitStack, init=False)
     client: UIServerClient = field(init=False)
 
     @cached_property
@@ -153,23 +145,16 @@ class ViewSession:
         return self.tmp_path / "model.py"
 
     def __post_init__(self) -> None:
+        super().__init__()
         self.model_file.write_text(self.start_model.read_text())
 
     def __enter__(self) -> Self:
-        self.client = self.stack.enter_context(
+        self.client = self.enter_context(
             self.ui_server.run_model_client(
                 [self.model_file, "view", *self.model_argv]
             )
         )
-        return self
-
-    def __exit__(
-        self,
-        exc_type: type[BaseException] | None,
-        exc_val: BaseException | None,
-        exc_tb: TracebackType | None,
-    ) -> bool | None:
-        return self.stack.__exit__(exc_type, exc_val, exc_tb)
+        return super().__enter__()
 
     def get_message(self, timeout: float = 5.0) -> ServerMessage:
         deadline = time.monotonic() + timeout
