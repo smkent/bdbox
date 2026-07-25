@@ -137,6 +137,44 @@ def test_geometry_resolve_returns_shown_with_truediv_operator(
         assert resolved.label == "bdbox selection"
 
 
+@pytest.mark.parametrize(
+    "obj",
+    [
+        pytest.param(object(), id="object"),
+        pytest.param(MockBuild123d.Shape(), id="shape"),
+        pytest.param(MockBuild123d.Builder(), id="empty_builder"),
+        pytest.param(
+            MockBuild123d.Builder(shape=MockBuild123d.Shape()), id="builder"
+        ),
+    ],
+)
+def test_geometry_resolve_returns_shown_with_add_operator(
+    mock_b123d: MockBuild123d, show_callable: ShowCallable, obj: object
+) -> None:
+    preloaded_shapes = [mock_b123d.Shape(), mock_b123d.Shape()]
+    for preload_obj in (
+        object(),
+        preloaded_shapes[0],
+        mock_b123d.Builder(),
+        mock_b123d.Builder(shape=preloaded_shapes[1]),
+    ):
+        show_callable(preload_obj)  # ty: ignore [invalid-argument-type]
+    assert run_state.geometry.resolve() == mock_b123d.Compound(
+        children=preloaded_shapes, label="bdbox collected geometry"
+    )
+    with suppress(ModelExit):
+        show_callable + obj  # ty: ignore [unsupported-operator]
+    expected = preloaded_shapes
+    if isinstance(obj, mock_b123d.Builder) and obj.shape:
+        expected.append(obj.shape)
+    elif isinstance(obj, mock_b123d.Shape):
+        expected.append(obj)
+    resolved = run_state.geometry.resolve()
+    assert resolved == mock_b123d.Compound(
+        children=expected, label="bdbox collected geometry"
+    )
+
+
 def test_geometry_resolve_empty_no_build123d(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

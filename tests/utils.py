@@ -147,6 +147,11 @@ class MockBuild123d(ModuleType):
         children: Sequence[MockBuild123d.Shape] = field(default_factory=tuple)
         label: str = ""
 
+    @dataclass
+    class Color:
+        value: str
+        alpha: int
+
 
 class MockOcpVscode(ModuleType):
     class Comms(ModuleType):

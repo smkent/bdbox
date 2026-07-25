@@ -53,6 +53,16 @@ class Show:
             self.func(geo)
         raise ModelExit
 
+    def __add__(self, geometry: GeometryT) -> GeometryT:
+        """Highlight the specified geometry."""
+        if geo := run_state.geometry.filter_geometry(geometry):
+            from build123d import Color  # noqa: PLC0415
+
+            geo.label = "bdbox highlight"
+            geo.color = Color(0xFF2351, 0x66)
+            self.func(geo)
+        return geometry
+
 
 @Show
 def show(
