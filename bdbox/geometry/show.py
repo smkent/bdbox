@@ -9,7 +9,7 @@ from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
-    from typing import Protocol
+    from typing import Protocol, TypeVar
 
     from build123d import Builder, Compound, Shape
 
@@ -21,6 +21,8 @@ if TYPE_CHECKING:
         | Mapping[str, Compound | Shape | Builder | None]
         | None
     )
+
+    GeometryT = TypeVar("GeometryT", bound=Geometry)
 
     class ShowCallable(Protocol):
         def __call__(self, *geometry: Geometry) -> None: ...
@@ -43,12 +45,12 @@ class Show:
 
     # Operators
 
-    def __truediv__(self, geometry: Geometry) -> None:
+    def __truediv__(self, geometry: GeometryT) -> GeometryT:
         """Show only the specified geometry, and stop model execution."""
         run_state.geometry.__init__()
-        if geometry := run_state.geometry.filter_geometry(geometry):
-            geometry.label = "bdbox selection"
-            self.func(geometry)
+        if geo := run_state.geometry.filter_geometry(geometry):
+            geo.label = "bdbox selection"
+            self.func(geo)
         raise ModelExit
 
 
