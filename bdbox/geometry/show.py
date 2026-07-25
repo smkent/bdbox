@@ -1,7 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from dataclasses import dataclass, field
+from functools import update_wrapper
+from typing import TYPE_CHECKING, Any
 
+from bdbox.errors import ModelExit
 from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
@@ -23,6 +26,33 @@ if TYPE_CHECKING:
         def __call__(self, *geometry: Geometry) -> None: ...
 
 
+@dataclass
+class Show:
+    """Extensions for [``show``][bdbox.geometry.show.show]."""
+
+    func: ShowCallable = field(repr=False)
+
+    def __post_init__(self) -> None:
+        update_wrapper(self, self.func)
+
+    def __call__(self, *geometry: Geometry) -> Any:
+        return self.func(*geometry)
+
+    def __repr__(self) -> str:
+        return repr(self.func)
+
+    # Operators
+
+    def __truediv__(self, geometry: Geometry) -> None:
+        """Show only the specified geometry, and stop model execution."""
+        run_state.geometry.__init__()
+        if geometry := run_state.geometry.filter_geometry(geometry):
+            geometry.label = "bdbox selection"
+            self.func(geometry)
+        raise ModelExit
+
+
+@Show
 def show(
     *geometry: Compound
     | Shape

@@ -3,12 +3,13 @@ from __future__ import annotations
 import atexit
 import os
 import sys
+from contextlib import suppress
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, TypeAlias, cast
 
 from bdbox.cli import cli_parser
 from bdbox.console import log
-from bdbox.errors import InternalError, MultipleModelsError
+from bdbox.errors import InternalError, ModelExit, MultipleModelsError
 from bdbox.geometry.show import show
 from bdbox.runner.state import run_state
 
@@ -115,7 +116,8 @@ class Model(Params):
             if not cli_result.params:
                 raise InternalError("CLI parameters class missing")
             run_state.model_state.apply_overrides(cli_result.params)
-            show(cli_result.params.build())
+            with suppress(ModelExit):
+                show(cli_result.params.build())
             run_state.action_state.act_once()
 
     def __init_subclass__(cls, **kwargs: Any) -> None:

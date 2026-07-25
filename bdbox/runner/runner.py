@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import runpy
 import sys
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
-from bdbox.errors import InternalError, RunError
+from bdbox.errors import InternalError, ModelExit, RunError
 from bdbox.runner.state import run_state
 
 from .locator import ModelLocator
@@ -79,7 +79,10 @@ class ModelRunner(ModelLocator):
     @contextmanager
     def action_on_model_render(self) -> Iterator[None]:
         if self.action and not self.discovery_mode:
-            with run_state.action_state.on_model_render():
+            with (
+                run_state.action_state.on_model_render(),
+                suppress(ModelExit),
+            ):
                 yield
         else:
             yield
