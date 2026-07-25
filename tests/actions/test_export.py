@@ -12,7 +12,7 @@ from unittest.mock import patch
 import pytest
 
 from bdbox.actions.export import ExportAction
-from bdbox.errors import RunError
+from bdbox.errors import RunError, UsageError
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from tests.utils import Examples, Models, RaisesRunError
@@ -151,6 +151,45 @@ def test_model_export(
         ["export", "--single", model_runner.output_dir],
         run_class=run_class,
         single=True,
+    )
+
+
+@pytest.mark.parametrize(
+    "model_file",
+    [
+        pytest.param(Models.MONO_MODEL_EXPORT, id="mono_model_export"),
+        pytest.param(Models.MONO_PARAMS_EXPORT, id="mono_params_export"),
+    ],
+)
+def test_model_export_without_solids(
+    run_class: type[Runner], model_file: Path, model_runner: ExportModelRunner
+) -> None:
+    with pytest.raises((SystemExit, RunError, UsageError)) as e:
+        model_runner(
+            model_file,
+            ["export", model_runner.output_dir, "--select", "edges"],
+            run_class=run_class,
+        )
+    if isinstance(e, RunError):
+        assert isinstance(e.exception, SystemExit)
+
+
+@pytest.mark.parametrize(
+    "model_file",
+    [
+        pytest.param(Models.MONO_MODEL_EXPORT, id="mono_model_export"),
+        pytest.param(Models.MONO_PARAMS_EXPORT, id="mono_params_export"),
+    ],
+)
+def test_model_export_with_mixed_solids_edges(
+    run_class: type[Runner], model_file: Path, model_runner: ExportModelRunner
+) -> None:
+    model_runner(
+        model_file,
+        ["export", model_runner.output_dir, "--select", "both"],
+        run_class=run_class,
+        single=False,
+        num_outputs=3,
     )
 
 
