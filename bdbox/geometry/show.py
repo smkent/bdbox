@@ -6,8 +6,21 @@ from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
+    from typing import Protocol
 
     from build123d import Builder, Compound, Shape
+
+    Geometry = (
+        Compound
+        | Shape
+        | Builder
+        | Sequence[Compound | Shape | Builder | None]
+        | Mapping[str, Compound | Shape | Builder | None]
+        | None
+    )
+
+    class ShowCallable(Protocol):
+        def __call__(self, *geometry: Geometry) -> None: ...
 
 
 def show(

@@ -9,6 +9,7 @@ from typing import Any, ClassVar
 
 from bdbox.cli import cli_parser
 from bdbox.errors import InternalError, ParamsError
+from bdbox.geometry.show import show
 from bdbox.runner.state import run_state
 
 from .annotations import Annotater
@@ -172,3 +173,11 @@ class Params(metaclass=ParamsType):
     @classmethod
     def _init_this_subclass(cls) -> bool:
         return True
+
+    show = show
+    """Provide built model geometry for display or use.
+
+    Note:
+        This is a convenience shortcut for
+        [``show``][bdbox.geometry.show.show].
+    """

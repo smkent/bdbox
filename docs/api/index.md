@@ -8,7 +8,7 @@ icon: lucide/file-box
 ::: bdbox.model.parameters
     options:
       members: [Params]
-      inherited_members: [with_preset]
+      inherited_members: [show, with_preset]
       show_root_heading: false
       show_root_toc_entry: false
       heading_level: 2
@@ -16,7 +16,7 @@ icon: lucide/file-box
 ::: bdbox.model.model
     options:
       members: [Model]
-      inherited_members: [with_preset]
+      inherited_members: [show, with_preset]
       show_root_heading: false
       show_root_toc_entry: false
       heading_level: 2
