@@ -193,11 +193,19 @@ def test_model_plain_not_importable(
     [
         pytest.param(
             f"tests.models.{Models.MODEL_CLASS_MULTIPLE.stem}:FirstModel",
-            id="class_multi_first",
+            id="class_multi_module_first",
+        ),
+        pytest.param(
+            f"{Models.MODEL_CLASS_MULTIPLE}:FirstModel",
+            id="class_multi_file_first",
         ),
         pytest.param(
             f"tests.models.{Models.MODEL_CLASS_MULTIPLE.stem}:SecondModel",
-            id="class_multi_second",
+            id="class_multi_module_second",
+        ),
+        pytest.param(
+            f"{Models.MODEL_CLASS_MULTIPLE}:SecondModel",
+            id="class_multi_file_second",
         ),
     ],
 )

@@ -297,7 +297,7 @@
   Run complete ([TIMER]ms)
   '''
 # ---
-# name: test_model_multiple_harness[normal-class_multi_first-help]
+# name: test_model_multiple_harness[normal-class_multi_file_first-help]
   '''
   usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
@@ -317,19 +317,19 @@
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
-# name: test_model_multiple_harness[normal-class_multi_first-help].1
+# name: test_model_multiple_harness[normal-class_multi_file_first-help].1
   ''
 # ---
-# name: test_model_multiple_harness[normal-class_multi_first-render]
+# name: test_model_multiple_harness[normal-class_multi_file_first-render]
   ''
 # ---
-# name: test_model_multiple_harness[normal-class_multi_first-render].1
+# name: test_model_multiple_harness[normal-class_multi_file_first-render].1
   '''
   FirstModel 10.0
   Run complete ([TIMER]ms)
   '''
 # ---
-# name: test_model_multiple_harness[normal-class_multi_second-help]
+# name: test_model_multiple_harness[normal-class_multi_file_second-help]
   '''
   usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
@@ -347,19 +347,19 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
-# name: test_model_multiple_harness[normal-class_multi_second-help].1
+# name: test_model_multiple_harness[normal-class_multi_file_second-help].1
   ''
 # ---
-# name: test_model_multiple_harness[normal-class_multi_second-render]
+# name: test_model_multiple_harness[normal-class_multi_file_second-render]
   ''
 # ---
-# name: test_model_multiple_harness[normal-class_multi_second-render].1
+# name: test_model_multiple_harness[normal-class_multi_file_second-render].1
   '''
   SecondModel 10
   Run complete ([TIMER]ms)
   '''
 # ---
-# name: test_model_multiple_harness[run-class_multi_first-help]
+# name: test_model_multiple_harness[normal-class_multi_module_first-help]
   '''
   usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
@@ -379,19 +379,19 @@
   ╰───────────────────────────────────────────────────────╯
   '''
 # ---
-# name: test_model_multiple_harness[run-class_multi_first-help].1
+# name: test_model_multiple_harness[normal-class_multi_module_first-help].1
   ''
 # ---
-# name: test_model_multiple_harness[run-class_multi_first-render]
+# name: test_model_multiple_harness[normal-class_multi_module_first-render]
   ''
 # ---
-# name: test_model_multiple_harness[run-class_multi_first-render].1
+# name: test_model_multiple_harness[normal-class_multi_module_first-render].1
   '''
   FirstModel 10.0
   Run complete ([TIMER]ms)
   '''
 # ---
-# name: test_model_multiple_harness[run-class_multi_second-help]
+# name: test_model_multiple_harness[normal-class_multi_module_second-help]
   '''
   usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
@@ -409,13 +409,137 @@
   ╰────────────────────────────────────────────────────────────────────╯
   '''
 # ---
-# name: test_model_multiple_harness[run-class_multi_second-help].1
+# name: test_model_multiple_harness[normal-class_multi_module_second-help].1
   ''
 # ---
-# name: test_model_multiple_harness[run-class_multi_second-render]
+# name: test_model_multiple_harness[normal-class_multi_module_second-render]
   ''
 # ---
-# name: test_model_multiple_harness[run-class_multi_second-render].1
+# name: test_model_multiple_harness[normal-class_multi_module_second-render].1
+  '''
+  SecondModel 10
+  Run complete ([TIMER]ms)
+  '''
+# ---
+# name: test_model_multiple_harness[run-class_multi_file_first-help]
+  '''
+  usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
+  
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit          │
+  │ -v, --verbose                                         │
+  │              Increase logging verbosity. (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                         │
+  │              (default: 10.0)                          │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run      Run the model.                           │
+  │   • export   Export geometry to a STEP or STL file.   │
+  │   • view     View model geometry.                     │
+  │   • version  Show bdbox version and exit              │
+  ╰───────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_multiple_harness[run-class_multi_file_first-help].1
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_file_first-render]
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_file_first-render].1
+  '''
+  FirstModel 10.0
+  Run complete ([TIMER]ms)
+  '''
+# ---
+# name: test_model_multiple_harness[run-class_multi_file_second-help]
+  '''
+  usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
+  
+  ╭─ options ──────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit          │
+  │ -v, --verbose             Increase logging verbosity. (repeatable) │
+  │ --height 1 <= INT <= 100  (default: 10)                            │
+  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────────────────╮
+  │ (default: run)                                                     │
+  │   • run                   Run the model.                           │
+  │   • export                Export geometry to a STEP or STL file.   │
+  │   • view                  View model geometry.                     │
+  │   • version               Show bdbox version and exit              │
+  ╰────────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_multiple_harness[run-class_multi_file_second-help].1
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_file_second-render]
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_file_second-render].1
+  '''
+  FirstModel 10.0
+  Run complete ([TIMER]ms)
+  '''
+# ---
+# name: test_model_multiple_harness[run-class_multi_module_first-help]
+  '''
+  usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
+  
+  ╭─ options ─────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit          │
+  │ -v, --verbose                                         │
+  │              Increase logging verbosity. (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                         │
+  │              (default: 10.0)                          │
+  ╰───────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────╮
+  │ (default: run)                                        │
+  │   • run      Run the model.                           │
+  │   • export   Export geometry to a STEP or STL file.   │
+  │   • view     View model geometry.                     │
+  │   • version  Show bdbox version and exit              │
+  ╰───────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_multiple_harness[run-class_multi_module_first-help].1
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_module_first-render]
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_module_first-render].1
+  '''
+  FirstModel 10.0
+  Run complete ([TIMER]ms)
+  '''
+# ---
+# name: test_model_multiple_harness[run-class_multi_module_second-help]
+  '''
+  usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
+  
+  ╭─ options ──────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit          │
+  │ -v, --verbose             Increase logging verbosity. (repeatable) │
+  │ --height 1 <= INT <= 100  (default: 10)                            │
+  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────────────────╮
+  │ (default: run)                                                     │
+  │   • run                   Run the model.                           │
+  │   • export                Export geometry to a STEP or STL file.   │
+  │   • view                  View model geometry.                     │
+  │   • version               Show bdbox version and exit              │
+  ╰────────────────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_model_multiple_harness[run-class_multi_module_second-help].1
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_module_second-render]
+  ''
+# ---
+# name: test_model_multiple_harness[run-class_multi_module_second-render].1
   '''
   FirstModel 10.0
   Run complete ([TIMER]ms)

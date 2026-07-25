@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from bdbox.errors import ParamsError
 from bdbox.protocol import ModelDisplayInfo
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from bdbox.model.parameters import Params
 
 
@@ -43,3 +42,8 @@ class ModelInfo(ModelDisplayInfo):
         if result := (self.module_name or self.filename or self.path):
             return result
         return None
+
+    @arg.setter
+    def arg(self, new_arg: Path | str) -> None:
+        self.path = Path(new_arg).resolve()
+        self.filename = str(new_arg)
