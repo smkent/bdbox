@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class Error(Exception):
-    """Base class for all bdbox exceptions."""
+    """Base class for all bdbox errors."""
 
 
 class InternalError(Error):
@@ -44,6 +44,10 @@ class RunError(Error):
     """Raised when a model run fails."""
 
     exception: Exception | SystemExit
+
+
+class ModelExit(SystemExit):
+    """Raised for control flow when a model run deliberately stops early."""
 
 
 @dataclass

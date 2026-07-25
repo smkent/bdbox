@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from dataclasses import dataclass, field
+from functools import update_wrapper
+from typing import TYPE_CHECKING, Any
 
+from bdbox.errors import ModelExit
 from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
-    from typing import Protocol
+    from typing import Protocol, TypeVar
 
     from build123d import Builder, Compound, Shape
 
@@ -19,10 +22,39 @@ if TYPE_CHECKING:
         | None
     )
 
+    GeometryT = TypeVar("GeometryT", bound=Geometry)
+
     class ShowCallable(Protocol):
         def __call__(self, *geometry: Geometry) -> None: ...
 
 
+@dataclass
+class Show:
+    """Extensions for [``show``][bdbox.geometry.show.show]."""
+
+    func: ShowCallable = field(repr=False)
+
+    def __post_init__(self) -> None:
+        update_wrapper(self, self.func)
+
+    def __call__(self, *geometry: Geometry) -> Any:
+        return self.func(*geometry)
+
+    def __repr__(self) -> str:
+        return repr(self.func)
+
+    # Operators
+
+    def __truediv__(self, geometry: GeometryT) -> GeometryT:
+        """Show only the specified geometry, and stop model execution."""
+        run_state.geometry.__init__()
+        if geo := run_state.geometry.filter_geometry(geometry):
+            geo.label = "bdbox selection"
+            self.func(geo)
+        raise ModelExit
+
+
+@Show
 def show(
     *geometry: Compound
     | Shape

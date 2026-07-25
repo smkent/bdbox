@@ -68,6 +68,9 @@ class Models:
     MONO_PLAIN = "tests.models.mono_plain.models.model"
     MONO_SUBCLASS = "tests.models.mono_subclass.models.model"
 
+    SHOWMODEL_MODEL = "tests.models.mod_model.show_model"
+    SHOWMODEL_PARAMS = "tests.models.mod_params.show_model"
+
 
 @dataclass
 class DisallowCallable:
@@ -121,14 +124,18 @@ class MockBuild123d(ModuleType):
 
     @dataclass
     class Builder:
-        shape: MockBuild123d.Shape | None = None
+        shape: MockBuild123d.Shape | None = field(default=None, kw_only=True)
 
         @property
         def _obj_name(self) -> str:
             return "shape"
 
+    @dataclass
     class Shape:
-        pass
+        label: str = ""
+
+        def show_topology(self, limit_class: str | None = None) -> str:
+            return ""
 
     class ShapeList(list):
         pass
@@ -137,9 +144,6 @@ class MockBuild123d(ModuleType):
     class Compound(Shape):
         children: Sequence[MockBuild123d.Shape] = field(default_factory=tuple)
         label: str = ""
-
-        def show_topology(self, limit_class: str | None = None) -> str:
-            return ""
 
 
 class MockOcpVscode(ModuleType):
