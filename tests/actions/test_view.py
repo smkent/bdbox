@@ -21,7 +21,6 @@ if TYPE_CHECKING:
 
 pytestmark = pytest.mark.usefixtures(
     "cache_build123d",
-    "ensure_sys_modules",
     "mock_ocp_vscode",
     "mock_server_start",
     "mock_ocp_cad_viewer_start",

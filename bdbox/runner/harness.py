@@ -120,19 +120,18 @@ class ModelHarness(ModelLocator):
         Returns a list of (name, annotation, field) tuples for user-defined
         parameters, or None if no bdbox Params/Model class was found.
         """
+        if not self.model.module_name and self.model.path:
+            with suppress(ValueError):
+                env = EnvLocator(self.model.path).project_root()
+                relative = self.model.path.relative_to(env)
+                mod_name = (
+                    str(relative).removesuffix(".py").replace(os.sep, ".")
+                )
+                self.model.module_name = mod_name
+                if model_class := self.get_model():
+                    return model_class
+                self.model.module_name = None
         if not (model_class := self.get_model()):
-            if not self.model.module_name and self.model.path:
-                with suppress(ValueError):
-                    env = EnvLocator(self.model.path).project_root()
-                    relative = self.model.path.relative_to(env)
-                    os.chdir(env)
-                    mod_name = (
-                        str(relative).removesuffix(".py").replace(os.sep, ".")
-                    )
-                    self.model.module_name = mod_name
-                    if model_class := self.get_model():
-                        return model_class
-                    self.model.module_name = None
             return None
         if getattr(model_class, "__module__", None) != "__main__":
             model_class.__module__ = "__main__"
