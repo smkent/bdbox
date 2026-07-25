@@ -9,10 +9,15 @@ from typing import TYPE_CHECKING, Any
 import pytest
 
 from bdbox.geometry.show import show
+from bdbox.model.model import Model
+from bdbox.model.parameters import Params
 from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
     from tests.utils import MockBuild123d
+
+if TYPE_CHECKING:
+    from bdbox.geometry.show import ShowCallable
 
 
 class MockMainBase(ModuleType):
@@ -20,7 +25,21 @@ class MockMainBase(ModuleType):
         super().__init__("__main__", *args, **kwargs)
 
 
-def test_show_multiple_args(mock_b123d: MockBuild123d) -> None:
+@pytest.fixture(
+    params=[
+        pytest.param(show, id="show"),
+        pytest.param(Params.show, id="Params.show"),
+        pytest.param(Model.show, id="Model.show"),
+    ]
+)
+def show_callable(request: pytest.FixtureRequest) -> ShowCallable:
+    assert request.param is show
+    return request.param
+
+
+def test_show_multiple_args(
+    mock_b123d: MockBuild123d, show_callable: ShowCallable
+) -> None:
     obj0, obj1, obj2, obj3, obj4 = (
         object(),
         mock_b123d.Shape(),
@@ -28,13 +47,15 @@ def test_show_multiple_args(mock_b123d: MockBuild123d) -> None:
         mock_b123d.Shape(),
         object(),
     )
-    show(obj0, obj1, obj2, obj3, obj4)  # ty: ignore [invalid-argument-type]
+    show_callable(obj0, obj1, obj2, obj3, obj4)  # ty: ignore [invalid-argument-type]
     assert run_state.geometry.resolve() == mock_b123d.Compound(
         children=[obj1, obj2, obj3], label="bdbox collected geometry"
     )
 
 
-def test_geometry_resolve_returns_shown(mock_b123d: MockBuild123d) -> None:
+def test_geometry_resolve_returns_shown(
+    mock_b123d: MockBuild123d, show_callable: ShowCallable
+) -> None:
     obj1, obj2, obj3, obj4, obj5, obj6 = (
         mock_b123d.Shape(),
         object(),
@@ -43,12 +64,12 @@ def test_geometry_resolve_returns_shown(mock_b123d: MockBuild123d) -> None:
         mock_b123d.Builder(shape=mock_b123d.Shape()),
         mock_b123d.Builder(),
     )
-    show(obj1)  # ty: ignore [invalid-argument-type]
-    show(obj2)  # ty: ignore [invalid-argument-type]
-    show(obj3)  # ty: ignore [invalid-argument-type]
-    show(obj4)  # ty: ignore [invalid-argument-type]
-    show(obj5)  # ty: ignore [invalid-argument-type]
-    show(obj6)  # ty: ignore [invalid-argument-type]
+    show_callable(obj1)  # ty: ignore [invalid-argument-type]
+    show_callable(obj2)  # ty: ignore [invalid-argument-type]
+    show_callable(obj3)  # ty: ignore [invalid-argument-type]
+    show_callable(obj4)  # ty: ignore [invalid-argument-type]
+    show_callable(obj5)  # ty: ignore [invalid-argument-type]
+    show_callable(obj6)  # ty: ignore [invalid-argument-type]
     assert obj5.shape
     assert run_state.geometry.resolve() == mock_b123d.Compound(
         children=[obj1, obj3, obj5.shape], label="bdbox collected geometry"
