@@ -51,9 +51,14 @@ class Exports:
     @cached_property
     def _parts(self) -> dict[str, Shape]:
         export_parts = {self.model_name: self.geometry}
-        if self.single or len(self.geometry.leaves) == 1:
+        num_solids = len(self.geometry.solids())
+        if not num_solids:
+            raise UsageError("No solid geometry to export")
+        if self.single or len(self.geometry.leaves) == 1 or num_solids == 1:
             return export_parts
         for part in self.geometry.leaves:
+            if not part.solids():
+                continue
             part_name = ".".join(
                 [
                     self.model_name,

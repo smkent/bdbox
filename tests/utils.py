@@ -64,7 +64,9 @@ class Models:
     MOD_PARAMS = "tests.models.mod_params"
     MOD_PLAIN = "tests.models.mod_plain"
     MONO_MODEL = "tests.models.mono_model.models.model"
+    MONO_MODEL_EXPORT = "tests.models.mono_model.models.export_model"
     MONO_PARAMS = "tests.models.mono_params.models.model"
+    MONO_PARAMS_EXPORT = "tests.models.mono_params.models.export_model"
     MONO_PLAIN = "tests.models.mono_plain.models.model"
     MONO_SUBCLASS = "tests.models.mono_subclass.models.model"
 
@@ -244,8 +246,10 @@ class RaisesRunError(ExitStack):
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
     ) -> bool | None:
-        result = super().__exit__(exc_type, exc_val, exc_tb)
+        if not (result := super().__exit__(exc_type, exc_val, exc_tb)):
+            return result
         assert self.exc_info
+        assert self.exc_info.value
         assert (
             type(self.exc_info.value.exception) is self.expected_exception
         ), f"Raised RunError did not contain {self.expected_exception}"
