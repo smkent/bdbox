@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.machinery
 import re
 import sys
 from contextlib import contextmanager, suppress
@@ -61,13 +62,29 @@ class ModelLocator:
         after_keys = sorted(set(sys.modules.keys()) - before_keys)
         if not after_keys:
             return
-        if name := (name or self.model.module_name):
+        if name:
             base_name = name.split(".", maxsplit=1)[0]
             after_keys = [
                 ak
                 for ak in after_keys
                 if ak == base_name or ak.startswith(f"{base_name}.")
             ]
+        extension_modules = {
+            ak
+            for ak in after_keys
+            if isinstance(
+                getattr(sys.modules.get(ak, None), "__loader__", None),
+                importlib.machinery.ExtensionFileLoader,
+            )
+        }
+        extension_prefixes = tuple(f"{p}." for p in extension_modules)
+        after_keys = [
+            ak
+            for ak in after_keys
+            if not (
+                ak in extension_modules or ak.startswith(extension_prefixes)
+            )
+        ]
         for ak in after_keys:
             sys.modules.pop(ak, None)
 

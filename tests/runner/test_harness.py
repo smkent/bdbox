@@ -119,16 +119,24 @@ def test_harness_existing_non_model_file(
     assert capsys.readouterr().err == snapshot
 
 
-def test_harness_mixed_model_then_params_exits(
-    model_runner: HarnessRunnerRunner,
+@pytest.mark.parametrize(
+    "model",
+    [
+        pytest.param(
+            Models.MIXED_MODEL_THEN_PARAMS, id="mixed_model_then_params"
+        ),
+        pytest.param(
+            Models.MIXED_PARAMS_THEN_MODEL, id="mixed_params_then_model"
+        ),
+    ],
+)
+def test_harness_mixed_params_and_model_exits(
+    model_runner: HarnessRunnerRunner, model: Path
 ) -> None:
-    model_runner(Models.MIXED_MODEL_THEN_PARAMS)
-
-
-def test_harness_mixed_params_then_model_exits(
-    model_runner: HarnessRunnerRunner,
-) -> None:
-    model_runner(Models.MIXED_PARAMS_THEN_MODEL)
+    model_runner(model)
+    # Expected error during model run instead of discovery,
+    # model module expected to be loaded for run
+    assert sys.modules.pop("tests.models", None)
 
 
 @pytest.mark.parametrize(
