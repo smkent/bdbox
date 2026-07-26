@@ -829,10 +829,6 @@
                               "default": "small",
                               "oneOf": [
                                   {
-                                      "type": "null",
-                                      "title": "None"
-                                  },
-                                  {
                                       "enum": [
                                           "small",
                                           "medium",
@@ -840,16 +836,16 @@
                                           1
                                       ],
                                       "title": "Literal"
+                                  },
+                                  {
+                                      "type": "null",
+                                      "title": "None"
                                   }
                               ]
                           },
                           "thing": {
                               "default": 4.4,
                               "oneOf": [
-                                  {
-                                      "type": "null",
-                                      "title": "None"
-                                  },
                                   {
                                       "type": "string",
                                       "title": "str"
@@ -864,6 +860,10 @@
                                           2
                                       ],
                                       "title": "Literal"
+                                  },
+                                  {
+                                      "type": "null",
+                                      "title": "None"
                                   }
                               ]
                           },
@@ -986,10 +986,6 @@
                                   "default": "small",
                                   "oneOf": [
                                       {
-                                          "type": "null",
-                                          "title": "None"
-                                      },
-                                      {
                                           "enum": [
                                               "small",
                                               "medium",
@@ -997,16 +993,16 @@
                                               1
                                           ],
                                           "title": "Literal"
+                                      },
+                                      {
+                                          "type": "null",
+                                          "title": "None"
                                       }
                                   ]
                               },
                               "thing": {
                                   "default": 4.4,
                                   "oneOf": [
-                                      {
-                                          "type": "null",
-                                          "title": "None"
-                                      },
                                       {
                                           "type": "string",
                                           "title": "str"
@@ -1021,6 +1017,10 @@
                                               2
                                           ],
                                           "title": "Literal"
+                                      },
+                                      {
+                                          "type": "null",
+                                          "title": "None"
                                       }
                                   ]
                               },
@@ -1172,10 +1172,6 @@
                           "default": "small",
                           "oneOf": [
                               {
-                                  "type": "null",
-                                  "title": "None"
-                              },
-                              {
                                   "enum": [
                                       "small",
                                       "medium",
@@ -1183,16 +1179,16 @@
                                       1
                                   ],
                                   "title": "Literal"
+                              },
+                              {
+                                  "type": "null",
+                                  "title": "None"
                               }
                           ]
                       },
                       "thing": {
                           "default": 4.4,
                           "oneOf": [
-                              {
-                                  "type": "null",
-                                  "title": "None"
-                              },
                               {
                                   "type": "string",
                                   "title": "str"
@@ -1207,6 +1203,10 @@
                                       2
                                   ],
                                   "title": "Literal"
+                              },
+                              {
+                                  "type": "null",
+                                  "title": "None"
                               }
                           ]
                       },
@@ -1411,10 +1411,6 @@
                               "default": "small",
                               "oneOf": [
                                   {
-                                      "type": "null",
-                                      "title": "None"
-                                  },
-                                  {
                                       "enum": [
                                           "small",
                                           "medium",
@@ -1422,16 +1418,16 @@
                                           1
                                       ],
                                       "title": "Literal"
+                                  },
+                                  {
+                                      "type": "null",
+                                      "title": "None"
                                   }
                               ]
                           },
                           "thing": {
                               "default": 4.4,
                               "oneOf": [
-                                  {
-                                      "type": "null",
-                                      "title": "None"
-                                  },
                                   {
                                       "type": "string",
                                       "title": "str"
@@ -1446,6 +1442,10 @@
                                           2
                                       ],
                                       "title": "Literal"
+                                  },
+                                  {
+                                      "type": "null",
+                                      "title": "None"
                                   }
                               ]
                           },
@@ -1568,10 +1568,6 @@
                                   "default": "small",
                                   "oneOf": [
                                       {
-                                          "type": "null",
-                                          "title": "None"
-                                      },
-                                      {
                                           "enum": [
                                               "small",
                                               "medium",
@@ -1579,16 +1575,16 @@
                                               1
                                           ],
                                           "title": "Literal"
+                                      },
+                                      {
+                                          "type": "null",
+                                          "title": "None"
                                       }
                                   ]
                               },
                               "thing": {
                                   "default": 4.4,
                                   "oneOf": [
-                                      {
-                                          "type": "null",
-                                          "title": "None"
-                                      },
                                       {
                                           "type": "string",
                                           "title": "str"
@@ -1603,6 +1599,10 @@
                                               2
                                           ],
                                           "title": "Literal"
+                                      },
+                                      {
+                                          "type": "null",
+                                          "title": "None"
                                       }
                                   ]
                               },
@@ -1754,10 +1754,6 @@
                           "default": "small",
                           "oneOf": [
                               {
-                                  "type": "null",
-                                  "title": "None"
-                              },
-                              {
                                   "enum": [
                                       "small",
                                       "medium",
@@ -1765,16 +1761,16 @@
                                       1
                                   ],
                                   "title": "Literal"
+                              },
+                              {
+                                  "type": "null",
+                                  "title": "None"
                               }
                           ]
                       },
                       "thing": {
                           "default": 4.4,
                           "oneOf": [
-                              {
-                                  "type": "null",
-                                  "title": "None"
-                              },
                               {
                                   "type": "string",
                                   "title": "str"
@@ -1789,6 +1785,10 @@
                                       2
                                   ],
                                   "title": "Literal"
+                              },
+                              {
+                                  "type": "null",
+                                  "title": "None"
                               }
                           ]
                       },
