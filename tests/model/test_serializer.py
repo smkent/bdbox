@@ -54,8 +54,8 @@ class SchemaModels:
             color: Color = Color.PURPLE
             maybe_color: Color | None = Color.RED
             kinda_color: Color | int | None = Color.BLUE
-            size: None | Literal["small", "medium", "large", 1] = "small"
-            thing: None | str | float | Literal[1, 2] = 4.4
+            size: Literal["small", "medium", "large", 1] | None = "small"
+            thing: str | float | Literal[1, 2] | None = 4.4
             other_thing: int | str = 5
 
         @dataclass
