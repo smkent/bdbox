@@ -63,13 +63,11 @@ export class Params {
   private display({
     schemaChanged = true,
   }: { schemaChanged?: boolean } = {}): void {
-    if (
-      !(
-        this.paramsFormEl &&
-        this.jedisonData.schema?.properties &&
-        this.jedisonData.schema?.required
-      )
-    ) {
+    if (!(
+      this.paramsFormEl &&
+      this.jedisonData.schema?.properties &&
+      this.jedisonData.schema?.required
+    )) {
       return;
     }
 
