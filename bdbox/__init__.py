@@ -1,4 +1,4 @@
-"""build123d development with live preview and interactive parameters."""
+"""Workshop for build123d models with live preview & interactive parameters."""
 
 from __future__ import annotations
 

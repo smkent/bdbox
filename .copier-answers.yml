@@ -13,7 +13,8 @@ enable_features:
 - xdist
 enable_pypi: true
 github_user: smkent
-project_description: build123d development with live preview and interactive parameters.
+project_description: Workshop for build123d models with live preview and interactive
+    parameters.
 project_name: bdbox
 project_slug: bdbox
 project_type: application

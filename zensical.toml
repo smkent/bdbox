@@ -1,6 +1,6 @@
 [project]
 site_name = "bdbox"
-site_description = "Interactive parametric build123d model development: live parameter panel, named presets, automatic CLI, and one-command export."
+site_description = "Workshop for build123d models with live preview and interactive parameters."
 site_author = "Stephen Kent"
 site_url = "https://smkent.github.io/bdbox"
 repo_url = "https://github.com/smkent/bdbox"

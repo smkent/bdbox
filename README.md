@@ -1,7 +1,7 @@
 # bdbox
 
-**[build123d][build123d]** development with live preview and
-interactive parameters
+**bdbox** is a workshop for **[build123d][build123d]** models
+with live preview and interactive parameters.
 
 [![License](https://img.shields.io/github/license/smkent/bdbox)](https://github.com/smkent/bdbox/blob/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/bdbox)](https://pypi.org/project/bdbox/)
