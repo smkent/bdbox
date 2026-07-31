@@ -4,14 +4,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
 
-from build123d import Box, Compound
+from build123d import Box, BuildPart, BuildSketch, Rectangle, extrude
 
-from bdbox import Float, Model, Preset
-
-if TYPE_CHECKING:
-    from collections.abc import Sequence
+from bdbox import Float, Model, Preset, show
 
 
 @dataclass
@@ -28,10 +24,22 @@ class ExportModel(Model):
     sub: SubOptions = field(default_factory=lambda: SubOptions(1, 2, 3))
     size = Float(10.0, min=1.0, max=100.0)
     presets = (Preset("mid", size=8.5),)
+    use_show: str | None = None
 
-    def build(self) -> Compound | Sequence[Compound]:
+    def build(self) -> Model.Geometry | None:
         """Build and return a box."""
-        return (
-            Box(self.size, self.size, self.size),
-            Box(self.size * 2, self.size * 2, self.size * 2),
-        )
+        b1 = Box(self.size, self.size, self.size)
+        with BuildPart() as p:
+            with BuildSketch() as sk:
+                Rectangle(self.size * 2, self.size * 2)
+            extrude(amount=self.size, both=True)
+            assert p.part
+            p.part.label = "Box"
+        b2 = p.part
+        if self.use_show:
+            func = getattr(show, f"__{self.use_show}__", None)
+            assert func, f"show.__{self.use_show}__ missing"
+            show(sk, b2)
+            func((b1, b2))
+            func(b1)
+        return b1, b2

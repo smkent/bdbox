@@ -47,7 +47,8 @@ class ModelRunner(ModelLocator):
                 exit_mock(),
                 AtExit.mock() as atexit_mock,
             ):
-                main_module.__dict__.update(self._run_model())
+                with suppress(ModelExit):
+                    main_module.__dict__.update(self._run_model())
                 mock_main.start()
                 if not atexit_mock.hooks:
                     run_state.action_state.act_once()
@@ -79,10 +80,7 @@ class ModelRunner(ModelLocator):
     @contextmanager
     def action_on_model_render(self) -> Iterator[None]:
         if self.action and not self.discovery_mode:
-            with (
-                run_state.action_state.on_model_render(),
-                suppress(ModelExit),
-            ):
+            with run_state.action_state.on_model_render():
                 yield
         else:
             yield

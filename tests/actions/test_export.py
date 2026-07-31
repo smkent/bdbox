@@ -154,6 +154,50 @@ def test_model_export(
     )
 
 
+@dataclass
+class ShowOperatorCase:
+    model: Path
+    operator: str
+    num_outputs: int
+    args: Sequence[str | Path] = ()
+
+
+@pytest.mark.parametrize(
+    "show_operator_case",
+    [
+        pytest.param(
+            ShowOperatorCase(
+                model=model,
+                operator=operator,
+                num_outputs=num_outputs,
+                args=(
+                    () if operator in model.stem else ["--use-show", operator]
+                ),
+            ),
+            id=f"{model.stem.split('_')[0]}_{operator}",
+        )
+        for operator, num_outputs in {"add": 5, "truediv": 3}.items()
+        for model in [
+            Models.MODEL_EXPORT,
+            Models.PARAMS_EXPORT,
+            Path(Models.DIR / f"plain_export_show_{operator}.py"),
+        ]
+    ],
+)
+def test_model_export_show_operator(
+    run_class: type[Runner],
+    model_runner: ExportModelRunner,
+    show_operator_case: ShowOperatorCase,
+) -> None:
+    model_runner(
+        show_operator_case.model,
+        ["export", model_runner.output_dir, *show_operator_case.args],
+        run_class=run_class,
+        single=False,
+        num_outputs=show_operator_case.num_outputs,
+    )
+
+
 @pytest.mark.parametrize(
     "model_file",
     [
