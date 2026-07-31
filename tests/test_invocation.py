@@ -264,6 +264,7 @@ def test_model_subclass(
         Models.MONO_PLAIN,
         Models.SHOWMODEL_MODEL,
         Models.SHOWMODEL_PARAMS,
+        Models.SHOWMODEL_PLAIN,
     ],
 )
 def test_module_models(

@@ -5,9 +5,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from build123d import Box
+from build123d import Box, BuildPart, BuildSketch, Rectangle, extrude
 
-from bdbox import Float, Params, Preset
+from bdbox import Float, Params, Preset, show
 
 
 @dataclass
@@ -24,6 +24,25 @@ class P(Params):
     sub: SubOptions = field(default_factory=lambda: SubOptions(1, 2, 3))
     size = Float(10.0, min=1.0, max=100.0)
     presets = (Preset("mid", size=8.5),)
+    use_show: str | None = None
 
 
-result = (Box(P.size, P.size, P.size), Box(P.size * 2, P.size * 2, P.size * 2))
+_b1 = Box(P.size, P.size, P.size)
+with BuildPart() as _p:
+    with BuildSketch() as _sk:
+        Rectangle(P.size * 2, P.size * 2)
+    extrude(amount=P.size, both=True)
+    assert _p.part
+    _p.part.label = "Box"
+_b2 = _p.part
+
+
+if P.use_show:
+    func = getattr(show, f"__{P.use_show}__", None)
+    assert func, f"show.__{P.use_show}__ missing"
+    show(_sk, _b2)
+    func((_b1, _b2))
+    func(_b1)
+    show((_b1, _b2))
+else:
+    result = (_b1, _b2)

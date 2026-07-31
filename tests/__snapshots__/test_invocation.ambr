@@ -1186,6 +1186,48 @@
   Run complete ([TIMER]ms)
   '''
 # ---
+# name: test_module_models[tests.models.mod_plain.show_model-help-embedded]
+  'show with or operator: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))'
+# ---
+# name: test_module_models[tests.models.mod_plain.show_model-help-embedded].1
+  ''
+# ---
+# name: test_module_models[tests.models.mod_plain.show_model-help-harness]
+  '''
+  show with or operator: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
+  usage: bdbox [-h] [-v] [{run,export,view,version}]
+  
+  ╭─ options ───────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit          │
+  │ -v, --verbose  Increase logging verbosity. (repeatable) │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ subcommands ───────────────────────────────────────────╮
+  │ (default: run)                                          │
+  │   • run        Run the model.                           │
+  │   • export     Export geometry to a STEP or STL file.   │
+  │   • view       View model geometry.                     │
+  │   • version    Show bdbox version and exit              │
+  ╰─────────────────────────────────────────────────────────╯
+  '''
+# ---
+# name: test_module_models[tests.models.mod_plain.show_model-help-harness].1
+  ''
+# ---
+# name: test_module_models[tests.models.mod_plain.show_model-render-embedded]
+  'show with or operator: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))'
+# ---
+# name: test_module_models[tests.models.mod_plain.show_model-render-embedded].1
+  ''
+# ---
+# name: test_module_models[tests.models.mod_plain.show_model-render-harness]
+  'show with or operator: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))'
+# ---
+# name: test_module_models[tests.models.mod_plain.show_model-render-harness].1
+  '''
+  show with or operator: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
+  Run complete ([TIMER]ms)
+  '''
+# ---
 # name: test_module_models[tests.models.mono_model.models.model-help-embedded]
   '''
   usage: MyModel [-h] [OPTIONS] [{run,export,view,version}]

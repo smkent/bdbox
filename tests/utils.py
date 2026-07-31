@@ -72,6 +72,7 @@ class Models:
 
     SHOWMODEL_MODEL = "tests.models.mod_model.show_model"
     SHOWMODEL_PARAMS = "tests.models.mod_params.show_model"
+    SHOWMODEL_PLAIN = "tests.models.mod_plain.show_model"
 
 
 @dataclass

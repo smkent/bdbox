@@ -41,11 +41,25 @@
               "maximum": 100.0,
               "type": "number",
               "x-format": "range"
+          },
+          "use_show": {
+              "default": null,
+              "oneOf": [
+                  {
+                      "type": "string",
+                      "title": "str"
+                  },
+                  {
+                      "type": "null",
+                      "title": "None"
+                  }
+              ]
           }
       },
       "required": [
           "size",
-          "sub"
+          "sub",
+          "use_show"
       ],
       "x-presets": [
           {
@@ -100,11 +114,25 @@
               "maximum": 100.0,
               "type": "number",
               "x-format": "range"
+          },
+          "use_show": {
+              "default": null,
+              "oneOf": [
+                  {
+                      "type": "string",
+                      "title": "str"
+                  },
+                  {
+                      "type": "null",
+                      "title": "None"
+                  }
+              ]
           }
       },
       "required": [
           "size",
-          "sub"
+          "sub",
+          "use_show"
       ],
       "x-presets": [
           {
@@ -374,11 +402,25 @@
               "maximum": 100.0,
               "type": "number",
               "x-format": "range"
+          },
+          "use_show": {
+              "default": null,
+              "oneOf": [
+                  {
+                      "type": "string",
+                      "title": "str"
+                  },
+                  {
+                      "type": "null",
+                      "title": "None"
+                  }
+              ]
           }
       },
       "required": [
           "size",
-          "sub"
+          "sub",
+          "use_show"
       ],
       "x-presets": [
           {
@@ -433,11 +475,25 @@
               "maximum": 100.0,
               "type": "number",
               "x-format": "range"
+          },
+          "use_show": {
+              "default": null,
+              "oneOf": [
+                  {
+                      "type": "string",
+                      "title": "str"
+                  },
+                  {
+                      "type": "null",
+                      "title": "None"
+                  }
+              ]
           }
       },
       "required": [
           "size",
-          "sub"
+          "sub",
+          "use_show"
       ],
       "x-presets": [
           {
