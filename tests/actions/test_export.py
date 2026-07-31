@@ -176,7 +176,11 @@ class ShowOperatorCase:
             ),
             id=f"{model.stem.split('_')[0]}_{operator}",
         )
-        for operator, num_outputs in {"add": 5, "truediv": 3}.items()
+        for operator, num_outputs in {
+            "add": 5,
+            "floordiv": 3,
+            "truediv": 3,
+        }.items()
         for model in [
             Models.MODEL_EXPORT,
             Models.PARAMS_EXPORT,

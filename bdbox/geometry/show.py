@@ -46,12 +46,16 @@ class Show:
     # Operators
 
     def __truediv__(self, geometry: GeometryT) -> GeometryT:
-        """Show only the specified geometry, and stop model execution."""
-        run_state.geometry.__init__()
+        """Show the specified geometry, and stop model execution."""
         if geo := run_state.geometry.filter_geometry(geometry):
             geo.label = "bdbox selection"
             self.func(geo)
         raise ModelExit
+
+    def __floordiv__(self, geometry: GeometryT) -> GeometryT:
+        """Show only the specified geometry, and stop model execution."""
+        run_state.geometry.__init__()
+        return self.__truediv__(geometry)
 
     def __add__(self, geometry: GeometryT) -> GeometryT:
         """Highlight the specified geometry."""

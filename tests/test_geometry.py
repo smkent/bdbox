@@ -37,6 +37,20 @@ def show_callable(request: pytest.FixtureRequest) -> ShowCallable:
     return request.param
 
 
+@pytest.fixture(
+    params=[
+        pytest.param(object(), id="object"),
+        pytest.param(MockBuild123d.Shape(), id="shape"),
+        pytest.param(MockBuild123d.Builder(), id="empty_builder"),
+        pytest.param(
+            MockBuild123d.Builder(shape=MockBuild123d.Shape()), id="builder"
+        ),
+    ]
+)
+def showable_object(request: pytest.FixtureRequest) -> object:
+    return request.param
+
+
 def test_show_multiple_args(
     mock_b123d: MockBuild123d, show_callable: ShowCallable
 ) -> None:
@@ -76,20 +90,10 @@ def test_geometry_resolve_returns_show_multiple(
     )
 
 
-@pytest.mark.parametrize(
-    "obj",
-    [
-        pytest.param(object(), id="object"),
-        pytest.param(MockBuild123d.Shape(), id="shape"),
-        pytest.param(MockBuild123d.Builder(), id="empty_builder"),
-        pytest.param(
-            MockBuild123d.Builder(shape=MockBuild123d.Shape()), id="builder"
-        ),
-    ],
-)
 def test_geometry_resolve_returns_show_single(
-    mock_b123d: MockBuild123d, obj: object
+    mock_b123d: MockBuild123d, showable_object: object
 ) -> None:
+    obj = showable_object
     show(obj)  # ty: ignore [invalid-argument-type]
     expected = None
     if isinstance(obj, mock_b123d.Builder) and obj.shape:
@@ -99,20 +103,42 @@ def test_geometry_resolve_returns_show_single(
     assert run_state.geometry.resolve() == expected
 
 
-@pytest.mark.parametrize(
-    "obj",
-    [
-        pytest.param(object(), id="object"),
-        pytest.param(MockBuild123d.Shape(), id="shape"),
-        pytest.param(MockBuild123d.Builder(), id="empty_builder"),
-        pytest.param(
-            MockBuild123d.Builder(shape=MockBuild123d.Shape()), id="builder"
-        ),
-    ],
-)
-def test_geometry_resolve_returns_shown_with_truediv_operator(
-    mock_b123d: MockBuild123d, show_callable: ShowCallable, obj: object
+def test_geometry_resolve_returns_shown_with_floordiv_operator(
+    mock_b123d: MockBuild123d,
+    show_callable: ShowCallable,
+    showable_object: object,
 ) -> None:
+    obj = showable_object
+    preloaded_shapes = [mock_b123d.Shape(), mock_b123d.Shape()]
+    for preload_obj in (
+        object(),
+        preloaded_shapes[0],
+        mock_b123d.Builder(),
+        mock_b123d.Builder(shape=preloaded_shapes[1]),
+    ):
+        show_callable(preload_obj)  # ty: ignore [invalid-argument-type]
+    assert run_state.geometry.resolve() == mock_b123d.Compound(
+        children=preloaded_shapes, label="bdbox collected geometry"
+    )
+    with suppress(ModelExit):
+        show_callable // obj  # ty: ignore [unsupported-operator]
+    expected = None
+    if isinstance(obj, mock_b123d.Builder) and obj.shape:
+        expected = obj.shape
+    elif isinstance(obj, mock_b123d.Shape):
+        expected = obj
+    resolved = run_state.geometry.resolve()
+    assert resolved == expected
+    if resolved:
+        assert resolved.label == "bdbox selection"
+
+
+def test_geometry_resolve_returns_shown_with_truediv_operator(
+    mock_b123d: MockBuild123d,
+    show_callable: ShowCallable,
+    showable_object: object,
+) -> None:
+    obj = showable_object
     preloaded_shapes = [mock_b123d.Shape(), mock_b123d.Shape()]
     for preload_obj in (
         object(),
@@ -126,31 +152,25 @@ def test_geometry_resolve_returns_shown_with_truediv_operator(
     )
     with suppress(ModelExit):
         show_callable / obj  # ty: ignore [unsupported-operator]
-    expected = None
+    expected = list(preloaded_shapes)
     if isinstance(obj, mock_b123d.Builder) and obj.shape:
-        expected = obj.shape
+        expected.append(obj.shape)
     elif isinstance(obj, mock_b123d.Shape):
-        expected = obj
+        expected.append(obj)
     resolved = run_state.geometry.resolve()
-    assert resolved == expected
-    if resolved:
-        assert resolved.label == "bdbox selection"
+    assert resolved == mock_b123d.Compound(
+        children=expected, label="bdbox collected geometry"
+    )
+    if len(expected) > len(preloaded_shapes):
+        assert expected[-1].label == "bdbox selection"
 
 
-@pytest.mark.parametrize(
-    "obj",
-    [
-        pytest.param(object(), id="object"),
-        pytest.param(MockBuild123d.Shape(), id="shape"),
-        pytest.param(MockBuild123d.Builder(), id="empty_builder"),
-        pytest.param(
-            MockBuild123d.Builder(shape=MockBuild123d.Shape()), id="builder"
-        ),
-    ],
-)
 def test_geometry_resolve_returns_shown_with_add_operator(
-    mock_b123d: MockBuild123d, show_callable: ShowCallable, obj: object
+    mock_b123d: MockBuild123d,
+    show_callable: ShowCallable,
+    showable_object: object,
 ) -> None:
+    obj = showable_object
     preloaded_shapes = [mock_b123d.Shape(), mock_b123d.Shape()]
     for preload_obj in (
         object(),
