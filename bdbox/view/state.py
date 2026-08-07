@@ -68,6 +68,9 @@ class ViewState:
         geometry = self.geometry.resolve()
         if not geometry:
             log.warning("No geometry collected")
+            from ocp_vscode import show_clear  # noqa: PLC0415
+
+            show_clear()
             return
 
         from ocp_vscode import show  # noqa: PLC0415
