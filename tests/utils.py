@@ -186,6 +186,9 @@ class MockOcpVscode(ModuleType):
     def show(*args: Any, **kwargs: Any) -> None:
         pass
 
+    def show_clear(*args: Any, **kwargs: Any) -> None:
+        pass
+
     comms = Comms()
     config = Config()
 

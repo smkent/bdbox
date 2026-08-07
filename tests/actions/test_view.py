@@ -112,6 +112,12 @@ def test_send_to_viewer_warns_on_empty_geometry(
 ) -> None:
     model = tmp_path / "model.py"
     model.write_text('print("nope")')
-    ModelHarness([str(model), "view"])()
+    with (
+        patch.object(mock_ocp_vscode, "show_clear") as mock_show_clear,
+        patch.object(mock_ocp_vscode, "show") as mock_show,
+    ):
+        ModelHarness([str(model), "view"])()
+    mock_show_clear.assert_called_once_with()
+    mock_show.assert_not_called()
     assert "No geometry collected" in log.messages
     assert "Sending geometry to viewer" not in log.messages
