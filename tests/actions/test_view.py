@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
+from contextlib import ExitStack
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
@@ -16,7 +19,13 @@ from bdbox.runner.watcher import ModelWatcher
 from tests.utils import MockOcpVscode, Models, RaisesRunError
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator, Sequence
     from pathlib import Path
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 
 pytestmark = pytest.mark.usefixtures(
@@ -28,6 +37,36 @@ pytestmark = pytest.mark.usefixtures(
 )
 
 
+@dataclass
+class ViewExportCase:
+    export: bool
+    output: Path | None = None
+    args: Sequence[str] = ()
+
+    def assert_no_geometry(self) -> None:
+        if not self.export:
+            return
+        assert self.output
+        assert not self.output.exists()
+
+
+@pytest.fixture(
+    params=[
+        pytest.param(False, id="no_export"),
+        pytest.param(True, id="export"),
+    ]
+)
+def view_export_case(
+    tmp_path: Path, request: pytest.FixtureRequest
+) -> ViewExportCase:
+    if request.param:
+        output = tmp_path / "out"
+        return ViewExportCase(
+            export=True, output=output, args=["--export", str(output)]
+        )
+    return ViewExportCase(export=False)
+
+
 @pytest.fixture(
     params=[
         pytest.param(Models.MODEL_EXPORT, id="Model"),
@@ -36,6 +75,31 @@ pytestmark = pytest.mark.usefixtures(
 )
 def model(request: pytest.FixtureRequest) -> Path:
     return request.param
+
+
+@dataclass
+class MockShow(ExitStack):
+    mock_ocp_vscode: MockOcpVscode
+    show: MagicMock = field(init=False)
+    show_clear: MagicMock = field(init=False)
+
+    def __post_init__(self) -> None:
+        super().__init__()
+
+    def __enter__(self) -> Self:
+        self.show = self.enter_context(
+            patch.object(self.mock_ocp_vscode, "show")
+        )
+        self.show_clear = self.enter_context(
+            patch.object(self.mock_ocp_vscode, "show_clear")
+        )
+        return super().__enter__()
+
+
+@pytest.fixture
+def mock_show(mock_ocp_vscode: MockOcpVscode) -> Iterator[MockShow]:
+    with MockShow(mock_ocp_vscode=mock_ocp_vscode) as mock:
+        yield mock
 
 
 @pytest.mark.usefixtures("embedded_mode")
@@ -77,11 +141,11 @@ def test_model_view_passes_flags_to_server(
     assert server_instance.open_browser is False
 
 
-def test_send_geometry_to_viewer(mock_ocp_vscode: MockOcpVscode) -> None:
-    with patch.object(mock_ocp_vscode, "show") as mock_show:
-        ModelHarness([Models.PARAMS_EXPORT, "view"])()
-    mock_show.assert_called_once()
-    assert len(mock_show.call_args[0][0]) == 2
+def test_send_geometry_to_viewer(mock_show: MockShow) -> None:
+    ModelHarness([Models.PARAMS_EXPORT, "view"])()
+    mock_show.show.assert_called_once()
+    mock_show.show_clear.assert_not_called()
+    assert len(mock_show.show.call_args[0][0]) == 2
 
 
 @pytest.mark.parametrize("file_format", ["step", "stl"])
@@ -106,18 +170,45 @@ def test_view_with_export_creates_file(
 
 
 def test_send_to_viewer_warns_on_empty_geometry(
-    tmp_path: Path,
-    log: pytest.LogCaptureFixture,
-    mock_ocp_vscode: MockOcpVscode,
+    tmp_path: Path, log: pytest.LogCaptureFixture, mock_show: MockShow
 ) -> None:
     model = tmp_path / "model.py"
     model.write_text('print("nope")')
-    with (
-        patch.object(mock_ocp_vscode, "show_clear") as mock_show_clear,
-        patch.object(mock_ocp_vscode, "show") as mock_show,
-    ):
-        ModelHarness([str(model), "view"])()
-    mock_show_clear.assert_called_once_with()
-    mock_show.assert_not_called()
+    ModelHarness([str(model), "view"])()
+    mock_show.show.assert_not_called()
+    mock_show.show_clear.assert_called_once_with()
     assert "No geometry collected" in log.messages
     assert "Sending geometry to viewer" not in log.messages
+
+
+def test_send_to_viewer_shows_geometry_on_run_failure(
+    tmp_path: Path, mock_show: MockShow, view_export_case: ViewExportCase
+) -> None:
+    model = tmp_path / "model.py"
+    model.write_text(
+        os.linesep.join(
+            (
+                "from build123d import Box",
+                "from bdbox import show",
+                "show(Box(77, 1138, 2187))",
+                "raise RuntimeError('that\\'s no moon')",
+            )
+        )
+    )
+    with RaisesRunError(RuntimeError):
+        ModelHarness([str(model), "view", *view_export_case.args])()
+    mock_show.show.assert_called_once()
+    mock_show.show_clear.assert_not_called()
+    view_export_case.assert_no_geometry()
+
+
+def test_send_to_viewer_clears_on_run_failure_with_no_geometry(
+    tmp_path: Path, mock_show: MockShow, view_export_case: ViewExportCase
+) -> None:
+    model = tmp_path / "model.py"
+    model.write_text("raise RuntimeError('no droids')")
+    with RaisesRunError(RuntimeError):
+        ModelHarness([str(model), "view", *view_export_case.args])()
+    mock_show.show.assert_not_called()
+    mock_show.show_clear.assert_called_once_with()
+    view_export_case.assert_no_geometry()
