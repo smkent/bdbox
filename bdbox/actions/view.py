@@ -65,11 +65,14 @@ class ViewAction(ModelAction):
 
     def __call__(self) -> None:
         """Collect geometry for viewer."""
+        self._show()
+        if self.export:
+            ExportAction(output=self.export, format=self.format)()
+
+    def _show(self) -> None:
         if self.view_app and (view_state := self.view_app.view_state):
             view_state.geometry = run_state.geometry
             view_state.show()
-        if self.export:
-            ExportAction(output=self.export, format=self.format)()
 
     def on_harness(self, model: ModelInfo) -> None:
         if not (model_arg := model.arg):
@@ -136,6 +139,7 @@ class ViewAction(ModelAction):
             try:
                 yield
             except (Exception, SystemExit):
+                self._show()
                 timer.stop()
                 self.view_app.enqueue(
                     ModelRunStatusMessage.error(elapsed_ms=timer.elapsed_ms)
