@@ -3,9 +3,10 @@
 
 from __future__ import annotations
 
+from copy import copy
 from dataclasses import dataclass, field
 
-from build123d import Box, BuildPart, BuildSketch, Rectangle, extrude
+from build123d import Box, BuildPart, BuildSketch, Compound, Rectangle, extrude
 
 from bdbox import Float, Model, Preset, show
 
@@ -36,10 +37,13 @@ class ExportModel(Model):
             assert p.part
             p.part.label = "Box"
         b2 = p.part
+        b3 = Box(self.size / 2, self.size / 2, self.size / 2)
+        c1 = Compound(children=[b3, copy(b3), copy(b3)])
         if self.use_show:
             func = getattr(show, f"__{self.use_show}__", None)
             assert func, f"show.__{self.use_show}__ missing"
             show(sk, b2)
             func((b1, b2))
             func(b1)
-        return b1, b2
+            func(c1)
+        return b1, b2, c1

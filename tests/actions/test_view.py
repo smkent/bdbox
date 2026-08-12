@@ -145,7 +145,7 @@ def test_send_geometry_to_viewer(mock_show: MockShow) -> None:
     ModelHarness([Models.PARAMS_EXPORT, "view"])()
     mock_show.show.assert_called_once()
     mock_show.show_clear.assert_not_called()
-    assert len(mock_show.show.call_args[0][0]) == 2
+    assert len(mock_show.show.call_args[0][0]) == 3
 
 
 @pytest.mark.parametrize("file_format", ["step", "stl"])
@@ -165,7 +165,7 @@ def test_view_with_export_creates_file(
     )()
     assert output_file.is_dir()
     exported_files = list(output_file.iterdir())
-    assert len(exported_files) == 3
+    assert len(exported_files) == 7
     assert all(f.suffix == f".{file_format}" for f in exported_files)
 
 

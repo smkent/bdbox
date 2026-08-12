@@ -56,7 +56,7 @@ class Exports:
             raise UsageError("No solid geometry to export")
         if self.single or len(self.geometry.leaves) == 1 or num_solids == 1:
             return export_parts
-        for part in self.geometry.leaves:
+        for part in self.geometry.descendants:
             if not part.solids():
                 continue
             part_name = ".".join(

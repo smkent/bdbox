@@ -177,9 +177,9 @@ class ShowOperatorCase:
             id=f"{model.stem.split('_')[0]}_{operator}",
         )
         for operator, num_outputs in {
-            "add": 5,
+            "add": 9,
             "floordiv": 3,
-            "truediv": 3,
+            "truediv": 4,
         }.items()
         for model in [
             Models.MODEL_EXPORT,
@@ -255,7 +255,7 @@ def test_export_with_parameters_after(
         model_with_params,
         ["export", model_runner.output_dir, "--size", "20"],
         run_class=run_class,
-        num_outputs=3,
+        num_outputs=7,
     )
 
 
@@ -269,7 +269,7 @@ def test_export_with_parameters_before(
         model_with_params,
         ["--size", "20", "export", model_runner.output_dir],
         run_class=run_class,
-        num_outputs=3,
+        num_outputs=7,
     )
 
 
@@ -287,7 +287,7 @@ def test_main_export(
     model_runner(
         MAIN_STUB,
         ["export", model_file, model_runner.output_dir],
-        num_outputs=3,
+        num_outputs=7,
     )
 
 
@@ -303,7 +303,7 @@ def test_main_export_with_parameters(
             "--size",
             "20",
         ],
-        num_outputs=3,
+        num_outputs=7,
     )
 
 
@@ -347,7 +347,7 @@ def test_export_single_embedded_does_not_exec_harness(
         model_runner(
             Models.PARAMS_EXPORT,
             ["export", model_runner.output_dir],
-            num_outputs=3,
+            num_outputs=7,
         )
     mock_run.assert_not_called()
 
@@ -361,9 +361,17 @@ def test_export_single_embedded_does_not_exec_harness(
                 Models.PARAMS_EXPORT.stem,
                 f"{Models.PARAMS_EXPORT.stem}.Box",
                 f"{Models.PARAMS_EXPORT.stem}.Box_002",
+                f"{Models.PARAMS_EXPORT.stem}.Compound",
+                f"{Models.PARAMS_EXPORT.stem}.Compound.Box",
+                f"{Models.PARAMS_EXPORT.stem}.Compound.Box_002",
+                f"{Models.PARAMS_EXPORT.stem}.Compound.Box_003",
                 f"{Models.PARAMS_EXPORT.stem}-mid",
                 f"{Models.PARAMS_EXPORT.stem}-mid.Box",
                 f"{Models.PARAMS_EXPORT.stem}-mid.Box_002",
+                f"{Models.PARAMS_EXPORT.stem}-mid.Compound",
+                f"{Models.PARAMS_EXPORT.stem}-mid.Compound.Box",
+                f"{Models.PARAMS_EXPORT.stem}-mid.Compound.Box_002",
+                f"{Models.PARAMS_EXPORT.stem}-mid.Compound.Box_003",
             ],
             id="Params-with-preset",
         ),
@@ -373,9 +381,17 @@ def test_export_single_embedded_does_not_exec_harness(
                 "ExportModel",
                 "ExportModel.Box",
                 "ExportModel.Box_002",
+                "ExportModel.Compound",
+                "ExportModel.Compound.Box",
+                "ExportModel.Compound.Box_002",
+                "ExportModel.Compound.Box_003",
                 "ExportModel-mid",
                 "ExportModel-mid.Box",
                 "ExportModel-mid.Box_002",
+                "ExportModel-mid.Compound",
+                "ExportModel-mid.Compound.Box",
+                "ExportModel-mid.Compound.Box_002",
+                "ExportModel-mid.Compound.Box_003",
             ],
             id="Model-with-preset",
         ),
@@ -385,6 +401,10 @@ def test_export_single_embedded_does_not_exec_harness(
                 Models.PLAIN_EXPORT.stem,
                 f"{Models.PLAIN_EXPORT.stem}.Box",
                 f"{Models.PLAIN_EXPORT.stem}.Box_002",
+                f"{Models.PLAIN_EXPORT.stem}.Compound",
+                f"{Models.PLAIN_EXPORT.stem}.Compound.Box",
+                f"{Models.PLAIN_EXPORT.stem}.Compound.Box_002",
+                f"{Models.PLAIN_EXPORT.stem}.Compound.Box_003",
             ],
             id="plain-no-presets",
         ),
