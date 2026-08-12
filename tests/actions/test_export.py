@@ -341,7 +341,7 @@ def test_export_all_embedded_execs_harness(tmp_path: Path) -> None:
 
 @pytest.mark.usefixtures("embedded_mode")
 def test_export_single_embedded_does_not_exec_harness(
-    tmp_path: Path, model_runner: ExportModelRunner
+    model_runner: ExportModelRunner,
 ) -> None:
     with patch.object(subprocess, "run") as mock_run:
         model_runner(
