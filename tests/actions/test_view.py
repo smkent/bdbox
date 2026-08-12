@@ -212,3 +212,28 @@ def test_send_to_viewer_clears_on_run_failure_with_no_geometry(
     mock_show.show.assert_not_called()
     mock_show.show_clear.assert_called_once_with()
     view_export_case.assert_no_geometry()
+
+
+@pytest.mark.parametrize(
+    "model_file",
+    [
+        pytest.param(Models.MONO_MODEL_EXPORT, id="mono_model_export"),
+        pytest.param(Models.MONO_PARAMS_EXPORT, id="mono_params_export"),
+    ],
+)
+@pytest.mark.parametrize("select", ["nothing", "vertices", "edges", "faces"])
+def test_view_with_export_no_geometry(
+    tmp_path: Path,
+    model_file: Path,
+    log: pytest.LogCaptureFixture,
+    select: str,
+) -> None:
+    output_file = tmp_path / "out"
+    ModelHarness(
+        [model_file, "view", "--export", str(output_file), "--select", select]
+    )()
+    assert not output_file.exists() or not any(output_file.iterdir())
+    if select == "nothing":
+        assert "Export: No geometry to export" in log.messages
+    else:
+        assert "Export: No solid geometry to export" in log.messages

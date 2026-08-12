@@ -209,13 +209,17 @@ def test_model_export_show_operator(
         pytest.param(Models.MONO_PARAMS_EXPORT, id="mono_params_export"),
     ],
 )
+@pytest.mark.parametrize("select", ["nothing", "vertices", "edges", "faces"])
 def test_model_export_without_solids(
-    run_class: type[Runner], model_file: Path, model_runner: ExportModelRunner
+    run_class: type[Runner],
+    model_file: Path,
+    model_runner: ExportModelRunner,
+    select: str,
 ) -> None:
     with pytest.raises((SystemExit, RunError, UsageError)) as e:
         model_runner(
             model_file,
-            ["export", model_runner.output_dir, "--select", "edges"],
+            ["export", model_runner.output_dir, "--select", select],
             run_class=run_class,
         )
     if isinstance(e, RunError):
@@ -234,7 +238,7 @@ def test_model_export_with_mixed_solids_edges(
 ) -> None:
     model_runner(
         model_file,
-        ["export", model_runner.output_dir, "--select", "both"],
+        ["export", model_runner.output_dir, "--select", "solids_and_mixed"],
         run_class=run_class,
         single=False,
         num_outputs=3,
