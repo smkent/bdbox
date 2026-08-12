@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Annotated, Any, Literal
 
 import tyro
 
+from bdbox.console import log
 from bdbox.errors import MultipleModelsError, ParamsError, UsageError
 from bdbox.model.serializer import serializer
 from bdbox.protocol import (
@@ -67,7 +68,10 @@ class ViewAction(ModelAction):
         """Collect geometry for viewer."""
         self._show()
         if self.export:
-            ExportAction(output=self.export, format=self.format)()
+            try:
+                ExportAction(output=self.export, format=self.format)()
+            except UsageError as e:
+                log.debug("Export: %s", e)
 
     def _show(self) -> None:
         if self.view_app and (view_state := self.view_app.view_state):
