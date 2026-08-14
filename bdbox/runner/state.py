@@ -4,13 +4,13 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 
 from bdbox.actions.state import ActionState
-from bdbox.geometry.geometry import Geometry
+from bdbox.geometry.geometry import GeometryCollector
 from bdbox.model.state import ModelState
 
 
 @dataclass
 class RunState:
-    geometry: Geometry = field(default_factory=Geometry)
+    geometry: GeometryCollector = field(default_factory=GeometryCollector)
     action_state: ActionState = field(default_factory=ActionState)
     model_state: ModelState = field(default_factory=ModelState)
 

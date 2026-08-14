@@ -19,14 +19,14 @@ from bdbox.protocol import (
 )
 
 if TYPE_CHECKING:
-    from bdbox.geometry.geometry import Geometry
+    from bdbox.geometry.geometry import GeometryCollector
     from bdbox.model.parameters import Params
     from bdbox.protocol import BrowserMessage
 
 
 @dataclass
 class ViewState:
-    geometry: Geometry | None = None
+    geometry: GeometryCollector | None = None
     rerender_event: Event = field(
         default_factory=lambda: Event(name="rerender_event"),
         init=False,

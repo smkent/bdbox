@@ -18,9 +18,7 @@ from .info import ModelInfo
 from .parameters import Params
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping, Sequence
-
-    from build123d import Builder, Shape
+    from bdbox.geometry.show import Geometry
 
 
 @dataclass(init=False)
@@ -66,8 +64,14 @@ class Model(Params):
     """
 
     if TYPE_CHECKING:
-        Geometry: TypeAlias = "Shape | Builder | Sequence[Shape | Builder] | Mapping[str, Shape | Builder]"  # noqa: E501
-        """Geometry return type annotation for [``build``][bdbox.model.model.Model.build]."""  # noqa: E501
+        Geometry: TypeAlias = Geometry
+        """Geometry return type annotation for [``build``][bdbox.model.model.Model.build].
+
+        References [``Geometry``][bdbox.geometry.geometry.Geometry].
+
+        Info:
+            Only available for static type checking.
+        """  # noqa: E501
 
     def build(self) -> Model.Geometry | None:
         """Build and return model geometry.

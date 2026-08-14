@@ -8,24 +8,14 @@ from bdbox.errors import ModelExit
 from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping, Sequence
     from typing import Protocol, TypeVar
 
-    from build123d import Builder, Compound, Shape
+    from bdbox.geometry.geometry import Geometry
 
-    Geometry = (
-        Compound
-        | Shape
-        | Builder
-        | Sequence[Compound | Shape | Builder | None]
-        | Mapping[str, Compound | Shape | Builder | None]
-        | None
-    )
-
-    GeometryT = TypeVar("GeometryT", bound=Geometry)
+    GeometryT = TypeVar("GeometryT", bound=Geometry | None)
 
     class ShowCallable(Protocol):
-        def __call__(self, *geometry: Geometry) -> None: ...
+        def __call__(self, *geometry: Geometry | None) -> None: ...
 
 
 @dataclass
@@ -37,7 +27,7 @@ class Show:
     def __post_init__(self) -> None:
         update_wrapper(self, self.func)
 
-    def __call__(self, *geometry: Geometry) -> Any:
+    def __call__(self, *geometry: Geometry | None) -> Any:
         return self.func(*geometry)
 
     def __repr__(self) -> str:
@@ -69,14 +59,7 @@ class Show:
 
 
 @Show
-def show(
-    *geometry: Compound
-    | Shape
-    | Builder
-    | Sequence[Compound | Shape | Builder | None]
-    | Mapping[str, Compound | Shape | Builder | None]
-    | None,
-) -> None:
+def show(*geometry: Geometry | None) -> None:
     """Provide built model geometry for display or use.
 
     Info:
