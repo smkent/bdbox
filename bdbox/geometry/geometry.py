@@ -14,28 +14,46 @@ if TYPE_CHECKING:
 
     from build123d import Builder, Compound, Shape
 
+    BaseGeometry = Builder | Compound | Shape
+    """Supported build123d base types for [``show``][bdbox.geometry.show.show].
+
+    For full geometry types accepted by [``show``][bdbox.geometry.show.show],
+    see [``Geometry``][bdbox.geometry.geometry.Geometry].
+
+    Info:
+        Only available for static type checking.
+    """
+
+    Geometry = (
+        BaseGeometry
+        | Sequence[BaseGeometry | None]
+        | Mapping[str, BaseGeometry | None]
+    )
+    """Geometry types accepted by [``show``][bdbox.geometry.show.show].
+
+    See [``BaseGeometry``][bdbox.geometry.geometry.BaseGeometry] for
+    supported build123d base types.
+
+    Info:
+        Only available for static type checking.
+    """
+
+    ResolvedGeometry = Compound | Shape
+
 
 @dataclass
-class Geometry:
+class GeometryCollector:
     # Geometry collected via show() calls during execution.
-    geometry: list[Compound | Shape] = field(default_factory=list)
+    geometry: list[ResolvedGeometry] = field(default_factory=list)
 
-    def accumulate_geometry(
-        self,
-        *shapes: Compound
-        | Shape
-        | Builder
-        | Sequence[Compound | Shape | Builder | None]
-        | Mapping[str, Compound | Shape | Builder | None]
-        | None,
-    ) -> None:
+    def accumulate_geometry(self, *shapes: Geometry | None) -> None:
         self.geometry.extend(
             [shape for s in shapes if (shape := self.filter_geometry(s))]
         )
 
     def filter_geometry(
         self, data: Any, label: str = ""
-    ) -> Compound | Shape | None:
+    ) -> ResolvedGeometry | None:
         if "build123d" not in sys.modules:
             return None
         from build123d import Builder, Compound, Shape  # noqa: PLC0415
@@ -62,7 +80,7 @@ class Geometry:
             return geometry[0]
         return Compound(label=label, children=geometry)
 
-    def resolve(self) -> Compound | Shape | None:
+    def resolve(self) -> ResolvedGeometry | None:
         if "build123d" not in sys.modules:
             return None
 

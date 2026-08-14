@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as import_version
+from typing import TYPE_CHECKING
 
 from bdbox.errors import (
     Error,
@@ -44,3 +45,11 @@ __all__ = [
     "show",
     "version",
 ]
+
+if TYPE_CHECKING:
+    from bdbox.geometry.geometry import (  # noqa: TC004
+        BaseGeometry,
+        Geometry,
+    )
+
+    __all__ += ["BaseGeometry", "Geometry"]
