@@ -126,6 +126,10 @@ class MockBuild123d(ModuleType):
         super().__init__("build123d", *args, **kwargs)
 
     @dataclass
+    class BoundBox:
+        diagonal: float = 0
+
+    @dataclass
     class Builder:
         shape: MockBuild123d.Shape | None = field(default=None, kw_only=True)
 
@@ -136,17 +140,74 @@ class MockBuild123d(ModuleType):
     @dataclass
     class Shape:
         label: str = ""
+        bound_box: MockBuild123d.BoundBox = field(
+            default_factory=lambda: MockBuild123d.BoundBox(),  # noqa: PLW0108
+            repr=False,
+        )
 
         def show_topology(self, limit_class: str | None = None) -> str:
             return ""
 
-    class ShapeList(list):
+        def bounding_box(
+            self, *, optimal: bool = True
+        ) -> MockBuild123d.BoundBox:
+            return self.bound_box
+
+    class ShapeList(list[Shape]):
         pass
 
     @dataclass
     class Compound(Shape):
         children: Sequence[MockBuild123d.Shape] = field(default_factory=tuple)
         label: str = ""
+
+        axes_scale: float | None = None
+        location: MockBuild123d.Location | None = field(
+            default=None, init=False
+        )
+
+        def __post_init__(self) -> None:
+            self.children = tuple(self.children)
+
+        @classmethod
+        def make_triad(cls, axes_scale: float) -> Self:
+            return cls(axes_scale=axes_scale)
+
+        def move(self, location: MockBuild123d.Location) -> Self:
+            self.location = location
+            return self
+
+    @dataclass
+    class Joint:
+        label: str = ""
+        parent: MockBuild123d.Compound | None = None
+        joint_location: MockBuild123d.Location = field(
+            default_factory=lambda: MockBuild123d.Location()  # noqa: PLW0108
+        )
+
+        @property
+        def symbol(self) -> MockBuild123d.Compound:
+            axes_scale = (
+                getattr(self.parent, "bound_box", None)
+                or MockBuild123d.BoundBox()
+            ).diagonal / 12
+            return MockBuild123d.Compound.make_triad(
+                axes_scale=axes_scale
+            ).move(self.joint_location)
+
+    @dataclass
+    class Location:
+        pass
+
+    @dataclass
+    class LocationList:
+        locations: Sequence[MockBuild123d.Location] = ()
+
+    @dataclass
+    class Plane:
+        location: MockBuild123d.Location = field(
+            default_factory=lambda: MockBuild123d.Location()  # noqa: PLW0108
+        )
 
     @dataclass
     class Color:
