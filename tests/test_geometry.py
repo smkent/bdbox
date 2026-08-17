@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import sys
 from contextlib import suppress
 from dataclasses import dataclass
@@ -229,7 +230,7 @@ def test_geometry_resolve_returns_shown_with_floordiv_operator(
     show_callable: ShowCallable, showable_object: object
 ) -> None:
     with suppress(ModelExit):
-        show_callable // showable_object  # ty: ignore [unsupported-operator]
+        show_callable // copy.copy(showable_object)  # ty: ignore [unsupported-operator]
     if expected_object := ShowableObject.for_object(showable_object):
         expected_object.label = "bdbox selection"
     resolved = run_state.geometry.resolve()
@@ -243,7 +244,7 @@ def test_geometry_resolve_returns_shown_with_truediv_operator(
     showable_object: object,
 ) -> None:
     with suppress(ModelExit):
-        show_callable / showable_object  # ty: ignore [unsupported-operator]
+        show_callable / copy.copy(showable_object)  # ty: ignore [unsupported-operator]
     expected = ShowableObject.for_objects(preshown_geometry)
     if expected_object := ShowableObject.for_object(
         showable_object, max_diagonal=ShowableObject.max_diagonal(expected)
@@ -263,12 +264,62 @@ def test_geometry_resolve_returns_shown_with_add_operator(
     showable_object: object,
 ) -> None:
     with suppress(ModelExit):
-        show_callable + showable_object  # ty: ignore [unsupported-operator]
+        show_callable + copy.copy(showable_object)  # ty: ignore [unsupported-operator]
     expected = ShowableObject.for_objects(preshown_geometry)
     if expected_object := ShowableObject.for_object(
         showable_object, max_diagonal=ShowableObject.max_diagonal(expected)
     ):
         expected_object.label = "bdbox highlight"
+        expected_object.color = MockBuild123d.Color(value=0xFF2351, alpha=0x66)
+        expected = (*expected, expected_object)
+    resolved = run_state.geometry.resolve()
+    assert resolved == mock_b123d.Compound(
+        children=expected, label="bdbox collected geometry"
+    )
+
+
+@pytest.mark.parametrize(
+    "mode", [pytest.param(mode, id=mode.name) for mode in MockBuild123d.Mode]
+)
+@pytest.mark.parametrize(
+    "add_object",
+    [
+        pytest.param(MockBuild123d.Shape(), id="Shape"),
+        pytest.param(MockBuild123d.Compound(), id="Compound"),
+        pytest.param(
+            MockBuild123d.Builder(shape=MockBuild123d.Shape()), id="Builder"
+        ),
+    ],
+)
+def test_geometry_resolve_returns_shown_with_add_operator_color(
+    mock_b123d: MockBuild123d,
+    show_callable: ShowCallable,
+    preshown_geometry: tuple[object, ...],
+    add_object: MockBuild123d.Shape | MockBuild123d.Builder,
+    mode: MockBuild123d.Mode,
+) -> None:
+    colors = {
+        "ADD": 0x22FF88,
+        "SUBTRACT": 0xFF2351,
+        "INTERSECT": 0x22CCFF,
+        "REPLACE": 0xFF6622,
+        "PRIVATE": 0xBB99FF,
+    }
+    if isinstance(add_object, MockBuild123d.Builder):
+        assert add_object.shape
+        add_object.shape.mode = mode
+    else:
+        add_object.mode = mode
+    with suppress(ModelExit):
+        show_callable + copy.copy(showable_object)  # ty: ignore [unsupported-operator]
+    expected = ShowableObject.for_objects(preshown_geometry)
+    if expected_object := ShowableObject.for_object(
+        showable_object, max_diagonal=ShowableObject.max_diagonal(expected)
+    ):
+        expected_object.label = "bdbox highlight"
+        expected_object.color = MockBuild123d.Color(
+            value=colors[mode.name], alpha=0x66
+        )
         expected = (*expected, expected_object)
     resolved = run_state.geometry.resolve()
     assert resolved == mock_b123d.Compound(

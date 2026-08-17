@@ -125,6 +125,13 @@ class MockBuild123d(ModuleType):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__("build123d", *args, **kwargs)
 
+    class Mode(Enum):
+        ADD = "ADD"
+        SUBTRACT = "SUBTRACT"
+        INTERSECT = "INTERSECT"
+        REPLACE = "REPLACE"
+        PRIVATE = "PRIVATE"
+
     @dataclass
     class BoundBox:
         diagonal: float = 0
@@ -140,6 +147,8 @@ class MockBuild123d(ModuleType):
     @dataclass
     class Shape:
         label: str = ""
+        color: MockBuild123d.Color | None = None
+        mode: MockBuild123d.Mode | None = None
         bound_box: MockBuild123d.BoundBox = field(
             default_factory=lambda: MockBuild123d.BoundBox(),  # noqa: PLW0108
             repr=False,
@@ -211,8 +220,8 @@ class MockBuild123d(ModuleType):
 
     @dataclass
     class Color:
-        value: str
-        alpha: int
+        value: str | int
+        alpha: int = 0xFF
 
 
 class MockOcpVscode(ModuleType):
