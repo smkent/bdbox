@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from functools import update_wrapper
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from bdbox.errors import ModelExit
 from bdbox.runner.state import run_state
@@ -23,6 +23,14 @@ class Show:
     """Extensions for [``show``][bdbox.geometry.show.show]."""
 
     func: ShowCallable = field(repr=False)
+
+    highlight_mode_colors: ClassVar[dict[str, int]] = {
+        "ADD": 0x22FF88,  # green
+        "SUBTRACT": 0xFF2351,  # red
+        "INTERSECT": 0x22CCFF,  # light blue
+        "REPLACE": 0xFF6622,  # orange
+        "PRIVATE": 0xBB99FF,  # purple
+    }
 
     def __post_init__(self) -> None:
         update_wrapper(self, self.func)
@@ -53,7 +61,13 @@ class Show:
             from build123d import Color  # noqa: PLC0415
 
             geo.label = "bdbox highlight"
-            geo.color = Color(0xFF2351, 0x66)
+            alpha = 0x66
+            if (mode := getattr(geo, "mode", None)) and (
+                color_name := self.highlight_mode_colors.get(mode.name)
+            ) is not None:
+                geo.color = Color(color_name, alpha)
+            else:
+                geo.color = Color(0xFF2351, alpha)
             self.func(geo)
         return geometry
 
