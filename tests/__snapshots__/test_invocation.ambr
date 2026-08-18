@@ -547,6 +547,8 @@
 # ---
 # name: test_model_plain[help]
   '''
+  Doing something at the end using atexit
+  Doing something at the end using atexit
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
@@ -566,13 +568,20 @@
   ''
 # ---
 # name: test_model_plain[render]
-  ''
+  '''
+  Doing something at the end using atexit
+  Doing something at the end using atexit
+  '''
 # ---
 # name: test_model_plain[render].1
-  'Run complete ([TIMER]ms)'
+  '''
+  Doing something at the end using atexit
+  Run complete ([TIMER]ms)
+  '''
 # ---
 # name: test_model_plain_not_importable[help]
   '''
+  Doing something at the end using atexit
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
   ╭─ options ───────────────────────────────────────────────╮
@@ -592,10 +601,13 @@
   ''
 # ---
 # name: test_model_plain_not_importable[render]
-  ''
+  'Doing something at the end using atexit'
 # ---
 # name: test_model_plain_not_importable[render].1
-  'Run complete ([TIMER]ms)'
+  '''
+  Doing something at the end using atexit
+  Run complete ([TIMER]ms)
+  '''
 # ---
 # name: test_model_subclass[normal-help]
   ''
