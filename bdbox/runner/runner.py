@@ -45,13 +45,12 @@ class ModelRunner(ModelLocator):
                     sys, "argv", [self.model.filename, *self.model.argv]
                 ),
                 exit_mock(),
-                AtExit.mock() as atexit_mock,
             ):
-                with suppress(ModelExit):
-                    main_module.__dict__.update(self._run_model())
-                mock_main.start()
-                if not atexit_mock.hooks:
-                    run_state.action_state.act_once()
+                with AtExit.mock():
+                    with suppress(ModelExit):
+                        main_module.__dict__.update(self._run_model())
+                    mock_main.start()
+                run_state.action_state.act_once()
         except (SystemExit, Exception) as e:
             if self.preserve_exceptions:
                 raise

@@ -452,6 +452,8 @@
 # ---
 # name: test_harness_usage_file[plain_export]
   '''
+  Doing something at the end using atexit
+  Doing something at the end using atexit
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
    options                                                   
