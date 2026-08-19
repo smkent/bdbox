@@ -52,11 +52,15 @@ class CLIOptions:
 
     @classmethod
     def configure_from_cli(
-        cls, prog: str | None = None, *args: Any, **kwargs: Any
+        cls,
+        prog: str | None = None,
+        *,
+        args: Sequence[str] | None = None,
+        **kwargs: Any,
     ) -> Self:
         instance, _ = tyro.cli(
             cls,
-            *args,
+            args=args,
             prog=prog,
             return_unknown_args=True,
             add_help=False,
@@ -116,7 +120,7 @@ class CLIParser:
         self,
         cls: type[T] | None,
         *,
-        args: Sequence[Any] | None = None,
+        args: Sequence[str] | None = None,
         prog: str | None = None,
         **kwargs: Any,
     ) -> CLIAction[None] | CLIConfig[T]:
@@ -164,7 +168,7 @@ class CLIParser:
         self,
         cls: type[T] | None,
         *,
-        args: Sequence[Any] | None = None,
+        args: Sequence[str] | None = None,
         prog: str | None = None,
         **kwargs: Any,
     ) -> tuple[CLIAction[None] | CLIConfig[T], Sequence[str]]:
