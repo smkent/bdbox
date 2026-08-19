@@ -138,9 +138,9 @@ usage: MyBox [-h] [OPTIONS] [{run,view,export}]
 ╰────────────────────────────────────────────────────────╯
 ╭─ subcommands ──────────────────────────────────────────╮
 │ (default: run)                                         │
-│   • run      Run the model.                            │
-│   • export   Export geometry to a STEP or STL file.    │
-│   • view     View model geometry.                      │
+│   • run      Run the model                             │
+│   • export   Export geometry to a STEP or STL file     │
+│   • view     View model geometry                       │
 │   • version  Show bdbox version and exit               │
 ╰────────────────────────────────────────────────────────╯
 ```

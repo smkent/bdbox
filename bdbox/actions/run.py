@@ -8,7 +8,7 @@ from .action import ModelAction
 
 
 @dataclass
-class RunAction(ModelAction, command="run", description="Run the model."):
+class RunAction(ModelAction, command="run", description="Run the model"):
     """Run the model without processing collected geometry."""
 
     def __call__(self) -> None:

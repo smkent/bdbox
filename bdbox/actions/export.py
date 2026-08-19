@@ -115,21 +115,21 @@ class Exports:
 class ExportAction(
     ModelAction,
     command="export",
-    description="Export geometry to a STEP or STL file.",
+    description="Export geometry to a STEP or STL file",
 ):
     """Export collected geometry to a STEP or STL file."""
 
     output: Annotated[
         Path,
         tyro.conf.Positional,
-        tyro.conf.arg(metavar="DIR", help="Output directory."),
+        tyro.conf.arg(metavar="DIR", help="Output directory"),
     ] = Path()
 
     single: Annotated[
         bool,
         tyro.conf.arg(
             aliases=["-s"],
-            help=("Only create a single combined export file."),
+            help=("Only create a single combined export file"),
             help_behavior_hint="(default: no)",
         ),
         tyro.conf.FlagCreatePairsOff,
@@ -140,8 +140,7 @@ class ExportAction(
         tyro.conf.arg(
             aliases=["-a"],
             help=(
-                "Export each preset to a separate file"
-                " in the output directory."
+                "Export each preset to a separate file in the output directory"
             ),
             help_behavior_hint="(default: no)",
         ),
@@ -150,14 +149,14 @@ class ExportAction(
 
     format: Annotated[
         Literal["step", "stl"],
-        tyro.conf.arg(aliases=["-f"], help="Output format."),
+        tyro.conf.arg(aliases=["-f"], help="Output format"),
     ] = "step"
 
     default: Annotated[
         bool,
         tyro.conf.arg(
             aliases=["-n"],
-            help=("Include no-preset render with -a/--all-presets."),
+            help=("Include no-preset render with -a/--all-presets"),
             help_behavior_hint="(default: yes)",
         ),
         tyro.conf.FlagCreatePairsOff,

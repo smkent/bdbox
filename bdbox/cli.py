@@ -43,7 +43,7 @@ TYRO_CLI_CONFIG = (
 class CLIOptions:
     verbose: Annotated[
         tyro.conf.UseCounterAction[int],
-        tyro.conf.arg(aliases=["-v"], help="Increase logging verbosity."),
+        tyro.conf.arg(aliases=["-v"], help="Increase logging verbosity"),
         tyro.conf.FlagCreatePairsOff,
     ] = field(default=0, kw_only=True)
 
