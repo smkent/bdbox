@@ -7,7 +7,9 @@ from .action import CommandAction
 
 
 @dataclass
-class VersionAction(CommandAction):
+class VersionAction(
+    CommandAction, command="version", description="Show bdbox version and exit"
+):
     def __call__(self) -> None:
         from bdbox import version  # noqa: PLC0415
 

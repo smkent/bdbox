@@ -2,33 +2,15 @@
 
 from __future__ import annotations
 
-from typing import Annotated
-
-import tyro
+import operator
+from functools import reduce
 
 from bdbox.actions.export import ExportAction
 from bdbox.actions.run import RunAction
 from bdbox.actions.version import VersionAction
 from bdbox.actions.view import ViewAction
 
-_Run = Annotated[
-    RunAction,
-    tyro.conf.subcommand("run", description="Run the model."),
-]
-_Export = Annotated[
-    ExportAction,
-    tyro.conf.subcommand(
-        "export", description="Export geometry to a STEP or STL file."
-    ),
-]
-_View = Annotated[
-    ViewAction,
-    tyro.conf.subcommand("view", description="View model geometry."),
-]
-_ModelCommands = _Run | _Export | _View
-_Version = Annotated[
-    VersionAction,
-    tyro.conf.subcommand("version", description="Show bdbox version and exit"),
-]
-
-ActionField = _ModelCommands | _Version
+cli_actions = (RunAction, ExportAction, ViewAction, VersionAction)
+ActionField = reduce(
+    operator.or_, (action.cli.field for action in cli_actions)
+)

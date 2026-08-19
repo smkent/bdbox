@@ -112,7 +112,11 @@ class Exports:
 
 
 @dataclass
-class ExportAction(ModelAction):
+class ExportAction(
+    ModelAction,
+    command="export",
+    description="Export geometry to a STEP or STL file.",
+):
     """Export collected geometry to a STEP or STL file."""
 
     output: Annotated[

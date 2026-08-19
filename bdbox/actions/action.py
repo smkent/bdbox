@@ -5,8 +5,10 @@ from __future__ import annotations
 import subprocess
 import sys
 from contextlib import contextmanager
-from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Annotated, Any, ClassVar
+
+import tyro
 
 from bdbox.console import console, log
 from bdbox.errors import RunError, UsageError
@@ -23,6 +25,37 @@ if TYPE_CHECKING:
 @dataclass
 class Action:
     """Base class for bdbox actions."""
+
+    @dataclass
+    class CLISubcommand:
+        cls: type[Any]
+        command: str = ""
+        description: str = ""
+        is_default: bool = field(default=False, kw_only=True)
+
+        @property
+        def field(self) -> Any:
+            return Annotated[
+                self.cls,
+                tyro.conf.subcommand(
+                    self.command,
+                    description=self.description,
+                    is_default=self.is_default,
+                ),
+            ]
+
+    cli: ClassVar[CLISubcommand]
+
+    def __init_subclass__(
+        cls,
+        *,
+        command: str = "",
+        description: str = "",
+        is_default: bool = False,
+    ) -> None:
+        cls.cli = cls.CLISubcommand(
+            cls, command, description, is_default=is_default
+        )
 
     def __call__(self) -> None:
         """Execute this action with the given geometry."""

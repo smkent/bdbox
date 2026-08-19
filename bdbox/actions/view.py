@@ -31,7 +31,9 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class ViewAction(ModelAction):
+class ViewAction(
+    ModelAction, command="view", description="View model geometry."
+):
     """View model geometry in OCP CAD Viewer."""
 
     open_browser: Annotated[
