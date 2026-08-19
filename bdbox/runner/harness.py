@@ -37,7 +37,7 @@ class HarnessCLIFactory:
         model: Annotated[
             str,
             tyro.conf.Positional,
-            tyro.conf.arg(metavar="model", help="Model file to run."),
+            tyro.conf.arg(metavar="model", help="Model file to run"),
         ]
 
     @classmethod

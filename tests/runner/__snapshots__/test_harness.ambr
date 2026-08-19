@@ -28,23 +28,23 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -57,23 +57,23 @@
   b2 Box(x=3, y=5, z=5.0)
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -86,19 +86,19 @@
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -109,23 +109,23 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -138,23 +138,23 @@
   b2 Box(x=3, y=5, z=5.0)
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -167,19 +167,19 @@
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -190,64 +190,64 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                    
-   ---------------------------------------------------------- 
-    -h, --help      show this help message and exit           
-    -v, --verbose   Increase logging verbosity. (repeatable)  
-    --preset {None,default,large,small,plain}                 
-                    (default: None)                           
-    --aa INT        (default: 5)                              
-    --width 1.0 <= FLOAT <= 100.0                             
-                    (default: 10.0)                           
-    --height 1 <= INT <= 50                                   
-                    (default: 5)                              
-    --enabled, --no-enabled                                   
-                    enable the thing (default: False)         
-    --text STR      (default: nope)                           
-    --thing {first,second,third}                              
-                    (default: first)                          
-    --count INT     (default: 1)                              
-                                                              
-   sub options                                                
-   ---------------------------------------------------------- 
-    --sub.a FLOAT   (required)                                
-    --sub.b FLOAT   (default: 5.0)                            
-    --sub.c 0 <= FLOAT <= 2000.0                              
-                    C! (default: 25.0)                        
-    --sub.do-the-thing, --sub.no-do-the-thing                 
-                    Zhu Li, do the thing! (default: False)    
-    --sub.do-another-thing, --sub.no-do-another-thing         
-                    Another thing? (default: False)           
-                                                              
-   sub.subsub options                                         
-   ---------------------------------------------------------- 
-    --sub.subsub.x 0 <= INT <= 10                             
-                    (default: 5)                              
-                                                              
-   sub2 options                                               
-   ---------------------------------------------------------- 
-    --sub2.a FLOAT  (default: 1)                              
-    --sub2.b FLOAT  (default: 2)                              
-    --sub2.c 0 <= FLOAT <= 2000.0                             
-                    C! (default: 3)                           
-    --sub2.do-the-thing, --sub2.no-do-the-thing               
-                    Zhu Li, do the thing! (default: False)    
-    --sub2.do-another-thing, --sub2.no-do-another-thing       
-                    Another thing? (default: False)           
-                                                              
-   sub2.subsub options                                        
-   ---------------------------------------------------------- 
-    --sub2.subsub.x 0 <= INT <= 10                            
-                    (default: 5)                              
-                                                              
-   subcommands                                                
-   ---------------------------------------------------------- 
-    (default: run)                                            
-      • run         Run the model.                            
-      • export      Export geometry to a STEP or STL file.    
-      • view        View model geometry.                      
-      • version     Show bdbox version and exit               
-                                                              
+   options                                                   
+   --------------------------------------------------------- 
+    -h, --help      show this help message and exit          
+    -v, --verbose   Increase logging verbosity (repeatable)  
+    --preset {None,default,large,small,plain}                
+                    (default: None)                          
+    --aa INT        (default: 5)                             
+    --width 1.0 <= FLOAT <= 100.0                            
+                    (default: 10.0)                          
+    --height 1 <= INT <= 50                                  
+                    (default: 5)                             
+    --enabled, --no-enabled                                  
+                    enable the thing (default: False)        
+    --text STR      (default: nope)                          
+    --thing {first,second,third}                             
+                    (default: first)                         
+    --count INT     (default: 1)                             
+                                                             
+   sub options                                               
+   --------------------------------------------------------- 
+    --sub.a FLOAT   (required)                               
+    --sub.b FLOAT   (default: 5.0)                           
+    --sub.c 0 <= FLOAT <= 2000.0                             
+                    C! (default: 25.0)                       
+    --sub.do-the-thing, --sub.no-do-the-thing                
+                    Zhu Li, do the thing! (default: False)   
+    --sub.do-another-thing, --sub.no-do-another-thing        
+                    Another thing? (default: False)          
+                                                             
+   sub.subsub options                                        
+   --------------------------------------------------------- 
+    --sub.subsub.x 0 <= INT <= 10                            
+                    (default: 5)                             
+                                                             
+   sub2 options                                              
+   --------------------------------------------------------- 
+    --sub2.a FLOAT  (default: 1)                             
+    --sub2.b FLOAT  (default: 2)                             
+    --sub2.c 0 <= FLOAT <= 2000.0                            
+                    C! (default: 3)                          
+    --sub2.do-the-thing, --sub2.no-do-the-thing              
+                    Zhu Li, do the thing! (default: False)   
+    --sub2.do-another-thing, --sub2.no-do-another-thing      
+                    Another thing? (default: False)          
+                                                             
+   sub2.subsub options                                       
+   --------------------------------------------------------- 
+    --sub2.subsub.x 0 <= INT <= 10                           
+                    (default: 5)                             
+                                                             
+   subcommands                                               
+   --------------------------------------------------------- 
+    (default: run)                                           
+      • run         Run the model                            
+      • export      Export geometry to a STEP or STL file    
+      • view        View model geometry                      
+      • version     Show bdbox version and exit              
+                                                             
   
   '''
 # ---
@@ -258,33 +258,33 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --preset {None,mid}                                      
-                   (default: None)                           
-    --size 1.0 <= FLOAT <= 100.0                             
-                   (default: 10.0)                           
-    --use-show {None}|STR                                    
-                   (default: None)                           
-                                                             
-   sub options                                               
-   --------------------------------------------------------- 
-    --sub.x FLOAT  (default: 1)                              
-    --sub.y FLOAT  (default: 2)                              
-    --sub.z FLOAT  (default: 3)                              
-    --sub.do-the-thing, --sub.no-do-the-thing                
-                   (default: False)                          
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --preset {None,mid}                                     
+                   (default: None)                          
+    --size 1.0 <= FLOAT <= 100.0                            
+                   (default: 10.0)                          
+    --use-show {None}|STR                                   
+                   (default: None)                          
+                                                            
+   sub options                                              
+   -------------------------------------------------------- 
+    --sub.x FLOAT  (default: 1)                             
+    --sub.y FLOAT  (default: 2)                             
+    --sub.z FLOAT  (default: 3)                             
+    --sub.do-the-thing, --sub.no-do-the-thing               
+                   (default: False)                         
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -295,23 +295,23 @@
   '''
   usage: bdbox [-h] [-v] [--preset {None,small}] [--size 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --preset {None,small}                                    
-                   (default: None)                           
-    --size 1.0 <= FLOAT <= 100.0                             
-                   (default: 10.0)                           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --preset {None,small}                                   
+                   (default: None)                          
+    --size 1.0 <= FLOAT <= 100.0                            
+                   (default: 10.0)                          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -322,64 +322,64 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                    
-   ---------------------------------------------------------- 
-    -h, --help      show this help message and exit           
-    -v, --verbose   Increase logging verbosity. (repeatable)  
-    --preset {None,default,large,small}                       
-                    (default: None)                           
-    --aa INT        (default: 5)                              
-    --width 1.0 <= FLOAT <= 100.0                             
-                    (default: 10.0)                           
-    --height 1 <= INT <= 50                                   
-                    (default: 5)                              
-    --enabled, --no-enabled                                   
-                    enable the thing (default: False)         
-    --text STR      (default: nope)                           
-    --thing {first,second,third}                              
-                    (default: first)                          
-    --count INT     (default: 1)                              
-                                                              
-   sub options                                                
-   ---------------------------------------------------------- 
-    --sub.a FLOAT   (required)                                
-    --sub.b FLOAT   (default: 5.0)                            
-    --sub.c 0 <= FLOAT <= 2000.0                              
-                    C! (default: 25.0)                        
-    --sub.do-the-thing, --sub.no-do-the-thing                 
-                    Zhu Li, do the thing! (default: False)    
-    --sub.do-another-thing, --sub.no-do-another-thing         
-                    Another thing? (default: False)           
-                                                              
-   sub.subsub options                                         
-   ---------------------------------------------------------- 
-    --sub.subsub.x 0 <= INT <= 10                             
-                    (default: 5)                              
-                                                              
-   sub2 options                                               
-   ---------------------------------------------------------- 
-    --sub2.a FLOAT  (default: 1)                              
-    --sub2.b FLOAT  (default: 2)                              
-    --sub2.c 0 <= FLOAT <= 2000.0                             
-                    C! (default: 3)                           
-    --sub2.do-the-thing, --sub2.no-do-the-thing               
-                    Zhu Li, do the thing! (default: False)    
-    --sub2.do-another-thing, --sub2.no-do-another-thing       
-                    Another thing? (default: False)           
-                                                              
-   sub2.subsub options                                        
-   ---------------------------------------------------------- 
-    --sub2.subsub.x 0 <= INT <= 10                            
-                    (default: 5)                              
-                                                              
-   subcommands                                                
-   ---------------------------------------------------------- 
-    (default: run)                                            
-      • run         Run the model.                            
-      • export      Export geometry to a STEP or STL file.    
-      • view        View model geometry.                      
-      • version     Show bdbox version and exit               
-                                                              
+   options                                                   
+   --------------------------------------------------------- 
+    -h, --help      show this help message and exit          
+    -v, --verbose   Increase logging verbosity (repeatable)  
+    --preset {None,default,large,small}                      
+                    (default: None)                          
+    --aa INT        (default: 5)                             
+    --width 1.0 <= FLOAT <= 100.0                            
+                    (default: 10.0)                          
+    --height 1 <= INT <= 50                                  
+                    (default: 5)                             
+    --enabled, --no-enabled                                  
+                    enable the thing (default: False)        
+    --text STR      (default: nope)                          
+    --thing {first,second,third}                             
+                    (default: first)                         
+    --count INT     (default: 1)                             
+                                                             
+   sub options                                               
+   --------------------------------------------------------- 
+    --sub.a FLOAT   (required)                               
+    --sub.b FLOAT   (default: 5.0)                           
+    --sub.c 0 <= FLOAT <= 2000.0                             
+                    C! (default: 25.0)                       
+    --sub.do-the-thing, --sub.no-do-the-thing                
+                    Zhu Li, do the thing! (default: False)   
+    --sub.do-another-thing, --sub.no-do-another-thing        
+                    Another thing? (default: False)          
+                                                             
+   sub.subsub options                                        
+   --------------------------------------------------------- 
+    --sub.subsub.x 0 <= INT <= 10                            
+                    (default: 5)                             
+                                                             
+   sub2 options                                              
+   --------------------------------------------------------- 
+    --sub2.a FLOAT  (default: 1)                             
+    --sub2.b FLOAT  (default: 2)                             
+    --sub2.c 0 <= FLOAT <= 2000.0                            
+                    C! (default: 3)                          
+    --sub2.do-the-thing, --sub2.no-do-the-thing              
+                    Zhu Li, do the thing! (default: False)   
+    --sub2.do-another-thing, --sub2.no-do-another-thing      
+                    Another thing? (default: False)          
+                                                             
+   sub2.subsub options                                       
+   --------------------------------------------------------- 
+    --sub2.subsub.x 0 <= INT <= 10                           
+                    (default: 5)                             
+                                                             
+   subcommands                                               
+   --------------------------------------------------------- 
+    (default: run)                                           
+      • run         Run the model                            
+      • export      Export geometry to a STEP or STL file    
+      • view        View model geometry                      
+      • version     Show bdbox version and exit              
+                                                             
   
   '''
 # ---
@@ -390,33 +390,33 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --preset {None,mid}                                      
-                   (default: None)                           
-    --size 1.0 <= FLOAT <= 100.0                             
-                   (default: 10.0)                           
-    --use-show {None}|STR                                    
-                   (default: None)                           
-                                                             
-   sub options                                               
-   --------------------------------------------------------- 
-    --sub.x FLOAT  (default: 1)                              
-    --sub.y FLOAT  (default: 2)                              
-    --sub.z FLOAT  (default: 3)                              
-    --sub.do-the-thing, --sub.no-do-the-thing                
-                   (default: False)                          
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --preset {None,mid}                                     
+                   (default: None)                          
+    --size 1.0 <= FLOAT <= 100.0                            
+                   (default: 10.0)                          
+    --use-show {None}|STR                                   
+                   (default: None)                          
+                                                            
+   sub options                                              
+   -------------------------------------------------------- 
+    --sub.x FLOAT  (default: 1)                             
+    --sub.y FLOAT  (default: 2)                             
+    --sub.z FLOAT  (default: 3)                             
+    --sub.do-the-thing, --sub.no-do-the-thing               
+                   (default: False)                         
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -427,23 +427,23 @@
   '''
   usage: bdbox [-h] [-v] [--preset {None,small}] [--size 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --preset {None,small}                                    
-                   (default: None)                           
-    --size 1.0 <= FLOAT <= 100.0                             
-                   (default: 10.0)                           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --preset {None,small}                                   
+                   (default: None)                          
+    --size 1.0 <= FLOAT <= 100.0                            
+                   (default: 10.0)                          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -456,19 +456,19 @@
   Doing something at the end using atexit
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -480,23 +480,23 @@
   Model main
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -508,23 +508,23 @@
   Model main
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -535,27 +535,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -566,27 +566,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -597,27 +597,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -628,27 +628,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -660,19 +660,19 @@
   Box count: 2
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -683,23 +683,23 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -710,23 +710,23 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -738,19 +738,19 @@
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -761,19 +761,19 @@
   '''
   usage: bdbox [-h] [-v] {run,export,view,version}
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (required)                                               
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (required)                                              
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -785,23 +785,23 @@
   Model main
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -813,23 +813,23 @@
   Model main
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -841,23 +841,23 @@
   Model main
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -869,23 +869,23 @@
   Model main
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -896,27 +896,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -927,27 +927,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -958,27 +958,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -989,27 +989,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -1020,27 +1020,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -1051,27 +1051,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -1082,27 +1082,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -1113,27 +1113,27 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-    --a FLOAT      (default: 2.5)                            
-    --b INT        (default: 3)                              
-    --c 1 <= INT <= 10                                       
-                   (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0                                 
-                   (default: 5.0)                            
-    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}    
-                   (default: TRANSPARENT_ALUMINUM)           
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+    --a FLOAT      (default: 2.5)                           
+    --b INT        (default: 3)                             
+    --c 1 <= INT <= 10                                      
+                   (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0                                
+                   (default: 5.0)                           
+    --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   
+                   (default: TRANSPARENT_ALUMINUM)          
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -1145,19 +1145,19 @@
   Box count: 2
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -1169,19 +1169,19 @@
   Box count: 2
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -1192,23 +1192,23 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -1219,23 +1219,23 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -1246,23 +1246,23 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -1273,23 +1273,23 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-   options                                                              
-   -------------------------------------------------------------------- 
-    -h, --help                show this help message and exit           
-    -v, --verbose             Increase logging verbosity. (repeatable)  
-    --a FLOAT                 (default: 2.5)                            
-    --b INT                   (default: 3)                              
-    --c 1 <= INT <= 10        (default: 5)                              
-    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                            
-                                                                        
-   subcommands                                                          
-   -------------------------------------------------------------------- 
-    (default: run)                                                      
-      • run                   Run the model.                            
-      • export                Export geometry to a STEP or STL file.    
-      • view                  View model geometry.                      
-      • version               Show bdbox version and exit               
-                                                                        
+   options                                                             
+   ------------------------------------------------------------------- 
+    -h, --help                show this help message and exit          
+    -v, --verbose             Increase logging verbosity (repeatable)  
+    --a FLOAT                 (default: 2.5)                           
+    --b INT                   (default: 3)                             
+    --c 1 <= INT <= 10        (default: 5)                             
+    --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           
+                                                                       
+   subcommands                                                         
+   ------------------------------------------------------------------- 
+    (default: run)                                                     
+      • run                   Run the model                            
+      • export                Export geometry to a STEP or STL file    
+      • view                  View model geometry                      
+      • version               Show bdbox version and exit              
+                                                                       
   
   '''
 # ---
@@ -1301,19 +1301,19 @@
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---
@@ -1325,19 +1325,19 @@
   Boxes: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-   options                                                   
-   --------------------------------------------------------- 
-    -h, --help     show this help message and exit           
-    -v, --verbose  Increase logging verbosity. (repeatable)  
-                                                             
-   subcommands                                               
-   --------------------------------------------------------- 
-    (default: run)                                           
-      • run        Run the model.                            
-      • export     Export geometry to a STEP or STL file.    
-      • view       View model geometry.                      
-      • version    Show bdbox version and exit               
-                                                             
+   options                                                  
+   -------------------------------------------------------- 
+    -h, --help     show this help message and exit          
+    -v, --verbose  Increase logging verbosity (repeatable)  
+                                                            
+   subcommands                                              
+   -------------------------------------------------------- 
+    (default: run)                                          
+      • run        Run the model                            
+      • export     Export geometry to a STEP or STL file    
+      • view       View model geometry                      
+      • version    Show bdbox version and exit              
+                                                            
   
   '''
 # ---

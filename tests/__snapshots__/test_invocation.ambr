@@ -3,58 +3,58 @@
   '''
   usage: MyModel [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ────────────────────────────────────────────────╮
-  │ -h, --help      show this help message and exit          │
-  │ -v, --verbose   Increase logging verbosity. (repeatable) │
-  │ --preset {None,default,large,small,plain}                │
-  │                 (default: None)                          │
-  │ --aa INT        (default: 5)                             │
-  │ --width 1.0 <= FLOAT <= 100.0                            │
-  │                 (default: 10.0)                          │
-  │ --height 1 <= INT <= 50                                  │
-  │                 (default: 5)                             │
-  │ --enabled, --no-enabled                                  │
-  │                 enable the thing (default: False)        │
-  │ --text STR      (default: nope)                          │
-  │ --thing {first,second,third}                             │
-  │                 (default: first)                         │
-  │ --count INT     (default: 1)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub options ────────────────────────────────────────────╮
-  │ --sub.a FLOAT   (required)                               │
-  │ --sub.b FLOAT   (default: 5.0)                           │
-  │ --sub.c 0 <= FLOAT <= 2000.0                             │
-  │                 C! (default: 25.0)                       │
-  │ --sub.do-the-thing, --sub.no-do-the-thing                │
-  │                 (default: False)                         │
-  │ --sub.do-another-thing, --sub.no-do-another-thing        │
-  │                 Another thing? (default: False)          │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub.subsub options ─────────────────────────────────────╮
-  │ --sub.subsub.x 0 <= INT <= 10                            │
-  │                 (default: 5)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub2 options ───────────────────────────────────────────╮
-  │ --sub2.a FLOAT  (default: 1)                             │
-  │ --sub2.b FLOAT  (default: 2)                             │
-  │ --sub2.c 0 <= FLOAT <= 2000.0                            │
-  │                 C! (default: 3)                          │
-  │ --sub2.do-the-thing, --sub2.no-do-the-thing              │
-  │                 (default: False)                         │
-  │ --sub2.do-another-thing, --sub2.no-do-another-thing      │
-  │                 Another thing? (default: False)          │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub2.subsub options ────────────────────────────────────╮
-  │ --sub2.subsub.x 0 <= INT <= 10                           │
-  │                 (default: 5)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────╮
-  │ (default: run)                                           │
-  │   • run         Run the model.                           │
-  │   • export      Export geometry to a STEP or STL file.   │
-  │   • view        View model geometry.                     │
-  │   • version     Show bdbox version and exit              │
-  ╰──────────────────────────────────────────────────────────╯
+  ╭─ options ───────────────────────────────────────────────╮
+  │ -h, --help      show this help message and exit         │
+  │ -v, --verbose   Increase logging verbosity (repeatable) │
+  │ --preset {None,default,large,small,plain}               │
+  │                 (default: None)                         │
+  │ --aa INT        (default: 5)                            │
+  │ --width 1.0 <= FLOAT <= 100.0                           │
+  │                 (default: 10.0)                         │
+  │ --height 1 <= INT <= 50                                 │
+  │                 (default: 5)                            │
+  │ --enabled, --no-enabled                                 │
+  │                 enable the thing (default: False)       │
+  │ --text STR      (default: nope)                         │
+  │ --thing {first,second,third}                            │
+  │                 (default: first)                        │
+  │ --count INT     (default: 1)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub options ───────────────────────────────────────────╮
+  │ --sub.a FLOAT   (required)                              │
+  │ --sub.b FLOAT   (default: 5.0)                          │
+  │ --sub.c 0 <= FLOAT <= 2000.0                            │
+  │                 C! (default: 25.0)                      │
+  │ --sub.do-the-thing, --sub.no-do-the-thing               │
+  │                 (default: False)                        │
+  │ --sub.do-another-thing, --sub.no-do-another-thing       │
+  │                 Another thing? (default: False)         │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub.subsub options ────────────────────────────────────╮
+  │ --sub.subsub.x 0 <= INT <= 10                           │
+  │                 (default: 5)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub2 options ──────────────────────────────────────────╮
+  │ --sub2.a FLOAT  (default: 1)                            │
+  │ --sub2.b FLOAT  (default: 2)                            │
+  │ --sub2.c 0 <= FLOAT <= 2000.0                           │
+  │                 C! (default: 3)                         │
+  │ --sub2.do-the-thing, --sub2.no-do-the-thing             │
+  │                 (default: False)                        │
+  │ --sub2.do-another-thing, --sub2.no-do-another-thing     │
+  │                 Another thing? (default: False)         │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub2.subsub options ───────────────────────────────────╮
+  │ --sub2.subsub.x 0 <= INT <= 10                          │
+  │                 (default: 5)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ subcommands ───────────────────────────────────────────╮
+  │ (default: run)                                          │
+  │   • run         Run the model                           │
+  │   • export      Export geometry to a STEP or STL file   │
+  │   • view        View model geometry                     │
+  │   • version     Show bdbox version and exit             │
+  ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model[normal-help].1
@@ -73,58 +73,58 @@
   '''
   usage: MyModel [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ────────────────────────────────────────────────╮
-  │ -h, --help      show this help message and exit          │
-  │ -v, --verbose   Increase logging verbosity. (repeatable) │
-  │ --preset {None,default,large,small,plain}                │
-  │                 (default: None)                          │
-  │ --aa INT        (default: 5)                             │
-  │ --width 1.0 <= FLOAT <= 100.0                            │
-  │                 (default: 10.0)                          │
-  │ --height 1 <= INT <= 50                                  │
-  │                 (default: 5)                             │
-  │ --enabled, --no-enabled                                  │
-  │                 enable the thing (default: False)        │
-  │ --text STR      (default: nope)                          │
-  │ --thing {first,second,third}                             │
-  │                 (default: first)                         │
-  │ --count INT     (default: 1)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub options ────────────────────────────────────────────╮
-  │ --sub.a FLOAT   (required)                               │
-  │ --sub.b FLOAT   (default: 5.0)                           │
-  │ --sub.c 0 <= FLOAT <= 2000.0                             │
-  │                 C! (default: 25.0)                       │
-  │ --sub.do-the-thing, --sub.no-do-the-thing                │
-  │                 Zhu Li, do the thing! (default: False)   │
-  │ --sub.do-another-thing, --sub.no-do-another-thing        │
-  │                 Another thing? (default: False)          │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub.subsub options ─────────────────────────────────────╮
-  │ --sub.subsub.x 0 <= INT <= 10                            │
-  │                 (default: 5)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub2 options ───────────────────────────────────────────╮
-  │ --sub2.a FLOAT  (default: 1)                             │
-  │ --sub2.b FLOAT  (default: 2)                             │
-  │ --sub2.c 0 <= FLOAT <= 2000.0                            │
-  │                 C! (default: 3)                          │
-  │ --sub2.do-the-thing, --sub2.no-do-the-thing              │
-  │                 Zhu Li, do the thing! (default: False)   │
-  │ --sub2.do-another-thing, --sub2.no-do-another-thing      │
-  │                 Another thing? (default: False)          │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub2.subsub options ────────────────────────────────────╮
-  │ --sub2.subsub.x 0 <= INT <= 10                           │
-  │                 (default: 5)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────╮
-  │ (default: run)                                           │
-  │   • run         Run the model.                           │
-  │   • export      Export geometry to a STEP or STL file.   │
-  │   • view        View model geometry.                     │
-  │   • version     Show bdbox version and exit              │
-  ╰──────────────────────────────────────────────────────────╯
+  ╭─ options ───────────────────────────────────────────────╮
+  │ -h, --help      show this help message and exit         │
+  │ -v, --verbose   Increase logging verbosity (repeatable) │
+  │ --preset {None,default,large,small,plain}               │
+  │                 (default: None)                         │
+  │ --aa INT        (default: 5)                            │
+  │ --width 1.0 <= FLOAT <= 100.0                           │
+  │                 (default: 10.0)                         │
+  │ --height 1 <= INT <= 50                                 │
+  │                 (default: 5)                            │
+  │ --enabled, --no-enabled                                 │
+  │                 enable the thing (default: False)       │
+  │ --text STR      (default: nope)                         │
+  │ --thing {first,second,third}                            │
+  │                 (default: first)                        │
+  │ --count INT     (default: 1)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub options ───────────────────────────────────────────╮
+  │ --sub.a FLOAT   (required)                              │
+  │ --sub.b FLOAT   (default: 5.0)                          │
+  │ --sub.c 0 <= FLOAT <= 2000.0                            │
+  │                 C! (default: 25.0)                      │
+  │ --sub.do-the-thing, --sub.no-do-the-thing               │
+  │                 Zhu Li, do the thing! (default: False)  │
+  │ --sub.do-another-thing, --sub.no-do-another-thing       │
+  │                 Another thing? (default: False)         │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub.subsub options ────────────────────────────────────╮
+  │ --sub.subsub.x 0 <= INT <= 10                           │
+  │                 (default: 5)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub2 options ──────────────────────────────────────────╮
+  │ --sub2.a FLOAT  (default: 1)                            │
+  │ --sub2.b FLOAT  (default: 2)                            │
+  │ --sub2.c 0 <= FLOAT <= 2000.0                           │
+  │                 C! (default: 3)                         │
+  │ --sub2.do-the-thing, --sub2.no-do-the-thing             │
+  │                 Zhu Li, do the thing! (default: False)  │
+  │ --sub2.do-another-thing, --sub2.no-do-another-thing     │
+  │                 Another thing? (default: False)         │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub2.subsub options ───────────────────────────────────╮
+  │ --sub2.subsub.x 0 <= INT <= 10                          │
+  │                 (default: 5)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ subcommands ───────────────────────────────────────────╮
+  │ (default: run)                                          │
+  │   • run         Run the model                           │
+  │   • export      Export geometry to a STEP or STL file   │
+  │   • view        View model geometry                     │
+  │   • version     Show bdbox version and exit             │
+  ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model[run-help].1
@@ -143,17 +143,17 @@
   '''
   usage: MyModel [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_blank[normal-help].1
@@ -172,17 +172,17 @@
   '''
   usage: MyModel [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_blank[run-help].1
@@ -237,20 +237,20 @@
   '''
   usage: FirstModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help   show this help message and exit          │
-  │ -v, --verbose                                         │
-  │              Increase logging verbosity. (repeatable) │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │              (default: 10.0)                          │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run      Run the model.                           │
-  │   • export   Export geometry to a STEP or STL file.   │
-  │   • view     View model geometry.                     │
-  │   • version  Show bdbox version and exit              │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit         │
+  │ -v, --verbose                                        │
+  │              Increase logging verbosity (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                        │
+  │              (default: 10.0)                         │
+  ╰──────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────╮
+  │ (default: run)                                       │
+  │   • run      Run the model                           │
+  │   • export   Export geometry to a STEP or STL file   │
+  │   • view     View model geometry                     │
+  │   • version  Show bdbox version and exit             │
+  ╰──────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple[run-class-help].1
@@ -269,20 +269,20 @@
   '''
   usage: FirstModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help   show this help message and exit          │
-  │ -v, --verbose                                         │
-  │              Increase logging verbosity. (repeatable) │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │              (default: 10.0)                          │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run      Run the model.                           │
-  │   • export   Export geometry to a STEP or STL file.   │
-  │   • view     View model geometry.                     │
-  │   • version  Show bdbox version and exit              │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit         │
+  │ -v, --verbose                                        │
+  │              Increase logging verbosity (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                        │
+  │              (default: 10.0)                         │
+  ╰──────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────╮
+  │ (default: run)                                       │
+  │   • run      Run the model                           │
+  │   • export   Export geometry to a STEP or STL file   │
+  │   • view     View model geometry                     │
+  │   • version  Show bdbox version and exit             │
+  ╰──────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple[run-file-help].1
@@ -301,20 +301,20 @@
   '''
   usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help   show this help message and exit          │
-  │ -v, --verbose                                         │
-  │              Increase logging verbosity. (repeatable) │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │              (default: 10.0)                          │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run      Run the model.                           │
-  │   • export   Export geometry to a STEP or STL file.   │
-  │   • view     View model geometry.                     │
-  │   • version  Show bdbox version and exit              │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit         │
+  │ -v, --verbose                                        │
+  │              Increase logging verbosity (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                        │
+  │              (default: 10.0)                         │
+  ╰──────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────╮
+  │ (default: run)                                       │
+  │   • run      Run the model                           │
+  │   • export   Export geometry to a STEP or STL file   │
+  │   • view     View model geometry                     │
+  │   • version  Show bdbox version and exit             │
+  ╰──────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple_harness[normal-class_multi_file_first-help].1
@@ -333,18 +333,18 @@
   '''
   usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --height 1 <= INT <= 100  (default: 10)                            │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --height 1 <= INT <= 100  (default: 10)                           │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple_harness[normal-class_multi_file_second-help].1
@@ -363,20 +363,20 @@
   '''
   usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help   show this help message and exit          │
-  │ -v, --verbose                                         │
-  │              Increase logging verbosity. (repeatable) │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │              (default: 10.0)                          │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run      Run the model.                           │
-  │   • export   Export geometry to a STEP or STL file.   │
-  │   • view     View model geometry.                     │
-  │   • version  Show bdbox version and exit              │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit         │
+  │ -v, --verbose                                        │
+  │              Increase logging verbosity (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                        │
+  │              (default: 10.0)                         │
+  ╰──────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────╮
+  │ (default: run)                                       │
+  │   • run      Run the model                           │
+  │   • export   Export geometry to a STEP or STL file   │
+  │   • view     View model geometry                     │
+  │   • version  Show bdbox version and exit             │
+  ╰──────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple_harness[normal-class_multi_module_first-help].1
@@ -395,18 +395,18 @@
   '''
   usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --height 1 <= INT <= 100  (default: 10)                            │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --height 1 <= INT <= 100  (default: 10)                           │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple_harness[normal-class_multi_module_second-help].1
@@ -425,20 +425,20 @@
   '''
   usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help   show this help message and exit          │
-  │ -v, --verbose                                         │
-  │              Increase logging verbosity. (repeatable) │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │              (default: 10.0)                          │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run      Run the model.                           │
-  │   • export   Export geometry to a STEP or STL file.   │
-  │   • view     View model geometry.                     │
-  │   • version  Show bdbox version and exit              │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit         │
+  │ -v, --verbose                                        │
+  │              Increase logging verbosity (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                        │
+  │              (default: 10.0)                         │
+  ╰──────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────╮
+  │ (default: run)                                       │
+  │   • run      Run the model                           │
+  │   • export   Export geometry to a STEP or STL file   │
+  │   • view     View model geometry                     │
+  │   • version  Show bdbox version and exit             │
+  ╰──────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple_harness[run-class_multi_file_first-help].1
@@ -457,18 +457,18 @@
   '''
   usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --height 1 <= INT <= 100  (default: 10)                            │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --height 1 <= INT <= 100  (default: 10)                           │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple_harness[run-class_multi_file_second-help].1
@@ -487,20 +487,20 @@
   '''
   usage: bdbox [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [{run,export,view,version}]
   
-  ╭─ options ─────────────────────────────────────────────╮
-  │ -h, --help   show this help message and exit          │
-  │ -v, --verbose                                         │
-  │              Increase logging verbosity. (repeatable) │
-  │ --width 1.0 <= FLOAT <= 100.0                         │
-  │              (default: 10.0)                          │
-  ╰───────────────────────────────────────────────────────╯
-  ╭─ subcommands ─────────────────────────────────────────╮
-  │ (default: run)                                        │
-  │   • run      Run the model.                           │
-  │   • export   Export geometry to a STEP or STL file.   │
-  │   • view     View model geometry.                     │
-  │   • version  Show bdbox version and exit              │
-  ╰───────────────────────────────────────────────────────╯
+  ╭─ options ────────────────────────────────────────────╮
+  │ -h, --help   show this help message and exit         │
+  │ -v, --verbose                                        │
+  │              Increase logging verbosity (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                        │
+  │              (default: 10.0)                         │
+  ╰──────────────────────────────────────────────────────╯
+  ╭─ subcommands ────────────────────────────────────────╮
+  │ (default: run)                                       │
+  │   • run      Run the model                           │
+  │   • export   Export geometry to a STEP or STL file   │
+  │   • view     View model geometry                     │
+  │   • version  Show bdbox version and exit             │
+  ╰──────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple_harness[run-class_multi_module_first-help].1
@@ -519,18 +519,18 @@
   '''
   usage: bdbox [-h] [-v] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --height 1 <= INT <= 100  (default: 10)                            │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --height 1 <= INT <= 100  (default: 10)                           │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_multiple_harness[run-class_multi_module_second-help].1
@@ -551,17 +551,17 @@
   Doing something at the end using atexit
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_plain[help].1
@@ -584,17 +584,17 @@
   Doing something at the end using atexit
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_plain_not_importable[help].1
@@ -631,21 +631,21 @@
   '''
   usage: ChildModel [-h] [-v] [--width 1.0 <= FLOAT <= 100.0] [--height 1 <= INT <= 100] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  │ --width 1.0 <= FLOAT <= 100.0                           │
-  │                (default: 10.0)                          │
-  │ --height 1 <= INT <= 100                                │
-  │                (default: 10)                            │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  │ --width 1.0 <= FLOAT <= 100.0                          │
+  │                (default: 10.0)                         │
+  │ --height 1 <= INT <= 100                               │
+  │                (default: 10)                           │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_model_subclass[run-help].1
@@ -664,21 +664,21 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_class_model[mod_model-help].1
@@ -698,21 +698,21 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_class_model[mod_params-help].1
@@ -732,25 +732,25 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  │ --a FLOAT      (default: 2.5)                           │
-  │ --b INT        (default: 3)                             │
-  │ --c 1 <= INT <= 10                                      │
-  │                (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0                                │
-  │                (default: 5.0)                           │
-  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   │
-  │                (default: TRANSPARENT_ALUMINUM)          │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  │ --a FLOAT      (default: 2.5)                          │
+  │ --b INT        (default: 3)                            │
+  │ --c 1 <= INT <= 10                                     │
+  │                (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0                               │
+  │                (default: 5.0)                          │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  │
+  │                (default: TRANSPARENT_ALUMINUM)         │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_class_model[mono_model-help].1
@@ -770,25 +770,25 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  │ --a FLOAT      (default: 2.5)                           │
-  │ --b INT        (default: 3)                             │
-  │ --c 1 <= INT <= 10                                      │
-  │                (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0                                │
-  │                (default: 5.0)                           │
-  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   │
-  │                (default: TRANSPARENT_ALUMINUM)          │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  │ --a FLOAT      (default: 2.5)                          │
+  │ --b INT        (default: 3)                            │
+  │ --c 1 <= INT <= 10                                     │
+  │                (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0                               │
+  │                (default: 5.0)                          │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  │
+  │                (default: TRANSPARENT_ALUMINUM)         │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_class_model[mono_params-help].1
@@ -809,21 +809,21 @@
   Model main
   usage: SomeModel [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_model-help-embedded].1
@@ -834,21 +834,21 @@
   Model main
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_model-help-harness].1
@@ -879,21 +879,21 @@
   '''
   usage: SomeModel [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_model.model-help-embedded].1
@@ -903,21 +903,21 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_model.model-help-harness].1
@@ -947,21 +947,21 @@
   '''
   usage: SomeModel [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_model.show_model-help-embedded].1
@@ -971,21 +971,21 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_model.show_model-help-harness].1
@@ -1023,21 +1023,21 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_params-help-harness].1
@@ -1068,21 +1068,21 @@
   '''
   usage: model.py [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_params.model-help-embedded].1
@@ -1092,21 +1092,21 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_params.model-help-harness].1
@@ -1136,21 +1136,21 @@
   '''
   usage: show_model.py [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_params.show_model-help-embedded].1
@@ -1160,21 +1160,21 @@
   '''
   usage: bdbox [-h] [-v] [--a FLOAT] [--b INT] [--c 1 <= INT <= 10] [--d 1.0 <= FLOAT <= 10.0] [{run,export,view,version}]
   
-  ╭─ options ──────────────────────────────────────────────────────────╮
-  │ -h, --help                show this help message and exit          │
-  │ -v, --verbose             Increase logging verbosity. (repeatable) │
-  │ --a FLOAT                 (default: 2.5)                           │
-  │ --b INT                   (default: 3)                             │
-  │ --c 1 <= INT <= 10        (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                           │
-  ╰────────────────────────────────────────────────────────────────────╯
-  ╭─ subcommands ──────────────────────────────────────────────────────╮
-  │ (default: run)                                                     │
-  │   • run                   Run the model.                           │
-  │   • export                Export geometry to a STEP or STL file.   │
-  │   • view                  View model geometry.                     │
-  │   • version               Show bdbox version and exit              │
-  ╰────────────────────────────────────────────────────────────────────╯
+  ╭─ options ─────────────────────────────────────────────────────────╮
+  │ -h, --help                show this help message and exit         │
+  │ -v, --verbose             Increase logging verbosity (repeatable) │
+  │ --a FLOAT                 (default: 2.5)                          │
+  │ --b INT                   (default: 3)                            │
+  │ --c 1 <= INT <= 10        (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0  (default: 5.0)                          │
+  ╰───────────────────────────────────────────────────────────────────╯
+  ╭─ subcommands ─────────────────────────────────────────────────────╮
+  │ (default: run)                                                    │
+  │   • run                   Run the model                           │
+  │   • export                Export geometry to a STEP or STL file   │
+  │   • view                  View model geometry                     │
+  │   • version               Show bdbox version and exit             │
+  ╰───────────────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_params.show_model-help-harness].1
@@ -1209,17 +1209,17 @@
   show with or operator: (Box(x=10, y=20, z=30), Box(x=30, y=40, z=50))
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mod_plain.show_model-help-harness].1
@@ -1244,25 +1244,25 @@
   '''
   usage: MyModel [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  │ --a FLOAT      (default: 2.5)                           │
-  │ --b INT        (default: 3)                             │
-  │ --c 1 <= INT <= 10                                      │
-  │                (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0                                │
-  │                (default: 5.0)                           │
-  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   │
-  │                (default: TRANSPARENT_ALUMINUM)          │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  │ --a FLOAT      (default: 2.5)                          │
+  │ --b INT        (default: 3)                            │
+  │ --c 1 <= INT <= 10                                     │
+  │                (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0                               │
+  │                (default: 5.0)                          │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  │
+  │                (default: TRANSPARENT_ALUMINUM)         │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_model.models.model-help-embedded].1
@@ -1272,25 +1272,25 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  │ --a FLOAT      (default: 2.5)                           │
-  │ --b INT        (default: 3)                             │
-  │ --c 1 <= INT <= 10                                      │
-  │                (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0                                │
-  │                (default: 5.0)                           │
-  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   │
-  │                (default: TRANSPARENT_ALUMINUM)          │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  │ --a FLOAT      (default: 2.5)                          │
+  │ --b INT        (default: 3)                            │
+  │ --c 1 <= INT <= 10                                     │
+  │                (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0                               │
+  │                (default: 5.0)                          │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  │
+  │                (default: TRANSPARENT_ALUMINUM)         │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_model.models.model-help-harness].1
@@ -1320,25 +1320,25 @@
   '''
   usage: model.py [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  │ --a FLOAT      (default: 2.5)                           │
-  │ --b INT        (default: 3)                             │
-  │ --c 1 <= INT <= 10                                      │
-  │                (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0                                │
-  │                (default: 5.0)                           │
-  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   │
-  │                (default: TRANSPARENT_ALUMINUM)          │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  │ --a FLOAT      (default: 2.5)                          │
+  │ --b INT        (default: 3)                            │
+  │ --c 1 <= INT <= 10                                     │
+  │                (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0                               │
+  │                (default: 5.0)                          │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  │
+  │                (default: TRANSPARENT_ALUMINUM)         │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_params.models.model-help-embedded].1
@@ -1348,25 +1348,25 @@
   '''
   usage: bdbox [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  │ --a FLOAT      (default: 2.5)                           │
-  │ --b INT        (default: 3)                             │
-  │ --c 1 <= INT <= 10                                      │
-  │                (default: 5)                             │
-  │ --d 1.0 <= FLOAT <= 10.0                                │
-  │                (default: 5.0)                           │
-  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}   │
-  │                (default: TRANSPARENT_ALUMINUM)          │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  │ --a FLOAT      (default: 2.5)                          │
+  │ --b INT        (default: 3)                            │
+  │ --c 1 <= INT <= 10                                     │
+  │                (default: 5)                            │
+  │ --d 1.0 <= FLOAT <= 10.0                               │
+  │                (default: 5.0)                          │
+  │ --material {TRANSPARENT_ALUMINUM,NEUTRONIUM,DURANIUM}  │
+  │                (default: TRANSPARENT_ALUMINUM)         │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_params.models.model-help-harness].1
@@ -1403,17 +1403,17 @@
   Box count: 2
   usage: bdbox [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_module_models[tests.models.mono_plain.models.model-help-harness].1
@@ -1450,58 +1450,58 @@
   '''
   usage: params_class.py [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ────────────────────────────────────────────────╮
-  │ -h, --help      show this help message and exit          │
-  │ -v, --verbose   Increase logging verbosity. (repeatable) │
-  │ --preset {None,default,large,small}                      │
-  │                 (default: None)                          │
-  │ --aa INT        (default: 5)                             │
-  │ --width 1.0 <= FLOAT <= 100.0                            │
-  │                 (default: 10.0)                          │
-  │ --height 1 <= INT <= 50                                  │
-  │                 (default: 5)                             │
-  │ --enabled, --no-enabled                                  │
-  │                 enable the thing (default: False)        │
-  │ --text STR      (default: nope)                          │
-  │ --thing {first,second,third}                             │
-  │                 (default: first)                         │
-  │ --count INT     (default: 1)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub options ────────────────────────────────────────────╮
-  │ --sub.a FLOAT   (required)                               │
-  │ --sub.b FLOAT   (default: 5.0)                           │
-  │ --sub.c 0 <= FLOAT <= 2000.0                             │
-  │                 C! (default: 25.0)                       │
-  │ --sub.do-the-thing, --sub.no-do-the-thing                │
-  │                 Zhu Li, do the thing! (default: False)   │
-  │ --sub.do-another-thing, --sub.no-do-another-thing        │
-  │                 Another thing? (default: False)          │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub.subsub options ─────────────────────────────────────╮
-  │ --sub.subsub.x 0 <= INT <= 10                            │
-  │                 (default: 5)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub2 options ───────────────────────────────────────────╮
-  │ --sub2.a FLOAT  (default: 1)                             │
-  │ --sub2.b FLOAT  (default: 2)                             │
-  │ --sub2.c 0 <= FLOAT <= 2000.0                            │
-  │                 C! (default: 3)                          │
-  │ --sub2.do-the-thing, --sub2.no-do-the-thing              │
-  │                 Zhu Li, do the thing! (default: False)   │
-  │ --sub2.do-another-thing, --sub2.no-do-another-thing      │
-  │                 Another thing? (default: False)          │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub2.subsub options ────────────────────────────────────╮
-  │ --sub2.subsub.x 0 <= INT <= 10                           │
-  │                 (default: 5)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────╮
-  │ (default: run)                                           │
-  │   • run         Run the model.                           │
-  │   • export      Export geometry to a STEP or STL file.   │
-  │   • view        View model geometry.                     │
-  │   • version     Show bdbox version and exit              │
-  ╰──────────────────────────────────────────────────────────╯
+  ╭─ options ───────────────────────────────────────────────╮
+  │ -h, --help      show this help message and exit         │
+  │ -v, --verbose   Increase logging verbosity (repeatable) │
+  │ --preset {None,default,large,small}                     │
+  │                 (default: None)                         │
+  │ --aa INT        (default: 5)                            │
+  │ --width 1.0 <= FLOAT <= 100.0                           │
+  │                 (default: 10.0)                         │
+  │ --height 1 <= INT <= 50                                 │
+  │                 (default: 5)                            │
+  │ --enabled, --no-enabled                                 │
+  │                 enable the thing (default: False)       │
+  │ --text STR      (default: nope)                         │
+  │ --thing {first,second,third}                            │
+  │                 (default: first)                        │
+  │ --count INT     (default: 1)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub options ───────────────────────────────────────────╮
+  │ --sub.a FLOAT   (required)                              │
+  │ --sub.b FLOAT   (default: 5.0)                          │
+  │ --sub.c 0 <= FLOAT <= 2000.0                            │
+  │                 C! (default: 25.0)                      │
+  │ --sub.do-the-thing, --sub.no-do-the-thing               │
+  │                 Zhu Li, do the thing! (default: False)  │
+  │ --sub.do-another-thing, --sub.no-do-another-thing       │
+  │                 Another thing? (default: False)         │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub.subsub options ────────────────────────────────────╮
+  │ --sub.subsub.x 0 <= INT <= 10                           │
+  │                 (default: 5)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub2 options ──────────────────────────────────────────╮
+  │ --sub2.a FLOAT  (default: 1)                            │
+  │ --sub2.b FLOAT  (default: 2)                            │
+  │ --sub2.c 0 <= FLOAT <= 2000.0                           │
+  │                 C! (default: 3)                         │
+  │ --sub2.do-the-thing, --sub2.no-do-the-thing             │
+  │                 Zhu Li, do the thing! (default: False)  │
+  │ --sub2.do-another-thing, --sub2.no-do-another-thing     │
+  │                 Another thing? (default: False)         │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub2.subsub options ───────────────────────────────────╮
+  │ --sub2.subsub.x 0 <= INT <= 10                          │
+  │                 (default: 5)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ subcommands ───────────────────────────────────────────╮
+  │ (default: run)                                          │
+  │   • run         Run the model                           │
+  │   • export      Export geometry to a STEP or STL file   │
+  │   • view        View model geometry                     │
+  │   • version     Show bdbox version and exit             │
+  ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class[normal-help].1
@@ -1520,58 +1520,58 @@
   '''
   usage: params_class.py [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ────────────────────────────────────────────────╮
-  │ -h, --help      show this help message and exit          │
-  │ -v, --verbose   Increase logging verbosity. (repeatable) │
-  │ --preset {None,default,large,small}                      │
-  │                 (default: None)                          │
-  │ --aa INT        (default: 5)                             │
-  │ --width 1.0 <= FLOAT <= 100.0                            │
-  │                 (default: 10.0)                          │
-  │ --height 1 <= INT <= 50                                  │
-  │                 (default: 5)                             │
-  │ --enabled, --no-enabled                                  │
-  │                 enable the thing (default: False)        │
-  │ --text STR      (default: nope)                          │
-  │ --thing {first,second,third}                             │
-  │                 (default: first)                         │
-  │ --count INT     (default: 1)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub options ────────────────────────────────────────────╮
-  │ --sub.a FLOAT   (required)                               │
-  │ --sub.b FLOAT   (default: 5.0)                           │
-  │ --sub.c 0 <= FLOAT <= 2000.0                             │
-  │                 C! (default: 25.0)                       │
-  │ --sub.do-the-thing, --sub.no-do-the-thing                │
-  │                 Zhu Li, do the thing! (default: False)   │
-  │ --sub.do-another-thing, --sub.no-do-another-thing        │
-  │                 Another thing? (default: False)          │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub.subsub options ─────────────────────────────────────╮
-  │ --sub.subsub.x 0 <= INT <= 10                            │
-  │                 (default: 5)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub2 options ───────────────────────────────────────────╮
-  │ --sub2.a FLOAT  (default: 1)                             │
-  │ --sub2.b FLOAT  (default: 2)                             │
-  │ --sub2.c 0 <= FLOAT <= 2000.0                            │
-  │                 C! (default: 3)                          │
-  │ --sub2.do-the-thing, --sub2.no-do-the-thing              │
-  │                 Zhu Li, do the thing! (default: False)   │
-  │ --sub2.do-another-thing, --sub2.no-do-another-thing      │
-  │                 Another thing? (default: False)          │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ sub2.subsub options ────────────────────────────────────╮
-  │ --sub2.subsub.x 0 <= INT <= 10                           │
-  │                 (default: 5)                             │
-  ╰──────────────────────────────────────────────────────────╯
-  ╭─ subcommands ────────────────────────────────────────────╮
-  │ (default: run)                                           │
-  │   • run         Run the model.                           │
-  │   • export      Export geometry to a STEP or STL file.   │
-  │   • view        View model geometry.                     │
-  │   • version     Show bdbox version and exit              │
-  ╰──────────────────────────────────────────────────────────╯
+  ╭─ options ───────────────────────────────────────────────╮
+  │ -h, --help      show this help message and exit         │
+  │ -v, --verbose   Increase logging verbosity (repeatable) │
+  │ --preset {None,default,large,small}                     │
+  │                 (default: None)                         │
+  │ --aa INT        (default: 5)                            │
+  │ --width 1.0 <= FLOAT <= 100.0                           │
+  │                 (default: 10.0)                         │
+  │ --height 1 <= INT <= 50                                 │
+  │                 (default: 5)                            │
+  │ --enabled, --no-enabled                                 │
+  │                 enable the thing (default: False)       │
+  │ --text STR      (default: nope)                         │
+  │ --thing {first,second,third}                            │
+  │                 (default: first)                        │
+  │ --count INT     (default: 1)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub options ───────────────────────────────────────────╮
+  │ --sub.a FLOAT   (required)                              │
+  │ --sub.b FLOAT   (default: 5.0)                          │
+  │ --sub.c 0 <= FLOAT <= 2000.0                            │
+  │                 C! (default: 25.0)                      │
+  │ --sub.do-the-thing, --sub.no-do-the-thing               │
+  │                 Zhu Li, do the thing! (default: False)  │
+  │ --sub.do-another-thing, --sub.no-do-another-thing       │
+  │                 Another thing? (default: False)         │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub.subsub options ────────────────────────────────────╮
+  │ --sub.subsub.x 0 <= INT <= 10                           │
+  │                 (default: 5)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub2 options ──────────────────────────────────────────╮
+  │ --sub2.a FLOAT  (default: 1)                            │
+  │ --sub2.b FLOAT  (default: 2)                            │
+  │ --sub2.c 0 <= FLOAT <= 2000.0                           │
+  │                 C! (default: 3)                         │
+  │ --sub2.do-the-thing, --sub2.no-do-the-thing             │
+  │                 Zhu Li, do the thing! (default: False)  │
+  │ --sub2.do-another-thing, --sub2.no-do-another-thing     │
+  │                 Another thing? (default: False)         │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ sub2.subsub options ───────────────────────────────────╮
+  │ --sub2.subsub.x 0 <= INT <= 10                          │
+  │                 (default: 5)                            │
+  ╰─────────────────────────────────────────────────────────╯
+  ╭─ subcommands ───────────────────────────────────────────╮
+  │ (default: run)                                          │
+  │   • run         Run the model                           │
+  │   • export      Export geometry to a STEP or STL file   │
+  │   • view        View model geometry                     │
+  │   • version     Show bdbox version and exit             │
+  ╰─────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class[show-help].1
@@ -1590,17 +1590,17 @@
   '''
   usage: params_class_blank.py [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class_blank[noparams-help].1
@@ -1619,17 +1619,17 @@
   '''
   usage: params_class_blank.py [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class_blank[normal-help].1
@@ -1648,17 +1648,17 @@
   '''
   usage: params_class_blank.py [-h] [-v] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class_blank[show-help].1
@@ -1677,28 +1677,28 @@
   '''
   usage: params_class_instance.py [-h] [OPTIONS] [{run,export,view,version}]
   
-  ╭─ options ───────────────────────────────────────────────╮
-  │ -h, --help     show this help message and exit          │
-  │ -v, --verbose  Increase logging verbosity. (repeatable) │
-  │ --preset {None,default,large,small}                     │
-  │                (default: None)                          │
-  │ --width 1.0 <= FLOAT <= 100.0                           │
-  │                (default: 10.0)                          │
-  │ --height 1 <= INT <= 50                                 │
-  │                (default: 5)                             │
-  │ --enabled, --no-enabled                                 │
-  │                enable the thing (default: False)        │
-  │ --text STR     (default: nope)                          │
-  │ --thing {first,second,third}                            │
-  │                (default: first)                         │
-  ╰─────────────────────────────────────────────────────────╯
-  ╭─ subcommands ───────────────────────────────────────────╮
-  │ (default: run)                                          │
-  │   • run        Run the model.                           │
-  │   • export     Export geometry to a STEP or STL file.   │
-  │   • view       View model geometry.                     │
-  │   • version    Show bdbox version and exit              │
-  ╰─────────────────────────────────────────────────────────╯
+  ╭─ options ──────────────────────────────────────────────╮
+  │ -h, --help     show this help message and exit         │
+  │ -v, --verbose  Increase logging verbosity (repeatable) │
+  │ --preset {None,default,large,small}                    │
+  │                (default: None)                         │
+  │ --width 1.0 <= FLOAT <= 100.0                          │
+  │                (default: 10.0)                         │
+  │ --height 1 <= INT <= 50                                │
+  │                (default: 5)                            │
+  │ --enabled, --no-enabled                                │
+  │                enable the thing (default: False)       │
+  │ --text STR     (default: nope)                         │
+  │ --thing {first,second,third}                           │
+  │                (default: first)                        │
+  ╰────────────────────────────────────────────────────────╯
+  ╭─ subcommands ──────────────────────────────────────────╮
+  │ (default: run)                                         │
+  │   • run        Run the model                           │
+  │   • export     Export geometry to a STEP or STL file   │
+  │   • view       View model geometry                     │
+  │   • version    Show bdbox version and exit             │
+  ╰────────────────────────────────────────────────────────╯
   '''
 # ---
 # name: test_params_class_instance[help].1

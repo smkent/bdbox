@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class ViewAction(
-    ModelAction, command="view", description="View model geometry."
+    ModelAction, command="view", description="View model geometry"
 ):
     """View model geometry in OCP CAD Viewer."""
 
@@ -48,12 +48,12 @@ class ViewAction(
     export: Annotated[
         Path | None,
         tyro.conf.arg(
-            aliases=("-e",), metavar="DIR", help="Export output directory."
+            aliases=("-e",), metavar="DIR", help="Export output directory"
         ),
     ] = None
     format: Annotated[
         Literal["step", "stl"],
-        tyro.conf.arg(aliases=["-f"], help="Output format."),
+        tyro.conf.arg(aliases=["-f"], help="Output format"),
     ] = "step"
     server_port: Annotated[
         int,
