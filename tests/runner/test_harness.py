@@ -30,8 +30,9 @@ class HarnessRunnerRunner:
         self.monkeypatch.setattr(sys, "argv", ["bdbox", *args])
         with pytest.raises(SystemExit):
             ModelHarness([*args])()
-        assert self.capsys.readouterr().out == self.snapshot
-        assert self.capsys.readouterr().err == self.snapshot
+        capture_result = self.capsys.readouterr()
+        assert capture_result.out == self.snapshot
+        assert capture_result.err == self.snapshot
 
 
 @pytest.fixture
