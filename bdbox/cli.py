@@ -91,14 +91,6 @@ class CLIConfig(CLIAction[T]):
 class CLIParser:
     package: str = (__package__ or "bdbox").split(".", 1)[0]
 
-    def parse_action_cls(
-        self, *, args: Sequence[str] | None = None
-    ) -> type[Action]:
-        commands = {action.cli.command: action for action in cli_actions}
-        return next(
-            (commands[a] for a in (args or []) if a in commands), RunAction
-        )
-
     @property
     def prog(self) -> str:
         if (argv0 := Path(sys.argv[0])).stem == "__main__":
@@ -149,6 +141,14 @@ class CLIParser:
         if isinstance(result, CLIOptions):
             result.configure()
         return result
+
+    def parse_action_cls(
+        self, *, args: Sequence[str] | None = None
+    ) -> type[Action]:
+        commands = {action.cli.command: action for action in cli_actions}
+        return next(
+            (commands[a] for a in (args or []) if a in commands), RunAction
+        )
 
     @overload
     def preparse(
