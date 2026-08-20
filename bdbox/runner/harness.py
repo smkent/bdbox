@@ -4,14 +4,14 @@ import operator
 import os
 import sys
 from contextlib import suppress
-from dataclasses import dataclass, make_dataclass
+from dataclasses import dataclass, field, make_dataclass
 from functools import cached_property, reduce
 from typing import TYPE_CHECKING, Annotated, Any, ClassVar, get_args
 from unittest.mock import MagicMock, patch
 
 import tyro
 
-from bdbox.actions.action import ModelAction
+from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField
 from bdbox.cli import CLIAction, CLIOptions, cli_parser
 from bdbox.dispatch import dispatch
@@ -65,6 +65,7 @@ class HarnessCLIFactory:
 @dataclass
 class ModelHarness(ModelLocator):
     env_search: ClassVar[bool] = True
+    action_cls: type[Action] | None = field(default=None, repr=False)
 
     @cached_property
     def harness_cli(self) -> type[CLIAction[None]]:
@@ -82,7 +83,11 @@ class ModelHarness(ModelLocator):
         run_state.mode = run_state.Mode.HARNESS
         argv = self._setup_argv(model_argv or sys.argv[1:])
         CLIOptions.configure_from_cli(args=argv)
-        super().__post_init__(argv)
+        self.action_cls = cli_parser.parse_action_cls(args=argv)
+        if issubclass(self.action_cls, ModelAction):
+            super().__post_init__(argv)
+        else:
+            self.model.argv = argv
         if not argv:
             self.model.argv.append("--help")
 
@@ -94,7 +99,9 @@ class ModelHarness(ModelLocator):
         main_module = MainModule()
         main_module.__dict__.update(run_state.model_state.module_dict)
         with PatchModule("__main__", main_module, auto=True):
-            cli_result = cli_parser.parse(cli_cls, args=self.model.argv)
+            cli_result = cli_parser.parse(
+                cli_cls, args=self.model.argv, action_cls=self.action_cls
+            )
         cli_result.action.on_harness(self.model)
         dispatch.exit.set()
         dispatch.exit_join()

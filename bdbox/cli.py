@@ -16,8 +16,8 @@ from typing import (
 
 import tyro
 
-from bdbox.actions.action import CommandAction
-from bdbox.actions.field import ActionField  # noqa: TC001
+from bdbox.actions.action import Action, ModelAction
+from bdbox.actions.field import ActionField, cli_actions
 from bdbox.actions.run import RunAction
 from bdbox.console import console
 
@@ -91,6 +91,14 @@ class CLIConfig(CLIAction[T]):
 class CLIParser:
     package: str = (__package__ or "bdbox").split(".", 1)[0]
 
+    def parse_action_cls(
+        self, *, args: Sequence[str] | None = None
+    ) -> type[Action]:
+        commands = {action.cli.command: action for action in cli_actions}
+        return next(
+            (commands[a] for a in (args or []) if a in commands), RunAction
+        )
+
     @property
     def prog(self) -> str:
         if (argv0 := Path(sys.argv[0])).stem == "__main__":
@@ -122,20 +130,13 @@ class CLIParser:
         *,
         args: Sequence[str] | None = None,
         prog: str | None = None,
+        action_cls: type[Action] | None = None,
         **kwargs: Any,
     ) -> CLIAction[None] | CLIConfig[T]:
         prog = prog or self.prog
-        preparse_action = True
-        for arg in args or []:
-            if arg in {"-h", "--help"}:
-                preparse_action = False
-        if preparse_action:
-            action_result, _ = self.preparse(
-                cls=CLIAction[None], args=args, prog=prog, **kwargs
-            )
-            if isinstance(action_result.action, CommandAction):
-                return action_result
-
+        action_cls = action_cls or self.parse_action_cls(args=args)
+        if not issubclass(action_cls, ModelAction):
+            cls = None
         cli_cls = self._cli(cls)
         result = tyro.cli(
             cli_cls,
