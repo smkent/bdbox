@@ -1,5 +1,4 @@
-import "golden-layout/dist/css/goldenlayout-base.css";
-import "golden-layout/dist/css/themes/goldenlayout-dark-theme.css";
+import "dockview/dist/styles/dockview.css";
 import "@xterm/xterm/css/xterm.css";
 import "./app.css";
 import { WebSocketManager } from "./websocket";

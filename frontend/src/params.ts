@@ -1,5 +1,6 @@
 import Alpine from "alpinejs";
 import Jedison from "jedison";
+import { GroupPanelPartInitParameters, IContentRenderer } from "dockview";
 import { JedisonData, ModelParamsState } from "./classes";
 import { WebSocketManager } from "./websocket";
 import {
@@ -9,7 +10,7 @@ import {
   ModelSetPresetMessage,
 } from "./protocol";
 
-export class Params {
+export class Params implements IContentRenderer {
   private webSocketManager: WebSocketManager;
   private div: HTMLElement;
   private paramsFormEl: HTMLElement;
@@ -20,6 +21,15 @@ export class Params {
     this.webSocketManager = webSocketManager;
     this.div = this.createDiv();
     this.paramsFormEl = this.div.querySelector(".params-form") as HTMLElement;
+  }
+
+  get element(): HTMLElement {
+    return this.div;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  init(parameters: GroupPanelPartInitParameters): void {
+    this.display();
   }
 
   private createDiv(): HTMLElement {
@@ -35,12 +45,7 @@ export class Params {
     return div;
   }
 
-  register(container: HTMLElement): void {
-    container.appendChild(this.div);
-    this.display();
-  }
-
-  update(detail: ModelDetailsMessage): void {
+  setModelDetails(detail: ModelDetailsMessage): void {
     let schemaChanged = false;
     if (detail.schema && detail.schema.properties && detail.schema.required) {
       this.jedisonData.schema = detail.schema;

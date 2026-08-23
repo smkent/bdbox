@@ -1,41 +1,39 @@
-export class OCPCADViewer {
-  private iframe: HTMLIFrameElement;
-  private containerEl: HTMLElement | null = null;
+import { GroupPanelPartInitParameters, IContentRenderer } from "dockview";
+
+export class OCPCADViewer implements IContentRenderer {
+  private readonly _element: HTMLElement;
+  private readonly iframe: HTMLIFrameElement;
 
   constructor(private port: number) {
-    this.iframe = this.createIframe();
-  }
+    this._element = document.createElement("div");
+    Object.assign(this._element.style, { width: "100%", height: "100%" });
 
-  private createIframe(): HTMLIFrameElement {
-    const iframe = document.createElement("iframe");
-    iframe.src = `http://localhost:${this.port}/viewer`;
-    Object.assign(iframe.style, {
-      position: "fixed",
+    this.iframe = document.createElement("iframe");
+    Object.assign(this.iframe.style, {
+      width: "100%",
+      height: "100%",
       border: "none",
-      display: "none",
-      zIndex: "45",
     });
-    document.addEventListener("mousedown", () => {
-      iframe.style.pointerEvents = "none";
-    });
-    document.addEventListener("mouseup", () => {
-      iframe.style.pointerEvents = "";
-    });
-    window.addEventListener("blur", () => {
-      iframe.style.pointerEvents = "";
-    });
-    document.body.appendChild(iframe);
+    this.iframe.src = `http://localhost:${this.port}/viewer`;
+    this._element.appendChild(this.iframe);
+
     window.addEventListener("bdbox.server:hello", ({ detail }) => {
       if (detail.viewer_port) {
         this.setPort(detail.viewer_port);
       }
     });
-    return iframe;
   }
 
-  register(container: HTMLElement): void {
-    this.containerEl = container;
-    this.reposition();
+  get element(): HTMLElement {
+    return this._element;
+  }
+
+  init(parameters: GroupPanelPartInitParameters): void {
+    const update = (isActive: boolean) => {
+      this.iframe.style.pointerEvents = isActive ? "inherit" : "none";
+    };
+    update(parameters.api.isActive);
+    parameters.api.onDidActiveChange((event) => update(event.isActive));
   }
 
   setPort(port: number): void {
@@ -43,32 +41,5 @@ export class OCPCADViewer {
       this.iframe.src = `http://localhost:${port}/viewer`;
     }
     this.port = port;
-  }
-
-  reposition(): void {
-    if (!this.containerEl) {
-      return;
-    }
-
-    // Hide if a non-viewer panel is maximised (would otherwise float above it)
-    const maximisedEl = document.querySelector(".lm_maximised");
-    if (maximisedEl && !maximisedEl.contains(this.containerEl)) {
-      this.iframe.style.display = "none";
-      return;
-    }
-
-    const rect = this.containerEl.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) {
-      this.iframe.style.display = "none";
-      return;
-    }
-
-    Object.assign(this.iframe.style, {
-      display: "block",
-      left: `${rect.left}px`,
-      top: `${rect.top}px`,
-      width: `${rect.width}px`,
-      height: `${rect.height}px`,
-    });
   }
 }

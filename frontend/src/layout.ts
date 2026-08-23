@@ -1,131 +1,109 @@
-import { GoldenLayout, ComponentContainer } from "golden-layout";
-import type { LayoutConfig } from "golden-layout";
+import {
+  createDockview,
+  DockviewApi,
+  SerializedDockview,
+  themeDark,
+} from "dockview";
 import { WebSocketManager } from "./websocket";
-import { ClientInfoMessage, TerminalInfo } from "./protocol";
 import { OCPCADViewer } from "./ocp-cad-viewer";
 import { WebConsole } from "./console";
 import { Params } from "./params";
+import { PlainTab } from "./plain-tab";
+import { MaximizeAction } from "./maximize-action";
 
 const LAYOUT_VERSION = 1;
 const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
 
-const DEFAULT_LAYOUT = {
-  root: {
-    type: "row",
-    content: [
-      {
-        type: "component",
-        componentType: "viewer",
-        title: "Viewer",
-        size: "70%",
-        isClosable: false,
-        header: { popout: false },
-      },
-      {
-        type: "column",
-        size: "30%",
-        content: [
-          {
-            type: "component",
-            componentType: "params",
-            title: "Parameters",
-            size: "60%",
-            isClosable: false,
-            header: { popout: false },
-          },
-          {
-            type: "component",
-            componentType: "console",
-            title: "Console",
-            size: "40%",
-            isClosable: false,
-            header: { popout: false },
-          },
-        ],
-      },
-    ],
-  },
-};
-
 export class Layout {
-  // The viewer iframe lives outside GoldenLayout's DOM so maximize/restore
-  // doesn't reload it. Repositioned to track container.element on each frame.
-  private webSocketManager: WebSocketManager;
   private params: Params;
   private viewer: OCPCADViewer = new OCPCADViewer(window.__BDBOX__.viewerPort);
-  private webconsole: WebConsole = new WebConsole();
+  private webconsole: WebConsole;
   private container: HTMLElement;
-  private goldenLayout: GoldenLayout;
+  private api!: DockviewApi;
 
   constructor(webSocketManager: WebSocketManager) {
-    this.webSocketManager = webSocketManager;
     this.params = new Params(webSocketManager);
+    this.webconsole = new WebConsole(webSocketManager);
     this.container = document.getElementById("layout") as HTMLElement;
-    this.goldenLayout = new GoldenLayout(this.container);
     document.addEventListener("DOMContentLoaded", () => this.init());
   }
 
   private init(): void {
-    this.registerComponents();
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const layout = this.goldenLayout;
-    let loaded = false;
-    if (saved) {
-      try {
-        layout.loadLayout(JSON.parse(saved) as LayoutConfig);
-        loaded = true;
-      } catch {
-        localStorage.removeItem(STORAGE_KEY);
-      }
-    }
-    if (!loaded) {
-      layout.loadLayout(DEFAULT_LAYOUT as unknown as LayoutConfig);
-    }
-
-    layout.on("stateChanged", () => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(layout.saveLayout()));
-      requestAnimationFrame(() => this.viewer.reposition());
+    this.api = createDockview(this.container, {
+      theme: themeDark,
+      disableAutoResizing: true,
+      defaultTabComponent: "plain",
+      createTabComponent: () => new PlainTab(),
+      createRightHeaderActionComponent: () => new MaximizeAction(),
+      createComponent: (options) => {
+        switch (options.name) {
+          case "viewer":
+            return this.viewer;
+          case "params":
+            return this.params;
+          case "console":
+            return this.webconsole;
+          default:
+            throw new Error(`Unknown component: ${options.name}`);
+        }
+      },
     });
+    this.api.layout(this.container.clientWidth, this.container.clientHeight);
 
     new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
-      layout.updateSize(width, height);
-      requestAnimationFrame(() => this.viewer.reposition());
+      this.api.layout(width, height);
     }).observe(this.container);
 
+    if (!this.loadSavedLayout()) {
+      this.setDefaultLayout();
+    }
+
+    const persistLayout = () => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.api.toJSON()));
+    };
+    this.api.onDidLayoutChange(persistLayout);
+    this.api.onDidMaximizedGroupChange(persistLayout);
+
     window.addEventListener("bdbox.server:model.details", ({ detail }) => {
-      this.params.update(detail);
+      this.params.setModelDetails(detail);
     });
   }
 
-  private registerComponents(): void {
-    this.goldenLayout.registerComponentFactoryFunction(
-      "viewer",
-      (container: ComponentContainer) =>
-        this.viewer.register(container.element),
-    );
+  private loadSavedLayout(): boolean {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        this.api.fromJSON(JSON.parse(saved) as SerializedDockview);
+        return true;
+      } catch (error) {
+        console.error("Failed to restore saved layout:", error);
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+    return false;
+  }
 
-    this.goldenLayout.registerComponentFactoryFunction(
-      "params",
-      (container: ComponentContainer) =>
-        this.params.register(container.element),
-    );
-
-    this.goldenLayout.registerComponentFactoryFunction(
-      "console",
-      (container: ComponentContainer) => {
-        const onResize = () => {
-          const { rows, cols } = this.webconsole.size;
-          this.webSocketManager.send(
-            new ClientInfoMessage(new TerminalInfo(rows, cols)),
-          );
-        };
-        this.webconsole.register(container.element, onResize);
-        container.on("resize", () => this.webconsole.resize());
-        window.addEventListener("bdbox:ws.open", onResize);
-        return undefined;
-      },
-    );
+  private setDefaultLayout(): void {
+    this.api.addPanel({
+      id: "viewer",
+      component: "viewer",
+      title: "Viewer",
+      renderer: "always",
+    });
+    this.api.addPanel({
+      id: "params",
+      component: "params",
+      title: "Parameters",
+      position: { referencePanel: "viewer", direction: "right" },
+      initialWidth: Math.round(this.container.clientWidth * 0.3),
+    });
+    this.api.addPanel({
+      id: "console",
+      component: "console",
+      title: "Console",
+      position: { referencePanel: "params", direction: "below" },
+      initialHeight: Math.round(this.container.clientHeight * 0.4),
+    });
   }
 }
