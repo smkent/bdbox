@@ -83,7 +83,7 @@ class AppBrowserSession(CallableContextManager):
 
     @contextmanager
     def screencast(self, output: Path) -> Iterator[None]:
-        self.page.screencast.start(path=output)
+        self.page.screencast.start(path=output, size=self.viewport_size)
         try:
             yield
         finally:
