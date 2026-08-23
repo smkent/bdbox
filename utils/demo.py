@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import subprocess
 import sys
 import time
@@ -104,7 +105,8 @@ class AppBrowserSession(CallableContextManager):
                     *(self.args.to_args() if self.args else []),
                 ]
             )
-            self._wait_for_url(BDBOX_URL)
+            ocp_port = self._wait_for_ocp_port(BDBOX_URL)
+            self._wait_for_url(f"http://localhost:{ocp_port}")
             yield
         finally:
             proc.terminate()
@@ -205,15 +207,27 @@ class AppBrowserSession(CallableContextManager):
         if resize:
             self.viewer_click_resize()
 
-    def _wait_for_url(self, url: str, timeout: float = 10.0) -> None:
+    def _wait_for_ocp_port(self, url: str, timeout: float = 10.0) -> int:
+        for line in self._wait_for_url(url, timeout).splitlines():
+            if m := re.match(
+                (
+                    r".*window\.__BDBOX__\s*=\s*"
+                    r"\{\s*\"viewerPort\"\s*:\s*(\d+)*\s*\}"
+                ),
+                line,
+            ):
+                return int(m.group(1))
+        raise InternalError("Unable to locate OCP CAD Viewer port")
+
+    def _wait_for_url(self, url: str, timeout: float = 10.0) -> str:
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             try:
-                urllib.request.urlopen(url, timeout=1)  # noqa: S310
+                result = urllib.request.urlopen(url, timeout=1)  # noqa: S310
+                return result.read().decode("utf-8")
             except urllib.error.URLError:  # noqa: PERF203
                 time.sleep(0.5)
-            else:
-                return
+                continue
         raise TimeoutError(f"Timed out waiting for {url}")
 
     def move_click(self, locator: Locator, delay_ms: int = 300) -> None:
