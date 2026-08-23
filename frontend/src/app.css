@@ -1,3 +1,42 @@
+.layout-maximize-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 10px;
+  background: transparent;
+  color: #999;
+  border: none;
+  border-left: 1px solid #333;
+  cursor: pointer;
+}
+
+.layout-maximize-button:hover {
+  background: #2a2a2a;
+  color: #ddd;
+}
+
+.dv-groupview.dv-active-group .dv-tab.dv-active-tab,
+.dv-groupview.dv-inactive-group .dv-tab.dv-active-tab {
+  position: relative;
+}
+
+.dv-groupview.dv-active-group .dv-tab.dv-active-tab::after,
+.dv-groupview.dv-inactive-group .dv-tab.dv-active-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  z-index: 999;
+  background-color: #5af;
+}
+
+.dv-groupview.dv-inactive-group .dv-tab.dv-active-tab::after {
+  background-color: rgba(85, 170, 255, 0.2);
+}
+
 .params-panel {
   display: flex;
   flex-direction: column;

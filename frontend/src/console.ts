@@ -1,17 +1,18 @@
 import Alpine from "alpinejs";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
+import { GroupPanelPartInitParameters, IContentRenderer } from "dockview";
+import { WebSocketManager } from "./websocket";
+import { ClientInfoMessage, TerminalInfo } from "./protocol";
 
-export class WebConsole {
-  private onResize: (() => void) | null = null;
-  private containerEl: HTMLElement | null = null;
+export class WebConsole implements IContentRenderer {
   private terminal: Terminal;
   private terminalEl: HTMLElement;
   private div: HTMLElement;
   private fitAddon: FitAddon = new FitAddon();
   private resizeObserver: ResizeObserver;
 
-  constructor() {
+  constructor(private webSocketManager: WebSocketManager) {
     this.div = this.createDiv();
     this.terminalEl = this.div.querySelector(
       ".console-terminal",
@@ -19,6 +20,21 @@ export class WebConsole {
     this.terminal = this.createTerminal();
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(this.terminalEl);
+  }
+
+  get element(): HTMLElement {
+    return this.div;
+  }
+
+  init(parameters: GroupPanelPartInitParameters): void {
+    const reportSize = () => {
+      const { rows, cols } = this.size;
+      this.webSocketManager.send(
+        new ClientInfoMessage(new TerminalInfo(rows, cols)),
+      );
+    };
+    parameters.api.onDidDimensionsChange(reportSize);
+    window.addEventListener("bdbox:ws.open", reportSize);
   }
 
   private createDiv(): HTMLElement {
@@ -63,7 +79,7 @@ export class WebConsole {
     return terminal;
   }
 
-  get size(): { rows?: number; cols: number } {
+  private get size(): { rows?: number; cols: number } {
     return {
       rows: this.terminal.rows,
       cols: this.terminal.cols,
@@ -71,13 +87,10 @@ export class WebConsole {
   }
 
   resize(): void {
+    const rect = this.terminalEl.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) {
+      return;
+    }
     this.fitAddon.fit();
-    this.onResize?.();
-  }
-
-  register(container: HTMLElement, onResize: () => void): void {
-    this.containerEl = container;
-    this.onResize = onResize;
-    this.containerEl.appendChild(this.div);
   }
 }

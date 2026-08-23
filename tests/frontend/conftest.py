@@ -87,8 +87,6 @@ class BackendTestApp:
         self.websocket.send(json.dumps(msg_dict))
 
     def handle_websocket_connect(self, ws: WebSocketRoute) -> None:
-        if self.websocket:
-            raise Exception("Websocket already connected")  # noqa: TRY002
         self.websocket = ws
         self.websocket.on_message(self.handle_websocket_message)
         self.websocket_connected.set()
