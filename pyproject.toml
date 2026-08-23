@@ -150,6 +150,10 @@ help = "Run all formatters, static checks and tests"
 script = "utils.demo"
 help = "Record UI demo for documentation"
 
+[tool.poe.tasks.screenshot]
+script = "utils.screenshot"
+help = "Create UI screenshot for documentation"
+
 [tool.poe.tasks.release]
 cmd = "bump-my-version bump -v"
 help = "Create and push a release tag (patch/minor/major)"

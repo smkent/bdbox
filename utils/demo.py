@@ -73,6 +73,7 @@ class AppBrowserSession(CallableContextManager):
     viewport_size: ViewportSize = field(
         default_factory=lambda: {"width": 1280, "height": 800}
     )
+    show_cursor: bool = field(default=True, kw_only=True)
     ocp_cad_viewer: Locator = field(init=False, repr=False)
     click_wait: float = field(default=0.0, repr=False)
 
@@ -131,9 +132,12 @@ class AppBrowserSession(CallableContextManager):
             self.page = page
             page.set_default_timeout(5_000)
 
-            page.add_init_script(
-                (Path(__file__).parent / "assets" / "cursor.js").read_text()
-            )
+            if self.show_cursor:
+                page.add_init_script(
+                    (
+                        Path(__file__).parent / "assets" / "cursor.js"
+                    ).read_text()
+                )
 
             with self.page.expect_console_message(
                 lambda msg: "WebSocket connection established" in msg.text,
@@ -329,6 +333,7 @@ class RecordDemo:
             args=self.args,
             headless=self.args.headless,
             viewport_size=self.args.viewport_size,
+            show_cursor=True,
         )
 
     def __call__(self) -> None:
