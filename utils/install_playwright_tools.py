@@ -24,7 +24,7 @@ def run(cmd: Sequence[str]) -> bool:
         cmd_text,
     )
     print(txt)
-    if pty:
+    if pty:  # ty: ignore[redundant-condition]
         return pty.spawn(cmd) == 0
     return subprocess.run(cmd).returncode == 0  # noqa: S603, PLW1510
 
