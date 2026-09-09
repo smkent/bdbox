@@ -77,7 +77,7 @@ class RecordScreenshot:
         )
 
     def __call__(self) -> None:
-        subprocess.run(["poe", "static"], check=True)
+        subprocess.run(["mise", "run", "static"], check=True)
         with self.app:
             self.app.set_param("display_color-color", "lime")
             self.app.page.wait_for_timeout(500)

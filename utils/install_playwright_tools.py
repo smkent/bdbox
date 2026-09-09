@@ -29,7 +29,7 @@ def run(cmd: Sequence[str]) -> bool:
     return subprocess.run(cmd).returncode == 0  # noqa: S603, PLW1510
 
 
-def install_playwright_tools() -> None:
+def main() -> None:
     cmd = ["uv", "run", "playwright", "install", "--with-deps", "chromium"]
     if not run(cmd):
         print()
@@ -47,3 +47,7 @@ def install_playwright_tools() -> None:
             .append(" ".join(cmd), style="bold")
         )
         print()
+
+
+if __name__ == "__main__":
+    main()

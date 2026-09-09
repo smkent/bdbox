@@ -4,13 +4,18 @@ __pycache__/
 *.py[cod]
 
 # uv and packaging
-.venv/
+.venv*/
 /build/
 /dist/
 
 # Node
 /node_modules/
 .eslintcache
+
+# mise
+mise.local.toml
+.mise.local.toml
+.mise/
 
 # Development tools
 .cache/
