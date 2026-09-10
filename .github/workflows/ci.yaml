@@ -80,9 +80,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.cache/uv
-          key: uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
           restore-keys: |
-            uv-${{ runner.os }}-${{ matrix.python-version }}-
+            uv-${{ runner.os }}-
 
       - name: 🟩 Cache node_modules
         uses: actions/cache@v6
