@@ -96,8 +96,10 @@ run = "uv run pytest --snapshot-update --numprocesses 0"
 
 [tasks.static]
 description = "Build static frontend assets"
+outputs = ["bdbox/view/ui/static/**/*"]
 raw_args = true
 run = "npm run build"
+sources = ["frontend/src/**/*.{ts,css}", "package.json", "package-lock.json"]
 
 [tasks.test]
 description = "Run tests"
