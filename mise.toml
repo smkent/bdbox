@@ -1,5 +1,8 @@
 min_version = "2026.2.5"
 
+[vars]
+playwright_browsers = "chromium"
+
 [hooks]
 postinstall = [
     "uv sync",
@@ -85,9 +88,12 @@ raw_args = true
 run = "uv run python -m utils.screenshot"
 
 [tasks.setup-playwright]
-description = "Install playwright tools"
+description = "Install playwright browsers and dependencies"
 raw_args = true
-run = "uv run python -m utils.install_playwright_tools"
+run = [
+    "uv run playwright install-deps {{ vars.playwright_browsers }} --dry-run || uv run playwright install-deps {{ vars.playwright_browsers }}",
+    "uv run playwright install {{ vars.playwright_browsers }}",
+]
 
 [tasks.snapup]
 description = "Update test snapshots"
