@@ -10,8 +10,8 @@ postinstall = [
 ]
 
 [tools]
+node = "24"
 "pipx:copier" = "latest"
-node = "latest"
 prek = "latest"
 uv = "latest"
 
