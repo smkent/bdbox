@@ -6,10 +6,10 @@ playwright_browsers = "chromium"
 [hooks]
 postinstall = [
     "uv sync",
-    "[ -d .git ] && prek install || { echo \"No git repository found. If this is a new project, run \\`mise run init\\` to create it.\"; }",
     "npm install",
     { task = "setup-playwright" },
     { task = "static" },
+    "[ -d .git ] && prek install || { echo \"No git repository found. If this is a new project, run \\`mise run init\\` to create it.\"; }",
 ]
 
 [tools]
