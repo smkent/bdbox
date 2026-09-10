@@ -25,5 +25,8 @@
     "prettier": "^3.8.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }
