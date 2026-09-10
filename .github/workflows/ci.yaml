@@ -14,6 +14,8 @@ jobs:
   ci:
     name: Test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
     strategy:
       fail-fast: false
       matrix:
@@ -27,26 +29,33 @@ jobs:
       - name: 💾 Check out repository
         uses: actions/checkout@v6
 
-      - name: 🦀 Set up Python project with uv
-        uses: astral-sh/setup-uv@v8.2.0
+      - name: 📦 Restore uv cache
+        uses: actions/cache@v6
         with:
-          enable-cache: true
-          python-version: ${{ matrix.python-version }}
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ matrix.python-version }}-
 
-      - name: 🟩 Set up Node.js
-        uses: actions/setup-node@v7
+      - name: 🟩 Cache node_modules
+        uses: actions/cache@v6
         with:
-          node-version: '22'
-          cache: npm
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
 
-      - name: 🐍 Install dependencies
-        run: uv sync
+      - name: 🍳 Set up mise
+        uses: jdx/mise-action@v4
+        with:
+          cache: true
+          install: true
 
       - name: 📐 Lint
-        run: uv run poe lint
+        run: mise run lint
 
       - name: 🔥 Test
-        run: uv run poe test
+        run: mise run test
 
       - name: 🔍 Collect coverage results
         run: uv run coverage xml
@@ -67,20 +76,21 @@ jobs:
       - name: 💾 Check out repository
         uses: actions/checkout@v6
 
-      - name: 🦀 Set up Python project with uv
-        uses: astral-sh/setup-uv@v8.2.0
+      - name: 📦 Restore uv cache
+        uses: actions/cache@v6
         with:
-          enable-cache: true
-          python-version: '3.14'
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
 
-      - name: 🟩 Set up Node.js
-        uses: actions/setup-node@v7
+      - name: 🟩 Cache node_modules
+        uses: actions/cache@v6
         with:
-          node-version: '22'
-          cache: npm
-
-      - name: 🐍 Install Python dependencies
-        run: uv sync
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
 
       - name: 🎭 Cache Playwright browsers
         uses: actions/cache@v4
@@ -89,32 +99,42 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('uv.lock') }}
 
-      - name: 🏗️ Install tools and build frontend
-        run: uv run poe setup
+      - name: 🍳 Set up mise
+        uses: jdx/mise-action@v4
+        with:
+          cache: true
+          install: true
 
       - name: 🌐 Test frontend
-        run: uv run poe webtest
+        run: mise run webtest
 
   docs:
     name: Documentation
     runs-on: ubuntu-latest
+    env:
+      UV_PYTHON: '3.14'
     steps:
       - name: 💾 Check out repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: 🦀 Set up Python project with uv
-        uses: astral-sh/setup-uv@v8.2.0
+      - name: 📦 Restore uv cache
+        uses: actions/cache@v6
         with:
-          enable-cache: true
-          python-version: '3.14'
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
 
-      - name: 🐍 Install dependencies
-        run: uv sync
+      - name: 🍳 Set up mise
+        uses: jdx/mise-action@v4
+        with:
+          cache: true
+          install: true
 
       - name: 📖 Build documentation
-        run: uv run poe docs-build
+        run: mise run docs-build
 
   gitleaks:
     name: Secret scan

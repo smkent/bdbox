@@ -337,7 +337,7 @@ class RecordDemo:
         )
 
     def __call__(self) -> None:
-        subprocess.run(["poe", "static"], check=True)
+        subprocess.run(["mise", "run", "static"], check=True)
         with self.app as session, session.screencast(self.args.output):
             self.record_demo()
 
