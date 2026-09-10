@@ -54,3 +54,9 @@ repos:
         language: system
         types_or: [javascript, json]
         pass_filenames: false
+      - id: tsc
+        name: tsc
+        entry: npm run typecheck
+        language: system
+        types_or: [ts]
+        pass_filenames: false
