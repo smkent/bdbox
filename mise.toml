@@ -13,6 +13,7 @@ postinstall = [
 ]
 
 [tools]
+betterleaks = "latest"
 node = "24"
 "pipx:copier" = "latest"
 prek = "latest"
@@ -89,6 +90,11 @@ run = "uv run bump-my-version bump -v"
 description = "Create UI screenshot for documentation"
 raw_args = true
 run = "uv run python -m utils.screenshot"
+
+[tasks.secretscan]
+description = "Scan git history for secrets"
+raw_args = true
+run = "betterleaks git . --redact"
 
 [tasks.setup-playwright]
 description = "Install playwright browsers and dependencies"
