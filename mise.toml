@@ -19,9 +19,6 @@ node = "24"
 prek = "latest"
 uv = "latest"
 
-[settings]
-lockfile = true
-
 [tasks.audit]
 description = "Run dependencies security audit"
 raw_args = true
