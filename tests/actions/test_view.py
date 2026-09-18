@@ -16,7 +16,7 @@ import pytest
 from bdbox.runner.harness import ModelHarness
 from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
-from tests.utils import MockOcpVscode, Models, RaisesRunError
+from tests.utils import MockOcpViewer, Models, RaisesRunError
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
@@ -30,7 +30,7 @@ else:
 
 pytestmark = pytest.mark.usefixtures(
     "cache_build123d",
-    "mock_ocp_vscode",
+    "mock_ocp_viewer",
     "mock_server_start",
     "mock_ocp_cad_viewer_start",
     "mock_watch_run_once",
@@ -79,7 +79,7 @@ def model(request: pytest.FixtureRequest) -> Path:
 
 @dataclass
 class MockShow(ExitStack):
-    mock_ocp_vscode: MockOcpVscode
+    mock_ocp_viewer: MockOcpViewer
     show: MagicMock = field(init=False)
     show_clear: MagicMock = field(init=False)
 
@@ -88,17 +88,17 @@ class MockShow(ExitStack):
 
     def __enter__(self) -> Self:
         self.show = self.enter_context(
-            patch.object(self.mock_ocp_vscode, "show")
+            patch.object(self.mock_ocp_viewer, "show")
         )
         self.show_clear = self.enter_context(
-            patch.object(self.mock_ocp_vscode, "show_clear")
+            patch.object(self.mock_ocp_viewer, "show_clear")
         )
         return super().__enter__()
 
 
 @pytest.fixture
-def mock_show(mock_ocp_vscode: MockOcpVscode) -> Iterator[MockShow]:
-    with MockShow(mock_ocp_vscode=mock_ocp_vscode) as mock:
+def mock_show(mock_ocp_viewer: MockOcpViewer) -> Iterator[MockShow]:
+    with MockShow(mock_ocp_viewer=mock_ocp_viewer) as mock:
         yield mock
 
 

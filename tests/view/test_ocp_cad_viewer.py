@@ -47,6 +47,8 @@ def mock_urlopen() -> Iterator[MagicMock]:
 @pytest.fixture
 def mock_popen() -> Iterator[MagicMock]:
     with patch.object(subprocess, "Popen") as mocked:
+        # A running viewer has not exited, so its `poll` returns `None`
+        mocked.return_value.poll.return_value = None
         yield mocked
 
 
@@ -107,13 +109,13 @@ def test_model_view_starts_ocp_cad_viewer(
             sys.executable,
             "-u",
             "-m",
-            "ocp_vscode",
+            "ocp_viewer",
             f"--port={expected_port}",
             "--theme=dark",
         ],
         text=True,
         stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
         **popen_kwargs,
     )
     mock_server_start.assert_called_once()
@@ -126,3 +128,18 @@ def test_model_view_without_model_does_not_start_ocp_cad_viewer(
         exec_main("view")
     mock_popen.assert_not_called()
     mock_server_start.assert_not_called()
+
+
+def test_ready_wait_reports_viewer_process_failure() -> None:
+    """A viewer that exits is reported at once, with its own output."""
+    error = "viewer: error: unrecognized arguments: --theme=dark"
+    process = MagicMock()
+    process.stdout = iter([f"{error}\n"])
+    process.poll.return_value = 2
+    process.returncode = 2
+
+    with patch.object(subprocess, "Popen", return_value=process):
+        viewer = OCPCADViewer(MagicMock(), listen_port=1138)
+    with pytest.raises(RuntimeError, match="exited with status 2") as exc_info:
+        viewer.ready_wait()
+    assert error in str(exc_info.value)

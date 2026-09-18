@@ -25,7 +25,7 @@ from tests.utils import (  # noqa: E402
     DisallowCallable,
     ExecMain,
     MockBuild123d,
-    MockOcpVscode,
+    MockOcpViewer,
     ThreadExceptions,
 )
 
@@ -134,11 +134,11 @@ def mock_b123d(monkeypatch: pytest.MonkeyPatch) -> MockBuild123d:
 
 
 @pytest.fixture(autouse=True)
-def mock_ocp_vscode(monkeypatch: pytest.MonkeyPatch) -> MockOcpVscode:
-    module = MockOcpVscode()
-    monkeypatch.setitem(sys.modules, "ocp_vscode", module)
-    monkeypatch.setitem(sys.modules, "ocp_vscode.comms", module.comms)
-    monkeypatch.setitem(sys.modules, "ocp_vscode.config", module.config)
+def mock_ocp_viewer(monkeypatch: pytest.MonkeyPatch) -> MockOcpViewer:
+    module = MockOcpViewer()
+    monkeypatch.setitem(sys.modules, "ocp_viewer", module)
+    monkeypatch.setitem(sys.modules, "ocp_viewer.comms", module.comms)
+    monkeypatch.setitem(sys.modules, "ocp_viewer.config", module.config)
     return module
 
 

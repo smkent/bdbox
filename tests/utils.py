@@ -224,7 +224,7 @@ class MockBuild123d(ModuleType):
         alpha: int = 0xFF
 
 
-class MockOcpVscode(ModuleType):
+class MockOcpViewer(ModuleType):
     class Comms(ModuleType):
         def __init__(self, *args: Any, **kwargs: Any) -> None:
             super().__init__("comms", *args, **kwargs)
@@ -251,7 +251,7 @@ class MockOcpVscode(ModuleType):
             pass
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__("ocp_vscode", *args, **kwargs)
+        super().__init__("ocp_viewer", *args, **kwargs)
 
     def show(*args: Any, **kwargs: Any) -> None:
         pass

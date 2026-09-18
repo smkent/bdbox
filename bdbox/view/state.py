@@ -68,12 +68,12 @@ class ViewState:
         geometry = self.geometry.resolve()
         if not geometry:
             log.warning("No geometry collected")
-            from ocp_vscode import show_clear  # noqa: PLC0415
+            from ocp_viewer import show_clear  # noqa: PLC0415
 
             show_clear()
             return
 
-        from ocp_vscode import show  # noqa: PLC0415
+        from ocp_viewer import show  # noqa: PLC0415
 
         log.debug("Sending geometry to viewer")
         buf = io.StringIO()
@@ -81,5 +81,5 @@ class ViewState:
             with redirect_stdout(buf), redirect_stderr(buf):
                 show(geometry)
         finally:
-            if ocp_vscode_output := buf.getvalue().strip():
-                log.debug(ocp_vscode_output)
+            if viewer_output := buf.getvalue().strip():
+                log.debug(viewer_output)
