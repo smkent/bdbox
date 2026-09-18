@@ -25,7 +25,7 @@ class OCPCADViewer(ListenService):
 
     client_registered: Callable[[], None] = field(repr=False)
     process: subprocess.Popen[str] | None = field(default=None, init=False)
-    ocp_vscode_args: ClassVar[Sequence[str]] = ("--theme=dark",)
+    ocp_viewer_args: ClassVar[Sequence[str]] = ("--theme=dark",)
 
     _POLL_INTERVAL: ClassVar[float] = 0.25
     _POLL_ATTEMPTS: ClassVar[int] = 100
@@ -44,7 +44,7 @@ class OCPCADViewer(ListenService):
         return popen_kwargs
 
     def start(self) -> None:
-        from ocp_vscode.comms import set_port  # noqa: PLC0415
+        from ocp_viewer.comms import set_port  # noqa: PLC0415
 
         set_port(self.port)
 
@@ -52,9 +52,9 @@ class OCPCADViewer(ListenService):
             sys.executable,
             "-u",
             "-m",
-            "ocp_vscode",
+            "ocp_viewer",
             f"--port={self.port}",
-            *self.ocp_vscode_args,
+            *self.ocp_viewer_args,
         ]
         log.debug("Starting OCP CAD Viewer")
         log.trace("Running: %s", " ".join(cmd))
@@ -73,7 +73,7 @@ class OCPCADViewer(ListenService):
         ).start()
 
     def _configure(self) -> None:
-        from ocp_vscode.config import (  # noqa: PLC0415
+        from ocp_viewer.config import (  # noqa: PLC0415
             Camera,
             reset_defaults,
             set_defaults,

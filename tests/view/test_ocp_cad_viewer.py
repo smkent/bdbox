@@ -107,7 +107,7 @@ def test_model_view_starts_ocp_cad_viewer(
             sys.executable,
             "-u",
             "-m",
-            "ocp_vscode",
+            "ocp_viewer",
             f"--port={expected_port}",
             "--theme=dark",
         ],

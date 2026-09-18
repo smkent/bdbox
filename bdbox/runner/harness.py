@@ -110,7 +110,7 @@ class ModelHarness(ModelLocator):
         if model_arg := self.model.arg:
             with (
                 PatchModule("build123d", Build123dStub(), recursive=True),
-                PatchModule("ocp_vscode"),
+                PatchModule("ocp_viewer"),
                 patch.object(
                     cli_parser, "parse", MagicMock(side_effect=SystemExit)
                 ),
