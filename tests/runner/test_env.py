@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import errno
 import os
 import shutil
 import subprocess
@@ -14,7 +15,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from bdbox.runner import env as runner_env
-from bdbox.runner.env import ENV_VAR
+from bdbox.runner.env import ENV_VAR, EnvLocator
 from bdbox.runner.harness import ModelHarness
 
 if sys.version_info >= (3, 11):
@@ -177,3 +178,40 @@ def test_reinvokes_with_poetry_venv(
 
     with patch.object(subprocess, "check_output", side_effect=_output):
         env_test.assert_exec()
+
+
+def test_find_venv_skips_directory_that_cannot_be_inspected(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Searching must survive a directory the filesystem will not stat.
+
+    macOS keeps synthetic directories at the root, such as `/.resolve`,
+    whose children fail `stat` with `EINVAL` rather than `ENOENT`. The
+    search walks up to the root, so it meets them on every Mac.
+    """
+    opaque = tmp_path / "opaque"
+    opaque.mkdir()
+    venv = tmp_path / ".venv"
+    venv.mkdir()
+    (venv / "pyvenv.cfg").write_text("home = /usr/bin\n")
+
+    original_is_file = Path.is_file
+    original_iterdir = Path.iterdir
+
+    def is_file(self: Path, *args: Any, **kwargs: Any) -> bool:
+        if self.parent == opaque:
+            raise OSError(errno.EINVAL, "Invalid argument", str(self))
+        return original_is_file(self, *args, **kwargs)
+
+    def iterdir(self: Path) -> Iterator[Path]:
+        children = list(original_iterdir(self))
+        # Reach the unreadable directory before the usable one
+        children.sort(key=lambda child: child != opaque)
+        return iter(children)
+
+    monkeypatch.setattr(Path, "is_file", is_file)
+    monkeypatch.setattr(Path, "iterdir", iterdir)
+
+    locator = EnvLocator()
+    locator.target_dir = tmp_path
+    assert locator.find_venv() == venv

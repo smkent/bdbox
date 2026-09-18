@@ -66,7 +66,11 @@ class EnvLocator:
             for child in search_dir.iterdir():
                 if not child.is_dir():
                     continue
-                with suppress(PermissionError):
+                # Any directory we cannot inspect is simply not a venv.
+                # macOS keeps synthetic directories at the root, such as
+                # `/.resolve`, whose children fail `stat` with `EINVAL`
+                # rather than `ENOENT`, and the search reaches the root.
+                with suppress(OSError):
                     if (child / "pyvenv.cfg").is_file():
                         return child
         return None
