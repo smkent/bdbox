@@ -124,6 +124,7 @@ filterwarnings = [
     "ignore::pyparsing.warnings.PyparsingDeprecationWarning:ezdxf.*",
     "ignore:.*ArcTangent.*:DeprecationWarning:build123d.objects_curve",
     "ignore:.*_pack_.*:DeprecationWarning:lib3mf.*",
+    "ignore:.*BlockingPortal.*:DeprecationWarning:starlette.testclient",
 ]
 
 [tool.coverage.run]
