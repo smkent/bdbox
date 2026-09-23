@@ -56,20 +56,20 @@ nav = [
 [project.theme]
 language = "en"
 features = [
-    "content.code.annotate",
-    "content.code.copy",
-    "content.tabs.link",
-    "content.tooltips",
-    "navigation.expand",
-    "navigation.footer",
-    "navigation.instant",
-    "navigation.path",
-    "navigation.sections",
-    "navigation.tabs",
-    "navigation.tabs.sticky",
-    "navigation.top",
-    "search.highlight",
-    "toc.follow",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.tabs.link",
+  "content.tooltips",
+  "navigation.expand",
+  "navigation.footer",
+  "navigation.instant",
+  "navigation.path",
+  "navigation.sections",
+  "navigation.tabs",
+  "navigation.tabs.sticky",
+  "navigation.top",
+  "search.highlight",
+  "toc.follow",
 ]
 
 [project.theme.icon]
@@ -146,8 +146,8 @@ custom_checkbox = true
 [project.plugins.mkdocstrings.handlers.python]
 paths = ["."]
 inventories = [
-    "https://docs.python.org/3/objects.inv",
-    "https://build123d.readthedocs.io/en/stable/objects.inv",
+  "https://docs.python.org/3/objects.inv",
+  "https://build123d.readthedocs.io/en/stable/objects.inv",
 ]
 
 [project.plugins.mkdocstrings.handlers.python.options]
