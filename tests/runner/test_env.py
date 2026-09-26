@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import errno
 import os
 import shutil
 import subprocess
@@ -122,6 +123,24 @@ def test_no_reinvoke_when_already_in_venv_python(env_test: EnvTest) -> None:
 
 def test_no_reinvoke_when_bdbox_not_in_venv(env_test: EnvTest) -> None:
     with env_test.assert_spec(spec=False):
+        env_test.run()
+
+
+@pytest.mark.parametrize(
+    "error_code",
+    ["EINVAL", "EIO", "ELOOP", "ENAMETOOLONG", "ESTALE", "ETIMEDOUT"],
+)
+def test_no_reinvoke_unreadable_venv_path(
+    env_test: EnvTest, error_code: str
+) -> None:
+    error_no = getattr(errno, error_code)
+
+    def _is_file(path: Path, *_: Any, **__: Any) -> bool:
+        if path.parent == env_test.venv:
+            raise OSError(error_no, os.strerror(error_no), str(path))
+        return False
+
+    with patch.object(Path, "is_file", _is_file):
         env_test.run()
 
 
