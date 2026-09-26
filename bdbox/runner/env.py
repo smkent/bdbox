@@ -64,11 +64,11 @@ class EnvLocator:
                 ) and (result := self.find_venv_from_poetry(search_dir)):
                     return result
             for child in search_dir.iterdir():
-                if not child.is_dir():
-                    continue
-                with suppress(PermissionError):
-                    if (child / "pyvenv.cfg").is_file():
+                try:
+                    if child.is_dir() and (child / "pyvenv.cfg").is_file():
                         return child
+                except OSError as e:  # noqa: PERF203
+                    log.debug("Ignoring unreadable path: %s", e)
         return None
 
     def find_venv_from_poetry(self, project_dir: Path) -> Path | None:
