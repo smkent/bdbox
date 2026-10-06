@@ -29,7 +29,7 @@ jobs:
       - name: 💾 Check out repository
         uses: actions/checkout@v7
 
-      - name: 📦 Restore uv cache
+      - name: 📦 Cache uv managed packages
         uses: actions/cache@v6
         with:
           path: ~/.cache/uv
@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-node_modules-
 
       - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
+        uses: jdx/mise-action@v5
         with:
           cache: true
           install: true
@@ -62,7 +62,7 @@ jobs:
         if: ${{ matrix.python-version == '3.14' }}
 
       - name: 📊 Upload coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         if: ${{ matrix.python-version == '3.14' }}
         with:
           fail_ci_if_error: true
@@ -119,7 +119,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 📦 Restore uv cache
+      - name: 📦 Cache uv managed packages
         uses: actions/cache@v6
         with:
           path: ~/.cache/uv
@@ -128,7 +128,7 @@ jobs:
             uv-${{ runner.os }}-
 
       - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
+        uses: jdx/mise-action@v5
         with:
           cache: true
           install: true
@@ -147,8 +147,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 📦 Cache uv managed packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ hashFiles('pyproject.toml', 'uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-
+
       - name: 🍳 Set up mise
-        uses: jdx/mise-action@v4
+        uses: jdx/mise-action@v5
         with:
           cache: true
           install: true
