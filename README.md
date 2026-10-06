@@ -3,7 +3,7 @@
 **bdbox** is a workshop for **[build123d][build123d]** models
 with live preview and interactive parameters.
 
-[![License](https://img.shields.io/github/license/smkent/bdbox)](https://github.com/smkent/bdbox/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/smkent/bdbox)](https://github.com/smkent/bdbox/blob/main/COPYING.LESSER)
 [![PyPI](https://img.shields.io/pypi/v/bdbox)](https://pypi.org/project/bdbox/)
 [![Python](https://img.shields.io/pypi/pyversions/bdbox)](https://pypi.org/project/bdbox/)
 [![CI](https://github.com/smkent/bdbox/actions/workflows/ci.yaml/badge.svg)](https://github.com/smkent/bdbox/actions/workflows/ci.yaml)
@@ -169,6 +169,13 @@ python mymodel.py export -f stl   # Export STL files to current directory
 ```
 
 **[See more about parameters in the documentation!][docs-parameters]**
+
+## License
+
+Copyright (C) 2026 Stephen Kent and contributors
+
+Licensed under the GNU Lesser General Public License v3.0 only
+([`LGPL-3.0-only`](https://github.com/smkent/bdbox/blob/main/COPYING.LESSER)).
 
 ## Project template
 

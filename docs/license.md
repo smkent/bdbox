@@ -6,5 +6,9 @@ icon: lucide/scale
 # License
 
 ```
---8<-- "LICENSE"
+--8<-- "COPYING.LESSER"
+```
+
+```
+--8<-- "COPYING"
 ```
