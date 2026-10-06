@@ -5,7 +5,7 @@ site_author = "Stephen Kent"
 site_url = "https://smkent.github.io/bdbox"
 repo_url = "https://github.com/smkent/bdbox"
 repo_name = "smkent/bdbox"
-copyright = "&copy; 2026 Stephen Kent"
+copyright = "&copy; 2026 Stephen Kent and contributors"
 
 nav = [
   { "About" = [
