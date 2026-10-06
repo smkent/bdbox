@@ -9,7 +9,7 @@ postinstall = [
   "npm install",
   { task = "setup-playwright" },
   { task = "static" },
-  "[ -d .git ] && prek install || { echo \"No git repository found. If this is a new project, run \\`mise run init\\` to create it.\"; }",
+  "[ -d .git ] && prek --quiet install || { echo \"No git repository found. If this is a new project, run \\`mise run init\\` to create it.\"; }",
 ]
 
 [tools]
