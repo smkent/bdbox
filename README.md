@@ -174,8 +174,8 @@ python mymodel.py export -f stl   # Export STL files to current directory
 
 Copyright (C) 2026 Stephen Kent and contributors
 
-Licensed under the GNU Lesser General Public License v3.0 only
-([`LGPL-3.0-only`](https://github.com/smkent/bdbox/blob/main/COPYING.LESSER)).
+Licensed under the GNU Lesser General Public License v3.0 or later
+([`LGPL-3.0-or-later`](https://github.com/smkent/bdbox/blob/main/COPYING.LESSER)).
 
 ## Project template
 

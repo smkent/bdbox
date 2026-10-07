@@ -2,7 +2,7 @@
 _commit: v0.17.0
 _src_path: gh:smkent/copier-python
 copyright_holder: Stephen Kent
-copyright_license: LGPL-3.0-only
+copyright_license: LGPL-3.0-or-later
 copyright_year: '2026'
 enable_container: false
 enable_coverage: true
