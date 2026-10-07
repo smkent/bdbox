@@ -31,7 +31,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator, Sequence
+    from collections.abc import Generator, Sequence
     from unittest.mock import MagicMock
 
     from starlette.testclient import WebSocketTestSession
@@ -114,7 +114,7 @@ class UIServerManager:
     @contextmanager
     def run_model_client(
         self, model_argv: Sequence[Path | str]
-    ) -> Iterator[UIServerClient]:
+    ) -> Generator[UIServerClient]:
         model_argv = [*model_argv, "--server-port", "0"]
 
         def _run_harness() -> None:

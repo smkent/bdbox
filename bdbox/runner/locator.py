@@ -16,7 +16,7 @@ from bdbox.model.info import ModelInfo
 from .env import EnvLocator
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator, Sequence
+    from collections.abc import Generator, Sequence
 
 
 @dataclass
@@ -53,7 +53,7 @@ class ModelLocator:
         return base_dir
 
     @contextmanager
-    def module_cleanup(self, name: str | None = None) -> Iterator[None]:
+    def module_cleanup(self, name: str | None = None) -> Generator[None]:
         before_keys = set(sys.modules.keys())
         yield
         after_keys = sorted(set(sys.modules.keys()) - before_keys)

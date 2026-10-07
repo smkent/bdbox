@@ -22,7 +22,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator, Sequence
+    from collections.abc import Callable, Generator, Sequence
     from types import TracebackType
 
 
@@ -100,7 +100,7 @@ class DisallowCallable:
         self.original = getattr(self.obj, self.attr)
 
     @contextmanager
-    def __call__(self) -> Iterator[Self]:
+    def __call__(self) -> Generator[Self]:
 
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             if self.enabled:
@@ -114,7 +114,7 @@ class DisallowCallable:
             yield self
 
     @contextmanager
-    def pause(self) -> Iterator[None]:
+    def pause(self) -> Generator[None]:
         if self.mock_attr:
             with patch.object(self.obj, self.attr, self.original):
                 yield
@@ -273,7 +273,7 @@ class ThreadExceptions:
         pass
 
     @contextmanager
-    def catch(self) -> Iterator[None]:
+    def catch(self) -> Generator[None]:
         def excepthook(args: threading.ExceptHookArgs) -> None:
             self.exceptions.append(
                 (
@@ -292,7 +292,7 @@ class ThreadExceptions:
     @contextmanager
     def raises(
         self, exc_type: type[BaseException] | tuple[type[BaseException], ...]
-    ) -> Iterator[None]:
+    ) -> Generator[None]:
         context_exceptions = []
         with patch.object(self, "exceptions", context_exceptions):
             yield

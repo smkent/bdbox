@@ -17,7 +17,7 @@ from bdbox.dispatch import Event, Service, dispatch
 from bdbox.errors import InternalError, RunError
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
     from .runner import ModelRunner
 
@@ -37,7 +37,7 @@ class ModelWatcher(Service):
 
     @property
     @contextmanager
-    def observer(self) -> Iterator[None]:
+    def observer(self) -> Generator[None]:
 
         class _Handler(FileSystemEventHandler):
             def on_modified(_self, event: FileSystemEvent) -> None:  # noqa: N805
@@ -82,7 +82,7 @@ class ModelWatcher(Service):
 
     @property
     @contextmanager
-    def handle_modules(self) -> Iterator[None]:
+    def handle_modules(self) -> Generator[None]:
         self.evict_local_modules()
         before = self.snapshot_modules()
         yield

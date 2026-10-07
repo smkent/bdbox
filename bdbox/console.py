@@ -31,7 +31,7 @@ from .errors import UsageError
 from .timer import Timer
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
     from types import TracebackType
 
     from rich.traceback import Traceback
@@ -287,7 +287,7 @@ class Console:
         return Logger(logging.getLogger("bdbox"))
 
     @contextmanager
-    def log_stdout_stderr(self) -> Iterator[None]:
+    def log_stdout_stderr(self) -> Generator[None]:
         """Redirect model stdout/stderr through the bdbox logger."""
         log = logging.getLogger("bdbox")
         stdout_stream = LoggingStream(log, LogLevel.STDOUT)
@@ -303,7 +303,9 @@ class Console:
             stderr_stream.flush()
 
     @contextmanager
-    def activity_indicator(self, timer: Timer | None = None) -> Iterator[None]:
+    def activity_indicator(
+        self, timer: Timer | None = None
+    ) -> Generator[None]:
         term = console.terminal_output
         if term and sys.__stderr__ and sys.__stderr__.isatty():
             with Live(

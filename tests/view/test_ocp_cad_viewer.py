@@ -19,7 +19,7 @@ from bdbox.view.ocp_cad_viewer import OCPCADViewer
 from tests.utils import ExecMain, Models
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator, Mapping
+    from collections.abc import Generator, Mapping
     from pathlib import Path
 
 
@@ -39,27 +39,27 @@ def model(request: pytest.FixtureRequest) -> Path:
 
 
 @pytest.fixture(autouse=True)
-def mock_urlopen() -> Iterator[MagicMock]:
+def mock_urlopen() -> Generator[MagicMock]:
     with patch.object(ocp_cad_viewer, "urlopen") as mocked:
         yield mocked
 
 
 @pytest.fixture
-def mock_popen() -> Iterator[MagicMock]:
+def mock_popen() -> Generator[MagicMock]:
     with patch.object(subprocess, "Popen") as mocked:
         yield mocked
 
 
 @pytest.fixture(autouse=True)
-def mock_browser_open() -> Iterator[MagicMock]:
+def mock_browser_open() -> Generator[MagicMock]:
     with patch.object(webbrowser, "open_new_tab") as mocked:
         yield mocked
 
 
 @pytest.fixture(autouse=True)
-def mock_view_action_on_model_render() -> Iterator[MagicMock]:
+def mock_view_action_on_model_render() -> Generator[MagicMock]:
     @contextmanager
-    def on_model_render() -> Iterator[None]:
+    def on_model_render() -> Generator[None]:
         yield
 
     with patch.object(

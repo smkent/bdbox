@@ -25,7 +25,7 @@ from .action import ModelAction
 from .export import ExportAction
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
     from bdbox.model.info import ModelInfo
 
@@ -129,7 +129,7 @@ class ViewAction(
         )
 
     @contextmanager
-    def on_model_render(self) -> Iterator[None]:
+    def on_model_render(self) -> Generator[None]:
         self._ensure_runner()
         with super().on_model_render() as timer:
             if not self.view_app:

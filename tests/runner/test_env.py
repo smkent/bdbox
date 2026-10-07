@@ -24,7 +24,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator, Sequence
+    from collections.abc import Generator, Sequence
 
     from tests.utils import DisallowCallable
 
@@ -39,7 +39,7 @@ class EnvTest:
         assert self.venv.is_dir()
 
     @contextmanager
-    def __call__(self) -> Iterator[Self]:
+    def __call__(self) -> Generator[Self]:
         self.monkeypatch.delenv(ENV_VAR, raising=False)
         self.monkeypatch.setattr(sys, "argv", ["bdbox", str(self.model_file)])
         yield self
@@ -48,7 +48,7 @@ class EnvTest:
         return ModelHarness([str(self.model_file)])
 
     @contextmanager
-    def assert_spec(self, *, spec: bool = False) -> Iterator[MagicMock]:
+    def assert_spec(self, *, spec: bool = False) -> Generator[MagicMock]:
         with patch.object(runner_env, "find_spec", return_value=spec) as mock:
             yield mock
         mock.assert_called_once()
@@ -101,7 +101,7 @@ class EnvTest:
 @pytest.fixture
 def env_test(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> Iterator[EnvTest]:
+) -> Generator[EnvTest]:
     with EnvTest(tmp_path=tmp_path, monkeypatch=monkeypatch)() as env:
         yield env
 

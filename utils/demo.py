@@ -33,7 +33,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator, Sequence
+    from collections.abc import Callable, Generator, Sequence
     from types import TracebackType
 
 
@@ -48,7 +48,7 @@ class CallableContextManager(ABC):
 
     @contextmanager
     @abstractmethod
-    def __call__(self) -> Iterator[Any]: ...
+    def __call__(self) -> Generator[Any]: ...
 
     def __enter__(self) -> Self:
         self.__context_manager = self()
@@ -78,12 +78,12 @@ class AppBrowserSession(CallableContextManager):
     click_wait: float = field(default=0.0, repr=False)
 
     @contextmanager
-    def __call__(self) -> Iterator[Self]:
+    def __call__(self) -> Generator[Self]:
         with self.new_page():
             yield self
 
     @contextmanager
-    def screencast(self, output: Path) -> Iterator[None]:
+    def screencast(self, output: Path) -> Generator[None]:
         self.page.screencast.start(path=output, size=self.viewport_size)
         try:
             yield
@@ -92,7 +92,7 @@ class AppBrowserSession(CallableContextManager):
             log.info('Screencast saved: "%s"', output)
 
     @contextmanager
-    def bdbox_view(self) -> Iterator[None]:
+    def bdbox_view(self) -> Generator[None]:
         try:
             proc = subprocess.Popen(  # noqa: S603
                 [
@@ -113,7 +113,7 @@ class AppBrowserSession(CallableContextManager):
             proc.terminate()
 
     @contextmanager
-    def new_page(self) -> Iterator[None]:
+    def new_page(self) -> Generator[None]:
         log.debug("Starting browser session")
         with (
             self.bdbox_view(),
@@ -127,7 +127,7 @@ class AppBrowserSession(CallableContextManager):
             yield
 
     @contextmanager
-    def bdbox_page(self, ctx: BrowserContext) -> Iterator[None]:
+    def bdbox_page(self, ctx: BrowserContext) -> Generator[None]:
         with ctx.new_page() as page:
             self.page = page
             page.set_default_timeout(5_000)

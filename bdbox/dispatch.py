@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, Any
 from bdbox.console import excepthook, log
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator, Mapping, Sequence
+    from collections.abc import Callable, Generator, Mapping, Sequence
 
 
 @dataclass
@@ -169,7 +169,7 @@ class Dispatch:
         log.trace("Registered exit callback: %s", ec.display_name)
 
     @contextmanager
-    def handle_exit(self) -> Iterator[None]:
+    def handle_exit(self) -> Generator[None]:
         try:
             yield
         except KeyboardInterrupt:

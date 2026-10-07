@@ -77,7 +77,7 @@ def test_params_preset_invalid_type() -> None:
 
         class BadModel(Params):
             width = Float(default=10.0)
-            presets = ("not_a_preset",)
+            presets = ("not_a_preset",)  # ty: ignore[invalid-assignment]
 
 
 def test_params_values_resolved_on_class() -> None:
