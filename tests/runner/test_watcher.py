@@ -21,7 +21,7 @@ from bdbox.runner.runner import ModelRunner
 from bdbox.runner.watcher import ModelWatcher
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator
+    from collections.abc import Callable, Generator
 
     from bdbox.actions.action import Action
 
@@ -44,7 +44,7 @@ class Modules(ABC):
         """After a run, add fake local/nonlocal modules to sys.modules."""
 
     @contextmanager
-    def __call__(self, watcher: ModelWatcher) -> Iterator[None]:
+    def __call__(self, watcher: ModelWatcher) -> Generator[None]:
         yield
         sys_filter = {
             m
@@ -176,7 +176,7 @@ def modules(
 
 
 @pytest.fixture(autouse=True)
-def mock_runner_call() -> Iterator[MagicMock]:
+def mock_runner_call() -> Generator[MagicMock]:
     with patch.object(ModelRunner, "__call__") as mocked:
         yield mocked
 
@@ -189,7 +189,7 @@ def runner(
 
 
 @pytest.fixture
-def watcher(modules: Modules, runner: ModelRunner) -> Iterator[ModelWatcher]:
+def watcher(modules: Modules, runner: ModelRunner) -> Generator[ModelWatcher]:
 
     class ManualStartModelWatcher(ModelWatcher):
         def __post_init__(self) -> None:
@@ -201,7 +201,7 @@ def watcher(modules: Modules, runner: ModelRunner) -> Iterator[ModelWatcher]:
 
 
 @pytest.fixture(autouse=True)
-def mock_sleep() -> Iterator[MagicMock]:
+def mock_sleep() -> Generator[MagicMock]:
     with patch.object(time, "sleep") as mocked:
         yield mocked
 
@@ -217,7 +217,7 @@ def debounce(
     request: pytest.FixtureRequest,
     watcher: ModelWatcher,
     mock_sleep: MagicMock,
-) -> Iterator[int]:
+) -> Generator[int]:
     count = request.param
 
     def _sleep(_secs: float) -> None:

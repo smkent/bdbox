@@ -21,7 +21,7 @@ from bdbox.runner.state import run_state
 from .action import ModelAction
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator, Sequence
+    from collections.abc import Callable, Generator, Sequence
 
     from build123d import Shape
 
@@ -34,7 +34,7 @@ class Exports:
     model_name: str
     single: bool = False
 
-    def __iter__(self) -> Iterator[tuple[str, Shape]]:
+    def __iter__(self) -> Generator[tuple[str, Shape]]:
         def _copy_shape(shape: Shape) -> Shape:
             return deepcopy(
                 shape,
@@ -237,7 +237,7 @@ class ExportAction(
             ModelRunner(argv, action, preserve_exceptions=True).run_or_exit()
 
     @contextmanager
-    def on_model_render(self) -> Iterator[None]:
+    def on_model_render(self) -> Generator[None]:
         if self.all_presets:
             self._ensure_runner()
         with super().on_model_render():

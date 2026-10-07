@@ -16,7 +16,7 @@ from .shims import AtExit, MainModule
 from .utils import PatchModule, exit_mock
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
     from bdbox.actions.action import Action
 
@@ -77,7 +77,7 @@ class ModelRunner(ModelLocator):
         return results
 
     @contextmanager
-    def action_on_model_render(self) -> Iterator[None]:
+    def action_on_model_render(self) -> Generator[None]:
         if self.action and not self.discovery_mode:
             with run_state.action_state.on_model_render():
                 yield

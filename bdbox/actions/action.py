@@ -16,7 +16,7 @@ from bdbox.runner.runner import ModelRunner
 from bdbox.runner.state import run_state
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
     from bdbox.model.info import ModelInfo
     from bdbox.timer import Timer
@@ -66,7 +66,7 @@ class Action:
         raise NotImplementedError
 
     @contextmanager
-    def on_model_render(self) -> Iterator[Timer]:
+    def on_model_render(self) -> Generator[Timer]:
         """Executed around model run."""
         with (
             run_state.model_state.set_running() as timer,
@@ -117,7 +117,7 @@ class CommandAction(Action):
         self()
 
     @contextmanager
-    def on_model_render(self) -> Iterator[None]:
+    def on_model_render(self) -> Generator[None]:
         self()
         yield
 

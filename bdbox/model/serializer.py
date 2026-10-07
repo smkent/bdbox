@@ -14,7 +14,6 @@ from typing import (
     Any,
     Literal,
     Union,
-    cast,
     get_args,
     get_origin,
     get_type_hints,
@@ -49,17 +48,14 @@ class Serializer:
         def _localns(
             cls: type, in_ns: dict[str, type] | None = None
         ) -> dict[str, Any]:
-            ns: dict[str, type] = in_ns or cast(
-                "dict[str, type]",
-                {
-                    "Mapping": abc.Mapping,
-                    "MutableMapping": abc.MutableMapping,
-                    "MutableSequence": abc.MutableSequence,
-                    "MutableSet": abc.MutableSet,
-                    "Sequence": abc.Sequence,
-                    "Set": abc.Set,
-                },
-            )
+            ns: dict[str, type] = in_ns or {
+                "Mapping": abc.Mapping,
+                "MutableMapping": abc.MutableMapping,
+                "MutableSequence": abc.MutableSequence,
+                "MutableSet": abc.MutableSet,
+                "Sequence": abc.Sequence,
+                "Set": abc.Set,
+            }
             if issubclass(cls, Enum):
                 ns.setdefault(cls.__name__, cls)
             if not is_dataclass(cls):

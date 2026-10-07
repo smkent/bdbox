@@ -15,7 +15,7 @@ from .fields import Field
 from .info import ModelInfo
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
     from .parameters import Params
 
@@ -109,7 +109,7 @@ class ModelState:
         return {}
 
     @contextmanager
-    def set_running(self) -> Iterator[Timer]:
+    def set_running(self) -> Generator[Timer]:
         if not self.cached_schema:
             self.cached_schema = self.schema
         was_timer = self.timer

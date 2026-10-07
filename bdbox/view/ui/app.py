@@ -28,7 +28,7 @@ from .templates import INDEX_TEMPLATE
 from .websocket import WebSocketConnection
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncIterator
+    from collections.abc import AsyncGenerator
 
     from bdbox.protocol import ServerMessage
     from bdbox.view.state import ViewState
@@ -60,7 +60,7 @@ class UIApp(FastAPI):
             connection.stop()
 
     @asynccontextmanager
-    async def lifespan(self) -> AsyncIterator[None]:
+    async def lifespan(self) -> AsyncGenerator[None]:
         try:
             yield
         finally:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Generator
 from contextlib import ExitStack, contextmanager
 from types import ModuleType
 from typing import TYPE_CHECKING, Any
@@ -27,7 +27,7 @@ class AtExit(ModuleType):
 
     @classmethod
     @contextmanager
-    def mock(cls) -> Iterator[Self]:
+    def mock(cls) -> Generator[Self]:
         builtin_atexit = sys.modules.get("atexit")
         mock_atexit = cls()
         with ExitStack() as mock_stack, PatchModule("atexit", mock_atexit):

@@ -18,7 +18,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator, Sequence
+    from collections.abc import Generator, Sequence
     from types import TracebackType
 
 
@@ -34,7 +34,7 @@ class Build123dStub(ModuleType, MagicMock):
     KG = 1000 * G
     LB = 453.59237 * G
 
-    __path__ = ()
+    __path__ = []  # noqa: RUF012
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__("build123d", *args, **kwargs)
@@ -45,7 +45,7 @@ class Build123dStub(ModuleType, MagicMock):
 
 
 @contextmanager
-def exit_mock() -> Iterator[None]:
+def exit_mock() -> Generator[None]:
     @dataclass
     class ExitError(Exception):
         code: int | str

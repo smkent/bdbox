@@ -41,7 +41,7 @@ else:
     from typing_extensions import Self
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Generator
 
     from starlette.testclient import WebSocketTestSession
     from syrupy.assertion import SnapshotAssertion
@@ -64,7 +64,7 @@ class WSParamTest:
         )
 
     @contextmanager
-    def __call__(self) -> Iterator[Self]:
+    def __call__(self) -> Generator[Self]:
         with TestClient(self.app) as client:
             self.client = client
             with self.wsconn() as ws:
@@ -77,7 +77,7 @@ class WSParamTest:
                 yield self
 
     @contextmanager
-    def wsconn(self) -> Iterator[WebSocketTestSession]:
+    def wsconn(self) -> Generator[WebSocketTestSession]:
         if not self.client:
             raise InternalError("Client not available")
         with self.client.websocket_connect("/ws") as ws:
@@ -117,7 +117,7 @@ class WSParamTest:
 
 
 @pytest.fixture(autouse=True)
-def mock_protocol_bdbox_version() -> Iterator[None]:
+def mock_protocol_bdbox_version() -> Generator[None]:
     original = VersionInfo.__init__
 
     def wrapper(self: VersionInfo, *args: Any, **kwargs: Any) -> None:
@@ -131,7 +131,7 @@ def mock_protocol_bdbox_version() -> Iterator[None]:
 @pytest.fixture(autouse=True)
 def wspt(
     snapshot: SnapshotAssertion, view_state: ViewState
-) -> Iterator[WSParamTest]:
+) -> Generator[WSParamTest]:
     with (
         WSParamTest(snapshot=snapshot, view_state=view_state)() as wspt,
     ):
