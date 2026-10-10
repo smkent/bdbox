@@ -73,10 +73,10 @@ class Event(StdlibEvent):
 class Thread(StdlibThread):
     group: None = field(default=None, init=False, repr=False)
     target: Callable[..., Any] | None = None
-    name: str | None = None
+    name: str = ""
     args: Sequence[Any] = ()
     kwargs: Mapping[str, Any] | None = None
-    daemon: bool | None = None
+    daemon: bool = False
 
     __hash__ = object.__hash__
 
@@ -84,7 +84,7 @@ class Thread(StdlibThread):
         super().__init__(
             group=self.group,
             target=self.target,
-            name=self.name,
+            name=self.name or None,
             args=self.args,
             kwargs=self.kwargs,
             daemon=self.daemon,
