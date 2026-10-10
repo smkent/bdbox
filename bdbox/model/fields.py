@@ -169,15 +169,15 @@ class Field:
 class NumberField(Field):
     """Number parameter field base class."""
 
-    default: int
+    default: float | int
     min: Annotated[
-        int | None, override(rename="minimum", omit_if_default=True)
+        float | int | None, override(rename="minimum", omit_if_default=True)
     ] = None
     max: Annotated[
-        int | None, override(rename="maximum", omit_if_default=True)
+        float | int | None, override(rename="maximum", omit_if_default=True)
     ] = None
     step: Annotated[
-        int | None, override(rename="multipleOf", omit_if_default=True)
+        float | int | None, override(rename="multipleOf", omit_if_default=True)
     ] = None
     unit: Annotated[Unit, override(omit=True)] = Unit.Millimeters
     description: Annotated[str | None, override(omit_if_default=True)] = None
