@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-import sys
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Any
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING, Any, Self
 from unittest.mock import patch
 from uuid import UUID
 
@@ -34,11 +33,6 @@ from bdbox.protocol import (
 from bdbox.runner.state import run_state
 from bdbox.view.state import ViewState
 from bdbox.view.ui.app import UIApp
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -304,7 +298,7 @@ def test_ws_reset_params(wspt: WSParamTest) -> None:
         ),
         pytest.param(
             ModelRunStatusMessage.running(
-                datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
+                datetime(1977, 5, 25, 11, 38, 00, tzinfo=UTC)
             ),
             id="run_start",
         ),
@@ -328,7 +322,7 @@ def test_ws_broadcast_reaches_client(
 
 def test_ws_broadcast_reaches_multiple_clients(wspt: WSParamTest) -> None:
     message = ModelRunStatusMessage.running(
-        datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
+        datetime(1977, 5, 25, 11, 38, 00, tzinfo=UTC)
     )
     with wspt.wsconn() as ws2:
         connected_message_data = ws2.receive_json()

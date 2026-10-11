@@ -40,7 +40,7 @@ class WebSocketConnection:
         while msg := await asyncio.to_thread(self.msg_queue.get):
             try:
                 await self.websocket.send_json(msg.to_dict())
-            except Exception:  # noqa: BLE001, PERF203
+            except Exception:  # noqa: BLE001
                 break
 
     async def send_message(self, message: ServerMessage) -> None:

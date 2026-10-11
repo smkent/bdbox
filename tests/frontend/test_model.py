@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from playwright.sync_api import expect
@@ -60,7 +60,7 @@ def test_model_status_lifecycle(app: BackendTestApp) -> None:
     expect(app.page.locator(".status-idle")).to_be_visible()
     app.send(
         ModelRunStatusMessage.running(
-            started_at=datetime(1977, 5, 25, 11, 38, 00, tzinfo=timezone.utc)
+            started_at=datetime(1977, 5, 25, 11, 38, 00, tzinfo=UTC)
         )
     )
     expect(app.page.locator(".status-running")).to_be_visible()

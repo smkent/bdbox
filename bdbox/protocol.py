@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -9,6 +8,7 @@ from typing import (
     Annotated,
     Any,
     ClassVar,
+    Self,
     TypeVar,
     overload,
 )
@@ -19,11 +19,6 @@ from cattrs.gen import override
 
 from bdbox.converter import Converter
 from bdbox.errors import InternalError
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 
 def _bdbox_version() -> str:

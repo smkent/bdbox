@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: v0.20.1
+_commit: v0.23.0
 _src_path: gh:smkent/copier-python
 copyright_holder: Stephen Kent
 copyright_license: LGPL-3.0-or-later
@@ -20,7 +20,7 @@ project_slug: bdbox
 project_type: application
 project_visibility: public
 python_version_maximum: '3.14'
-python_version_minimum: '3.10'
+python_version_minimum: '3.11'
 template_attribution: true
 user_email: smkent@smkent.net
 user_name: Stephen Kent

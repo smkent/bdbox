@@ -5,7 +5,7 @@ import sys
 from collections.abc import Sequence  # noqa: TC003
 from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Self
 
 from bdbox.cli import cli_parser
 from bdbox.errors import InternalError, ParamsError
@@ -17,11 +17,6 @@ from .field_factories import Bool, Choice, Float, Int, Str
 from .fields import Field
 from .info import ModelInfo
 from .preset import Preset  # noqa: TC001
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 if sys.version_info >= (3, 12):
     from typing import dataclass_transform

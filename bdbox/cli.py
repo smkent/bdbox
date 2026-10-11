@@ -8,6 +8,7 @@ from typing import (
     Annotated,
     Any,
     Generic,
+    Self,
     TypeVar,
     cast,
     get_origin,
@@ -20,11 +21,6 @@ from bdbox.actions.action import Action, ModelAction
 from bdbox.actions.field import ActionField, cli_actions
 from bdbox.actions.run import RunAction
 from bdbox.console import console
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 if TYPE_CHECKING:
     from collections.abc import Sequence

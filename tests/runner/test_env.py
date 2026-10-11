@@ -9,7 +9,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -17,11 +17,6 @@ import pytest
 from bdbox.runner import env as runner_env
 from bdbox.runner.env import ENV_VAR
 from bdbox.runner.harness import ModelHarness
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 if TYPE_CHECKING:
     from collections.abc import Generator, Sequence
