@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from functools import cached_property
 
 
@@ -17,9 +17,7 @@ class Timer:
 
     @cached_property
     def started_at(self) -> datetime:
-        return datetime.now(timezone.utc) - timedelta(
-            seconds=self.elapsed / 1000
-        )
+        return datetime.now(UTC) - timedelta(seconds=self.elapsed / 1000)
 
     def stop(self) -> float:
         if not self.stopped:

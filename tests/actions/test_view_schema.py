@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 import time
 from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass, field
@@ -8,7 +7,7 @@ from functools import cached_property, partial
 from pathlib import Path  # noqa: TC003
 from queue import Empty, Queue
 from threading import Thread
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 
 import pytest
 from starlette.testclient import TestClient
@@ -24,11 +23,6 @@ from bdbox.protocol import (
 )
 from bdbox.runner.harness import ModelHarness
 from tests.utils import Models
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 if TYPE_CHECKING:
     from collections.abc import Generator, Sequence

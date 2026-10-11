@@ -8,7 +8,7 @@ import sys
 from contextlib import ExitStack
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -21,11 +21,6 @@ from tests.utils import MockOcpVscode, Models, RaisesRunError
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
     from pathlib import Path
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 
 pytestmark = pytest.mark.usefixtures(

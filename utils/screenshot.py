@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import subprocess
-import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING, Annotated, Self
 
 import tyro
 
@@ -12,15 +11,8 @@ from bdbox.cli import CLIOptions
 from bdbox.errors import UsageError
 from utils.demo import DEMO_MODEL, AppBrowserSession
 
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
-
 if TYPE_CHECKING:
-    from playwright.sync_api import (
-        ViewportSize,
-    )
+    from playwright.sync_api import ViewportSize
 
 
 @dataclass

@@ -67,7 +67,7 @@ class EnvLocator:
                 try:
                     if child.is_dir() and (child / "pyvenv.cfg").is_file():
                         return child
-                except OSError as e:  # noqa: PERF203
+                except OSError as e:
                     log.debug("Ignoring unreadable path: %s", e)
         return None
 

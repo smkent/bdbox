@@ -11,7 +11,7 @@ from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass, field
 from functools import partial
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any
+from typing import TYPE_CHECKING, Annotated, Any, Self
 
 import tyro
 from playwright.sync_api import (
@@ -26,11 +26,6 @@ from playwright.sync_api import (
 from bdbox.cli import CLIOptions
 from bdbox.console import log
 from bdbox.errors import InternalError, UsageError
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Generator, Sequence
@@ -229,7 +224,7 @@ class AppBrowserSession(CallableContextManager):
             try:
                 result = urllib.request.urlopen(url, timeout=1)  # noqa: S310
                 return result.read().decode("utf-8")
-            except urllib.error.URLError:  # noqa: PERF203
+            except urllib.error.URLError:
                 time.sleep(0.5)
                 continue
         raise TimeoutError(f"Timed out waiting for {url}")

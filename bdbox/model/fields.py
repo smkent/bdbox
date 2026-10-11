@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 from collections.abc import Callable, Sequence  # noqa: TC003
 from dataclasses import Field as DCField
 from dataclasses import dataclass, field
@@ -16,6 +15,7 @@ from typing import (
     Generic,
     Literal,
     ParamSpec,
+    Self,
     TypeVar,
 )
 
@@ -29,10 +29,6 @@ from bdbox.errors import ParamsError, ParamValidationError
 if TYPE_CHECKING:
     from collections.abc import Set as AbstractSet
 
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
 
 Number = TypeVar("Number", float, int)
 P = ParamSpec("P")
