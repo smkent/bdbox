@@ -14,6 +14,7 @@ postinstall = [
 
 [tools]
 betterleaks = "latest"
+jactionlint = "latest"
 node = "24"
 "pipx:copier" = "latest"
 prek = "latest"
