@@ -179,14 +179,14 @@ Licensed under the GNU Lesser General Public License v3.0 or later
 
 ## Project template
 
-This project is generated and maintained with [copier-python][copier-python].
+This project is generated and maintained with [copier-project][copier-project].
 
 [build123d-chamfer]: https://build123d.readthedocs.io/en/stable/direct_api_reference.html#topology.Mixin3D.chamfer
 [build123d-fillet]: https://build123d.readthedocs.io/en/stable/direct_api_reference.html#topology.Mixin3D.fillet
 [build123d-pypi]: https://pypi.org/project/build123d/
 [build123d-vs-openscad]: https://build123d.readthedocs.io/en/stable/OpenSCAD.html
 [build123d]: https://build123d.readthedocs.io
-[copier-python]: https://smkent.github.io/copier-python
+[copier-project]: https://smkent.github.io/copier-project
 [docs-actions]: https://smkent.github.io/bdbox/actions/
 [docs-background]: https://smkent.github.io/bdbox/background/
 [docs-panel]: https://smkent.github.io/bdbox/parameters/panel/
