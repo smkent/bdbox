@@ -162,18 +162,18 @@ class Field:
         return default
 
 
-class NumberField(Field):
+class NumberField(Field, Generic[Number]):
     """Number parameter field base class."""
 
-    default: float | int
+    default: Number
     min: Annotated[
-        float | int | None, override(rename="minimum", omit_if_default=True)
+        Number | None, override(rename="minimum", omit_if_default=True)
     ] = None
     max: Annotated[
-        float | int | None, override(rename="maximum", omit_if_default=True)
+        Number | None, override(rename="maximum", omit_if_default=True)
     ] = None
     step: Annotated[
-        float | int | None, override(rename="multipleOf", omit_if_default=True)
+        Number | None, override(rename="multipleOf", omit_if_default=True)
     ] = None
     unit: Annotated[Unit, override(omit=True)] = Unit.Millimeters
     description: Annotated[str | None, override(omit_if_default=True)] = None
