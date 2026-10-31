@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 class ViewAction(
     ModelAction, command="view", description="View model geometry"
 ):
-    """View model geometry in OCP CAD Viewer."""
+    """View model geometry in OCP Viewer."""
 
     open_browser: Annotated[
         bool,

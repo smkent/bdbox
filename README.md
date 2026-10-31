@@ -95,7 +95,7 @@ bdbox mymodel.py export output/   # Export STEP files to output/
 bdbox mymodel.py export -f stl    # Export STL files to current directory
 ```
 
-View your model using the web UI, which includes [OCP CAD Viewer][ocp_vscode]
+View your model using the web UI, which includes [OCP Viewer][ocp_viewer]
 and an [interactive parameters panel][docs-panel]:
 
 ```sh
@@ -193,7 +193,7 @@ This project is generated and maintained with [copier-project][copier-project].
 [docs-parameters]: https://smkent.github.io/bdbox/parameters/
 [docs-screenshot-ui]: https://smkent.github.io/bdbox/bdbox-ui.webp
 [docs]: https://smkent.github.io/bdbox/
-[ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer
+[ocp_viewer]: https://github.com/bernhard-42/ocp_viewer
 [openscad-csg]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/CSG_Modelling
 [openscad-customizer]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Customizer
 [openscad-language]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual#The_OpenSCAD_Language_Reference

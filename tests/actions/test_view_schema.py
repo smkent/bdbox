@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from bdbox.view.ui.server import UIServer
 
 
-pytestmark = pytest.mark.usefixtures("mock_ocp_cad_viewer_start")
+pytestmark = pytest.mark.usefixtures("mock_ocp_viewer_start")
 
 
 class SchemaModels:

@@ -23,7 +23,7 @@ icon: lucide/play
 | Action | Description |
 |---|---|
 | [`export`](export.md) | Export model geometry to a STEP or STL file |
-| [`view`](view.md) | View model geometry with [OCP CAD Viewer][ocp_vscode] |
+| [`view`](view.md) | View model geometry with [OCP Viewer][ocp_viewer] |
 | `run` (default) | No geometry processing. Model is responsible for using its own geometry. |
 
 ## Invocation modes
@@ -43,7 +43,7 @@ any `bdbox` imports:
 
 ```sh
 bdbox model.py                     # Run (default)
-bdbox model.py view                # View in OCP CAD Viewer
+bdbox model.py view                # View in OCP Viewer
 bdbox model.py export output.step  # Export to STEP
 ```
 
@@ -51,7 +51,7 @@ or with a module:
 
 ```sh
 bdbox mypackage.mymodule                     # Run (default)
-bdbox mypackage.mymodule view                # View in OCP CAD Viewer
+bdbox mypackage.mymodule view                # View in OCP Viewer
 bdbox mypackage.mymodule export output.step  # Export to STEP
 ```
 
@@ -60,7 +60,7 @@ selected:
 
 ```sh
 bdbox mypackage.mymodule:MyModel                     # Run (default)
-bdbox mypackage.mymodule:MyModel view                # View in OCP CAD Viewer
+bdbox mypackage.mymodule:MyModel view                # View in OCP Viewer
 bdbox mypackage.mymodule:MyModel export output.step  # Export to STEP
 ```
 
@@ -79,7 +79,7 @@ the CLI:
 
 ```sh
 python model.py                     # Run (default)
-python model.py view                # View in OCP CAD Viewer
+python model.py view                # View in OCP Viewer
 python model.py export output.step  # Export to STEP
 ```
 
@@ -87,10 +87,10 @@ or with a module:
 
 ```sh
 python -m mypackage.mymodule                     # Run (default)
-python -m mypackage.mymodule view                # View in OCP CAD Viewer
+python -m mypackage.mymodule view                # View in OCP Viewer
 python -m mypackage.mymodule export output.step  # Export to STEP
 ```
 
 [build123d]: https://build123d.readthedocs.io
-[ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer
+[ocp_viewer]: https://github.com/bernhard-42/ocp_viewer
 [python-venv]: https://docs.python.org/3/tutorial/venv.html
