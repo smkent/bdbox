@@ -141,7 +141,7 @@ dev = [
     { name = "httpx2", specifier = ">=0.28" },
     { name = "playwright", specifier = ">=1.60" },
     { name = "pysentry-rs", specifier = ">=0.4" },
-    { name = "pytest", specifier = ">=9" },
+    { name = "pytest", specifier = ">=9,<=9.2" },
     { name = "pytest-cov", specifier = ">=7" },
     { name = "pytest-playwright", specifier = ">=0.8" },
     { name = "pytest-sugar", specifier = ">=1" },
