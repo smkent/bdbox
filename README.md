@@ -179,7 +179,7 @@ Licensed under the GNU Lesser General Public License v3.0 or later
 
 ## Project template
 
-This project is generated and maintained with [copier-project][copier-project].
+This project is based on and maintained with [copier-project][copier-project].
 
 [build123d-chamfer]: https://build123d.readthedocs.io/en/stable/direct_api_reference.html#topology.Mixin3D.chamfer
 [build123d-fillet]: https://build123d.readthedocs.io/en/stable/direct_api_reference.html#topology.Mixin3D.fillet
