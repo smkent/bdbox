@@ -97,24 +97,6 @@ artifacts = ["bdbox/view/ui/static/*"]
 [tool.hatch.version]
 source = "uv-dynamic-versioning"
 
-[tool.pysentry.ignore]
-ids = [
-  # Pillow 12.2.0 via threejs-materials via ocp-vscode
-  "GHSA-62p4-gmf7-7g93",
-  "GHSA-fj7v-r99m-22gq",
-  "GHSA-jjj6-mw9f-p565",
-  "GHSA-vjc4-5qp5-m44j",
-  "PYSEC-2026-2253",
-  "PYSEC-2026-2254",
-  "PYSEC-2026-2255",
-  "PYSEC-2026-2256",
-  "PYSEC-2026-2257",
-  "PYSEC-2026-3451",
-  "PYSEC-2026-3452",
-  "PYSEC-2026-3453",
-  "PYSEC-2026-3454",
-]
-
 [tool.pytest]
 addopts = [
   "-ra",
