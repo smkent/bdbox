@@ -1,4 +1,4 @@
-"""OCP CAD Viewer management tests."""
+"""OCP Viewer management tests."""
 
 from __future__ import annotations
 
@@ -14,8 +14,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from bdbox.actions.view import ViewAction
-from bdbox.view import ocp_cad_viewer
-from bdbox.view.ocp_cad_viewer import OCPCADViewer
+from bdbox.view import ocp_viewer
+from bdbox.view.ocp_viewer import OCPViewer
 from tests.utils import ExecMain, Models
 
 if TYPE_CHECKING:
@@ -40,7 +40,7 @@ def model(request: pytest.FixtureRequest) -> Path:
 
 @pytest.fixture(autouse=True)
 def mock_urlopen() -> Generator[MagicMock]:
-    with patch.object(ocp_cad_viewer, "urlopen") as mocked:
+    with patch.object(ocp_viewer, "urlopen") as mocked:
         yield mocked
 
 
@@ -82,7 +82,7 @@ def popen_kwargs() -> Mapping[str, Any]:
         pytest.param(1138, 1138, id="1138"),
     ],
 )
-def test_model_view_starts_ocp_cad_viewer(
+def test_model_view_starts_ocp_viewer(
     model: Path,
     exec_main: ExecMain,
     mock_popen: MagicMock,
@@ -91,14 +91,14 @@ def test_model_view_starts_ocp_cad_viewer(
     port: int,
     expected_port: int,
 ) -> None:
-    original = OCPCADViewer.__post_init__
+    original = OCPViewer.__post_init__
 
-    def wrapper(self: OCPCADViewer) -> None:
+    def wrapper(self: OCPViewer) -> None:
         self.port = port
         original(self)
 
     with (
-        patch.object(OCPCADViewer, "__post_init__", new=wrapper),
+        patch.object(OCPViewer, "__post_init__", new=wrapper),
         patch.object(socket.socket, "getsockname", return_value=(None, 2187)),
     ):
         exec_main(str(model), "view")
@@ -107,7 +107,7 @@ def test_model_view_starts_ocp_cad_viewer(
             sys.executable,
             "-u",
             "-m",
-            "ocp_vscode",
+            "ocp_viewer",
             f"--port={expected_port}",
             "--theme=dark",
         ],
@@ -119,7 +119,7 @@ def test_model_view_starts_ocp_cad_viewer(
     mock_server_start.assert_called_once()
 
 
-def test_model_view_without_model_does_not_start_ocp_cad_viewer(
+def test_model_view_without_model_does_not_start_ocp_viewer(
     exec_main: ExecMain, mock_popen: MagicMock, mock_server_start: MagicMock
 ) -> None:
     with pytest.raises(SystemExit):

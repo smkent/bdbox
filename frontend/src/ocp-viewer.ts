@@ -1,6 +1,6 @@
 import { GroupPanelPartInitParameters, IContentRenderer } from "dockview";
 
-export class OCPCADViewer implements IContentRenderer {
+export class OCPViewer implements IContentRenderer {
   private readonly _element: HTMLElement;
   private readonly iframe: HTMLIFrameElement;
 

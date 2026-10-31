@@ -29,16 +29,17 @@ in several other areas:
   [even provides a GUI for setting toplevel variables][openscad-customizer]!
 * Sharing models is as simple as publishing `*.scad` files. Sharing a build123d
   model which is an arbitrary Python program has a bit more friction. Users need
-  to install build123d (perhaps in a virtualenv), [OCP CAD Viewer][ocp_vscode]
-  using VSCode or standalone with its own instructions, and potentially edit
-  variables in the model source for customization, etc. This is especially
-  cumbersome for folks who aren't familiar with the Python ecosystem.
+  to install build123d (perhaps in a virtualenv), one of
+  [OCP CAD Viewer for VS Code][ocp_vscode]
+  or [standalone OCP Viewer][ocp_viewer] with its own instructions, and
+  potentially edit variables in the model source for customization, etc. This is
+  especially cumbersome for folks who aren't familiar with the Python ecosystem.
 
 ## Competing responsibilities
 
 Additionally, I didn't like how build123d models needed to both **define the
 model geometry** and **decide what to do with it** (e.g. viewing with
-**`ocp_vscode.show()`** or exporting with **`build123d.export_step`**).
+**`ocp_viewer.show()`** or exporting with **`build123d.export_step`**).
 
 Models are code, which should be tracked in source control. Why should tracked
 model geometry code need to be cluttered with miscellaneous actions? The code
@@ -69,6 +70,7 @@ parameters panel, CLI, and render export with simple commands.
 [build123d-vs-openscad]: https://build123d.readthedocs.io/en/stable/OpenSCAD.html
 [build123d]: https://build123d.readthedocs.io
 [ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer
+[ocp_viewer]: https://github.com/bernhard-42/ocp_viewer
 [openscad-csg]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/CSG_Modelling
 [openscad-customizer]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Customizer
 [openscad-language]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual#The_OpenSCAD_Language_Reference

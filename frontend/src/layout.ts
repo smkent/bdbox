@@ -5,7 +5,7 @@ import {
   themeDark,
 } from "dockview";
 import { WebSocketManager } from "./websocket";
-import { OCPCADViewer } from "./ocp-cad-viewer";
+import { OCPViewer } from "./ocp-viewer";
 import { WebConsole } from "./console";
 import { Params } from "./params";
 import { PlainTab } from "./plain-tab";
@@ -16,7 +16,7 @@ const STORAGE_KEY = `bdbox-layout-v${LAYOUT_VERSION}`;
 
 export class Layout {
   private params: Params;
-  private viewer: OCPCADViewer = new OCPCADViewer(window.__BDBOX__.viewerPort);
+  private viewer: OCPViewer = new OCPViewer(window.__BDBOX__.viewerPort);
   private webconsole: WebConsole;
   private container: HTMLElement;
   private api!: DockviewApi;

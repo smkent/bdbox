@@ -69,7 +69,7 @@ class AppBrowserSession(CallableContextManager):
         default_factory=lambda: {"width": 1280, "height": 800}
     )
     show_cursor: bool = field(default=True, kw_only=True)
-    ocp_cad_viewer: Locator = field(init=False, repr=False)
+    ocp_viewer: Locator = field(init=False, repr=False)
     click_wait: float = field(default=0.0, repr=False)
 
     @contextmanager
@@ -140,13 +140,13 @@ class AppBrowserSession(CallableContextManager):
             ):
                 self.page.goto(BDBOX_URL)
             self.reset_params()
-            self.ocp_cad_viewer = self.page.frame_locator(
+            self.ocp_viewer = self.page.frame_locator(
                 "iframe[src*='/viewer']"
             ).locator("#cad_viewer")
-            self.ocp_cad_viewer.click()
-            self.ocp_cad_viewer.press("p")
-            self.ocp_cad_viewer.press("r")
-            self.ocp_cad_viewer.press("5")
+            self.ocp_viewer.click()
+            self.ocp_viewer.press("p")
+            self.ocp_viewer.press("r")
+            self.ocp_viewer.press("5")
             yield
 
     def reset_params(self, *, wait: bool = True, resize: bool = False) -> None:
@@ -216,7 +216,7 @@ class AppBrowserSession(CallableContextManager):
                 line,
             ):
                 return int(m.group(1))
-        raise InternalError("Unable to locate OCP CAD Viewer port")
+        raise InternalError("Unable to locate OCP Viewer port")
 
     def _wait_for_url(self, url: str, timeout: float = 10.0) -> str:
         deadline = time.monotonic() + timeout
@@ -249,7 +249,7 @@ class AppBrowserSession(CallableContextManager):
         duration_ms: int = 60,
         ms_per_step: int = 10,
     ) -> None:
-        if not (box := self.ocp_cad_viewer.bounding_box()):
+        if not (box := self.ocp_viewer.bounding_box()):
             raise InternalError("Unable to determine viewer bounding box")
         if (wait_time := (self.click_wait - time.monotonic())) > 0:
             self.page.wait_for_timeout(int(wait_time))
@@ -272,10 +272,10 @@ class AppBrowserSession(CallableContextManager):
         self.click_wait = time.monotonic() + 200
 
     def viewer_click_iso(self) -> None:
-        self.move_click(self.ocp_cad_viewer.locator(".tcv_button_iso"))
+        self.move_click(self.ocp_viewer.locator(".tcv_button_iso"))
 
     def viewer_click_resize(self) -> None:
-        self.move_click(self.ocp_cad_viewer.locator(".tcv_button_resize"))
+        self.move_click(self.ocp_viewer.locator(".tcv_button_resize"))
 
 
 @dataclass

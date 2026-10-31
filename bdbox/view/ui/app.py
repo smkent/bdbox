@@ -41,7 +41,7 @@ class UIApp(FastAPI):
     view_state: ViewState
     session_id: UUID = field(default_factory=uuid4)
     connections: dict[int, WebSocketConnection] = field(default_factory=dict)
-    ocp_cad_viewer_port: int = 3939
+    ocp_viewer_port: int = 3939
 
     def __post_init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, lifespan=type(self).lifespan, **kwargs)
@@ -76,9 +76,7 @@ class UIApp(FastAPI):
         return routes_router
 
     async def index_endpoint(self) -> str:
-        return INDEX_TEMPLATE.format(
-            ocp_cad_viewer_port=self.ocp_cad_viewer_port
-        )
+        return INDEX_TEMPLATE.format(ocp_viewer_port=self.ocp_viewer_port)
 
     async def websocket_endpoint(self, websocket: WebSocket) -> None:
         await websocket.accept()
@@ -97,7 +95,7 @@ class UIApp(FastAPI):
             await connection.send_message(
                 ConnectedMessage(
                     session_id=self.session_id,
-                    viewer_port=self.ocp_cad_viewer_port,
+                    viewer_port=self.ocp_viewer_port,
                 )
             )
             if self.view_state.model_class:

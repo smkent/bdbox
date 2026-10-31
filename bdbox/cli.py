@@ -80,7 +80,7 @@ class CLIAction(CLIOptions, Generic[T]):
 
 @dataclass
 class CLIConfig(CLIAction[T]):
-    params: Annotated[T, tyro.conf.arg(name="")]
+    params: Annotated[T, tyro.conf.arg(name="")]  # ty: ignore[invalid-mutable-override]
 
 
 @dataclass

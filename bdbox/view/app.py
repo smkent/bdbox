@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import InitVar, dataclass, field
 from typing import TYPE_CHECKING
 
-from bdbox.view.ocp_cad_viewer import OCPCADViewer
+from bdbox.view.ocp_viewer import OCPViewer
 from bdbox.view.state import ViewState
 from bdbox.view.ui.server import UIServer
 
@@ -16,13 +16,13 @@ if TYPE_CHECKING:
 
 @dataclass
 class ViewApp:
-    """View model geometry in OCP CAD Viewer."""
+    """View model geometry in OCP Viewer."""
 
     server_port: InitVar[int]
     model_class: InitVar[type[Params] | None] = None
     open_browser: InitVar[bool] = False
 
-    ocp_cad_viewer: OCPCADViewer = field(init=False)
+    ocp_viewer: OCPViewer = field(init=False)
     view_state: ViewState = field(init=False)
     ui_server: UIServer = field(init=False)
 
@@ -33,14 +33,14 @@ class ViewApp:
         open_browser: bool,
     ) -> None:
         self.view_state = ViewState(model_class=model_class)
-        self.ocp_cad_viewer = OCPCADViewer(self.view_state.show)
+        self.ocp_viewer = OCPViewer(self.view_state.show)
         self.ui_server = UIServer(
             listen_port=server_port,
             view_state=self.view_state,
-            ocp_cad_viewer_port=self.ocp_cad_viewer.port,
+            ocp_viewer_port=self.ocp_viewer.port,
             open_browser=open_browser,
         )
-        self.ocp_cad_viewer.ready_wait()
+        self.ocp_viewer.ready_wait()
         self.ui_server.ready_wait()
 
     def enqueue(self, msg: ServerMessage) -> None:

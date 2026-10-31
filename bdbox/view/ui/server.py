@@ -39,7 +39,7 @@ class UvicornServer(Server):
 class UIServer(ListenService):
     app: UIApp = field(init=False)
     view_state: ViewState
-    ocp_cad_viewer_port: int = 3939
+    ocp_viewer_port: int = 3939
     open_browser: bool = True
 
     _STARTUP_TIMEOUT: ClassVar[float] = 10.0
@@ -50,7 +50,7 @@ class UIServer(ListenService):
     def __post_init__(self) -> None:
         self.app = UIApp(
             view_state=self.view_state,
-            ocp_cad_viewer_port=self.ocp_cad_viewer_port,
+            ocp_viewer_port=self.ocp_viewer_port,
         )
         self.uvicorn_server = UvicornServer(
             Config(

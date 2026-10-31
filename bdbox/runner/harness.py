@@ -6,7 +6,7 @@ import sys
 from contextlib import suppress
 from dataclasses import dataclass, field, make_dataclass
 from functools import cached_property, reduce
-from typing import TYPE_CHECKING, Annotated, Any, ClassVar, get_args
+from typing import TYPE_CHECKING, Annotated, Any, ClassVar, cast, get_args
 from unittest.mock import MagicMock, patch
 
 import tyro
@@ -69,13 +69,14 @@ class ModelHarness(ModelLocator):
 
     @cached_property
     def harness_cli(self) -> type[CLIAction[None]]:
-        @dataclass
-        class HarnessCLI(CLIAction[None]):
-            HarnessAction = HarnessCLIFactory.make()
-
-            action: HarnessAction
-
-        return HarnessCLI
+        return cast(
+            "type[CLIAction[None]]",
+            make_dataclass(
+                "HarnessCLI",
+                [("action", HarnessCLIFactory.make())],
+                bases=(CLIAction[None],),
+            ),
+        )
 
     def __post_init__(
         self, model_argv: Sequence[Path | str] | Path | str
@@ -110,7 +111,7 @@ class ModelHarness(ModelLocator):
         if model_arg := self.model.arg:
             with (
                 PatchModule("build123d", Build123dStub(), recursive=True),
-                PatchModule("ocp_vscode"),
+                PatchModule("ocp_viewer"),
                 patch.object(
                     cli_parser, "parse", MagicMock(side_effect=SystemExit)
                 ),

@@ -16,7 +16,7 @@ from bdbox.model.model import Model
 from bdbox.model.parameters import Params
 from bdbox.runner.state import RunState, run_state
 from bdbox.runner.watcher import ModelWatcher
-from bdbox.view.ocp_cad_viewer import OCPCADViewer
+from bdbox.view.ocp_viewer import OCPViewer
 from bdbox.view.ui.server import UIServer
 
 pytest.register_assert_rewrite("tests.utils")
@@ -25,7 +25,7 @@ from tests.utils import (  # noqa: E402
     DisallowCallable,
     ExecMain,
     MockBuild123d,
-    MockOcpVscode,
+    MockOcpViewer,
     ThreadExceptions,
 )
 
@@ -134,11 +134,11 @@ def mock_b123d(monkeypatch: pytest.MonkeyPatch) -> MockBuild123d:
 
 
 @pytest.fixture(autouse=True)
-def mock_ocp_vscode(monkeypatch: pytest.MonkeyPatch) -> MockOcpVscode:
-    module = MockOcpVscode()
-    monkeypatch.setitem(sys.modules, "ocp_vscode", module)
-    monkeypatch.setitem(sys.modules, "ocp_vscode.comms", module.comms)
-    monkeypatch.setitem(sys.modules, "ocp_vscode.config", module.config)
+def mock_ocp_viewer(monkeypatch: pytest.MonkeyPatch) -> MockOcpViewer:
+    module = MockOcpViewer()
+    monkeypatch.setitem(sys.modules, "ocp_viewer", module)
+    monkeypatch.setitem(sys.modules, "ocp_viewer.comms", module.comms)
+    monkeypatch.setitem(sys.modules, "ocp_viewer.config", module.config)
     return module
 
 
@@ -183,10 +183,10 @@ def thread_exceptions() -> Iterator[ThreadExceptions]:
 
 
 @pytest.fixture
-def mock_ocp_cad_viewer_start() -> Iterator[MagicMock]:
+def mock_ocp_viewer_start() -> Iterator[MagicMock]:
     with (
-        patch.object(OCPCADViewer, "start", autospec=True) as mocked,
-        patch.object(OCPCADViewer, "ready_wait"),
+        patch.object(OCPViewer, "start", autospec=True) as mocked,
+        patch.object(OCPViewer, "ready_wait"),
     ):
         yield mocked
 

@@ -6,9 +6,8 @@ icon: lucide/eye
 # View
 
 The `view` action provides a web UI for displaying rendered models in your
-browser using [OCP CAD Viewer][ocp_vscode]. The UI server is started
-automatically. Models being viewed automatically re-render when model files are
-saved.
+browser using [OCP Viewer][ocp_viewer]. The UI server is started automatically.
+Models being viewed automatically re-render when model files are saved.
 
 With the `view` command running, the UI is available at:
 
@@ -100,4 +99,4 @@ select presets in the panel. The model re-renders automatically.
 
 See the [Parameter Panel](../parameters/panel.md) documentation for details.
 
-[ocp_vscode]: https://github.com/bernhard-42/vscode-ocp-cad-viewer
+[ocp_viewer]: https://github.com/bernhard-42/ocp_viewer

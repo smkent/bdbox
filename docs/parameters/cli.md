@@ -22,7 +22,7 @@ argument parsing code is needed.
     | `bdbox model.py --preset large --width 25` | Preset as baseline, then override |
     | `bdbox model.py --help` | Show all fields, defaults, presets, and actions |
     | `bdbox model.py run` | Explicitly run the model |
-    | `bdbox model.py view` | View geometry in OCP CAD Viewer |
+    | `bdbox model.py view` | View geometry in OCP Viewer |
     | `bdbox model.py export` | Export geometry to STEP files |
     | `bdbox model.py export -f stl` | Export geometry to STL files |
 
@@ -36,7 +36,7 @@ argument parsing code is needed.
     | `bdbox mypackage.mymodule --preset large --width 25` | Preset as baseline, then override |
     | `bdbox mypackage.mymodule --help` | Show all fields, defaults, presets, and actions |
     | `bdbox mypackage.mymodule run` | Explicitly run the model |
-    | `bdbox mypackage.mymodule view` | View geometry in OCP CAD Viewer |
+    | `bdbox mypackage.mymodule view` | View geometry in OCP Viewer |
     | `bdbox mypackage.mymodule export` | Export geometry to STEP files |
     | `bdbox mypackage.mymodule export -f stl` | Export geometry to STL files |
 
@@ -50,7 +50,7 @@ argument parsing code is needed.
     | `python model.py --preset large --width 25` | Preset as baseline, then override |
     | `python model.py --help` | Show all fields, defaults, presets, and actions |
     | `python model.py run` | Explicitly run the model |
-    | `python model.py view` | View geometry in OCP CAD Viewer |
+    | `python model.py view` | View geometry in OCP Viewer |
     | `python model.py export` | Export geometry to STEP files |
     | `python model.py export -f stl` | Export geometry to STL files |
 
@@ -64,7 +64,7 @@ argument parsing code is needed.
     | `python -m mypackage.mymodule --preset large --width 25` | Preset as baseline, then override |
     | `python -m mypackage.mymodule --help` | Show all fields, defaults, presets, and actions |
     | `python -m mypackage.mymodule run` | Explicitly run the model |
-    | `python -m mypackage.mymodule view` | View geometry in OCP CAD Viewer |
+    | `python -m mypackage.mymodule view` | View geometry in OCP Viewer |
     | `python -m mypackage.mymodule export` | Export geometry to STEP files |
     | `python -m mypackage.mymodule export -f stl` | Export geometry to STL files |
 
