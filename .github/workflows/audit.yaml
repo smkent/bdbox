@@ -5,9 +5,11 @@ on:
     branches:
       - main
     paths:
+      - pyproject.toml
       - uv.lock
   pull_request:
     paths:
+      - pyproject.toml
       - uv.lock
 
 permissions:
@@ -18,6 +20,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
+  UV_LOCKED: 1
   UV_PYTHON: '3.14'
 
 jobs:
