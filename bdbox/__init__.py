@@ -21,7 +21,7 @@ from bdbox.model.parameters import Params
 from bdbox.model.preset import Preset
 
 try:
-    version = import_version(__name__)
+    version = import_version("bdbox")
 except PackageNotFoundError:  # pragma: no cover
     version = "0.0.0"
 
