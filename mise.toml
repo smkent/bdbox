@@ -3,6 +3,9 @@ min_version = "2026.10.3"
 [vars]
 playwright_browsers = "chromium"
 
+[settings]
+minimum_release_age = "P1W"
+
 [hooks]
 postinstall = [
   "uv sync",
@@ -64,10 +67,14 @@ description = "Record UI demo for documentation"
 raw_args = true
 run = "uv run python -m utils.demo"
 
+[tasks.release-notes]
+description = "Preview release notes (requires `gh` from the GitHub API)"
+run = "gh api repos/{owner}/{repo}/releases/generate-notes -f target_commitish=\"$(git rev-parse @)\" -f \"tag_name=(preview)\" -q .body || { echo \"Unable to preview release notes\"; }"
+
 [tasks.release]
 description = "Create and push a release tag (patch/minor/major)"
 raw_args = true
-run = "uv run bump-my-version bump -v"
+run = [{ task = "release-notes" }, "uv run bump-my-version bump -v"]
 
 [tasks.screenshot]
 description = "Create UI screenshot for documentation"

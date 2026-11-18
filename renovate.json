@@ -1,10 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "schedule:weekly", ":enablePreCommit"],
+  "extends": ["config:recommended", ":enablePreCommit"],
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
     "schedule": ["at any time"]
   },
+  "labels": ["dependencies"],
+  "minimumReleaseAge": "1 week",
   "packageRules": [
     {
       "matchManagers": ["github-actions", "mise", "pep621", "pre-commit"],
