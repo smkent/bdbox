@@ -8,6 +8,7 @@ from queue import Queue
 from typing import TYPE_CHECKING
 
 import pytest
+import xdist
 
 from bdbox.console import console, log
 from bdbox.dispatch import Event
@@ -42,8 +43,18 @@ def build_frontend_assets() -> None:
     subprocess.run(["npm", "run", "build"], check=True)
 
 
+@pytest.fixture(scope="session")
+def listen_port(request: pytest.FixtureRequest) -> int:
+    base_port = 40404
+    if xdist.is_xdist_controller(request):
+        return base_port
+    worker_num = int(xdist.get_xdist_worker_id(request).removeprefix("gw"))
+    return base_port + 1 + worker_num
+
+
 @dataclass
 class BackendTestApp:
+    listen_port: int
     backend_server: UIServer = field(init=False)
     page: Page
     websocket: WebSocketRoute | None = field(default=None, init=False)
@@ -58,7 +69,7 @@ class BackendTestApp:
     def __post_init__(self) -> None:
         self.backend_server = UIServer(
             view_state=ViewState(),
-            listen_port=40404,
+            listen_port=self.listen_port,
             open_browser=False,
         )
         self.backend_server.ready_wait()
@@ -101,5 +112,5 @@ class BackendTestApp:
 
 
 @pytest.fixture
-def app(page: Page) -> BackendTestApp:
-    return BackendTestApp(page=page)
+def app(page: Page, listen_port: int) -> BackendTestApp:
+    return BackendTestApp(listen_port=listen_port, page=page)
