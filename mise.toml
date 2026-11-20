@@ -152,4 +152,4 @@ run = "uv run pytest --numprocesses 0 --no-cov -vv -m \"not frontend\""
 [tasks.webtest]
 description = "Run frontend (web) tests"
 raw_args = true
-run = "uv run pytest --numprocesses 0 --no-cov -m frontend"
+run = "uv run pytest --no-cov -m frontend"
