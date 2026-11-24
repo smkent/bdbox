@@ -62,7 +62,7 @@ dev = [
   "pytest-xdist>=3",
   "pytest>=9,<9.2",
   "ruff>=0.17",
-  "syrupy>=5",
+  "syrupy>=7",
   "ty>=0.0.84",
 ]
 docs = ["mkdocstrings[python]>=1", "zensical>=0.1"]
